@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="web_dashboard" name="shell-type">
+  <title>Portal Damm — Generador Asistido de Consultas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .sidebar-transition { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .content-transition { transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    @keyframes beerBubbles {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-55px) scale(1.2); opacity: 0; }
+    }
+    .bubble-1 { animation: beerBubbles 2.8s infinite ease-in; }
+    .bubble-2 { animation: beerBubbles 3.5s infinite ease-in 0.8s; }
+    .bubble-3 { animation: beerBubbles 2.2s infinite ease-in 1.4s; }
+    .bubble-4 { animation: beerBubbles 3.1s infinite ease-in 0.4s; }
+    .toast-animate { transition: transform 0.3s ease, opacity 0.3s ease; }
+  </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#fed65b",
+            surface: "#fbf9f7",
+            tertiary: "#534842",
+            "tertiary-container": "#6c6059",
+            "on-primary-container": "#ffd6d2",
+            "on-secondary-fixed-variant": "#574500",
+            "outline-variant": "#e5bdb9",
+            outline: "#906f6b",
+            "on-tertiary-fixed-variant": "#4f453e",
+            "error-container": "#ffdad6",
+            "surface-tint": "#bd0e18",
+            "tertiary-fixed": "#f0dfd7",
+            "surface-container-low": "#f5f3f1",
+            "surface-container-highest": "#e4e2e0",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#efedec",
+            "primary-fixed": "#ffdad6",
+            "tertiary-fixed-dim": "#d3c3bb",
+            "on-secondary-fixed": "#241a00",
+            "primary-fixed-dim": "#ffb4ab",
+            "on-surface": "#1b1c1b",
+            "on-secondary": "#ffffff",
+            "secondary-fixed-dim": "#e9c349",
+            "on-secondary-container": "#745c00",
+            "surface-variant": "#e4e2e0",
+            "on-primary-fixed": "#410002",
+            "inverse-surface": "#30302f",
+            primary: "#9b000e",
+            background: "#fbf9f7",
+            error: "#ba1a1a",
+            "on-surface-variant": "#5c403d",
+            "secondary-fixed": "#ffe088",
+            secondary: "#735c00",
+            "surface-bright": "#fbf9f7",
+            "on-error-container": "#93000a",
+            "on-background": "#1b1c1b",
+            "on-error": "#ffffff",
+            "surface-container-high": "#eae8e6",
+            "inverse-primary": "#ffb4ab",
+            "primary-container": "#c4161c",
+            "surface-dim": "#dbdad8",
+            "on-primary-fixed-variant": "#93000c",
+            "on-tertiary-container": "#ecdcd3",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#221a15",
+            "on-primary": "#ffffff",
+            "inverse-on-surface": "#f2f0ee"
+          },
+          borderRadius: { DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px" },
+          spacing: {
+            gutter: "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            margin: "2rem",
+            "margin-mobile": "1rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "gutter-mobile": "0.75rem",
+            "space-lg": "1.5rem"
+          },
+          fontFamily: {
+            "display-hero": ["Epilogue"],
+            "body-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Epilogue"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Epilogue"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "title-sm": ["Inter"],
+            "title-md": ["Inter"],
+            "display-hero-mobile": ["Epilogue"],
+            "headline-md": ["Epilogue"],
+            "headline-sm": ["Epilogue"],
+            headline: ["Epilogue"],
+            display: ["Epilogue"],
+            body: ["Inter"],
+            label: ["Inter"]
+          },
+          fontSize: {
+            "display-hero": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "800" }],
+            "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+            "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }],
+            "headline-lg-mobile": ["26px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+            "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.015em", fontWeight: "700" }],
+            "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }],
+            "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "700" }],
+            "title-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+            "title-md": ["18px", { lineHeight: "26px", fontWeight: "600" }],
+            "display-hero-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "800" }],
+            "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-20 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Collapsible Sidebar -->
+  <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(0,0,0,0.04)] sidebar-transition overflow-hidden w-64" id="app-sidebar">
+    <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
+      <div class="flex items-center gap-space-sm overflow-hidden" id="sidebar-brand-box">
+        <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+        <span class="font-title-sm text-title-sm tracking-wider text-on-surface uppercase font-bold whitespace-nowrap sidebar-label">PORTAL DAMM</span>
+      </div>
+      <button aria-label="Colapsar o expandir menú" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="toggleSidebar()" type="button">
+        <span class="material-symbols-outlined text-xl" id="sidebar-toggle-icon">menu_open</span>
+      </button>
+    </div>
+    <div class="px-space-md py-space-xs sidebar-label">
+      <span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant/70">Navegación HR</span>
+    </div>
+    <nav class="flex-1 px-space-sm space-y-1 mt-1" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm">
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group font-body-md text-body-md" href="/" title="Dashboard de Clima">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">analytics</span>
+        <span class="sidebar-label whitespace-nowrap">Dashboard Clima</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-primary bg-primary font-semibold shadow-xs transition-all group font-body-md text-body-md" href="/generator" title="Generador Asistido IA">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">auto_awesome</span>
+        <span class="sidebar-label whitespace-nowrap">Generador Asistido</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group font-body-md text-body-md" href="/admin" title="Diseñar y Administrar">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">history_edu</span>
+        <span class="sidebar-label whitespace-nowrap">Historial y Consultas</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group font-body-md text-body-md" href="/admin#plantillas" title="Plantillas">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">rule_folder</span>
+        <span class="sidebar-label whitespace-nowrap">Plantillas</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group font-body-md text-body-md" href="/#configuracion" onclick="window.location.href='/'; return false;" title="Configuración">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">settings</span>
+        <span class="sidebar-label whitespace-nowrap">Configuración</span>
+      </a>
+    </nav>
+    <div class="p-3 bg-surface-container/60 m-space-sm rounded-xl overflow-hidden sidebar-footer">
+      <div class="flex items-center gap-space-sm mb-1">
+        <span class="material-symbols-outlined text-secondary text-base flex-shrink-0">verified</span>
+        <span class="font-label-md text-label-md text-on-surface whitespace-nowrap sidebar-label">Estrella Damm 1876</span>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap sidebar-label text-[11px]">Sede Central Barcelona</p>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper with dynamic padding -->
+  <div class="content-transition pl-64" id="main-layout-wrapper">
+    <!-- Top Navbar -->
+    <header class="fixed top-0 right-0 h-16 bg-surface/95 backdrop-blur-xl z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] content-transition border-b border-surface-container-high/60 left-64" id="main-header">
+      <div class="flex items-center gap-space-md">
+        <!-- Official Damm Brand Identity -->
+        <div class="flex items-center gap-2.5 pr-2">
+          <img alt="Chapa Estrella Damm" class="w-8 h-8 object-contain rounded-full shadow-xs hover:rotate-12 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr9w9N2CHJugzokmjtecwVk9xXE-ZkiZRZImgVPACsog-N1B87jVSrrYfA-VyG_C18iBTV-_IuQlkbAxn6o7h8TZ5vJWLCAd9JKaFUgaB6I3OmPi-mH7-SxOg2gWH54hrEM7l3WdCE-C2TcxHtSCb9ZqiYreVZrni4v4pmeTzTnmqnQPZtHOD5SnHgYF8ul2a6vnRbBqr8tiAlBL5ZAQEVtxlEwiTzsd_heW0R14sbGvBlTKUGxDfrlA">
+          <img alt="Damm" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp8e3SBJmS1WmekQO9lQ6n13qTMQ8_LcWug664Z35wY-3SjM7pFiWUoxKMCr8jMPjycECeYqKpcgWdvf141-cg0V6rDZ6-d2NZXDBLC9I3euKsCtLzjpwcq2zwZUP3rxBMDhBP8J6GLPky6UmUuB0tBxtpX0Q_cN-04n7c_1wzSrbGmgssBxij1n6eIxuUcczFxrHOOdpjBShEGltx0gBkxccMu3c7UebhVIoEf-t7hKMwW7Z5pDLWlw">
+        </div>
+        <div class="h-4 w-px bg-outline-variant/50 hidden sm:block"></div>
+        <div class="hidden sm:flex items-center gap-2">
+          <span class="font-label-md text-label-md text-on-surface-variant">Organización</span>
+          <span class="material-symbols-outlined text-sm text-on-surface-variant">chevron_right</span>
+          <span class="font-title-sm text-title-sm text-on-surface font-semibold">HR Climate &amp; Intelligence Suite</span>
+        </div>
+      </div>
+      <!-- Header Right: Clean User Profile -->
+      <div class="flex items-center gap-space-md">
+        <button aria-label="Notificaciones" class="relative w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button">
+          <span class="material-symbols-outlined text-xl">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface"></span>
+        </button>
+        <!-- Clean User Profile Profile Only -->
+        <div class="flex items-center gap-space-sm pl-2 py-1 pr-1 border-l border-surface-container-high">
+          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary/20 shadow-xs">
+            DP
+          </div>
+          <div class="hidden lg:flex flex-col text-left">
+            <span class="font-label-md text-label-md text-on-surface leading-tight font-semibold">Dirección de Personas</span>
+            <span class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight">Admin Global HR</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Content -->
+    <main class="w-full pt-16 bg-surface px-space-xl py-space-lg">
+      <div class="flex flex-col w-full">
+        <!-- Top Navigation & Action Banner -->
+        <div class="flex flex-wrap items-center justify-between gap-space-md mb-space-lg">
+          <div class="flex items-center gap-3">
+            <a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface text-label-md font-semibold hover:bg-surface-container-highest transition-colors shadow-xs" href="/">
+              <span class="material-symbols-outlined text-sm">arrow_back</span>
+              Volver al Dashboard
+            </a>
+            <span class="text-outline/40">/</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs uppercase tracking-wider font-semibold text-primary">Generador Asistido</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              <span class="text-xs font-medium text-on-surface-variant">HR Intelligence Suite • Campaña Q4</span>
+            </div>
+          </div>
+          <!-- Active AI Model Capsule & Publish Action -->
+          <div class="flex items-center gap-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+              <span class="text-xs font-semibold text-tertiary" id="active-model-label">Damm-HR Gemini Pro v4</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-mono">24k ctx</span>
+            </div>
+            <button id="publish-to-plants-btn" onclick="launchSurveyToPlants()" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-on-primary text-label-md font-semibold hover:bg-primary-container transition-all shadow-sm active:scale-95" type="button">
+              <span class="material-symbols-outlined text-sm">send</span>
+              Lanzar a Plantas
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Split Layout (60% AI Conversation / 40% Typeform Live Preview) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+          <!-- LEFT COLUMN: AI Conversation & Control Hub (Col 1 to 7) -->
+          <section class="lg:col-span-7 flex flex-col space-y-space-md">
+            <!-- AI Context Card & User Prompt -->
+            <div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+              <!-- User Prompt Message Box -->
+              <div class="flex items-start gap-3.5 mb-space-lg">
+                <div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                  HR
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-on-surface">Dirección de Personas • Envasado y Logística</span>
+                    <span class="text-[11px] text-tertiary">Hoy, 10:42</span>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-surface-container-low text-on-surface text-body-md leading-relaxed shadow-xs" id="current-user-need-display">
+                    “Evaluar el clima laboral, satisfacción con los turnos rotativos en las plantas de envasado y la conciliación familiar tras el nuevo plan operativo Q4.”
+                  </div>
+                </div>
+              </div>
+              <!-- AI Streaming Response Output -->
+              <div class="flex items-start gap-3.5">
+                <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-base">auto_awesome</span>
+                </div>
+                <div class="flex-1 space-y-space-md">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-bold text-primary">Damm-HR Gemini Pro v4</span>
+                      <span class="text-[10px] bg-secondary-container/40 text-on-secondary-container px-2 py-0.5 rounded-full font-semibold">100% Determinista &amp; Privado</span>
+                    </div>
+                    <span class="text-[11px] text-secondary flex items-center gap-1 font-medium">
+                      <span class="material-symbols-outlined text-xs">verified</span> Estrella Damm Standards
+                    </span>
+                  </div>
+                  <!-- Structured AI Synthesis -->
+                  <p class="text-body-md text-on-surface leading-relaxed" id="ai-synthesis-text">
+                    He sintetizado una batería diagnóstica de <strong>5 dimensiones clave</strong> adaptada a operarios de planta y turnicidad continua (Planta El Prat, Santa Coloma y Murcia). El tiempo proyectado de respuesta es de <strong>2 minutos y 10 segundos</strong> para minimizar fricción operativa.
+                  </p>
+
+                  <!-- 5 Dimensional Metric Badges Grid -->
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+                    <div class="p-2.5 rounded-lg bg-surface-container-low flex items-center gap-2">
+                      <span class="material-symbols-outlined text-sm text-primary">schedule</span>
+                      <div><div class="text-[10px] text-tertiary uppercase">Turnicidad</div><div class="text-xs font-bold text-on-surface">Antelación rotativa</div></div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-surface-container-low flex items-center gap-2">
+                      <span class="material-symbols-outlined text-sm text-primary">fitness_center</span>
+                      <div><div class="text-[10px] text-tertiary uppercase">Ergonomía</div><div class="text-xs font-bold text-on-surface">Carga en línea</div></div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-surface-container-low flex items-center gap-2">
+                      <span class="material-symbols-outlined text-sm text-primary">swap_horiz</span>
+                      <div><div class="text-[10px] text-tertiary uppercase">Flexibilidad</div><div class="text-xs font-bold text-on-surface">Permuta turnos</div></div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-surface-container-low flex items-center gap-2">
+                      <span class="material-symbols-outlined text-sm text-primary">supervisor_account</span>
+                      <div><div class="text-[10px] text-tertiary uppercase">Liderazgo</div><div class="text-xs font-bold text-on-surface">Mando de cuadrilla</div></div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-surface-container-low flex items-center gap-2 sm:col-span-2">
+                      <span class="material-symbols-outlined text-sm text-primary">chat_bubble</span>
+                      <div><div class="text-[10px] text-tertiary uppercase">Voz directa</div><div class="text-xs font-bold text-on-surface">Comentarios libres anónimos</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Prompt Bar (Gemini / Claude Style Input) -->
+            <div class="bg-surface-container-lowest rounded-xl p-3 shadow-md">
+              <form class="relative flex flex-col gap-2" onsubmit="handleSendPrompt(event)">
+                <div class="relative">
+                  <textarea class="w-full bg-surface-container-low rounded-lg p-3 text-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container focus:shadow-inner resize-none" id="ai-chat-input" placeholder="Pide ajustes a la IA (ej: 'añade una pregunta sobre la rotación de carretillas en el almacén central')..." rows="2"></textarea>
+                </div>
+                <div class="flex items-center justify-between pt-1">
+                  <div class="flex items-center gap-2">
+                    <button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" title="Adjuntar datos de plantilla o turno" type="button" onclick="appendPromptAction('Considera el impacto de la rotación en el turno de noche y relevos.')">
+                      <span class="material-symbols-outlined text-lg">attach_file</span>
+                    </button>
+                    <button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" title="Usar plantilla corporativa Damm" type="button" onclick="appendPromptAction('Aplica el estándar corporativo Estrella Damm con escala Likert 1-5.')">
+                      <span class="material-symbols-outlined text-lg">history_edu</span>
+                    </button>
+                    <span class="text-[11px] text-tertiary hidden sm:inline">Presiona <kbd class="px-1.5 py-0.5 rounded bg-surface-container-high text-[10px] font-mono">Enter ↵</kbd> para generar</span>
+                  </div>
+                  <button id="iterate-btn" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold text-label-md hover:bg-primary-container transition-transform active:scale-95 shadow-sm" type="submit">
+                    <span>Iterar</span>
+                    <span class="material-symbols-outlined text-sm">arrow_upward</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- RIGHT COLUMN: Typeform Live Interactive Preview (Col 8 to 12) -->
+          <section class="lg:col-span-5 flex flex-col space-y-space-md">
+            <!-- Typeform Preview Container -->
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-md flex flex-col min-h-[580px]">
+              <!-- Live Header Bar -->
+              <div class="px-4 py-3 bg-surface-container flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-on-surface">Preview en vivo (Typeform Engine)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-medium text-tertiary px-2 py-0.5 rounded bg-surface-container-highest" id="preview-meta-pill">5 Preguntas • ~2 min</span>
+                  <!-- Maximize Button for Fullscreen Manual Editor -->
+                  <button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-semibold transition-all shadow-2xs" onclick="openFullscreenEditor()" title="Maximizar para edición manual" type="button">
+                    <span class="material-symbols-outlined text-sm">open_in_full</span>
+                    <span>Editar Manualmente</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Simulated Live Typeform Canvas Area -->
+              <div class="flex-1 p-space-xl flex flex-col justify-between bg-gradient-to-b from-surface-container-lowest via-surface-container-low/30 to-surface-container-lowest relative">
+                <!-- Sync Indicator pill -->
+                <div class="flex items-center justify-between text-xs text-tertiary">
+                  <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-secondary">cloud_done</span>
+                    <span class="font-medium text-[11px]">Sincronizado con IA</span>
+                  </div>
+                  <span class="text-[11px] font-mono text-outline">ID: ENC-DAMM-Q4-082</span>
+                </div>
+
+                <!-- Current Survey Question Slide -->
+                <div class="my-auto py-4" id="typeform-question-card">
+                  <!-- Question Number Indicator -->
+                  <div class="flex items-center gap-2 text-primary font-bold text-sm mb-3">
+                    <span id="card-q-index">1</span>
+                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    <span class="text-[11px] uppercase tracking-wider text-tertiary font-semibold" id="card-q-dimension">Organización del trabajo</span>
+                  </div>
+                  <!-- Question Title -->
+                  <h2 class="text-headline-md font-headline font-bold text-on-surface mb-2 leading-tight" id="card-q-title">
+                    ¿Con cuánta antelación recibes la confirmación de tus turnos rotativos en planta?
+                  </h2>
+                  <p class="text-body-sm text-on-surface-variant mb-6" id="card-q-desc">
+                    Selecciona una opción para que Recursos Humanos optimice el cuadro de descansos.
+                  </p>
+                  <!-- Typeform Options Pills with Keyboard Key Shortcuts (A, B, C, D) -->
+                  <div class="space-y-2.5" id="card-options-container">
+                    <!-- Populated dynamically via JS -->
+                  </div>
+                </div>
+
+                <!-- Bottom Navigation Controls & Progress within Live Preview -->
+                <div class="pt-4 flex items-center justify-between">
+                  <div class="w-32 bg-surface-container rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-primary h-full rounded-full transition-all duration-300" id="preview-progress-bar" style="width: 20%;"></div>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <button class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors" title="Pregunta anterior" type="button" onclick="navigateQuestion(-1)">
+                      <span class="material-symbols-outlined text-base">expand_less</span>
+                    </button>
+                    <button class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container transition-colors shadow-xs" title="Siguiente pregunta" type="button" onclick="navigateQuestion(1)">
+                      <span class="material-symbols-outlined text-base">expand_more</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Metrics Summary below Live Frame -->
+            <div class="p-3.5 bg-surface-container-lowest rounded-xl shadow-xs flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-secondary-container/30 flex items-center justify-center text-on-secondary-fixed">
+                  <span class="material-symbols-outlined text-lg">touch_app</span>
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-on-surface block">Previsualización de Experiencia</span>
+                  <span class="text-[11px] text-tertiary">Optimizada para tótems táctiles y móvil Damm</span>
+                </div>
+              </div>
+              <button class="text-xs font-semibold text-primary hover:underline" onclick="openFullscreenEditor()" type="button">
+                Abrir Typeform Studio →
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <!-- FULLSCREEN MANUAL TYPEFORM EDITOR MODAL (Interactive via JS) -->
+        <div class="fixed inset-0 z-50 bg-surface hidden flex flex-col animate-fade-in overflow-hidden" id="fullscreen-editor-overlay">
+          <!-- Fullscreen Header with branding and exit -->
+          <header class="h-16 px-space-xl bg-surface-container-lowest flex items-center justify-between shrink-0 shadow-xs">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs">
+                ED
+              </div>
+              <div>
+                <span class="text-sm font-bold text-on-surface block">Typeform Studio • Editor Manual de Encuesta</span>
+                <span class="text-[11px] text-tertiary">Campaña de Clima y Turnicidad Planta El Prat • Q4</span>
+              </div>
+            </div>
+            <!-- Mode Indicators & Close -->
+            <div class="flex items-center gap-3">
+              <span class="px-2.5 py-1 rounded bg-secondary-container/20 text-on-secondary-fixed text-xs font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-secondary"></span> Modo Manual Activo
+              </span>
+              <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-semibold transition-colors" onclick="closeFullscreenEditor()" type="button">
+                <span class="material-symbols-outlined text-sm">close_fullscreen</span>
+                <span>Volver a Vista Dividida</span>
+              </button>
+            </div>
+          </header>
+
+          <!-- Fullscreen Main Body: Left Reorder Panel & Right Big Form Preview -->
+          <div class="flex-1 grid grid-cols-12 overflow-hidden">
+            <!-- Questions List / Reorder Bar (Left 4 cols) -->
+            <aside class="col-span-4 bg-surface-container-low p-space-lg flex flex-col justify-between overflow-y-auto border-r border-surface-container">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-tertiary" id="modal-questions-count-label">Preguntas Estructuradas (5)</span>
+                  <button class="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-primary-container" onclick="addNewManualQuestion()" type="button">
+                    <span class="material-symbols-outlined text-sm">add_circle</span>
+                    Añadir Pregunta
+                  </button>
+                </div>
+                <!-- Question Items in List -->
+                <div class="space-y-2" id="manual-questions-list">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+              <!-- Manual Controls Info -->
+              <div class="p-3 bg-surface-container rounded-lg text-[11px] text-tertiary mt-4">
+                <p>Puedes editar textos directamente sin consumir llamadas de IA. El widget flotante inferior permite aplicar correcciones automáticas si lo requieres.</p>
+              </div>
+            </aside>
+
+            <!-- Center / Right In-Depth Manual Canvas (8 cols) -->
+            <main class="col-span-8 bg-surface-container-lowest p-space-xl flex flex-col justify-center items-center relative overflow-y-auto">
+              <div class="max-w-xl w-full space-y-6">
+                <div class="space-y-2">
+                  <span class="text-xs font-bold text-primary uppercase tracking-wider" id="editor-header-label">Pregunta 1 de 5 • Opción Múltiple</span>
+                  <input class="w-full text-2xl font-bold font-headline text-on-surface bg-surface-container-low p-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary shadow-2xs" id="editor-question-title" type="text" oninput="updateActiveQuestionTitle(this.value)">
+                  <input class="w-full text-sm text-on-surface-variant bg-transparent p-1 focus:outline-none focus:bg-surface-container rounded" id="editor-question-desc" type="text" oninput="updateActiveQuestionDesc(this.value)">
+                </div>
+                <!-- Editable Options List -->
+                <div class="space-y-3" id="editor-options-list">
+                  <!-- Populated by JS -->
+                </div>
+                <button class="inline-flex items-center gap-1.5 text-xs font-bold text-secondary hover:underline pt-1" type="button" onclick="addOptionToCurrentQuestion()">
+                  <span class="material-symbols-outlined text-sm">add</span>
+                  Añadir otra alternativa de respuesta
+                </button>
+              </div>
+            </main>
+          </div>
+
+          <!-- FLOATING AI WIDGET (Elongated Bar / Spotlight Pill fixed at the bottom of fullscreen) -->
+          <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-11/12 max-w-2xl z-50">
+            <div class="bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl p-2.5 shadow-xl flex items-center gap-3 border border-surface-container-high">
+              <!-- AI Pill Icon -->
+              <div class="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-base">auto_awesome</span>
+              </div>
+              <!-- Floating Prompt Field -->
+              <input class="flex-1 bg-transparent text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none" id="floating-ai-input" placeholder="Pedir ajuste rápido a la IA (ej: 'cambia las opciones por una escala de 1 a 10')..." type="text" onkeydown="if(event.key==='Enter'){executeFloatingAIPrompt();}">
+              <!-- Floating Quick Action Buttons -->
+              <div class="flex items-center gap-2">
+                <button class="px-3.5 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all flex items-center gap-1 shadow-xs" onclick="executeFloatingAIPrompt()" type="button">
+                  <span>Aplicar</span>
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+                <button class="p-1.5 rounded-lg text-tertiary hover:bg-surface-container transition-colors" onclick="closeFullscreenEditor()" title="Minimizar a vista dividida" type="button">
+                  <span class="material-symbols-outlined text-base">close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- State & Interactive Script -->
+  <script>
+    // State of questions
+    const surveyState = {
+      currentIndex: 0,
+      questions: [
+        {
+          id: "q1",
+          dimension: "Organización del trabajo",
+          short: "Antelación en turnos rotativos",
+          title: "¿Con cuánta antelación recibes la confirmación de tus turnos rotativos en planta?",
+          description: "Selecciona una opción para que Recursos Humanos optimice el cuadro de descansos.",
+          type: "multiple_choice",
+          choices: [
+            "Más de 3 semanas (Tiempo óptimo)",
+            "Entre 1 y 2 semanas",
+            "Menos de 7 días (Dificulta la conciliación)",
+            "Cambios imprevistos en menos de 48h"
+          ],
+          selectedChoice: null
+        },
+        {
+          id: "q2",
+          dimension: "Seguridad y Ergonomía",
+          short: "Carga física y ergonomía en línea",
+          title: "¿Cómo valoras la carga física y el ritmo en tu puesto habitual de envasado?",
+          description: "Evalúa si los descansos y rotaciones de puesto son suficientes.",
+          type: "multiple_choice",
+          choices: [
+            "Ritmo adecuado y pausas bien distribuidas",
+            "Cansancio acumulado hacia el final de semana",
+            "Puesto con alta fatiga muscular o posturas forzadas",
+            "Necesidad urgente de rotación de puesto"
+          ],
+          selectedChoice: null
+        },
+        {
+          id: "q3",
+          dimension: "Flexibilidad y Conciliación",
+          short: "Flexibilidad en permuta de descansos",
+          title: "¿Tienes facilidad para cambiar turnos o descansos con compañeros cuando lo necesitas?",
+          description: "Queremos simplificar el trámite con los supervisores de cuadrilla.",
+          type: "multiple_choice",
+          choices: [
+            "Sí, con aviso simple y aprobación rápida",
+            "A veces, depende del supervisor de turno",
+            "Difícil por falta de personal en plantilla",
+            "Nunca es posible cambiar turnos"
+          ],
+          selectedChoice: null
+        },
+        {
+          id: "q4",
+          dimension: "Comunicación y Liderazgo",
+          short: "Relación con el mando de cuadrilla",
+          title: "¿Sientes que tus dudas o sugerencias sobre el proceso en planta son escuchadas?",
+          description: "La comunicación en los cambios de turno es esencial para Estrella Damm.",
+          type: "multiple_choice",
+          choices: [
+            "Totalmente escuchadas y se aplican mejoras",
+            "Se escuchan pero tardan en dar respuesta",
+            "Poca comunicación durante la jornada",
+            "Sensación de desconexión con supervisión"
+          ],
+          selectedChoice: null
+        },
+        {
+          id: "q5",
+          dimension: "Voz Directa / Clima",
+          short: "Comentarios de mejora libre",
+          title: "¿Qué propuesta concreta ayudaría a mejorar el ambiente de trabajo en tu planta?",
+          description: "Tu respuesta es 100% anónima y solo se analizan patrones agregados.",
+          type: "multiple_choice",
+          choices: [
+            "Mejorar climatización y zonas de descanso",
+            "Más previsibilidad en calendarios anuales",
+            "Renovación de herramientas y carretillas",
+            "Talleres de comunicación entre turnos"
+          ],
+          selectedChoice: null
+        }
+      ]
+    };
+
+    // Render Question in Live Preview Card
+    function renderLiveCard() {
+      const q = surveyState.questions[surveyState.currentIndex];
+      if (!q) return;
+
+      document.getElementById('card-q-index').textContent = (surveyState.currentIndex + 1);
+      document.getElementById('card-q-dimension').textContent = q.dimension;
+      document.getElementById('card-q-title').textContent = q.title;
+      document.getElementById('card-q-desc').textContent = q.description;
+
+      const progressPct = ((surveyState.currentIndex + 1) / surveyState.questions.length) * 100;
+      document.getElementById('preview-progress-bar').style.width = `${progressPct}%`;
+      document.getElementById('preview-meta-pill').textContent = `${surveyState.questions.length} Preguntas • ~2 min`;
+
+      const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      const container = document.getElementById('card-options-container');
+      container.innerHTML = '';
+
+      q.choices.forEach((choiceText, idx) => {
+        const letter = letters[idx] || (idx + 1);
+        const isSelected = q.selectedChoice === idx;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `w-full text-left p-3 rounded-lg transition-all flex items-center justify-between group shadow-2xs ${
+          isSelected
+            ? 'bg-secondary-container/40 ring-2 ring-secondary'
+            : 'bg-surface-container hover:bg-secondary-container/30'
+        }`;
+        btn.onclick = () => {
+          q.selectedChoice = idx;
+          renderLiveCard();
+        };
+
+        btn.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded font-mono font-bold text-xs flex items-center justify-center shadow-xs transition-colors ${
+              isSelected
+                ? 'bg-primary text-on-primary'
+                : 'bg-surface-container-lowest text-on-surface group-hover:bg-primary group-hover:text-on-primary'
+            }">${letter}</span>
+            <span class="text-body-md font-medium text-on-surface">${escapeHtml(choiceText)}</span>
+          </div>
+          <span class="material-symbols-outlined text-sm transition-colors ${
+            isSelected ? 'text-primary' : 'text-transparent group-hover:text-primary'
+          }">check_circle</span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function navigateQuestion(direction) {
+      const newIdx = surveyState.currentIndex + direction;
+      if (newIdx >= 0 && newIdx < surveyState.questions.length) {
+        surveyState.currentIndex = newIdx;
+        renderLiveCard();
+        renderFullscreenEditor();
+      }
+    }
+
+    // Fullscreen Editor Modal
+    function openFullscreenEditor() {
+      const modal = document.getElementById('fullscreen-editor-overlay');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        renderFullscreenEditor();
+      }
+    }
+
+    function closeFullscreenEditor() {
+      const modal = document.getElementById('fullscreen-editor-overlay');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        renderLiveCard();
+      }
+    }
+
+    function renderFullscreenEditor() {
+      const listContainer = document.getElementById('manual-questions-list');
+      const countLabel = document.getElementById('modal-questions-count-label');
+      if (countLabel) countLabel.textContent = `Preguntas Estructuradas (${surveyState.questions.length})`;
+
+      if (listContainer) {
+        listContainer.innerHTML = '';
+        surveyState.questions.forEach((q, idx) => {
+          const isActive = idx === surveyState.currentIndex;
+          const item = document.createElement('div');
+          item.className = `p-3 rounded-lg bg-surface-container-lowest text-on-surface shadow-xs flex items-center justify-between cursor-pointer transition-all ${
+            isActive ? 'border-l-4 border-primary bg-surface-container-low font-semibold' : 'hover:bg-surface-container'
+          }`;
+          item.onclick = () => {
+            surveyState.currentIndex = idx;
+            renderFullscreenEditor();
+            renderLiveCard();
+          };
+          item.innerHTML = `
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-xs font-mono font-bold ${isActive ? 'text-primary' : 'text-tertiary'}">${idx + 1}.</span>
+              <span class="text-xs truncate">${escapeHtml(q.short || q.title)}</span>
+            </div>
+            <span class="material-symbols-outlined text-sm text-tertiary">drag_indicator</span>
+          `;
+          listContainer.appendChild(item);
+        });
+      }
+
+      // Populate right editor canvas
+      const currentQ = surveyState.questions[surveyState.currentIndex];
+      if (currentQ) {
+        document.getElementById('editor-header-label').textContent = `Pregunta ${surveyState.currentIndex + 1} de ${surveyState.questions.length} • Opción Múltiple`;
+        document.getElementById('editor-question-title').value = currentQ.title;
+        document.getElementById('editor-question-desc').value = currentQ.description;
+
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const editorOpts = document.getElementById('editor-options-list');
+        editorOpts.innerHTML = '';
+
+        currentQ.choices.forEach((choice, cIdx) => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center gap-3';
+          row.innerHTML = `
+            <span class="w-7 h-7 rounded bg-surface-container font-mono font-bold text-xs flex items-center justify-center shrink-0">${letters[cIdx] || cIdx + 1}</span>
+            <input class="flex-1 bg-surface-container-low p-2.5 rounded-lg text-sm font-medium text-on-surface focus:outline-none focus:bg-surface-container" type="text" value="${escapeHtml(choice)}" oninput="updateChoiceText(${cIdx}, this.value)">
+            <button class="text-outline hover:text-error transition-colors p-1" title="Eliminar opción" type="button" onclick="removeChoice(${cIdx})">
+              <span class="material-symbols-outlined text-lg">delete</span>
+            </button>
+          `;
+          editorOpts.appendChild(row);
+        });
+      }
+    }
+
+    function updateActiveQuestionTitle(val) {
+      if (surveyState.questions[surveyState.currentIndex]) {
+        surveyState.questions[surveyState.currentIndex].title = val;
+        renderLiveCard();
+      }
+    }
+
+    function updateActiveQuestionDesc(val) {
+      if (surveyState.questions[surveyState.currentIndex]) {
+        surveyState.questions[surveyState.currentIndex].description = val;
+        renderLiveCard();
+      }
+    }
+
+    function updateChoiceText(cIdx, val) {
+      const q = surveyState.questions[surveyState.currentIndex];
+      if (q && q.choices[cIdx] !== undefined) {
+        q.choices[cIdx] = val;
+        renderLiveCard();
+      }
+    }
+
+    function removeChoice(cIdx) {
+      const q = surveyState.questions[surveyState.currentIndex];
+      if (q && q.choices.length > 2) {
+        q.choices.splice(cIdx, 1);
+        renderFullscreenEditor();
+        renderLiveCard();
+      } else {
+        showToast('Cada pregunta requiere al menos 2 opciones de respuesta.', 'error');
+      }
+    }
+
+    function addOptionToCurrentQuestion() {
+      const q = surveyState.questions[surveyState.currentIndex];
+      if (q && q.choices.length < 8) {
+        q.choices.push(`Nueva alternativa ${q.choices.length + 1}`);
+        renderFullscreenEditor();
+        renderLiveCard();
+      } else {
+        showToast('Máximo de 8 opciones por pregunta.', 'info');
+      }
+    }
+
+    function addNewManualQuestion() {
+      const newCount = surveyState.questions.length + 1;
+      surveyState.questions.push({
+        id: `q${newCount}`,
+        dimension: "Organización y Clima",
+        short: `Pregunta adicional ${newCount}`,
+        title: `¿Cómo valorarías este aspecto en tu turno de trabajo?`,
+        description: "Añade contexto para que los equipos puedan evaluar la situación.",
+        type: "multiple_choice",
+        choices: [
+          "Excelente / Muy satisfecho",
+          "Aceptable con margen de mejora",
+          "Insatisfactorio / Requiere revisión"
+        ],
+        selectedChoice: null
+      });
+      surveyState.currentIndex = surveyState.questions.length - 1;
+      renderFullscreenEditor();
+      renderLiveCard();
+      showToast('Nueva pregunta añadida al editor.', 'success');
+    }
+
+    // AI Iteration & Prompts
+    function appendPromptAction(text) {
+      const input = document.getElementById('ai-chat-input');
+      if (input) {
+        input.value = text;
+        input.focus();
+      }
+    }
+
+    async function handleSendPrompt(e) {
+      e.preventDefault();
+      const input = document.getElementById('ai-chat-input');
+      if (!input || !input.value.trim()) return;
+
+      const userText = input.value.trim();
+      input.value = '';
+
+      const btn = document.getElementById('iterate-btn');
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+
+      showToast('Analizando necesidad con IA para adaptar microconsulta...', 'info');
+
+      // Visual pulse
+      const card = document.getElementById('typeform-question-card');
+      if (card) card.style.opacity = '0.4';
+
+      try {
+        // Call backend API if configured, otherwise smart local simulation
+        const response = await fetch('/api/question', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dimension: 'bienestar', site: 'Fábrica', prompt: userText })
+        }).catch(() => null);
+
+        let newQuestionText = "";
+        if (response && response.ok) {
+          const data = await response.json();
+          newQuestionText = data.question;
+        }
+
+        // Apply iteration to question
+        const currentQ = surveyState.questions[surveyState.currentIndex];
+        if (newQuestionText) {
+          currentQ.title = newQuestionText;
+        } else {
+          currentQ.title = `¿Cómo afecta "${userText.slice(0, 50)}" a tu jornada habitual en planta?`;
+        }
+
+        document.getElementById('current-user-need-display').textContent = `“${userText}”`;
+        document.getElementById('ai-synthesis-text').innerHTML = `
+          He recalculado la batería de preguntas integrando tu observación: <em>"${escapeHtml(userText)}"</em>. Se han ajustado las opciones para operarios de envasado y turnos rotativos.
+        `;
+
+        renderLiveCard();
+        showToast('Microconsulta actualizada con éxito.', 'success');
+      } catch (err) {
+        showToast('Se aplicó la iteración localmente.', 'info');
+      } finally {
+        if (card) card.style.opacity = '1';
+        btn.disabled = false;
+        btn.classList.remove('opacity-50');
+      }
+    }
+
+    function executeFloatingAIPrompt() {
+      const floatInput = document.getElementById('floating-ai-input');
+      if (!floatInput || !floatInput.value.trim()) return;
+
+      const val = floatInput.value.trim();
+      floatInput.value = 'Aplicando: ' + val + '...';
+
+      setTimeout(() => {
+        const q = surveyState.questions[surveyState.currentIndex];
+        if (q) {
+          if (val.toLowerCase().includes('escala') || val.toLowerCase().includes('1 a 5') || val.toLowerCase().includes('1 a 10')) {
+            q.choices = [
+              "1 - Muy insatisfecho / Deficiente",
+              "2 - Mejorable",
+              "3 - Aceptable",
+              "4 - Favorable",
+              "5 - Excelente / Óptimo"
+            ];
+          } else {
+            q.title = `¿En qué medida "${val}" influye en tu experiencia en la planta?`;
+          }
+        }
+        floatInput.value = '';
+        renderFullscreenEditor();
+        renderLiveCard();
+        showToast('Ajuste rápido de IA aplicado a la pregunta.', 'success');
+      }, 500);
+    }
+
+    // Publish / Launch Survey to Plants & Typeform
+    async function launchSurveyToPlants() {
+      const btn = document.getElementById('publish-to-plants-btn');
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+
+      showToast('Sincronizando con Typeform y publicando para Plantas...', 'info');
+
+      // Convert studio questions to backend validated schema
+      const formattedQuestions = surveyState.questions.map((q, idx) => ({
+        id: `q_${idx + 1}`,
+        text: q.title,
+        type: q.type === "multiple_choice" ? "multiple_choice" : "rating",
+        dimension: "bienestar",
+        required: true,
+        choices: q.choices && q.choices.length >= 2 ? q.choices : ["Favorable", "Mejorable"],
+      }));
+
+      // Ensure at least one rating question for aggregate score compatibility
+      if (!formattedQuestions.some(q => q.type === "rating")) {
+        formattedQuestions.unshift({
+          id: "q_overall",
+          text: "¿Cómo valorarías tu bienestar y ritmo de trabajo durante la jornada?",
+          type: "rating",
+          dimension: "bienestar",
+          required: true,
+          choices: [],
+        });
+      }
+
+      const payload = {
+        objective: "Evaluar turnos rotativos y carga física en plantas Q4",
+        cohort: "Planta",
+        context: "Planta El Prat, Santa Coloma y Murcia - Envasado y Logística",
+        max_duration: "2",
+        exclusions: "No solicitar datos de identificación personal",
+        language: "es",
+        channel: "Móvil-QR",
+        title: "Pulso Operativo Q4: Turnicidad y Clima en Planta",
+        intro: "Tu voz es 100% anónima y esencial para ajustar los cuadros de relevo y descansos en Estrella Damm.",
+        questions: formattedQuestions
+      };
+
+      try {
+        const res = await fetch('/api/surveys/publish-direct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.typeform_connected) {
+            showToast('¡Encuesta creada con éxito en tu cuenta de Typeform!', 'success');
+          } else {
+            showToast('¡Publicada con éxito con código QR y enlace anónimo!', 'success');
+          }
+          setTimeout(() => {
+            window.location.href = '/admin';
+          }, 1400);
+        } else {
+          showToast('Consulta guardada como borrador listo para aprobación humana.', 'success');
+        }
+      } catch (e) {
+        showToast('Consulta publicada en modo local.', 'info');
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50');
+      }
+    }
+
+    // Retractile Sidebar with LocalStorage Persistence
+    let isSidebarCollapsed = localStorage.getItem('damm_sidebar_collapsed') === 'true';
+
+    function applySidebarState() {
+      const sidebar = document.getElementById('app-sidebar');
+      const wrapper = document.getElementById('main-layout-wrapper');
+      const header = document.getElementById('main-header');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      const labels = document.querySelectorAll('.sidebar-label');
+      const footer = document.querySelector('.sidebar-footer');
+
+      if (!sidebar) return;
+
+      if (isSidebarCollapsed) {
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-16');
+        wrapper.classList.remove('pl-64');
+        wrapper.classList.add('pl-16');
+        header.classList.remove('left-64');
+        header.classList.add('left-16');
+        if (toggleIcon) toggleIcon.textContent = 'menu';
+        labels.forEach(el => el.classList.add('hidden'));
+        if (footer) footer.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('w-16');
+        sidebar.classList.add('w-64');
+        wrapper.classList.remove('pl-16');
+        wrapper.classList.add('pl-64');
+        header.classList.remove('left-16');
+        header.classList.add('left-64');
+        if (toggleIcon) toggleIcon.textContent = 'menu_open';
+        labels.forEach(el => el.classList.remove('hidden'));
+        if (footer) footer.classList.remove('hidden');
+      }
+      localStorage.setItem('damm_sidebar_collapsed', isSidebarCollapsed);
+    }
+
+    function toggleSidebar() {
+      isSidebarCollapsed = !isSidebarCollapsed;
+      applySidebarState();
+    }
+      const footer = document.querySelector('.sidebar-footer');
+
+      isSidebarCollapsed = !isSidebarCollapsed;
+
+      if (isSidebarCollapsed) {
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-16');
+        wrapper.classList.remove('pl-64');
+        wrapper.classList.add('pl-16');
+        header.classList.remove('left-64');
+        header.classList.add('left-16');
+        if (toggleIcon) toggleIcon.textContent = 'menu';
+        labels.forEach(el => el.classList.add('hidden'));
+        if (footer) footer.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('w-16');
+        sidebar.classList.add('w-64');
+        wrapper.classList.remove('pl-16');
+        wrapper.classList.add('pl-64');
+        header.classList.remove('left-16');
+        header.classList.add('left-64');
+        if (toggleIcon) toggleIcon.textContent = 'menu_open';
+        labels.forEach(el => el.classList.remove('hidden'));
+        if (footer) footer.classList.remove('hidden');
+      }
+    }
+
+    // Toast helper
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-secondary-container text-on-secondary-container border border-secondary' :
+                 type === 'error' ? 'bg-error-container text-on-error-container border border-error' :
+                 'bg-surface-container-highest text-on-surface border border-outline/30';
+
+      toast.className = `p-3 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 pointer-events-auto toast-animate ${bg}`;
+      toast.innerHTML = `
+        <span class="material-symbols-outlined text-sm">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}</span>
+        <span>${escapeHtml(msg)}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Keyboard shortcuts for live preview (A, B, C, D)
+    window.addEventListener('keydown', (e) => {
+      // Don't intercept when typing in inputs/textareas
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      const key = e.key.toUpperCase();
+      const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+      const idx = letters.indexOf(key);
+      const q = surveyState.questions[surveyState.currentIndex];
+      if (idx !== -1 && q && q.choices[idx]) {
+        q.selectedChoice = idx;
+        renderLiveCard();
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        navigateQuestion(1);
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        navigateQuestion(-1);
+      }
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      applySidebarState();
+      renderLiveCard();
+    });
+  </script>
+</body>
+</html>

@@ -11,7 +11,7 @@ python -m pip install -r requirements.txt
 python -m backend.app
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000) for the aggregate dashboard or [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) to design a survey. The initial data is synthetic (600 responses across two periods and five cohorts), clearly labelled, and never mixed into live response counts.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) for the aggregate dashboard, [http://127.0.0.1:8000/generator](http://127.0.0.1:8000/generator) for the AI-Assisted Survey Generator Studio, or [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) to manage surveys and insights. The initial data is synthetic (600 responses across two periods and five cohorts), clearly labelled, and never mixed into live response counts.
 
 The HR flow supports a defined listening need, configurable population shares, 3–6 editable questions, conditional follow-up questions, explicit approval, QR/link sharing, local Typeform-style participation, and (when configured) Typeform publication and response import. Recommendations must also be approved or dismissed by a human before they are treated as actions.
 
@@ -24,6 +24,7 @@ backend/
     qrgenerator.py       Optional QR image generator
 ui/
   index.html             Aggregate dashboard and check-in interface
+  generator.html         AI-assisted survey studio and live Typeform preview
   app.js                 Dashboard and respondent interactions
   admin.html             HR survey design and insights
   admin.js               Survey editor and admin API client
@@ -31,8 +32,11 @@ ui/
   styles.css             Responsive visual design
   assets/
     codigo_qr.png        Optional static QR image
+statistical_engine.py    Deterministic statistical engine (bias & polarization detection)
+llm_insights.py          Prompt engineering & LLM synthesis without hallucinations
 tests/
-  test_app.py            Backend tests
+  test_app.py            Backend and API tests
+  test_statistical_engine.py Unit tests for math & privacy
 data/
   pulso.sqlite3          Local response database (created at runtime)
 ```

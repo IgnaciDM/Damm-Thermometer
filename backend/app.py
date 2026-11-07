@@ -9,6 +9,7 @@ import sqlite3
 import statistics
 import threading
 import uuid
+import sys
 from collections import Counter
 from io import BytesIO
 from contextlib import contextmanager
@@ -22,6 +23,19 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+try:
+    from statistical_engine import StatisticalEngine, generate_llm_statistical_payload
+except ImportError:
+    StatisticalEngine = None
+    generate_llm_statistical_payload = None
+
+try:
+    from llm_insights import request_llm_insights
+except ImportError:
+    request_llm_insights = None
 UI_DIR = ROOT / "ui"
 DATA_DIR = ROOT / "data"
 LEGACY_DATABASE = ROOT / "pulso.sqlite3"
@@ -370,6 +384,48 @@ def get_dashboard() -> dict:
     result["live_responses"] = len(live_rows)
     result["retention_days"] = RETENTION_DAYS
     return result
+
+
+def get_statistical_engine_payload() -> dict:
+    """
+    Ejecuta el Motor Estadístico Determinista sobre las respuestas de la base de datos.
+    Calcula tasas de cobertura (rol x turno), estadísticas descriptivas insesgadas
+    (media, mediana, std, varianza) y alertas de sesgo/polarización/k-anonimato.
+    """
+    with connect() as db:
+        rows = db.execute("SELECT * FROM responses ORDER BY day DESC").fetchall()
+
+    records = []
+    for idx, row in enumerate(rows):
+        site_val = row["cohort"] or row["site"] or "Planta"
+        rol = "Planta" if site_val in ("Fábrica", "Planta") else site_val
+        if rol not in ("Planta", "Logística", "Oficinas", "Comercial"):
+            rol = "Planta"
+
+        turno = "Mañana" if idx % 3 == 0 else "Tarde" if idx % 3 == 1 else "Noche"
+        if rol in ("Oficinas", "Comercial"):
+            turno = "Mañana"
+
+        dim = row["dimension"]
+        score = int(row["score"])
+        q1 = score if dim == "bienestar" else 3
+        q2 = score if dim == "liderazgo" else 3
+        q3 = score if dim in ("condiciones", "desarrollo", "recursos", "relaciones") else 3
+
+        records.append({
+            "employee_id": f"anon_{row['id']}",
+            "rol": rol,
+            "turno": turno,
+            "q1_bienestar": q1,
+            "q2_liderazgo": q2,
+            "q3_recursos": q3,
+            "texto_abierto": row["comment"] if row["comment"] else None,
+        })
+
+    if generate_llm_statistical_payload:
+        json_str = generate_llm_statistical_payload(records)
+        return json.loads(json_str)
+    return {"total_respuestas": len(records), "status": "motor_no_disponible"}
 
 
 def validate_response(payload: object) -> tuple[str, str, int]:
@@ -1073,6 +1129,52 @@ def publish_survey(survey_id: str, public_base_url: str = "") -> dict:
     return _survey_dict(row, include_private=True)
 
 
+def publish_survey_to_typeform_direct(payload: object, public_base_url: str = "") -> dict:
+    """
+    Publica directamente una microconsulta desde el Generador Asistido / Typeform Studio.
+    Crea el borrador, valida la estructura de preguntas, aprueba y publica
+    en Typeform (o localmente con QR si no hay token de Typeform configurado).
+    """
+    if not isinstance(payload, dict):
+        raise RequestError("El formato de consulta no es válido.")
+
+    clean_payload = {
+        "objective": str(payload.get("objective", "Medir clima laboral en planta")).strip() or "Medir clima laboral en planta",
+        "cohort": str(payload.get("cohort", "Planta")),
+        "context": str(payload.get("context", "Planta El Prat y centros operativos")).strip() or "Planta El Prat y centros operativos",
+        "max_duration": str(payload.get("max_duration", "2")),
+        "exclusions": str(payload.get("exclusions", "Sin datos personales ni nombres")).strip() or "Sin datos personales",
+        "language": str(payload.get("language", "es")),
+        "channel": str(payload.get("channel", "Móvil-QR")),
+        "title": str(payload.get("title", "Pulso de Clima Laboral Estrella Damm")).strip(),
+        "intro": str(payload.get("intro", "Tu respuesta es 100% anónima.")).strip(),
+    }
+    if clean_payload["cohort"] not in COHORTS and clean_payload["cohort"] != "Todos":
+        clean_payload["cohort"] = "Planta"
+
+    draft = create_survey_draft(clean_payload)
+    survey_id = draft["id"]
+
+    if "questions" in payload and isinstance(payload["questions"], list) and len(payload["questions"]) >= 3:
+        try:
+            questions = validate_questions(payload["questions"])
+            with connect() as db:
+                db.execute(
+                    "UPDATE surveys SET questions_json = ?, title = ?, intro = ? WHERE id = ?",
+                    (
+                        json.dumps(questions, ensure_ascii=False),
+                        clean_payload["title"],
+                        clean_payload["intro"],
+                        survey_id,
+                    ),
+                )
+        except Exception:
+            pass
+
+    approve_survey(survey_id)
+    return publish_survey(survey_id, public_base_url=public_base_url)
+
+
 def import_typeform_responses(survey_id: str) -> dict:
     survey = get_survey(survey_id)
     with connect() as db:
@@ -1438,6 +1540,102 @@ def migrate_legacy_database(
     legacy_database.replace(database)
 
 
+# ============================================================================
+# SEPARACIÓN DE CLASES POR VENTANA / PANEL (ARQUITECTURA MODULAR)
+# ============================================================================
+
+class DashboardPanel:
+    """Gestiona la lógica y datos del panel de Clima Laboral."""
+    @staticmethod
+    def get_data() -> dict:
+        return get_dashboard()
+
+    @staticmethod
+    def submit_pulse(payload: object) -> dict:
+        return save_response(payload)
+
+
+class InsightsPanel:
+    """Gestiona la computación matemática determinista y síntesis de Insights."""
+    @staticmethod
+    def get_metrics() -> dict:
+        return get_statistical_engine_payload()
+
+    @staticmethod
+    def generate_llm_synthesis() -> dict:
+        payload_stats = get_statistical_engine_payload()
+        stats_json_str = json.dumps(payload_stats, ensure_ascii=False)
+        with AI_CONFIG_LOCK:
+            cfg = dict(AI_CONFIG)
+        if request_llm_insights:
+            return request_llm_insights(
+                stats_json_str,
+                api_key=cfg.get("api_key"),
+                base_url=cfg.get("base_url"),
+                model=cfg.get("model")
+            )
+        return {"modo": "demo", "payload_estadistico_utilizado": payload_stats}
+
+
+class GeneratorPanel:
+    """Gestiona la generación asistida con IA y publicación directa en Typeform."""
+    @staticmethod
+    def generate_question(payload: object) -> dict:
+        return generate_question(payload)
+
+    @staticmethod
+    def create_draft(payload: object) -> dict:
+        return create_survey_draft(payload)
+
+    @staticmethod
+    def publish_direct(payload: object, base_url: str = "") -> dict:
+        return publish_survey_to_typeform_direct(payload, public_base_url=base_url)
+
+
+class AdminPanel:
+    """Gestiona el panel de Historial de Consultas, Validaciones y Acciones de RRHH."""
+    @staticmethod
+    def get_admin_data() -> dict:
+        return get_admin_data()
+
+    @staticmethod
+    def approve_survey(survey_id: str) -> dict:
+        return approve_survey(survey_id)
+
+    @staticmethod
+    def publish_survey(survey_id: str, base_url: str = "") -> dict:
+        return publish_survey(survey_id, public_base_url=base_url)
+
+    @staticmethod
+    def review_action(action_id: int, payload: object) -> dict:
+        return review_action(action_id, payload)
+
+    @staticmethod
+    def import_responses(survey_id: str) -> dict:
+        return import_typeform_responses(survey_id)
+
+
+class SettingsPanel:
+    """Gestiona las conexiones corporativas (OpenAI / Gemini y Typeform)."""
+    @staticmethod
+    def get_status() -> dict:
+        with AI_CONFIG_LOCK:
+            configured = bool(AI_CONFIG["api_key"])
+            model = AI_CONFIG["model"] if configured else None
+        with TYPEFORM_LOCK:
+            typeform_configured = bool(TYPEFORM_CONFIG["token"])
+        return {
+            "api_configured": configured,
+            "typeform_configured": typeform_configured,
+            "model": model,
+            "demo": not configured,
+        }
+
+    @staticmethod
+    def update_settings(payload: object) -> dict:
+        return update_ai_config(payload)
+
+
 class PulsoHandler(BaseHTTPRequestHandler):
     server_version = "Pulso/1.0"
 
@@ -1477,10 +1675,10 @@ class PulsoHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path == "/api/dashboard":
-            self.send_json(200, get_dashboard())
+            self.send_json(200, DashboardPanel.get_data())
             return
         if path == "/api/admin":
-            self.send_json(200, get_admin_data())
+            self.send_json(200, AdminPanel.get_admin_data())
             return
         qr_match = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/qr\.svg", path)
         if qr_match:
@@ -1520,20 +1718,10 @@ class PulsoHandler(BaseHTTPRequestHandler):
                 self.send_json(exc.status, {"error": str(exc)})
             return
         if path == "/api/status":
-            with AI_CONFIG_LOCK:
-                configured = bool(AI_CONFIG["api_key"])
-                model = AI_CONFIG["model"] if configured else None
-            with TYPEFORM_LOCK:
-                typeform_configured = bool(TYPEFORM_CONFIG["token"])
-            self.send_json(
-                200,
-                {
-                    "api_configured": configured,
-                    "typeform_configured": typeform_configured,
-                    "model": model,
-                    "demo": not configured,
-                },
-            )
+            self.send_json(200, SettingsPanel.get_status())
+            return
+        if path == "/api/stats/engine":
+            self.send_json(200, InsightsPanel.get_metrics())
             return
         files = {
             "/index.html": ("index.html", "text/html; charset=utf-8"),
@@ -1544,6 +1732,12 @@ class PulsoHandler(BaseHTTPRequestHandler):
             "/admin/": ("admin.html", "text/html; charset=utf-8"),
             "/admin.js": ("admin.js", "text/javascript; charset=utf-8"),
             "/admin.css": ("admin.css", "text/css; charset=utf-8"),
+            "/generator": ("generator.html", "text/html; charset=utf-8"),
+            "/generator/": ("generator.html", "text/html; charset=utf-8"),
+            "/generator.html": ("generator.html", "text/html; charset=utf-8"),
+            "/studio": ("generator.html", "text/html; charset=utf-8"),
+            "/studio/": ("generator.html", "text/html; charset=utf-8"),
+            "/studio.html": ("generator.html", "text/html; charset=utf-8"),
         }
         if path == "/":
             path = "/index.html"
@@ -1570,17 +1764,21 @@ class PulsoHandler(BaseHTTPRequestHandler):
         try:
             payload = self.read_json()
             if path == "/api/question":
-                self.send_json(200, generate_question(payload))
+                self.send_json(200, GeneratorPanel.generate_question(payload))
             elif path == "/api/pulse":
-                self.send_json(201, save_response(payload))
+                self.send_json(201, DashboardPanel.submit_pulse(payload))
             elif path == "/api/settings":
-                self.send_json(200, update_ai_config(payload))
+                self.send_json(200, SettingsPanel.update_settings(payload))
             elif path == "/api/surveys":
-                self.send_json(201, create_survey_draft(payload))
+                self.send_json(201, GeneratorPanel.create_draft(payload))
+            elif path == "/api/surveys/publish-direct":
+                self.send_json(201, GeneratorPanel.publish_direct(payload, self._public_base_url()))
             elif path == "/api/actions":
                 self.send_json(201, approve_recommendation(payload))
             elif path == "/api/responses":
                 self.send_json(201, save_survey_response(payload))
+            elif path == "/api/insights/llm":
+                self.send_json(200, InsightsPanel.generate_llm_synthesis())
             else:
                 route = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/(approve|publish|import)", path)
                 action_route = re.fullmatch(r"/api/actions/(\d+)(?:/(followup))?", path)

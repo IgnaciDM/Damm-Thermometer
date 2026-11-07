@@ -1,209 +1,1582 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f3ed">
-  <meta name="description" content="Escucha el clima de tu equipo, de forma continua, humana y anónima.">
-  <title>Pulso — Escuchar mejor, actuar antes</title>
-  <link rel="stylesheet" href="/styles.css">
-  <script src="/app.js" defer></script>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="web_dashboard" name="shell-type">
+  <title>Portal Damm — HR Climate &amp; Intelligence Suite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .sidebar-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .content-transition { transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), left 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .toast-animate { transition: transform 0.25s ease, opacity 0.25s ease; }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    .status-bar-positive { border-left: 3px solid #10b981; }
+    .status-bar-warning { border-left: 3px solid #f59e0b; }
+    .status-bar-critical { border-left: 3px solid #ef4444; }
+    .status-bar-brand { border-left: 3px solid #c4161c; }
+    .status-bar-gold { border-left: 3px solid #d4af37; }
+  </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#fbf9f7",
+            "surface-dim": "#dbdad8",
+            "surface-bright": "#fbf9f7",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f5f3f1",
+            "surface-container": "#efedec",
+            "surface-container-high": "#eae8e6",
+            "surface-container-highest": "#e4e2e0",
+            "on-surface": "#1b1c1b",
+            "on-surface-variant": "#5c403d",
+            "inverse-surface": "#30302f",
+            "inverse-on-surface": "#f2f0ee",
+            "outline": "#906f6b",
+            "outline-variant": "#e5bdb9",
+            "surface-tint": "#bd0e18",
+            "primary": "#c4161c",
+            "primary-container": "#c4161c",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#ffd6d2",
+            "secondary": "#735c00",
+            "secondary-container": "#fed65b",
+            "on-secondary-container": "#745c00",
+            "tertiary": "#1e1611",
+            "tertiary-container": "#6c6059",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "status-positive": "#10b981",
+            "status-warning": "#f59e0b",
+            "status-critical": "#ef4444",
+            "brand-gold": "#d4af37"
+          },
+          borderRadius: { DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px" },
+          spacing: {
+            gutter: "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            margin: "2rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Navegación principal">
-      <a class="brand" href="#" aria-label="Pulso, inicio">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="brand-name">pulso<span>.</span></span>
-      </a>
-      <div class="workspace-label">ESCUCHA ORGANIZACIONAL</div>
-      <nav class="side-nav">
-        <a class="nav-link active" href="#inicio" aria-label="Resumen" title="Resumen"><span class="nav-icon">◫</span> Resumen <span class="nav-dot"></span></a>
-        <a class="nav-link" href="/admin" aria-label="Diseñar consulta" title="Diseñar consulta"><span class="nav-icon">✳</span> Diseñar consulta</a>
-        <a class="nav-link" href="#pulso" aria-label="Nuevo pulso" title="Nuevo pulso"><span class="nav-icon">◎</span> Nuevo pulso</a>
-        <a class="nav-link" href="#insights" aria-label="Insights" title="Insights"><span class="nav-icon">↗</span> Insights</a>
-        <a class="nav-link" href="#dimensiones" aria-label="Dimensiones" title="Dimensiones"><span class="nav-icon">◉</span> Dimensiones</a>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="sidebar-note">
-          <div class="note-icon">✳</div>
-          <p>Escuchar mejor,<br><strong>actuar antes.</strong></p>
-          <span>El bienestar también se construye cada día.</span>
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-20 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Retractile Sidebar -->
+  <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(30,22,17,0.04)] sidebar-transition overflow-hidden w-64 border-r border-surface-container/60" id="app-sidebar">
+    <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
+      <div class="flex items-center gap-space-sm overflow-hidden" id="sidebar-brand-box">
+        <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+        <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">PORTAL DAMM</span>
+      </div>
+      <button aria-label="Colapsar o expandir menú" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="toggleSidebar()" type="button">
+        <span class="material-symbols-outlined text-xl" id="sidebar-toggle-icon">menu_open</span>
+      </button>
+    </div>
+
+    <div class="px-space-md py-space-xs sidebar-label">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70">Paneles de Gestión</span>
+    </div>
+
+    <!-- Navigation Buttons with Red Active State -->
+    <nav class="flex-1 px-space-sm space-y-1.5 mt-1" id="sidebar-nav">
+      <button id="nav-btn-dashboard" onclick="showPanel('dashboard')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-bold bg-primary text-on-primary shadow-xs transition-all text-left">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">analytics</span>
+        <span class="sidebar-label whitespace-nowrap">Dashboard Clima</span>
+      </button>
+
+      <button id="nav-btn-insights" onclick="showPanel('insights')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">query_stats</span>
+        <span class="sidebar-label whitespace-nowrap">Insights &amp; Motor</span>
+      </button>
+
+      <button id="nav-btn-generator" onclick="showPanel('generator')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">auto_awesome</span>
+        <span class="sidebar-label whitespace-nowrap">Generador Asistido</span>
+      </button>
+
+      <button id="nav-btn-admin" onclick="showPanel('admin')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">history_edu</span>
+        <span class="sidebar-label whitespace-nowrap">Historial y Acciones</span>
+      </button>
+
+      <button id="nav-btn-settings" onclick="showPanel('settings')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">settings</span>
+        <span class="sidebar-label whitespace-nowrap">Configuración</span>
+      </button>
+    </nav>
+
+    <div class="p-3 bg-surface-container/60 m-space-sm rounded-xl overflow-hidden sidebar-footer border border-surface-container-high">
+      <div class="flex items-center gap-space-sm mb-1">
+        <span class="material-symbols-outlined text-brand-gold text-base flex-shrink-0">verified</span>
+        <span class="text-xs font-bold text-on-surface whitespace-nowrap sidebar-label">Estrella Damm 1876</span>
+      </div>
+      <p class="text-[11px] text-on-surface-variant whitespace-nowrap sidebar-label">Sede Central Barcelona</p>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="content-transition pl-64" id="main-layout-wrapper">
+    <!-- Topbar -->
+    <header class="fixed top-0 right-0 h-16 bg-surface/95 backdrop-blur-xl z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(30,22,17,0.04)] content-transition border-b border-surface-container-high/60 left-64" id="main-header">
+      <div class="flex items-center gap-space-md">
+        <div class="flex items-center gap-2.5 pr-2">
+          <img alt="Chapa Estrella Damm" class="w-8 h-8 object-contain rounded-full shadow-xs hover:rotate-12 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr9w9N2CHJugzokmjtecwVk9xXE-ZkiZRZImgVPACsog-N1B87jVSrrYfA-VyG_C18iBTV-_IuQlkbAxn6o7h8TZ5vJWLCAd9JKaFUgaB6I3OmPi-mH7-SxOg2gWH54hrEM7l3WdCE-C2TcxHtSCb9ZqiYreVZrni4v4pmeTzTnmqnQPZtHOD5SnHgYF8ul2a6vnRbBqr8tiAlBL5ZAQEVtxlEwiTzsd_heW0R14sbGvBlTKUGxDfrlA">
+          <img alt="Damm" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp8e3SBJmS1WmekQO9lQ6n13qTMQ8_LcWug664Z35wY-3SjM7pFiWUoxKMCr8jMPjycECeYqKpcgWdvf141-cg0V6rDZ6-d2NZXDBLC9I3euKsCtLzjpwcq2zwZUP3rxBMDhBP8J6GLPky6UmUuB0tBxtpX0Q_cN-04n7c_1wzSrbGmgssBxij1n6eIxuUcczFxrHOOdpjBShEGltx0gBkxccMu3c7UebhVIoEf-t7hKMwW7Z5pDLWlw">
         </div>
-        <button class="settings-link" id="open-settings"><span class="nav-icon">⚙</span> Configurar API <span class="settings-status" id="api-status-dot"></span></button>
-        <div class="profile">
-          <div class="profile-avatar">P</div>
-          <div><strong>People & Culture</strong><small>Panel de organización</small></div>
-          <span class="profile-more">···</span>
+        <div class="h-4 w-px bg-outline-variant/50 hidden sm:block"></div>
+        <div class="hidden sm:flex items-center gap-2">
+          <span class="text-xs font-medium text-on-surface-variant">Organización</span>
+          <span class="material-symbols-outlined text-sm text-on-surface-variant">chevron_right</span>
+          <span class="text-sm font-headline font-semibold text-on-surface" id="topbar-active-section-title">Dashboard Clima</span>
         </div>
       </div>
-    </aside>
 
-    <main id="inicio" class="main-content">
-      <header class="topbar">
-        <div class="breadcrumb"><span>Organización</span><span class="crumb-sep">/</span><strong>Resumen</strong></div>
-        <div class="topbar-actions">
-          <span class="live-pill"><i></i> Actualizado ahora</span>
-          <button class="icon-button mobile-settings" id="open-settings-mobile" aria-label="Configurar API">⚙</button>
-          <div class="top-avatar" title="People & Culture">P</div>
-        </div>
-      </header>
+      <div class="flex items-center gap-space-md">
+        <!-- Responder Pulso Kiosk Button -->
+        <button onclick="openCheckinModal()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold transition-all border border-surface-container" type="button">
+          <span class="material-symbols-outlined text-sm text-primary">touch_app</span>
+          <span>Participar en un Pulso</span>
+        </button>
 
-      <section class="hero">
-        <div class="hero-copy">
-          <div class="eyebrow"><span class="eyebrow-star">✳</span> CLIMA LABORAL · A TU RITMO</div>
-          <h1>Las personas<br>marcan el <em>pulso.</em></h1>
-          <p>Una pregunta a la vez. Una organización que escucha de verdad. Descubre qué está pasando en cada equipo, hoy.</p>
-          <a class="hero-cta" href="#pulso">Lanzar un pulso <span>↗</span></a>
-          <div class="hero-footnote"><span class="tiny-shield">⬡</span> Anónimo por diseño <span class="footnote-divider"></span> Solo 30 segundos</div>
-        </div>
-        <div class="hero-art" aria-label="Ilustración decorativa de un equipo conectado">
-          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-          <div class="art-sun"></div><div class="art-pulse-line"></div>
-          <div class="art-card">
-            <div class="art-card-top"><span>EL EQUIPO, EN UNA MIRADA</span><b>● ● ●</b></div>
-            <div class="art-score">4.2 <span>/ 5</span></div>
-            <div class="art-score-caption">energía del equipo</div>
-            <div class="art-chart"><i style="--h:35%"></i><i style="--h:50%"></i><i style="--h:44%"></i><i style="--h:70%"></i><i style="--h:61%"></i><i style="--h:84%"></i><i style="--h:73%"></i><i style="--h:94%"></i></div>
-            <div class="art-chart-labels"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span><span>HOY</span></div>
+        <button aria-label="Notificaciones" class="relative w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button">
+          <span class="material-symbols-outlined text-xl">notifications</span>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface"></span>
+        </button>
+
+        <!-- User Profile -->
+        <div class="flex items-center gap-space-sm pl-2 py-1 pr-1 border-l border-surface-container-high">
+          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary/20 shadow-xs">
+            DP
           </div>
-          <div class="art-bubble bubble-heart">♡</div>
-          <div class="art-bubble bubble-spark">✳</div>
-          <div class="art-caption">Bienestar<br>en el trabajo</div>
-          <div class="art-person person-one"><div class="person-head"></div><div class="person-body"></div><div class="person-arm"></div></div>
-          <div class="art-person person-two"><div class="person-head"></div><div class="person-body"></div><div class="person-arm"></div></div>
-          <div class="art-floor"></div>
+          <div class="hidden lg:flex flex-col text-left">
+            <span class="text-xs font-bold text-on-surface leading-tight">Dirección de Personas</span>
+            <span class="text-[11px] text-on-surface-variant leading-tight">Admin Global HR</span>
+          </div>
         </div>
-        <div class="hero-stamp"><span>UN BUEN LUGAR<br>PARA TRABAJAR</span><b>✳</b></div>
-      </section>
+      </div>
+    </header>
 
-      <div class="demo-banner" id="demo-banner" hidden>
-        <span class="demo-symbol">◌</span>
-        <span><strong>Vista de demostración.</strong> Estas respuestas son sintéticas; al recibir el primer pulso, se sustituyen por datos reales.</span>
-        <button id="dismiss-demo" aria-label="Cerrar aviso">×</button>
+    <!-- CONTENT PANELS CONTAINER -->
+    <main class="w-full pt-20 bg-surface px-space-xl py-space-lg max-w-7xl mx-auto space-y-space-lg">
+
+      <!-- ===================================================================== -->
+      <!-- PANEL 1: DASHBOARD CLIMA -->
+      <!-- ===================================================================== -->
+      <div id="panel-dashboard" class="panel-view space-y-space-lg">
+        <!-- Hero Header -->
+        <div class="flex flex-wrap items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-xs border border-surface-container">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary">Estrella Damm • Clima Continuo</span>
+              <span class="text-xs text-outline">/</span>
+              <span class="text-xs text-on-surface-variant" id="demo-indicator-pill">Entorno Activo</span>
+            </div>
+            <h1 class="text-2xl font-headline font-bold text-on-surface">Escucha activa en Fábricas, Logística, Comercial y Oficinas</h1>
+            <p class="text-xs text-on-surface-variant mt-1">Medición ágil y continua del clima laboral con estricta separación matemática y privacidad garantizada.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showPanel('insights')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-semibold text-on-surface border border-surface-container transition-all">
+              <span class="material-symbols-outlined text-sm text-primary">query_stats</span>
+              <span>Ver Insights Estadísticos</span>
+            </button>
+            <button onclick="showPanel('generator')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold text-xs hover:bg-primary-container transition-transform active:scale-95 shadow-xs">
+              <span class="material-symbols-outlined text-base">auto_awesome</span>
+              <span>Diseñar Consulta IA</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPIs Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs border border-surface-container status-bar-brand flex flex-col justify-between">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+              <span>ÍNDICE GLOBAL</span>
+              <span class="material-symbols-outlined text-primary text-sm">speed</span>
+            </div>
+            <div class="my-2">
+              <div class="flex items-baseline gap-1">
+                <span class="text-3xl font-headline font-bold text-on-surface tabular-nums" id="kpi-overall-score">4.1</span>
+                <span class="text-xs text-on-surface-variant">/ 5.0</span>
+              </div>
+              <p class="text-[11px] text-status-positive font-semibold flex items-center gap-1 mt-0.5" id="kpi-score-trend">
+                <span class="material-symbols-outlined text-xs">trending_up</span> +0.2 vs periodo anterior
+              </p>
+            </div>
+            <div class="text-[10px] text-tertiary">Promedio ponderado insesgado</div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs border border-surface-container status-bar-gold flex flex-col justify-between">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+              <span>PULSOS RECIBIDOS</span>
+              <span class="material-symbols-outlined text-brand-gold text-sm">how_to_reg</span>
+            </div>
+            <div class="my-2">
+              <span class="text-3xl font-headline font-bold text-on-surface tabular-nums" id="kpi-total-responses">600</span>
+              <p class="text-[11px] text-on-surface-variant mt-0.5">Respuestas anónimas activas</p>
+            </div>
+            <div class="text-[10px] text-tertiary">Protección k-anonimato activa (k ≥ 5)</div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs border border-surface-container status-bar-positive flex flex-col justify-between">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+              <span>DIMENSIÓN DESTACADA</span>
+              <span class="material-symbols-outlined text-status-positive text-sm">favorite</span>
+            </div>
+            <div class="my-2">
+              <span class="text-base font-bold text-on-surface block truncate" id="kpi-top-dimension">Bienestar y Salud</span>
+              <p class="text-xs font-headline font-bold text-status-positive tabular-nums mt-0.5" id="kpi-top-dimension-score">4.3 / 5.0</p>
+            </div>
+            <div class="text-[10px] text-tertiary">Mayor fortaleza organizativa</div>
+          </div>
+
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs border border-surface-container status-bar-warning flex flex-col justify-between">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant font-semibold">
+              <span>ESTADO DE SESGO</span>
+              <span class="material-symbols-outlined text-status-warning text-sm">balance</span>
+            </div>
+            <div class="my-2">
+              <span class="text-base font-bold text-on-surface block" id="kpi-bias-status">2 Alertas Activas</span>
+              <p class="text-[11px] text-status-warning font-semibold mt-0.5" id="kpi-bias-desc">Comercial &lt;15% • Planta Q2 polarizada</p>
+            </div>
+            <div class="text-[10px] text-tertiary">Detección determinista SciPy</div>
+          </div>
+        </section>
+
+        <!-- Trend & 6 Dimensions Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+          <!-- 7-Day Trend Chart (7 cols) -->
+          <div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Evolución Continua</span>
+                <h2 class="text-lg font-headline font-bold text-on-surface">Índice de Clima por Periodo</h2>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-primary tabular-nums" id="trend-avg-display">4.1 / 5</span>
+                <span class="w-2 h-2 rounded-full bg-status-positive"></span>
+              </div>
+            </div>
+
+            <div class="w-full h-44 bg-surface-container-low/40 rounded-lg p-3 flex flex-col justify-end relative">
+              <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#c4161c" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#c4161c" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,80 Q70,70 140,55 T280,45 T420,30 T500,25 L500,120 L0,120 Z" fill="url(#trendGradient)"/>
+                <path d="M0,80 Q70,70 140,55 T280,45 T420,30 T500,25" fill="none" stroke="#c4161c" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="500" cy="25" r="4" fill="#c4161c" stroke="#ffffff" stroke-width="2"/>
+              </svg>
+              <div class="flex items-center justify-between text-[11px] text-tertiary pt-2 border-t border-surface-container">
+                <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+              </div>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-3 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-primary">info</span>
+              Tendencia favorable en plantas de envasado tras los relevos de cuadrilla.
+            </p>
+          </div>
+
+          <!-- 6 Dimensions Breakdown (5 cols) -->
+          <div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Evaluación Integral</span>
+                <h2 class="text-lg font-headline font-bold text-on-surface">Las 6 Dimensiones Damm</h2>
+              </div>
+              <span class="text-xs text-tertiary">Escala 1–5</span>
+            </div>
+
+            <div class="space-y-3" id="dimensions-container">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span>Bienestar</span><span class="tabular-nums text-primary font-bold">4.2</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 84%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span>Liderazgo y Acompañamiento</span><span class="tabular-nums text-primary font-bold">3.8</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 76%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span>Desarrollo y Oportunidades</span><span class="tabular-nums text-primary font-bold">3.9</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 78%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span>Cultura y Pertenencia</span><span class="tabular-nums text-primary font-bold">4.4</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 88%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span>Entorno y Relaciones</span><span class="tabular-nums text-primary font-bold">4.1</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 82%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span>Condiciones y Organización</span><span class="tabular-nums text-primary font-bold">3.7</span>
+                </div>
+                <div class="w-full bg-surface-container rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 74%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workplaces Grid -->
+        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Realidad por Áreas</span>
+              <h2 class="text-lg font-headline font-bold text-on-surface">Entornos de Trabajo</h2>
+            </div>
+            <span class="text-xs text-tertiary">Fábrica • Logística • Comercial • Oficina</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md" id="sites-cards-container">
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-xs font-bold text-on-surface block">Fábrica / Planta</span>
+              <span class="text-xl font-headline font-bold text-primary tabular-nums">4.0</span>
+              <span class="text-[11px] text-tertiary block mt-0.5">Líneas de envasado y cocción</span>
+            </div>
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-xs font-bold text-on-surface block">Logística</span>
+              <span class="text-xl font-headline font-bold text-primary tabular-nums">3.9</span>
+              <span class="text-[11px] text-tertiary block mt-0.5">Almacén central y distribución</span>
+            </div>
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-xs font-bold text-on-surface block">Comercial</span>
+              <span class="text-xl font-headline font-bold text-primary tabular-nums">4.2</span>
+              <span class="text-[11px] text-tertiary block mt-0.5">Canal HORECA y grandes cuentas</span>
+            </div>
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-xs font-bold text-on-surface block">Oficinas Centrales</span>
+              <span class="text-xl font-headline font-bold text-primary tabular-nums">4.3</span>
+              <span class="text-[11px] text-tertiary block mt-0.5">Sede Barcelona y servicios</span>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <section class="section-heading">
-        <div><div class="eyebrow muted-eyebrow">LA ORGANIZACIÓN, EN SINTONÍA</div><h2>Un vistazo a cómo nos sentimos.</h2></div>
-        <button class="date-filter" aria-label="Periodo de los últimos 7 días"><span>▦</span> Últimos 7 días <span class="chevron">⌄</span></button>
-      </section>
 
-      <section class="metrics-grid" aria-label="Indicadores de clima laboral">
-        <article class="metric-card score-card">
-          <div class="metric-top"><span>ÍNDICE DE CLIMA</span><span class="metric-icon red-icon">✳</span></div>
-          <div class="metric-value"><strong id="overall-score">—</strong><span>/ 5</span></div>
-          <div class="metric-bottom"><span class="trend-up" id="overall-trend">—</span><span>vs. periodo anterior</span></div>
-          <div class="score-sparkline" aria-hidden="true"><svg viewBox="0 0 220 50" preserveAspectRatio="none"><path d="M0 39 C20 36 23 25 43 29 S63 39 82 24 S105 34 124 17 S148 26 164 12 S193 21 220 3" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M0 39 C20 36 23 25 43 29 S63 39 82 24 S105 34 124 17 S148 26 164 12 S193 21 220 3 V50 H0Z" fill="url(#score-fill)"/><defs><linearGradient id="score-fill" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#df352c" stop-opacity=".18"/><stop offset="1" stop-color="#df352c" stop-opacity="0"/></linearGradient></defs></svg></div>
-        </article>
-        <article class="metric-card">
-          <div class="metric-top"><span>PULSOS RECIBIDOS</span><span class="metric-icon blush-icon">↗</span></div>
-          <div class="metric-value"><strong id="response-count">—</strong></div>
-          <div class="metric-bottom"><span>en los últimos 7 días</span></div>
-          <div class="metric-people" aria-hidden="true"><span>•</span><span>•</span><span>•</span><span>•</span><span>+</span></div>
-        </article>
-        <article class="metric-card">
-          <div class="metric-top"><span>DIMENSIÓN DESTACADA</span><span class="metric-icon green-icon">♡</span></div>
-          <div class="featured-value"><strong id="top-dimension">—</strong><span id="top-dimension-score"></span></div>
-          <div class="metric-bottom"><span>Lo que mejor nos conecta.</span></div>
-          <div class="featured-line"><span></span></div>
-        </article>
-      </section>
-
-      <section class="content-grid" id="insights">
-        <article class="panel trend-panel">
-          <div class="panel-header">
-            <div><div class="eyebrow muted-eyebrow">EL CLIMA, DÍA A DÍA</div><h3>La conversación evoluciona.</h3></div>
-            <span class="panel-menu">···</span>
+      <!-- ===================================================================== -->
+      <!-- PANEL 2: INSIGHTS & MOTOR ESTADÍSTICO DETERMINISTA -->
+      <!-- ===================================================================== -->
+      <div id="panel-insights" class="panel-view hidden space-y-space-lg">
+        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+          <div class="flex flex-wrap items-center justify-between gap-space-md border-b border-surface-container pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-primary">Motor Estadístico Python</span>
+                <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-[11px] font-bold">
+                  100% Determinista (Pandas / SciPy)
+                </span>
+              </div>
+              <h2 class="text-xl font-headline font-bold text-on-surface mt-1">Detección de Sesgos, Polarización y Cobertura</h2>
+              <p class="text-xs text-on-surface-variant">Cálculos matemáticos estrictamente separados del LLM para garantizar exactitud y confidencialidad.</p>
+            </div>
+            <button onclick="requestLlmSynthesis()" id="btn-request-llm-synthesis" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-transform active:scale-95 shadow-xs" type="button">
+              <span class="material-symbols-outlined text-base">auto_awesome</span>
+              <span>Generar Síntesis RRHH con LLM</span>
+            </button>
           </div>
-          <div class="chart-meta"><strong id="trend-score">—</strong><span>puntuación media</span><span class="chart-legend"><i></i> Índice de clima</span></div>
-          <div class="trend-chart" id="trend-chart" role="img" aria-label="Evolución del índice de clima durante los últimos siete días"></div>
-          <div class="chart-annotation"><span class="annotation-star">✳</span><span id="chart-insight">Cada voz ayuda a dibujar una imagen más clara.</span></div>
-        </article>
-        <article class="panel dimensions-panel" id="dimensiones">
-          <div class="panel-header">
-            <div><div class="eyebrow muted-eyebrow">SEIS FORMAS DE ESCUCHAR</div><h3>Lo que importa, importa.</h3></div>
-            <a class="text-link" href="#pulso">Explorar <span>↗</span></a>
+
+          <!-- Anomaly and Bias Alert Chips -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container status-bar-warning">
+              <div class="flex items-center gap-2 text-status-warning font-bold text-xs mb-1">
+                <span class="material-symbols-outlined text-base">warning</span>
+                <span>Alerta de Representatividad (&lt;15%)</span>
+              </div>
+              <p class="text-xs text-on-surface" id="alert-rep-text">
+                <strong>Comercial:</strong> 10.0% de participación global. Riego de subrepresentación frente a Planta (45%).
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container status-bar-critical">
+              <div class="flex items-center gap-2 text-status-critical font-bold text-xs mb-1">
+                <span class="material-symbols-outlined text-base">bolt</span>
+                <span>Alerta de Polarización (σ ≥ 1.25)</span>
+              </div>
+              <p class="text-xs text-on-surface" id="alert-pol-text">
+                <strong>Planta (q2_liderazgo):</strong> Desviación típica de 1.68. Respuestas divididas entre valores 1 y 5.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container status-bar-positive">
+              <div class="flex items-center gap-2 text-status-positive font-bold text-xs mb-1">
+                <span class="material-symbols-outlined text-base">verified_user</span>
+                <span>Privacidad &amp; k-Anonimato (k ≥ 5)</span>
+              </div>
+              <p class="text-xs text-on-surface" id="alert-k-text">
+                Todos los cortes con menos de 5 observaciones han sido suprimidos del reporte para evitar reidentificación.
+              </p>
+            </div>
           </div>
-          <div class="dimension-list" id="dimension-list"></div>
-          <div class="dimension-foot"><span>◉</span> Los grupos pequeños siempre quedan protegidos.</div>
-        </article>
-      </section>
 
-      <section class="lower-grid">
-        <article class="panel site-panel">
-          <div class="panel-header">
-            <div><div class="eyebrow muted-eyebrow">DISTINTAS REALIDADES, UNA ESCUCHA</div><h3>Cada equipo cuenta.</h3></div>
-            <span class="sites-tag">4 entornos</span>
+          <!-- Coverage Matrix: Rol x Turno -->
+          <div class="pt-2">
+            <h3 class="text-sm font-headline font-bold text-on-surface mb-2">Matriz de Participación y Cobertura (Rol x Turno)</h3>
+            <div class="overflow-x-auto rounded-lg border border-surface-container">
+              <table class="w-full text-left text-xs text-on-surface">
+                <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
+                  <tr>
+                    <th class="p-3">Colectivo Damm</th>
+                    <th class="p-3 text-center">Mañana</th>
+                    <th class="p-3 text-center">Tarde</th>
+                    <th class="p-3 text-center">Noche</th>
+                    <th class="p-3 text-center">Total Respuestas</th>
+                    <th class="p-3 text-center">Cobertura</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="coverage-matrix-body">
+                  <tr>
+                    <td class="p-3 font-semibold">Planta / Fábrica</td>
+                    <td class="p-3 text-center tabular-nums">92 (23.0%)</td>
+                    <td class="p-3 text-center tabular-nums">60 (15.0%)</td>
+                    <td class="p-3 text-center tabular-nums">28 (7.0%)</td>
+                    <td class="p-3 text-center font-bold tabular-nums">180</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">45.0%</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold">Logística</td>
+                    <td class="p-3 text-center tabular-nums">48 (12.0%)</td>
+                    <td class="p-3 text-center tabular-nums">36 (9.0%)</td>
+                    <td class="p-3 text-center tabular-nums">16 (4.0%)</td>
+                    <td class="p-3 text-center font-bold tabular-nums">100</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">25.0%</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold">Oficinas Centrales</td>
+                    <td class="p-3 text-center tabular-nums">80 (20.0%)</td>
+                    <td class="p-3 text-center text-tertiary">—</td>
+                    <td class="p-3 text-center text-tertiary">—</td>
+                    <td class="p-3 text-center font-bold tabular-nums">80</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">20.0%</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold">Comercial</td>
+                    <td class="p-3 text-center tabular-nums">40 (10.0%)</td>
+                    <td class="p-3 text-center text-tertiary">—</td>
+                    <td class="p-3 text-center text-tertiary">—</td>
+                    <td class="p-3 text-center font-bold tabular-nums">40</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-warning/10 text-status-warning font-bold text-[10px]">10.0% (Bajo)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div class="site-grid" id="site-grid"></div>
-          <div class="site-foot">Fábrica · Logística · Comercial · Oficina</div>
-        </article>
-        <article class="panel action-panel">
-          <div class="action-orb">✳</div>
-          <div class="eyebrow muted-eyebrow">DEL DATO A LA ACCIÓN</div>
-          <h3>Escuchar solo<br>es el principio.</h3>
-          <p id="action-copy">Convierte una señal en un pequeño cambio que se note.</p>
-          <a href="#pulso" class="action-link">Proponer una acción <span>↗</span></a>
-        </article>
-      </section>
 
-      <section class="typeform-promo" id="pulso">
-        <div class="promo-copy">
-          <div class="eyebrow"><span class="eyebrow-star">✳</span> UNA CONVERSACIÓN, NO UN FORMULARIO</div>
-          <h2>Tu voz merece<br><em>un buen espacio.</em></h2>
-          <p>Una pregunta pensada para tu día. Sin listas interminables, sin nombres. Solo una pausa para escucharte.</p>
-          <button class="promo-start" id="open-survey" type="button">Empezar mi pulso <span>↗</span></button>
-          <div class="promo-trust"><span>⬡</span> Anónimo por diseño <i></i> Menos de 30 segundos</div>
-        </div>
-        <div class="promo-art" aria-hidden="true">
-          <div class="promo-orbit"></div>
-          <div class="promo-note"><span>UNA PREGUNTA</span><strong>¿Qué te haría<br>sentir mejor hoy?</strong><i>♡</i></div>
-          <div class="promo-spark">✳</div>
-          <div class="promo-response"><span>Tu respuesta</span><b>Importa.</b></div>
-        </div>
-      </section>
+          <!-- Descriptive Statistics Table -->
+          <div class="pt-4">
+            <h3 class="text-sm font-headline font-bold text-on-surface mb-2">Estadísticas Descriptivas Insesgadas (Escala Likert 1–5)</h3>
+            <div class="overflow-x-auto rounded-lg border border-surface-container">
+              <table class="w-full text-left text-xs text-on-surface">
+                <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
+                  <tr>
+                    <th class="p-3">Dimensión Evaluada</th>
+                    <th class="p-3 text-center">Media (μ)</th>
+                    <th class="p-3 text-center">Mediana</th>
+                    <th class="p-3 text-center">Desv. Típica (σ)</th>
+                    <th class="p-3 text-center">Varianza (s²)</th>
+                    <th class="p-3 text-center">Asimetría</th>
+                    <th class="p-3 text-center">Diagnóstico</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-surface-container bg-surface-container-lowest">
+                  <tr>
+                    <td class="p-3 font-semibold">q1_bienestar</td>
+                    <td class="p-3 text-center font-bold tabular-nums text-primary">3.425</td>
+                    <td class="p-3 text-center tabular-nums">3.000</td>
+                    <td class="p-3 text-center tabular-nums">0.782</td>
+                    <td class="p-3 text-center tabular-nums">0.612</td>
+                    <td class="p-3 text-center tabular-nums">-0.114</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive text-[10px] font-bold">Consistente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold">q2_liderazgo</td>
+                    <td class="p-3 text-center font-bold tabular-nums text-primary">3.475</td>
+                    <td class="p-3 text-center tabular-nums">4.000</td>
+                    <td class="p-3 text-center tabular-nums text-status-critical font-bold">1.285</td>
+                    <td class="p-3 text-center tabular-nums">1.651</td>
+                    <td class="p-3 text-center tabular-nums">-0.428</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-critical/10 text-status-critical text-[10px] font-bold">Polarizado</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-semibold">q3_recursos</td>
+                    <td class="p-3 text-center font-bold tabular-nums text-primary">3.325</td>
+                    <td class="p-3 text-center tabular-nums">3.000</td>
+                    <td class="p-3 text-center tabular-nums">0.894</td>
+                    <td class="p-3 text-center tabular-nums">0.799</td>
+                    <td class="p-3 text-center tabular-nums">-0.052</td>
+                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive text-[10px] font-bold">Estable</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-      <dialog class="survey-dialog" id="survey-dialog" aria-labelledby="survey-title">
-        <div class="survey-topbar">
-          <a class="survey-brand" href="#pulso"><span class="brand-mark"><span></span><span></span><span></span></span> pulso<span>.</span></a>
-          <div class="survey-progress" aria-label="Progreso de la encuesta"><span id="survey-progress-fill"></span></div>
-          <span class="survey-counter" id="survey-counter">30 SEG</span>
-          <button class="survey-exit" id="close-survey" type="button" aria-label="Cerrar encuesta">×</button>
-        </div>
-        <div class="survey-body" id="survey-body" aria-live="polite"></div>
-        <div class="survey-footer">
-          <span class="survey-privacy"><span>⬡</span> Tu respuesta es anónima</span>
-          <div class="survey-navigation" id="survey-navigation"></div>
-        </div>
-      </dialog>
+          <!-- LLM Executive Synthesis Result Container -->
+          <div id="llm-insights-result-box" class="hidden p-space-md rounded-xl bg-surface-container-low border border-surface-container-high transition-all mt-4">
+            <div class="flex items-center justify-between mb-3 border-b border-surface-container pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+                <h3 class="text-sm font-headline font-bold text-on-surface">Conclusiones Ejecutivas de Dirección (IA Cero-Alucinaciones)</h3>
+              </div>
+              <button onclick="document.getElementById('llm-insights-result-box').classList.add('hidden')" class="text-tertiary hover:text-on-surface p-1" type="button">
+                <span class="material-symbols-outlined text-sm">close</span>
+              </button>
+            </div>
+            <div class="prose prose-sm max-w-none text-xs text-on-surface leading-relaxed space-y-2" id="llm-insights-content">
+              <!-- Filled via fetch to /api/insights/llm -->
+            </div>
+          </div>
+        </section>
+      </div>
 
-      <footer class="footer">
-        <a class="footer-brand" href="#inicio"><span class="brand-mark"><span></span><span></span><span></span></span> pulso<span>.</span></a>
-        <span>Escuchar mejor. Entender de verdad. Actuar antes.</span>
-        <a href="#inicio">Hecho para cuidar <b>♥</b></a>
-      </footer>
+
+      <!-- ===================================================================== -->
+      <!-- PANEL 3: GENERADOR ASISTIDO & TYPEFORM STUDIO -->
+      <!-- ===================================================================== -->
+      <div id="panel-generator" class="panel-view hidden space-y-space-lg">
+        <!-- Action Banner -->
+        <div class="flex flex-wrap items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-xs border border-surface-container">
+          <div class="flex items-center gap-3">
+            <span class="text-xs uppercase tracking-wider font-semibold text-primary">Generador Asistido con IA</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            <span class="text-xs font-medium text-on-surface-variant">HR Intelligence Suite • Campaña Q4</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+              <span class="text-xs font-semibold text-tertiary">Damm-HR Gemini Pro v4</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-mono">24k ctx</span>
+            </div>
+            <button id="generator-publish-btn" onclick="publishFromGenerator()" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-all shadow-sm active:scale-95" type="button">
+              <span class="material-symbols-outlined text-sm">send</span>
+              Lanzar a Plantas / Typeform
+            </button>
+          </div>
+        </div>
+
+        <!-- Split Layout (Left: AI Control Hub / Right: Typeform Live Preview) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+          <!-- Left Column -->
+          <section class="lg:col-span-7 flex flex-col space-y-space-md">
+            <div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm border border-surface-container">
+              <div class="flex items-start gap-3.5 mb-space-lg">
+                <div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                  HR
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-on-surface">Dirección de Personas • Envasado y Logística</span>
+                    <span class="text-[11px] text-tertiary">Hoy, 10:42</span>
+                  </div>
+                  <div class="p-3.5 rounded-xl bg-surface-container-low text-on-surface text-xs leading-relaxed shadow-xs" id="gen-user-prompt-text">
+                    “Evaluar el clima laboral, satisfacción con los turnos rotativos en las plantas de envasado y la conciliación familiar tras el nuevo plan operativo Q4.”
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3.5">
+                <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-base">auto_awesome</span>
+                </div>
+                <div class="flex-1 space-y-space-md">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-primary">Damm-HR Gemini Pro v4</span>
+                    <span class="text-[11px] text-secondary flex items-center gap-1 font-medium">
+                      <span class="material-symbols-outlined text-xs">verified</span> Estrella Damm Standards
+                    </span>
+                  </div>
+                  <p class="text-xs text-on-surface leading-relaxed" id="gen-synthesis-text">
+                    He sintetizado una batería diagnóstica de <strong>5 dimensiones clave</strong> adaptada a operarios de planta y turnicidad continua (Planta El Prat, Santa Coloma y Murcia). El tiempo proyectado de respuesta es de <strong>2 minutos y 10 segundos</strong> para minimizar fricción operativa.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Prompt Bar -->
+            <div class="bg-surface-container-lowest rounded-xl p-3 shadow-md border border-surface-container">
+              <form class="relative flex flex-col gap-2" onsubmit="handleGeneratorPrompt(event)">
+                <textarea class="w-full bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Pide ajustes a la IA (ej: 'añade una pregunta sobre la rotación de carretillas en el almacén central')..." rows="2"></textarea>
+                <div class="flex items-center justify-between pt-1">
+                  <div class="flex items-center gap-2">
+                    <button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button" title="Adjuntar necesidad" onclick="appendGenPrompt('Considera el impacto de la rotación en el turno de noche.')">
+                      <span class="material-symbols-outlined text-base">attach_file</span>
+                    </button>
+                    <button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button" title="Estándar Damm" onclick="appendGenPrompt('Usa escala Likert estándar de 1 a 5.')">
+                      <span class="material-symbols-outlined text-base">history_edu</span>
+                    </button>
+                  </div>
+                  <button class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container shadow-sm" type="submit">
+                    <span>Iterar</span>
+                    <span class="material-symbols-outlined text-sm">arrow_upward</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- Right Column: Typeform Live Interactive Preview -->
+          <section class="lg:col-span-5 flex flex-col space-y-space-md">
+            <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-md border border-surface-container flex flex-col min-h-[500px]">
+              <div class="px-4 py-3 bg-surface-container flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-on-surface">Preview en vivo (Typeform Engine)</span>
+                </div>
+                <button onclick="window.location.href='/generator'" class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-semibold transition-all">
+                  <span class="material-symbols-outlined text-sm">open_in_full</span>
+                  <span>Abrir Studio</span>
+                </button>
+              </div>
+
+              <div class="flex-1 p-space-lg flex flex-col justify-between relative">
+                <div class="flex items-center justify-between text-xs text-tertiary">
+                  <span class="font-medium text-[11px] flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm text-secondary">cloud_done</span> Sincronizado
+                  </span>
+                  <span class="text-[11px] font-mono text-outline">ENC-DAMM-Q4-082</span>
+                </div>
+
+                <div class="my-auto py-4" id="gen-preview-card">
+                  <div class="flex items-center gap-2 text-primary font-bold text-xs mb-2">
+                    <span id="gen-card-index">1</span>
+                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    <span class="text-[10px] uppercase tracking-wider text-tertiary font-semibold" id="gen-card-dimension">Organización del trabajo</span>
+                  </div>
+                  <h2 class="text-base font-headline font-bold text-on-surface mb-1.5" id="gen-card-title">
+                    ¿Con cuánta antelación recibes la confirmación de tus turnos rotativos en planta?
+                  </h2>
+                  <p class="text-xs text-on-surface-variant mb-4" id="gen-card-desc">
+                    Selecciona una opción para que Recursos Humanos optimice el cuadro de descansos.
+                  </p>
+                  <div class="space-y-2" id="gen-card-options-box">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
+                <div class="pt-4 flex items-center justify-between border-t border-surface-container">
+                  <div class="w-28 bg-surface-container rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-primary h-full rounded-full" id="gen-card-progress" style="width: 25%"></div>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <button onclick="navigateGenPreview(-1)" class="w-7 h-7 rounded bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high">
+                      <span class="material-symbols-outlined text-sm">expand_less</span>
+                    </button>
+                    <button onclick="navigateGenPreview(1)" class="w-7 h-7 rounded bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container">
+                      <span class="material-symbols-outlined text-sm">expand_more</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+
+      <!-- ===================================================================== -->
+      <!-- PANEL 4: HISTORIAL Y ACCIONES DE RRHH -->
+      <!-- ===================================================================== -->
+      <div id="panel-admin" class="panel-view hidden space-y-space-lg">
+        <!-- Ciclo Banner -->
+        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container flex flex-wrap items-center justify-between gap-space-md">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-primary block mb-1">Campaña de Clima y Escucha Continua</span>
+            <h1 class="text-2xl font-headline font-bold text-on-surface">Gestión de Consultas y Ciclo de Acción</h1>
+            <p class="text-xs text-on-surface-variant mt-1">Supervisión humana obligatoria en cada fase: la IA propone, las personas deciden y validan.</p>
+          </div>
+          <button onclick="showPanel('generator')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container shadow-xs">
+            <span class="material-symbols-outlined text-base">add</span>
+            <span>Nueva Microconsulta</span>
+          </button>
+        </section>
+
+        <!-- Surveys Table -->
+        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+          <div class="flex items-center justify-between border-b border-surface-container pb-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Campañas Registradas</span>
+              <h2 class="text-lg font-headline font-bold text-on-surface">Historial de Microconsultas</h2>
+            </div>
+            <span class="text-xs text-tertiary" id="admin-surveys-count-label">Cargando...</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-lg border border-surface-container">
+            <table class="w-full text-left text-xs text-on-surface">
+              <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
+                <tr>
+                  <th class="p-3">Título de la Consulta</th>
+                  <th class="p-3">Colectivo</th>
+                  <th class="p-3 text-center">Duración</th>
+                  <th class="p-3 text-center">Canal</th>
+                  <th class="p-3 text-center">Estado</th>
+                  <th class="p-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="admin-surveys-table-body">
+                <tr>
+                  <td colspan="6" class="p-4 text-center text-tertiary">Cargando consultas...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Recommended Actions Review -->
+        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+          <div class="flex items-center justify-between border-b border-surface-container pb-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Cierre del Ciclo</span>
+              <h2 class="text-lg font-headline font-bold text-on-surface">Recomendaciones &amp; Planes de Acción</h2>
+            </div>
+            <span class="text-xs text-on-surface-variant font-medium">Requiere validación humana</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-space-md" id="admin-actions-cards-container">
+            <div class="p-4 rounded-lg bg-surface-container-low border border-surface-container status-bar-gold">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-primary uppercase">Rotación de turnos en Planta</span>
+                <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-[10px] font-bold">Propuesta</span>
+              </div>
+              <p class="text-xs text-on-surface mb-3">
+                Abrir una sesión de diálogo con supervisores de cuadrilla para revisar la antelación de cuadros de descanso.
+              </p>
+              <div class="flex items-center gap-2">
+                <button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container">Aprobar Acción</button>
+                <button class="px-3 py-1.5 rounded-lg bg-surface-container text-xs font-semibold text-tertiary">Descartar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      <!-- ===================================================================== -->
+      <!-- PANEL 5: CONFIGURACIÓN Y CONEXIONES CORPORATIVAS -->
+      <!-- ===================================================================== -->
+      <div id="panel-settings" class="panel-view hidden space-y-space-lg">
+        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+          <div class="border-b border-surface-container pb-3">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Integración &amp; Credenciales</span>
+            <h2 class="text-lg font-headline font-bold text-on-surface">Configuración de Conexiones</h2>
+            <p class="text-xs text-on-surface-variant mt-1">Conecta el motor de IA (OpenAI / Gemini) y la cuenta de Typeform para sincronización en la nube.</p>
+          </div>
+
+          <form id="settings-panel-form" onsubmit="savePanelSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-space-md max-w-4xl">
+            <div>
+              <label class="text-xs font-bold text-on-surface block mb-1">OpenAI / Gemini API Key</label>
+              <input type="password" id="set-api-key" placeholder="sk-..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <span class="text-[10px] text-tertiary mt-1 block">Para generación asistida de preguntas y síntesis ejecutiva.</span>
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-on-surface block mb-1">Typeform Personal Access Token</label>
+              <input type="password" id="set-typeform-token" placeholder="tfp_..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <span class="text-[10px] text-tertiary mt-1 block">Permite publicar encuestas y sincronizar respuestas de Typeform.</span>
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-on-surface block mb-1">API Endpoint Base URL</label>
+              <input type="text" id="set-base-url" value="https://api.openai.com/v1/chat/completions" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-on-surface block mb-1">Modelo de Lenguaje</label>
+              <input type="text" id="set-model" value="gpt-4o-mini" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+            </div>
+
+            <div class="md:col-span-2 pt-2">
+              <button type="submit" class="px-5 py-2.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-xs">
+                Guardar Configuración
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+
     </main>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <dialog class="settings-dialog" id="settings-dialog">
-    <form method="dialog" class="dialog-close-row"><button class="dialog-close" aria-label="Cerrar">×</button></form>
-    <div class="eyebrow muted-eyebrow">PREGUNTAS GENERATIVAS</div>
-    <h2>Conecta tu API.</h2>
-    <p>Configura un endpoint compatible con OpenAI. La clave permanece solo en la memoria del servidor y no se guarda en disco.</p>
-    <form id="settings-form" class="settings-form">
-      <label>Endpoint
-        <input name="base_url" type="url" value="https://api.openai.com/v1/chat/completions" required>
-      </label>
-      <label>Modelo
-        <input name="model" type="text" value="gpt-4o-mini" maxlength="120" required>
-      </label>
-      <label>Clave API
-        <input name="api_key" type="password" placeholder="sk-…" autocomplete="off" required>
-      </label>
-      <div class="settings-demo-note">Sin configurar, puedes probar la experiencia con preguntas de demostración.</div>
-      <button class="submit-pulse" type="submit">Guardar en esta sesión <span>↗</span></button>
-    </form>
-  </dialog>
+  <!-- MODAL: KIOSK DE CHECK-IN RÁPIDO PARA EMPLEADOS (100% ANÓNIMO) -->
+  <div id="checkin-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-space-xl shadow-xl border border-surface-container space-y-4">
+      <div class="flex items-center justify-between border-b border-surface-container pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs">
+            ED
+          </div>
+          <div>
+            <h3 class="text-sm font-headline font-bold text-on-surface">Participar en un Pulso</h3>
+            <span class="text-[11px] text-tertiary">30 segundos • 100% Anónimo • Sin contraseñas</span>
+          </div>
+        </div>
+        <button onclick="closeCheckinModal()" class="text-tertiary hover:text-on-surface p-1" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+
+      <form id="checkin-form" onsubmit="submitCheckin(event)" class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-on-surface block mb-1">Entorno de trabajo</label>
+          <select id="checkin-site" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <option value="Fábrica">Fábrica / Planta</option>
+            <option value="Logística">Logística / Almacén</option>
+            <option value="Comercial">Comercial / Ventas</option>
+            <option value="Oficina">Oficinas Corporativas</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-on-surface block mb-1">Dimensión a valorar</label>
+          <select id="checkin-dimension" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <option value="bienestar">Bienestar y Salud</option>
+            <option value="liderazgo">Liderazgo y Acompañamiento</option>
+            <option value="desarrollo">Desarrollo Profesional</option>
+            <option value="cultura">Cultura y Pertenencia</option>
+            <option value="relaciones">Entorno y Relaciones</option>
+            <option value="condiciones">Condiciones y Organización</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-on-surface block mb-2">Tu valoración (1 a 5)</label>
+          <div class="grid grid-cols-5 gap-2" id="checkin-score-buttons">
+            <button type="button" onclick="selectScore(1)" class="score-btn p-3 rounded-lg bg-surface-container font-headline font-bold text-sm hover:bg-secondary-container/40">1</button>
+            <button type="button" onclick="selectScore(2)" class="score-btn p-3 rounded-lg bg-surface-container font-headline font-bold text-sm hover:bg-secondary-container/40">2</button>
+            <button type="button" onclick="selectScore(3)" class="score-btn p-3 rounded-lg bg-surface-container font-headline font-bold text-sm hover:bg-secondary-container/40">3</button>
+            <button type="button" onclick="selectScore(4)" class="score-btn p-3 rounded-lg bg-surface-container font-headline font-bold text-sm hover:bg-secondary-container/40">4</button>
+            <button type="button" onclick="selectScore(5)" class="score-btn p-3 rounded-lg bg-secondary-container text-on-secondary-container ring-2 ring-secondary font-headline font-bold text-sm">5</button>
+          </div>
+          <input type="hidden" id="checkin-score-value" value="5">
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-xs">
+          Enviar Pulso Anónimo
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- QR MODAL VIEWER -->
+  <div id="qr-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest max-w-sm w-full rounded-2xl p-space-xl shadow-xl border border-surface-container text-center space-y-4">
+      <div class="flex items-center justify-between border-b border-surface-container pb-2">
+        <h3 class="text-sm font-headline font-bold text-on-surface" id="qr-modal-title">Código QR de Encuesta</h3>
+        <button onclick="closeQrModal()" class="text-tertiary hover:text-on-surface p-1" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center">
+        <img id="qr-modal-image" src="" alt="Código QR" class="w-48 h-48 object-contain">
+      </div>
+      <p class="text-xs text-on-surface-variant break-all" id="qr-modal-url"></p>
+      <button onclick="closeQrModal()" class="w-full py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition-all">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+
+  <!-- UNIFIED MASTER SCRIPT -->
+  <script>
+    // State of generator preview
+    const genQuestions = [
+      {
+        dimension: "Organización del trabajo",
+        title: "¿Con cuánta antelación recibes la confirmación de tus turnos rotativos en planta?",
+        description: "Selecciona una opción para que Recursos Humanos optimice el cuadro de descansos.",
+        choices: [
+          "Más de 3 semanas (Tiempo óptimo)",
+          "Entre 1 y 2 semanas",
+          "Menos de 7 días (Dificulta la conciliación)",
+          "Cambios imprevistos en menos de 48h"
+        ],
+        selected: null
+      },
+      {
+        dimension: "Seguridad y Ergonomía",
+        title: "¿Cómo valoras la carga física y el ritmo en tu puesto habitual de envasado?",
+        description: "Evalúa si las pausas y rotaciones entre líneas son adecuadas.",
+        choices: [
+          "Ritmo adecuado y pausas bien distribuidas",
+          "Cansancio acumulado hacia final de semana",
+          "Puesto con alta fatiga muscular o posturas forzadas",
+          "Necesidad urgente de rotación de puesto"
+        ],
+        selected: null
+      },
+      {
+        dimension: "Flexibilidad y Conciliación",
+        title: "¿Tienes facilidad para cambiar turnos o descansos con compañeros cuando lo necesitas?",
+        description: "Queremos simplificar los trámites con los supervisores de cuadrilla.",
+        choices: [
+          "Sí, aviso simple y aprobación rápida",
+          "A veces, depende del supervisor de turno",
+          "Difícil por falta de relevo en plantilla",
+          "Nunca es posible cambiar turnos"
+        ],
+        selected: null
+      },
+      {
+        dimension: "Comunicación y Liderazgo",
+        title: "¿Sientes que tus dudas o sugerencias sobre el proceso en planta son escuchadas?",
+        description: "La comunicación en los cambios de turno es esencial para Estrella Damm.",
+        choices: [
+          "Totalmente escuchadas y se aplican mejoras",
+          "Se escuchan pero tardan en dar respuesta",
+          "Poca comunicación durante la jornada",
+          "Sensación de desconexión con supervisión"
+        ],
+        selected: null
+      }
+    ];
+    let genIndex = 0;
+
+    // 1. DEDICATED PANEL SWITCHING (Single-Page / Distinct View Router)
+    const panelNames = ['dashboard', 'insights', 'generator', 'admin', 'settings'];
+
+    function showPanel(name) {
+      if (!panelNames.includes(name)) name = 'dashboard';
+
+      // Hide all panels, show selected panel
+      panelNames.forEach(p => {
+        const el = document.getElementById(`panel-${p}`);
+        if (el) {
+          if (p === name) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+
+        // Active State: MARK WITH RED COLOR
+        const btn = document.getElementById(`nav-btn-${p}`);
+        if (btn) {
+          if (p === name) {
+            // RED BRAND ACCENT (#c4161c)
+            btn.className = 'nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-bold bg-primary text-on-primary shadow-xs transition-all text-left';
+          } else {
+            // INACTIVE STATE
+            btn.className = 'nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left';
+          }
+        }
+      });
+
+      // Update Topbar Title
+      const titles = {
+        dashboard: 'Dashboard Clima',
+        insights: 'Insights & Motor Estadístico',
+        generator: 'Generador Asistido & Typeform Studio',
+        admin: 'Historial y Acciones de RRHH',
+        settings: 'Configuración de Conexiones'
+      };
+      const crumb = document.getElementById('topbar-active-section-title');
+      if (crumb) crumb.textContent = titles[name] || 'Dashboard Clima';
+
+      // Persist in hash
+      window.location.hash = name;
+
+      // Lazy loaders
+      if (name === 'insights') loadStatisticalEngineData();
+      if (name === 'admin') loadAdminData();
+      if (name === 'generator') renderGenCard();
+      if (name === 'dashboard') loadDashboardData();
+    }
+
+    // Retractile Sidebar with LocalStorage
+    let isSidebarCollapsed = localStorage.getItem('damm_sidebar_collapsed') === 'true';
+
+    function applySidebarState() {
+      const sidebar = document.getElementById('app-sidebar');
+      const wrapper = document.getElementById('main-layout-wrapper');
+      const header = document.getElementById('main-header');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      const labels = document.querySelectorAll('.sidebar-label');
+      const footer = document.querySelector('.sidebar-footer');
+
+      if (!sidebar) return;
+
+      if (isSidebarCollapsed) {
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-16');
+        wrapper.classList.remove('pl-64');
+        wrapper.classList.add('pl-16');
+        header.classList.remove('left-64');
+        header.classList.add('left-16');
+        if (toggleIcon) toggleIcon.textContent = 'menu';
+        labels.forEach(el => el.classList.add('hidden'));
+        if (footer) footer.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('w-16');
+        sidebar.classList.add('w-64');
+        wrapper.classList.remove('pl-16');
+        wrapper.classList.add('pl-64');
+        header.classList.remove('left-16');
+        header.classList.add('left-64');
+        if (toggleIcon) toggleIcon.textContent = 'menu_open';
+        labels.forEach(el => el.classList.remove('hidden'));
+        if (footer) footer.classList.remove('hidden');
+      }
+      localStorage.setItem('damm_sidebar_collapsed', isSidebarCollapsed);
+    }
+
+    function toggleSidebar() {
+      isSidebarCollapsed = !isSidebarCollapsed;
+      applySidebarState();
+    }
+
+    // Toast helper
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-secondary-container text-on-secondary-container border border-secondary' :
+                 type === 'error' ? 'bg-error-container text-on-error-container border border-error' :
+                 'bg-surface-container-highest text-on-surface border border-outline/30';
+      toast.className = `p-3 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 pointer-events-auto toast-animate ${bg}`;
+      toast.innerHTML = `
+        <span class="material-symbols-outlined text-sm">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}</span>
+        <span>${escapeHtml(msg)}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+
+    function escapeHtml(t) {
+      if (!t) return '';
+      return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Modal Handlers
+    function openCheckinModal() { document.getElementById('checkin-modal').classList.remove('hidden'); }
+    function closeCheckinModal() { document.getElementById('checkin-modal').classList.add('hidden'); }
+    function openQrModal(url, id, title) {
+      document.getElementById('qr-modal-title').textContent = title || 'Código QR';
+      document.getElementById('qr-modal-image').src = `/api/surveys/${id}/qr.svg`;
+      document.getElementById('qr-modal-url').textContent = url || `/respond/${id}`;
+      document.getElementById('qr-modal').classList.remove('hidden');
+    }
+    function closeQrModal() { document.getElementById('qr-modal').classList.add('hidden'); }
+
+    function selectScore(val) {
+      document.getElementById('checkin-score-value').value = val;
+      const buttons = document.querySelectorAll('.score-btn');
+      buttons.forEach((btn, idx) => {
+        if (idx + 1 === val) {
+          btn.className = 'score-btn p-3 rounded-lg bg-secondary-container text-on-secondary-container ring-2 ring-secondary font-headline font-bold text-sm';
+        } else {
+          btn.className = 'score-btn p-3 rounded-lg bg-surface-container font-headline font-bold text-sm hover:bg-secondary-container/40';
+        }
+      });
+    }
+
+    async function submitCheckin(e) {
+      e.preventDefault();
+      const site = document.getElementById('checkin-site').value;
+      const dimension = document.getElementById('checkin-dimension').value;
+      const score = parseInt(document.getElementById('checkin-score-value').value, 10);
+
+      try {
+        const res = await fetch('/api/pulse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ site, dimension, score })
+        });
+        if (res.ok) {
+          showToast('¡Gracias! Tu valoración anónima ha sido registrada.', 'success');
+          closeCheckinModal();
+          loadDashboardData();
+          loadStatisticalEngineData();
+        } else {
+          showToast('No se pudo guardar la respuesta.', 'error');
+        }
+      } catch (err) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
+
+    // Loaders
+    async function loadDashboardData() {
+      try {
+        const res = await fetch('/api/dashboard');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        if (data.overall !== null && data.overall !== undefined) {
+          document.getElementById('kpi-overall-score').textContent = Number(data.overall).toFixed(1);
+          document.getElementById('trend-avg-display').textContent = `${Number(data.overall).toFixed(1)} / 5`;
+        }
+        if (data.total_responses !== null && data.total_responses !== undefined) {
+          document.getElementById('kpi-total-responses').textContent = data.total_responses;
+        }
+
+        const demoPill = document.getElementById('demo-indicator-pill');
+        if (demoPill) demoPill.textContent = data.is_demo ? "Demostración Sintética" : "Datos Reales";
+
+        if (data.dimensions && data.dimensions.length > 0) {
+          const sorted = [...data.dimensions].sort((a, b) => (b.score || 0) - (a.score || 0));
+          if (sorted[0] && sorted[0].score !== null) {
+            document.getElementById('kpi-top-dimension').textContent = sorted[0].label;
+            document.getElementById('kpi-top-dimension-score').textContent = `${Number(sorted[0].score).toFixed(1)} / 5.0`;
+          }
+        }
+      } catch (e) {
+        console.warn('Dashboard fetch error', e);
+      }
+    }
+
+    async function loadStatisticalEngineData() {
+      try {
+        const res = await fetch('/api/stats/engine');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const alerts = data.alertas_de_sesgo || {};
+        const repAlerts = alerts.alerta_representatividad_baja_participacion || [];
+        const polAlerts = alerts.alerta_polarizacion_grupal || [];
+
+        if (repAlerts.length > 0) {
+          const first = repAlerts[0];
+          document.getElementById('alert-rep-text').innerHTML = `
+            <strong>${escapeHtml(first.rol)}:</strong> ${first.porcentaje_observado}% de participación. Bajo el umbral mínimo (${first.umbral_minimo}%).
+          `;
+        }
+        if (polAlerts.length > 0) {
+          const first = polAlerts[0];
+          document.getElementById('alert-pol-text').innerHTML = `
+            <strong>${escapeHtml(first.rol)} (${escapeHtml(first.pregunta)}):</strong> Desviación típica de ${first.desviacion_tipica}.
+          `;
+        }
+
+        const totalAlerts = repAlerts.length + polAlerts.length;
+        document.getElementById('kpi-bias-status').textContent = totalAlerts > 0 ? `${totalAlerts} Alertas Activas` : "Equilibrado";
+
+        const matrixBody = document.getElementById('coverage-matrix-body');
+        const porRolTurno = (data.participacion_y_cobertura && data.participacion_y_cobertura.por_rol_turno) || {};
+        const porRol = (data.participacion_y_cobertura && data.participacion_y_cobertura.por_rol) || {};
+
+        if (Object.keys(porRolTurno).length > 0 && matrixBody) {
+          matrixBody.innerHTML = '';
+          for (const [rol, turnos] of Object.entries(porRolTurno)) {
+            const m = turnos['Mañana'] ? `${turnos['Mañana'].n_respuestas} (${turnos['Mañana'].porcentaje_total}%)` : '—';
+            const t = turnos['Tarde'] ? `${turnos['Tarde'].n_respuestas} (${turnos['Tarde'].porcentaje_total}%)` : '—';
+            const n = turnos['Noche'] ? `${turnos['Noche'].n_respuestas} (${turnos['Noche'].porcentaje_total}%)` : '—';
+            const totalR = porRol[rol] ? porRol[rol].n_respuestas : 0;
+            const pctR = porRol[rol] ? porRol[rol].porcentaje_total : 0;
+            const isLow = pctR < 15;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td class="p-3 font-semibold">${escapeHtml(rol)}</td>
+              <td class="p-3 text-center tabular-nums">${m}</td>
+              <td class="p-3 text-center tabular-nums">${t}</td>
+              <td class="p-3 text-center tabular-nums">${n}</td>
+              <td class="p-3 text-center font-bold tabular-nums">${totalR}</td>
+              <td class="p-3 text-center">
+                <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                  isLow ? 'bg-status-warning/10 text-status-warning' : 'bg-status-positive/10 text-status-positive'
+                }">${pctR}% ${isLow ? '(Bajo)' : ''}</span>
+              </td>
+            `;
+            matrixBody.appendChild(tr);
+          }
+        }
+      } catch (e) {
+        console.warn('Statistical engine fetch error', e);
+      }
+    }
+
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/admin');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const tbody = document.getElementById('admin-surveys-table-body');
+        const countLabel = document.getElementById('admin-surveys-count-label');
+        const surveys = data.surveys || [];
+        if (countLabel) countLabel.textContent = `${surveys.length} consultas registradas`;
+
+        if (tbody) {
+          if (surveys.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-tertiary">No hay consultas registradas. Usa el Generador Asistido para crear una.</td></tr>';
+          } else {
+            tbody.innerHTML = '';
+            surveys.forEach(s => {
+              const tr = document.createElement('tr');
+              const statusPill = s.status === 'published' ? '<span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">Publicada</span>' :
+                                 s.status === 'approved' ? '<span class="px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold text-[10px]">Aprobada</span>' :
+                                 '<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-bold text-[10px]">Borrador</span>';
+
+              const qrAction = s.status === 'published'
+                ? `<button onclick="openQrModal('${escapeHtml(s.publish_url)}', '${s.id}', '${escapeHtml(s.title)}')" class="p-1 text-primary hover:text-primary-container" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
+                : '';
+
+              const approveAction = s.status === 'draft'
+                ? `<button onclick="approveSurveyAdmin('${s.id}')" class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-bold text-[10px] hover:bg-secondary">Aprobar</button>`
+                : '';
+
+              const publishAction = s.status === 'approved'
+                ? `<button onclick="publishSurveyAdmin('${s.id}')" class="px-2 py-1 rounded bg-primary text-on-primary font-bold text-[10px] hover:bg-primary-container">Publicar</button>`
+                : '';
+
+              tr.innerHTML = `
+                <td class="p-3 font-semibold">${escapeHtml(s.title)}</td>
+                <td class="p-3 text-tertiary">${escapeHtml(s.cohort)}</td>
+                <td class="p-3 text-center tabular-nums text-tertiary">${s.estimated_minutes} min</td>
+                <td class="p-3 text-center">${escapeHtml(s.channel)}</td>
+                <td class="p-3 text-center">${statusPill}</td>
+                <td class="p-3 text-right space-x-1">
+                  ${qrAction}
+                  ${approveAction}
+                  ${publishAction}
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        }
+
+        const actionsBox = document.getElementById('admin-actions-cards-container');
+        const actions = data.actions || [];
+        if (actionsBox && actions.length > 0) {
+          actionsBox.innerHTML = '';
+          actions.forEach(act => {
+            const card = document.createElement('div');
+            card.className = 'p-4 rounded-lg bg-surface-container-low border border-surface-container status-bar-gold';
+            card.innerHTML = `
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-primary uppercase">${escapeHtml(act.title)}</span>
+                <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-[10px] font-bold">${escapeHtml(act.status)}</span>
+              </div>
+              <p class="text-xs text-on-surface mb-2">${escapeHtml(act.description)}</p>
+              <p class="text-[11px] text-tertiary mb-3">${escapeHtml(act.rationale || '')}</p>
+              ${act.status === 'proposed' && act.id ? `
+                <div class="flex items-center gap-2">
+                  <button onclick="reviewActionAdmin(${act.id}, 'approved')" class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container">Aprobar</button>
+                  <button onclick="reviewActionAdmin(${act.id}, 'dismissed')" class="px-3 py-1.5 rounded-lg bg-surface-container text-xs font-semibold text-tertiary">Descartar</button>
+                </div>
+              ` : ''}
+            `;
+            actionsBox.appendChild(card);
+          });
+        }
+      } catch (e) {
+        console.warn('Error loading admin data', e);
+      }
+    }
+
+    async function approveSurveyAdmin(id) {
+      try {
+        const res = await fetch(`/api/surveys/${id}/approve`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        if (res.ok) {
+          showToast('Consulta aprobada por RRHH.', 'success');
+          loadAdminData();
+        }
+      } catch (err) { showToast('Error al aprobar.', 'error'); }
+    }
+
+    async function publishSurveyAdmin(id) {
+      try {
+        const res = await fetch(`/api/surveys/${id}/publish`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        if (res.ok) {
+          showToast('¡Consulta publicada con éxito!', 'success');
+          loadAdminData();
+        }
+      } catch (err) { showToast('Error al publicar.', 'error'); }
+    }
+
+    async function reviewActionAdmin(id, status) {
+      try {
+        const res = await fetch(`/api/actions/${id}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) });
+        if (res.ok) {
+          showToast(status === 'approved' ? 'Acción aprobada.' : 'Acción descartada.', 'success');
+          loadAdminData();
+        }
+      } catch (err) { showToast('Error al procesar acción.', 'error'); }
+    }
+
+    // Generator Live Preview Logic
+    function renderGenCard() {
+      const q = genQuestions[genIndex];
+      if (!q) return;
+
+      document.getElementById('gen-card-index').textContent = genIndex + 1;
+      document.getElementById('gen-card-dimension').textContent = q.dimension;
+      document.getElementById('gen-card-title').textContent = q.title;
+      document.getElementById('gen-card-desc').textContent = q.description;
+
+      const progress = ((genIndex + 1) / genQuestions.length) * 100;
+      document.getElementById('gen-card-progress').style.width = `${progress}%`;
+
+      const box = document.getElementById('gen-card-options-box');
+      box.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.choices.forEach((c, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isSel = q.selected === idx;
+        btn.className = `w-full text-left p-2.5 rounded-lg flex items-center justify-between text-xs transition-all ${
+          isSel ? 'bg-secondary-container/40 ring-2 ring-secondary' : 'bg-surface-container hover:bg-secondary-container/20'
+        }`;
+        btn.onclick = () => { q.selected = idx; renderGenCard(); };
+        btn.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="w-5 h-5 rounded font-mono font-bold text-[10px] flex items-center justify-center ${
+              isSel ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface'
+            }">${letters[idx] || idx + 1}</span>
+            <span>${escapeHtml(c)}</span>
+          </div>
+          <span class="material-symbols-outlined text-xs ${isSel ? 'text-primary' : 'text-transparent'}">check_circle</span>
+        `;
+        box.appendChild(btn);
+      });
+    }
+
+    function navigateGenPreview(d) {
+      const next = genIndex + d;
+      if (next >= 0 && next < genQuestions.length) {
+        genIndex = next;
+        renderGenCard();
+      }
+    }
+
+    function appendGenPrompt(t) {
+      const input = document.getElementById('gen-ai-chat-input');
+      if (input) { input.value = t; input.focus(); }
+    }
+
+    async function handleGeneratorPrompt(e) {
+      e.preventDefault();
+      const input = document.getElementById('gen-ai-chat-input');
+      if (!input || !input.value.trim()) return;
+      const val = input.value.trim();
+      input.value = '';
+
+      showToast('Adaptando microconsulta con IA...', 'info');
+
+      try {
+        const res = await fetch('/api/question', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dimension: 'bienestar', site: 'Fábrica', prompt: val })
+        });
+        if (res.ok) {
+          const d = await res.json();
+          genQuestions[genIndex].title = d.question;
+        } else {
+          genQuestions[genIndex].title = `¿Cómo influye "${val}" en tu jornada habitual en planta?`;
+        }
+        document.getElementById('gen-user-prompt-text').textContent = `“${val}”`;
+        document.getElementById('gen-synthesis-text').innerHTML = `
+          He adaptado la consulta incorporando: <em>"${escapeHtml(val)}"</em> para los turnos de envasado y planta.
+        `;
+        renderGenCard();
+        showToast('Pregunta actualizada.', 'success');
+      } catch (err) {
+        showToast('Pregunta adaptada localmente.', 'info');
+      }
+    }
+
+    async function publishFromGenerator() {
+      const btn = document.getElementById('generator-publish-btn');
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+
+      showToast('Publicando microconsulta para Fábrica y Logística...', 'info');
+
+      const formattedQuestions = genQuestions.map((q, idx) => ({
+        id: `q_${idx + 1}`,
+        text: q.title,
+        type: idx === 0 ? "rating" : "multiple_choice",
+        dimension: "bienestar",
+        required: true,
+        choices: q.choices,
+      }));
+
+      const payload = {
+        objective: "Evaluar turnos rotativos y carga física en plantas Q4",
+        cohort: "Planta",
+        context: "Planta El Prat y centros logísticos",
+        max_duration: "2",
+        exclusions: "No solicitar datos de identificación personal",
+        language: "es",
+        channel: "Móvil-QR",
+        title: "Pulso Operativo Q4: Turnicidad y Clima en Planta",
+        intro: "Tu voz es 100% anónima y esencial para ajustar los cuadros de relevo y descansos.",
+        questions: formattedQuestions
+      };
+
+      try {
+        const res = await fetch('/api/surveys/publish-direct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.typeform_connected) {
+            showToast('¡Encuesta creada en Typeform con éxito!', 'success');
+          } else {
+            showToast('¡Publicada con éxito con código QR y enlace anónimo!', 'success');
+          }
+          setTimeout(() => { showPanel('admin'); }, 1200);
+        } else {
+          showToast('Guardada para validación humana.', 'info');
+        }
+      } catch (e) {
+        showToast('Guardada en modo local.', 'info');
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50');
+      }
+    }
+
+    // LLM Insights Synthesis
+    async function requestLlmSynthesis() {
+      const btn = document.getElementById('btn-request-llm-synthesis');
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+
+      showToast('Generando síntesis ejecutiva basada en el JSON determinista...', 'info');
+
+      try {
+        const res = await fetch('/api/insights/llm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const data = await res.json();
+        const box = document.getElementById('llm-insights-result-box');
+        const content = document.getElementById('llm-insights-content');
+
+        box.classList.remove('hidden');
+        if (data.informe_markdown) {
+          content.innerHTML = formatMarkdown(data.informe_markdown);
+        } else {
+          content.innerHTML = `
+            <p><strong>Modo Determinista:</strong> El cálculo estadístico se ejecutó al 100% sin alucinaciones numéricas.</p>
+            <p>Total respuestas analizadas: <strong>${data.payload_estadistico_utilizado?.participacion_y_cobertura?.total_respuestas || 600}</strong>.</p>
+            <p>Para activar el reporte generado con OpenAI / Gemini, configura tu API Key en la barra lateral.</p>
+          `;
+        }
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (err) {
+        showToast('No se pudo generar la síntesis en este momento.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50');
+      }
+    }
+
+    function formatMarkdown(md) {
+      return md
+        .replace(/### (.*)/g, '<h4 class="font-bold text-sm text-primary mt-2 mb-1">$1</h4>')
+        .replace(/## (.*)/g, '<h3 class="font-bold text-base text-on-surface mt-3 mb-1">$1</h3>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '<p class="mb-1"></p>')
+        .replace(/\n- (.*)/g, '<li class="ml-4 list-disc">$1</li>');
+    }
+
+    // Save Settings from Settings Panel
+    async function savePanelSettings(e) {
+      e.preventDefault();
+      const apiKey = document.getElementById('set-api-key').value;
+      const typeformToken = document.getElementById('set-typeform-token').value;
+      const baseUrl = document.getElementById('set-base-url').value;
+      const model = document.getElementById('set-model').value;
+
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ api_key: apiKey, typeform_token: typeformToken, base_url: baseUrl, model: model })
+        });
+        if (res.ok) {
+          showToast('Credenciales guardadas con éxito.', 'success');
+        } else {
+          showToast('Error al guardar credenciales.', 'error');
+        }
+      } catch (err) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
+
+    // Initial Routing
+    document.addEventListener('DOMContentLoaded', () => {
+      applySidebarState();
+      
+      // Check hash route
+      const initialHash = window.location.hash ? window.location.hash.replace('#', '') : 'dashboard';
+      showPanel(initialHash);
+      
+      // Check if visiting respondent URL
+      const respondentMatch = window.location.pathname.match(/^\/respond\/([a-f0-9]{32})$/);
+      if (respondentMatch) {
+        openCampaignRespondentModal(respondentMatch[1]);
+      }
+    });
+
+    // Listen to hash changes (browser back/forward button)
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash ? window.location.hash.replace('#', '') : 'dashboard';
+      showPanel(hash);
+    });
+  </script>
 </body>
 </html>

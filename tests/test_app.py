@@ -371,5 +371,30 @@ class SurveyTests(unittest.TestCase):
         self.assertEqual(row["typeform_response_id"], "response-token")
 
 
+class GeneratorPanelTests(unittest.TestCase):
+    def test_generator_panel_template_exists_and_routes(self):
+        generator_file = app.UI_DIR / "generator.html"
+        self.assertTrue(generator_file.exists())
+        content = generator_file.read_text(encoding="utf-8")
+        self.assertIn("PORTAL DAMM", content)
+        self.assertIn("Generador Asistido", content)
+        self.assertIn("Typeform Studio", content)
+
+    def test_statistical_engine_payload_generates_anonymous_contract(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(app, "DATABASE", Path(directory) / "test.sqlite3"):
+                with app.connect() as db:
+                    app.seed_demo_data(db)
+                payload = app.get_statistical_engine_payload()
+                self.assertIn("participacion_y_cobertura", payload)
+                self.assertIn("metricas_globales", payload)
+                self.assertIn("estadisticas_por_rol", payload)
+                self.assertIn("alertas_de_sesgo", payload)
+                self.assertGreater(payload["participacion_y_cobertura"]["total_respuestas"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

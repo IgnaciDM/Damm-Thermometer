@@ -1,205 +1,545 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f3ed">
-  <title>Diseñar escucha — Pulso</title>
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/admin.css">
-  <script src="/admin.js" defer></script>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="web_dashboard" name="shell-type">
+  <title>Portal Damm — Administración y Consultas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+      main > :first-child { margin-top: 0 !important; }
+      main > :last-child { margin-bottom: 0 !important; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .sidebar-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .content-transition { transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), left 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .toast-animate { transition: transform 0.25s ease, opacity 0.25s ease; }
+    .status-bar-positive { border-left: 3px solid #10b981; }
+    .status-bar-warning { border-left: 3px solid #f59e0b; }
+    .status-bar-critical { border-left: 3px solid #ef4444; }
+    .status-bar-brand { border-left: 3px solid #c4161c; }
+    .status-bar-gold { border-left: 3px solid #d4af37; }
+  </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#fbf9f7",
+            "surface-dim": "#dbdad8",
+            "surface-bright": "#fbf9f7",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f5f3f1",
+            "surface-container": "#efedec",
+            "surface-container-high": "#eae8e6",
+            "surface-container-highest": "#e4e2e0",
+            "on-surface": "#1b1c1b",
+            "on-surface-variant": "#5c403d",
+            "inverse-surface": "#30302f",
+            "inverse-on-surface": "#f2f0ee",
+            "outline": "#906f6b",
+            "outline-variant": "#e5bdb9",
+            "surface-tint": "#bd0e18",
+            "primary": "#c4161c",
+            "primary-container": "#c4161c",
+            "on-primary": "#ffffff",
+            "secondary": "#735c00",
+            "secondary-container": "#fed65b",
+            "on-secondary-container": "#745c00",
+            "tertiary": "#1e1611",
+            "tertiary-container": "#6c6059",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "status-positive": "#10b981",
+            "status-warning": "#f59e0b",
+            "status-critical": "#ef4444",
+            "brand-gold": "#d4af37"
+          },
+          borderRadius: { DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px" },
+          spacing: {
+            gutter: "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            margin: "2rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Navegación principal">
-      <a class="brand" href="/" aria-label="Pulso, inicio">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="brand-name">pulso<span>.</span></span>
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-20 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Retractile Sidebar -->
+  <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(30,22,17,0.04)] sidebar-transition overflow-hidden w-64 border-r border-surface-container/60" id="app-sidebar">
+    <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
+      <div class="flex items-center gap-space-sm overflow-hidden" id="sidebar-brand-box">
+        <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+        <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">PORTAL DAMM</span>
+      </div>
+      <button aria-label="Colapsar o expandir menú" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="toggleSidebar()" type="button">
+        <span class="material-symbols-outlined text-xl" id="sidebar-toggle-icon">menu_open</span>
+      </button>
+    </div>
+
+    <div class="px-space-md py-space-xs sidebar-label">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70">Navegación HR</span>
+    </div>
+
+    <nav class="flex-1 px-space-sm space-y-1 mt-1">
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group text-sm" href="/" title="Dashboard de Clima">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">analytics</span>
+        <span class="sidebar-label whitespace-nowrap">Dashboard Clima</span>
       </a>
-      <div class="workspace-label">ESCUCHA ORGANIZACIONAL</div>
-      <nav class="side-nav">
-        <a class="nav-link" href="/"><span class="nav-icon">◫</span> Resumen</a>
-        <a class="nav-link active" href="/admin"><span class="nav-icon">✳</span> Diseñar consulta <span class="nav-dot"></span></a>
-        <a class="nav-link" href="#participacion"><span class="nav-icon">◉</span> Representatividad</a>
-        <a class="nav-link" href="#acciones"><span class="nav-icon">↗</span> Insights y acciones</a>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="sidebar-note">
-          <div class="note-icon">⬡</div>
-          <p>Primero escuchar.<br><strong>Después actuar.</strong></p>
-          <span>Las consultas y las acciones siempre requieren aprobación humana.</span>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group text-sm" href="/#insights" title="Insights y Motor Estadístico">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">query_stats</span>
+        <span class="sidebar-label whitespace-nowrap">Insights &amp; Motor</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group text-sm" href="/generator" title="Generador Asistido IA & Typeform Studio">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">auto_awesome</span>
+        <span class="sidebar-label whitespace-nowrap">Generador Asistido</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-primary bg-primary font-semibold shadow-xs transition-all group text-sm" href="/admin" title="Administración de Consultas">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">history_edu</span>
+        <span class="sidebar-label whitespace-nowrap">Historial y Acciones</span>
+      </a>
+      <a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group text-sm" href="#conexiones" title="Configuración de Conexiones">
+        <span class="material-symbols-outlined text-xl flex-shrink-0">settings</span>
+        <span class="sidebar-label whitespace-nowrap">Configuración</span>
+      </a>
+    </nav>
+
+    <div class="p-3 bg-surface-container/60 m-space-sm rounded-xl overflow-hidden sidebar-footer border border-surface-container-high">
+      <div class="flex items-center gap-space-sm mb-1">
+        <span class="material-symbols-outlined text-brand-gold text-base flex-shrink-0">verified</span>
+        <span class="text-xs font-bold text-on-surface whitespace-nowrap sidebar-label">Estrella Damm 1876</span>
+      </div>
+      <p class="text-[11px] text-on-surface-variant whitespace-nowrap sidebar-label">Sede Central Barcelona</p>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="content-transition pl-64" id="main-layout-wrapper">
+    <!-- Topbar -->
+    <header class="fixed top-0 right-0 h-16 bg-surface/95 backdrop-blur-xl z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(30,22,17,0.04)] content-transition border-b border-surface-container-high/60 left-64" id="main-header">
+      <div class="flex items-center gap-space-md">
+        <div class="flex items-center gap-2.5 pr-2">
+          <img alt="Chapa Estrella Damm" class="w-8 h-8 object-contain rounded-full shadow-xs hover:rotate-12 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr9w9N2CHJugzokmjtecwVk9xXE-ZkiZRZImgVPACsog-N1B87jVSrrYfA-VyG_C18iBTV-_IuQlkbAxn6o7h8TZ5vJWLCAd9JKaFUgaB6I3OmPi-mH7-SxOg2gWH54hrEM7l3WdCE-C2TcxHtSCb9ZqiYreVZrni4v4pmeTzTnmqnQPZtHOD5SnHgYF8ul2a6vnRbBqr8tiAlBL5ZAQEVtxlEwiTzsd_heW0R14sbGvBlTKUGxDfrlA">
+          <img alt="Damm" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp8e3SBJmS1WmekQO9lQ6n13qTMQ8_LcWug664Z35wY-3SjM7pFiWUoxKMCr8jMPjycECeYqKpcgWdvf141-cg0V6rDZ6-d2NZXDBLC9I3euKsCtLzjpwcq2zwZUP3rxBMDhBP8J6GLPky6UmUuB0tBxtpX0Q_cN-04n7c_1wzSrbGmgssBxij1n6eIxuUcczFxrHOOdpjBShEGltx0gBkxccMu3c7UebhVIoEf-t7hKMwW7Z5pDLWlw">
         </div>
-        <div class="profile">
-          <div class="profile-avatar">P</div>
-          <div><strong>People & Culture</strong><small>Panel de organización</small></div>
+        <div class="h-4 w-px bg-outline-variant/50 hidden sm:block"></div>
+        <div class="hidden sm:flex items-center gap-2">
+          <a href="/" class="text-xs font-medium text-on-surface-variant hover:text-primary">Dashboard</a>
+          <span class="material-symbols-outlined text-sm text-on-surface-variant">chevron_right</span>
+          <span class="text-sm font-headline font-semibold text-on-surface">Gestión de Consultas &amp; Acciones</span>
         </div>
       </div>
-    </aside>
 
-    <main class="main-content admin-main">
-      <header class="topbar">
-        <div class="breadcrumb"><a href="/">Organización</a><span class="crumb-sep">/</span><strong>Diseñar escucha</strong></div>
-        <div class="topbar-actions"><span class="privacy-chip">⬡ Solo datos agregados</span><a class="top-avatar admin-top-avatar" href="/" aria-label="Volver al resumen">P</a></div>
-      </header>
+      <div class="flex items-center gap-space-md">
+        <a href="/generator" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-semibold hover:bg-primary-container transition-all shadow-xs">
+          <span class="material-symbols-outlined text-sm">add</span>
+          <span>Nueva Consulta</span>
+        </a>
 
-      <section class="admin-heading">
+        <div class="flex items-center gap-space-sm pl-2 py-1 pr-1 border-l border-surface-container-high">
+          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs border border-primary/20 shadow-xs">
+            DP
+          </div>
+          <div class="hidden lg:flex flex-col text-left">
+            <span class="text-xs font-bold text-on-surface leading-tight">Dirección de Personas</span>
+            <span class="text-[11px] text-on-surface-variant leading-tight">Admin Global HR</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full pt-20 bg-surface px-space-xl py-space-lg max-w-7xl mx-auto space-y-space-lg">
+
+      <!-- Header Card: Listening Cycle -->
+      <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container flex flex-wrap items-center justify-between gap-space-md">
         <div>
-          <div class="eyebrow muted-eyebrow">PEOPLE · ESCUCHA ACTIVA</div>
-          <h1>De una necesidad<br>a <em>una acción concreta.</em></h1>
-          <p>Diseña una microconsulta relevante, revísala antes de compartirla y entiende qué voces te faltan por escuchar.</p>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-primary block mb-1">Campaña de Clima y Escucha Continua</span>
+          <h1 class="text-2xl font-headline font-bold text-on-surface">El Ciclo de Escucha Activa</h1>
+          <p class="text-xs text-on-surface-variant mt-1">Supervisión humana obligatoria en cada fase: la IA propone, las personas deciden y validan.</p>
         </div>
-        <div class="cycle-card" aria-label="Ciclo de escucha completo">
-          <span>EL CICLO DE ESCUCHA</span>
-          <div><i>01</i> Necesidad <b>→</b> <i>02</i> Consulta <b>→</b> <i>03</i> Acción</div>
-          <small>Una conversación, de principio a fin.</small>
+        <div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low border border-surface-container text-xs text-tertiary">
+          <span class="font-bold text-primary">01</span> Necesidad
+          <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          <span class="font-bold text-primary">02</span> Consulta
+          <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          <span class="font-bold text-primary">03</span> Validación
+          <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          <span class="font-bold text-primary">04</span> Acción
         </div>
       </section>
 
-      <div class="admin-demo-notice" id="synthetic-notice" hidden>
-        <span>◌</span><p><strong>Entorno de demostración.</strong> Las respuestas son 100% sintéticas (600 en dos periodos). No son datos de Damm ni de personas reales.</p>
-      </div>
-
-      <section class="admin-stats" aria-label="Estado de participación">
-        <article class="admin-stat"><span>RESPUESTAS EN MUESTRA</span><strong id="admin-sample">—</strong><small>Solo se muestran agregados</small></article>
-        <article class="admin-stat"><span>CONFIANZA DEL ANÁLISIS</span><strong id="admin-confidence">—</strong><small id="admin-retention">Retención limitada</small></article>
-        <article class="admin-stat"><span>ALERTAS DE REPRESENTATIVIDAD</span><strong id="admin-alert-count">—</strong><small>Comparación con la población objetivo</small></article>
-        <article class="admin-stat"><span>CANALES QUE ESCUCHAN</span><strong id="admin-channel-count">—</strong><small>Móvil · QR · Teams · correo</small></article>
-      </section>
-
-      <div class="admin-layout">
-        <div class="admin-primary">
-          <section class="admin-panel" id="necesidad">
-            <div class="admin-panel-heading">
-              <div><div class="eyebrow muted-eyebrow">01 · DEFINIR LA NECESIDAD</div><h2>¿Qué queremos entender?</h2></div>
-              <span class="required-badge">RR. HH.</span>
-            </div>
-            <p class="panel-description">Cuanto más concreta la necesidad, más útil será la consulta. No incluyas nombres ni información personal.</p>
-            <form id="need-form">
-              <div class="admin-form-grid">
-                <label class="field-wide">Objetivo de escucha
-                  <textarea name="objective" rows="2" maxlength="400" required>Entender cómo está funcionando el nuevo sistema de turnos e identificar qué ayudaría a organizar mejor el trabajo.</textarea>
-                </label>
-                <label>Colectivo
-                  <select name="cohort" required>
-                    <option value="Planta">Planta</option><option value="Logística">Logística</option><option value="Comercial">Comercial</option><option value="Oficina">Oficina</option><option value="Manager">Manager</option><option value="Todos" selected>Todos los colectivos</option>
-                  </select>
-                </label>
-                <label>Tiempo máximo
-                  <select name="max_duration"><option value="1">1 minuto</option><option value="2" selected>2 minutos</option><option value="3">3 minutos</option><option value="5">5 minutos</option></select>
-                </label>
-                <label class="field-wide">Contexto de la consulta
-                  <textarea name="context" rows="2" maxlength="400" required>Hace tres semanas se ha implantado una nueva planificación. Queremos detectar si los cambios se entienden y qué dificultades aparecen en los turnos.</textarea>
-                </label>
-                <label class="field-wide">Qué no debemos preguntar
-                  <input name="exclusions" type="text" maxlength="300" required value="Nombres, datos de salud, teléfono, correo o detalles sobre personas concretas">
-                </label>
-                <label>Idioma
-                  <select name="language"><option value="es">Español</option><option value="ca">Català</option><option value="en">English</option></select>
-                </label>
-                <label>Canal de participación
-                  <select name="channel"><option>Móvil-QR</option><option>Teams</option><option>Correo</option></select>
-                </label>
-                <label>Frecuencia mínima
-                  <select name="frequency_days"><option value="7">Una consulta cada 7 días</option><option value="14">Una consulta cada 14 días</option><option value="30">Una consulta cada 30 días</option></select>
-                </label>
-                <fieldset class="population-fieldset field-wide">
-                  <legend>Distribución esperada de la población · estimación de RR. HH.</legend>
-                  <div class="population-grid">
-                    <label>Planta %<input name="population_Planta" type="number" min="0" max="100" step="1" value="42" required></label>
-                    <label>Logística %<input name="population_Logística" type="number" min="0" max="100" step="1" value="20" required></label>
-                    <label>Comercial %<input name="population_Comercial" type="number" min="0" max="100" step="1" value="16" required></label>
-                    <label>Oficina %<input name="population_Oficina" type="number" min="0" max="100" step="1" value="16" required></label>
-                    <label>Managers %<input name="population_Manager" type="number" min="0" max="100" step="1" value="6" required></label>
-                  </div>
-                  <small>Los porcentajes se normalizan automáticamente; no son cuotas individuales.</small>
-                </fieldset>
-              </div>
-              <div class="privacy-inline">⬡ La IA solo recibe esta necesidad. La encuesta no pide identidades individuales; los porcentajes sirven para detectar voces poco escuchadas.</div>
-              <button class="admin-primary-button" id="generate-draft" type="submit">Generar borrador de consulta <span>✦</span></button>
-            </form>
-          </section>
-
-          <section class="admin-panel survey-editor-panel" id="editor-panel" hidden>
-            <div class="admin-panel-heading">
-              <div><div class="eyebrow muted-eyebrow">02 · REVISIÓN HUMANA OBLIGATORIA</div><h2>Una propuesta. Tú decides.</h2></div>
-              <span class="draft-badge" id="draft-status">BORRADOR</span>
-            </div>
-            <div class="human-review-note"><span>◎</span><span><strong>La IA no publica.</strong> Edita, reordena o elimina preguntas. Solo RR. HH. puede aprobar y publicar.</span></div>
-            <div id="survey-editor"></div>
-            <div class="editor-toolbar">
-              <button class="secondary-button" id="add-question" type="button">＋ Añadir pregunta</button>
-              <span id="question-count">4 preguntas · menos de 2 min</span>
-            </div>
-            <div class="editor-actions" id="editor-actions">
-              <button class="secondary-button" id="save-draft" type="button">Guardar cambios</button>
-              <button class="admin-primary-button" id="approve-survey" type="button">Revisar y aprobar <span>✓</span></button>
-              <button class="admin-primary-button" id="publish-survey" type="button" hidden>Publicar consulta <span>↗</span></button>
-            </div>
-            <div class="publish-result" id="publish-result" hidden>
-              <div class="publish-success">✓ Consulta publicada. Comparte el enlace o escanea el QR.</div>
-              <div class="publish-share"><img id="published-qr" alt="Código QR de la consulta"><div><label for="published-link">Enlace para responder</label><div class="copy-link-row"><input id="published-link" readonly><button id="copy-published-link" type="button">Copiar</button></div><a id="open-published-link" href="#" target="_blank" rel="noopener noreferrer">Abrir consulta <span>↗</span></a><a id="share-published-teams" href="#" target="_blank" rel="noopener noreferrer">Compartir en Teams <span>↗</span></a></div></div>
-              <button class="secondary-button" id="import-typeform" type="button" hidden>Actualizar respuestas desde Typeform ↻</button>
-            </div>
-          </section>
+      <!-- SECTION 2: SURVEYS LIST / MANAGEMENT -->
+      <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+        <div class="flex items-center justify-between border-b border-surface-container pb-3">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Campañas Registradas</span>
+            <h2 class="text-lg font-headline font-bold text-on-surface">Historial de Microconsultas</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-tertiary" id="surveys-count-label">Cargando...</span>
+          </div>
         </div>
 
-        <aside class="admin-secondary">
-          <section class="admin-panel integration-panel">
-            <div class="admin-panel-heading">
-              <div><div class="eyebrow muted-eyebrow">PUBLICACIÓN SEGURA</div><h2>Conexiones</h2></div>
-            </div>
-            <p class="panel-description">Las claves solo permanecen en la memoria del servidor durante esta sesión.</p>
-            <form id="integration-form" class="integration-form">
-              <label>Clave de IA <span class="optional-label">opcional</span>
-                <input name="api_key" type="password" placeholder="Genera consultas con IA" autocomplete="off">
-              </label>
-              <label>Token API de Typeform <span class="optional-label">opcional</span>
-                <input name="typeform_token" type="password" placeholder="Publica en tu cuenta de Typeform" autocomplete="off">
-              </label>
-              <label>Modelo
-                <input name="model" type="text" value="gpt-4o-mini" maxlength="120">
-              </label>
-              <label>URL base de chat completions
-                <input name="base_url" type="url" value="https://api.openai.com/v1/chat/completions">
-              </label>
-              <button class="secondary-button" type="submit">Guardar conexiones</button>
-              <div class="connection-state" id="connection-state">Sin configurar · las plantillas locales funcionan sin API.</div>
-            </form>
-          </section>
-
-          <section class="admin-panel" id="participacion">
-            <div class="admin-panel-heading">
-              <div><div class="eyebrow muted-eyebrow">05 · ESCUCHAR A TODAS LAS VOCES</div><h2>¿A quién nos falta escuchar?</h2></div>
-            </div>
-            <p class="panel-description">Respuesta observada frente a la composición de población objetivo configurada.</p>
-            <div class="representation-list" id="representation-list"></div>
-            <div class="representation-legend"><i></i> Necesita más alcance <i></i> Equilibrada</div>
-            <div class="privacy-inline">Se ocultan los grupos con menos de cinco respuestas. La proporción poblacional es una hipótesis de demostración editable.</div>
-          </section>
-
-          <section class="admin-panel" id="acciones">
-            <div class="admin-panel-heading">
-              <div><div class="eyebrow muted-eyebrow">06–08 · ENTENDER Y ACTUAR</div><h2>Señales, no conclusiones.</h2></div>
-            </div>
-            <div class="analysis-caveat" id="analysis-caveat">La clasificación temática ayuda a priorizar una conversación; no demuestra causas ni evalúa personas.</div>
-            <div id="topic-list" class="topic-list"></div>
-            <div class="weak-signal" id="weak-signal"></div>
-            <div class="recommendation-list" id="recommendation-list"></div>
-          </section>
-        </aside>
-      </div>
-
-      <section class="admin-panel campaign-panel">
-        <div class="admin-panel-heading">
-          <div><div class="eyebrow muted-eyebrow">EL CICLO CONTINÚA</div><h2>Consultas creadas y acciones revisadas.</h2></div>
-          <a class="text-link" href="/">Ver panel completo ↗</a>
+        <div class="overflow-x-auto rounded-lg border border-surface-container">
+          <table class="w-full text-left text-xs text-on-surface">
+            <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
+              <tr>
+                <th class="p-3">Título de la Consulta</th>
+                <th class="p-3">Colectivo</th>
+                <th class="p-3 text-center">Duración</th>
+                <th class="p-3 text-center">Canal</th>
+                <th class="p-3 text-center">Estado</th>
+                <th class="p-3 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="surveys-table-body">
+              <tr>
+                <td colspan="6" class="p-4 text-center text-tertiary">Cargando consultas...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="campaign-list" id="campaign-list"></div>
       </section>
 
-      <footer class="footer"><a class="footer-brand" href="/"><span class="brand-mark"><span></span><span></span><span></span></span> pulso<span>.</span></a><span>Escuchar mejor. Entender de verdad. Actuar antes.</span><span>Privacidad por diseño · Retención: 90 días</span></footer>
+      <!-- SECTION 3: RECOMMENDED ACTIONS & HUMAN APPROVAL -->
+      <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+        <div class="flex items-center justify-between border-b border-surface-container pb-3">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Cierre del Ciclo</span>
+            <h2 class="text-lg font-headline font-bold text-on-surface">Recomendaciones &amp; Planes de Acción</h2>
+          </div>
+          <span class="text-xs text-on-surface-variant font-medium">Requiere validación humana</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-space-md" id="actions-cards-container">
+          <!-- Populated by JS -->
+          <div class="p-4 rounded-lg bg-surface-container-low border border-surface-container status-bar-gold">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-primary uppercase">Rotación de turnos en Planta</span>
+              <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-[10px] font-bold">Propuesta</span>
+            </div>
+            <p class="text-xs text-on-surface mb-3">
+              Abrir una sesión de diálogo con supervisores de cuadrilla para revisar la antelación de cuadros de descanso.
+            </p>
+            <div class="flex items-center gap-2">
+              <button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-all">Aprobar Acción</button>
+              <button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-tertiary transition-all">Descartar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: CONNECTIONS & SETTINGS -->
+      <section id="conexiones" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+        <div class="border-b border-surface-container pb-3">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Integración Corporativa</span>
+          <h2 class="text-lg font-headline font-bold text-on-surface">Conexión Typeform &amp; Modelos IA</h2>
+        </div>
+
+        <form id="admin-settings-form" onsubmit="saveAdminSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+          <div>
+            <label class="text-xs font-bold text-on-surface block mb-1">OpenAI / Gemini API Key</label>
+            <input type="password" id="admin-api-key" placeholder="sk-..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <span class="text-[10px] text-tertiary mt-1 block">Para generación asistida de preguntas y síntesis ejecutiva.</span>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-on-surface block mb-1">Typeform Personal Access Token</label>
+            <input type="password" id="admin-typeform-token" placeholder="tfp_..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <span class="text-[10px] text-tertiary mt-1 block">Permite publicar y sincronizar respuestas de Typeform en la nube.</span>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-on-surface block mb-1">API Endpoint Base URL</label>
+            <input type="text" id="admin-base-url" value="https://api.openai.com/v1/chat/completions" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-on-surface block mb-1">Modelo Seleccionado</label>
+            <input type="text" id="admin-model" value="gpt-4o-mini" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+          </div>
+
+          <div class="md:col-span-2 pt-2">
+            <button type="submit" class="px-5 py-2.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-xs">
+              Guardar Conexiones
+            </button>
+          </div>
+        </form>
+      </section>
+
     </main>
   </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- QR MODAL VIEWER -->
+  <div id="qr-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest max-w-sm w-full rounded-2xl p-space-xl shadow-xl border border-surface-container text-center space-y-4">
+      <div class="flex items-center justify-between border-b border-surface-container pb-2">
+        <h3 class="text-sm font-headline font-bold text-on-surface" id="qr-modal-title">Código QR de Encuesta</h3>
+        <button onclick="closeQrModal()" class="text-tertiary hover:text-on-surface p-1" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center">
+        <img id="qr-modal-image" src="" alt="Código QR" class="w-48 h-48 object-contain">
+      </div>
+      <p class="text-xs text-on-surface-variant" id="qr-modal-url"></p>
+      <button onclick="closeQrModal()" class="w-full py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition-all">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    let isSidebarCollapsed = localStorage.getItem('damm_sidebar_collapsed') === 'true';
+
+    function applySidebarState() {
+      const sidebar = document.getElementById('app-sidebar');
+      const wrapper = document.getElementById('main-layout-wrapper');
+      const header = document.getElementById('main-header');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      const labels = document.querySelectorAll('.sidebar-label');
+      const footer = document.querySelector('.sidebar-footer');
+
+      if (!sidebar) return;
+
+      if (isSidebarCollapsed) {
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-16');
+        wrapper.classList.remove('pl-64');
+        wrapper.classList.add('pl-16');
+        header.classList.remove('left-64');
+        header.classList.add('left-16');
+        if (toggleIcon) toggleIcon.textContent = 'menu';
+        labels.forEach(el => el.classList.add('hidden'));
+        if (footer) footer.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('w-16');
+        sidebar.classList.add('w-64');
+        wrapper.classList.remove('pl-16');
+        wrapper.classList.add('pl-64');
+        header.classList.remove('left-16');
+        header.classList.add('left-64');
+        if (toggleIcon) toggleIcon.textContent = 'menu_open';
+        labels.forEach(el => el.classList.remove('hidden'));
+        if (footer) footer.classList.remove('hidden');
+      }
+      localStorage.setItem('damm_sidebar_collapsed', isSidebarCollapsed);
+    }
+
+    function toggleSidebar() {
+      isSidebarCollapsed = !isSidebarCollapsed;
+      applySidebarState();
+    }
+
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-secondary-container text-on-secondary-container border border-secondary' :
+                 type === 'error' ? 'bg-error-container text-on-error-container border border-error' :
+                 'bg-surface-container-highest text-on-surface border border-outline/30';
+      toast.className = `p-3 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 pointer-events-auto toast-animate ${bg}`;
+      toast.innerHTML = `
+        <span class="material-symbols-outlined text-sm">${type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info'}</span>
+        <span>${escapeHtml(msg)}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+
+    function escapeHtml(t) {
+      if (!t) return '';
+      return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function openQrModal(url, id, title) {
+      document.getElementById('qr-modal-title').textContent = title || 'Código QR';
+      document.getElementById('qr-modal-image').src = `/api/surveys/${id}/qr.svg`;
+      document.getElementById('qr-modal-url').textContent = url || `/respond/${id}`;
+      document.getElementById('qr-modal').classList.remove('hidden');
+    }
+
+    function closeQrModal() {
+      document.getElementById('qr-modal').classList.add('hidden');
+    }
+
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/admin');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        // Surveys
+        const tbody = document.getElementById('surveys-table-body');
+        const countLabel = document.getElementById('surveys-count-label');
+        const surveys = data.surveys || [];
+        if (countLabel) countLabel.textContent = `${surveys.length} consultas registradas`;
+
+        if (tbody) {
+          if (surveys.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-tertiary">No hay consultas registradas. Usa el Generador Asistido para crear una.</td></tr>';
+          } else {
+            tbody.innerHTML = '';
+            surveys.forEach(s => {
+              const tr = document.createElement('tr');
+              const statusPill = s.status === 'published' ? '<span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">Publicada</span>' :
+                                 s.status === 'approved' ? '<span class="px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold text-[10px]">Aprobada</span>' :
+                                 '<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-bold text-[10px]">Borrador</span>';
+
+              const qrAction = s.status === 'published'
+                ? `<button onclick="openQrModal('${escapeHtml(s.publish_url)}', '${s.id}', '${escapeHtml(s.title)}')" class="p-1 text-primary hover:text-primary-container" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
+                : '';
+
+              const approveAction = s.status === 'draft'
+                ? `<button onclick="approveSurvey('${s.id}')" class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-bold text-[10px] hover:bg-secondary">Aprobar</button>`
+                : '';
+
+              const publishAction = s.status === 'approved'
+                ? `<button onclick="publishSurvey('${s.id}')" class="px-2 py-1 rounded bg-primary text-on-primary font-bold text-[10px] hover:bg-primary-container">Publicar</button>`
+                : '';
+
+              tr.innerHTML = `
+                <td class="p-3 font-semibold">${escapeHtml(s.title)}</td>
+                <td class="p-3 text-tertiary">${escapeHtml(s.cohort)}</td>
+                <td class="p-3 text-center tabular-nums text-tertiary">${s.estimated_minutes} min</td>
+                <td class="p-3 text-center">${escapeHtml(s.channel)}</td>
+                <td class="p-3 text-center">${statusPill}</td>
+                <td class="p-3 text-right space-x-1">
+                  ${qrAction}
+                  ${approveAction}
+                  ${publishAction}
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        }
+
+        // Actions
+        const actionsBox = document.getElementById('actions-cards-container');
+        const actions = data.actions || [];
+        if (actionsBox && actions.length > 0) {
+          actionsBox.innerHTML = '';
+          actions.forEach(act => {
+            const card = document.createElement('div');
+            card.className = 'p-4 rounded-lg bg-surface-container-low border border-surface-container status-bar-gold';
+            card.innerHTML = `
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-primary uppercase">${escapeHtml(act.title)}</span>
+                <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-[10px] font-bold">${escapeHtml(act.status)}</span>
+              </div>
+              <p class="text-xs text-on-surface mb-2">${escapeHtml(act.description)}</p>
+              <p class="text-[11px] text-tertiary mb-3">${escapeHtml(act.rationale || '')}</p>
+              ${act.status === 'proposed' && act.id ? `
+                <div class="flex items-center gap-2">
+                  <button onclick="reviewAction(${act.id}, 'approved')" class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container">Aprobar</button>
+                  <button onclick="reviewAction(${act.id}, 'dismissed')" class="px-3 py-1.5 rounded-lg bg-surface-container text-xs font-semibold text-tertiary">Descartar</button>
+                </div>
+              ` : ''}
+            `;
+            actionsBox.appendChild(card);
+          });
+        }
+      } catch (e) {
+        console.warn('Error loading admin data', e);
+      }
+    }
+
+    async function approveSurvey(id) {
+      try {
+        const res = await fetch(`/api/surveys/${id}/approve`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        if (res.ok) {
+          showToast('Consulta aprobada por RRHH.', 'success');
+          loadAdminData();
+        } else {
+          showToast('No se pudo aprobar la consulta.', 'error');
+        }
+      } catch (err) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
+
+    async function publishSurvey(id) {
+      try {
+        const res = await fetch(`/api/surveys/${id}/publish`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        if (res.ok) {
+          showToast('¡Consulta publicada con QR y enlace!', 'success');
+          loadAdminData();
+        } else {
+          showToast('Error al publicar la consulta.', 'error');
+        }
+      } catch (err) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
+
+    async function reviewAction(id, status) {
+      try {
+        const res = await fetch(`/api/actions/${id}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) });
+        if (res.ok) {
+          showToast(status === 'approved' ? 'Acción aprobada.' : 'Acción descartada.', 'success');
+          loadAdminData();
+        }
+      } catch (err) {
+        showToast('Error al procesar acción.', 'error');
+      }
+    }
+
+    async function saveAdminSettings(e) {
+      e.preventDefault();
+      const apiKey = document.getElementById('admin-api-key').value;
+      const typeformToken = document.getElementById('admin-typeform-token').value;
+      const baseUrl = document.getElementById('admin-base-url').value;
+      const model = document.getElementById('admin-model').value;
+
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ api_key: apiKey, typeform_token: typeformToken, base_url: baseUrl, model: model })
+        });
+        if (res.ok) {
+          showToast('Credenciales guardadas con éxito.', 'success');
+        } else {
+          showToast('Error al guardar credenciales.', 'error');
+        }
+      } catch (err) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applySidebarState();
+      loadAdminData();
+    });
+  </script>
 </body>
 </html>
