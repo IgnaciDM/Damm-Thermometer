@@ -678,9 +678,9 @@
                   <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
                   <span class="text-xs font-bold uppercase tracking-wider text-on-surface">Preview en vivo (Typeform Engine)</span>
                 </div>
-                <button onclick="window.location.href='/generator'" class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-semibold transition-all">
-                  <span class="material-symbols-outlined text-sm">open_in_full</span>
-                  <span>Abrir Studio</span>
+                <button onclick="openTypeformStudio()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-bold transition-all shadow-xs" title="Abrir editor de Typeform para edición manual">
+                  <span class="material-symbols-outlined text-sm">open_in_new</span>
+                  <span>Abrir en Typeform</span>
                 </button>
               </div>
 
@@ -934,6 +934,96 @@
     </div>
   </div>
 
+  <!-- MODAL: LANZAR A PLANTAS / TYPEFORM (VALIDACIÓN HUMANA PREVIA) -->
+  <div id="modal-launch-draft" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-space-xl shadow-2xl border border-surface-container space-y-4">
+      <div class="flex items-center justify-between border-b border-surface-container pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-xs shadow-xs">
+            <span class="material-symbols-outlined text-base">rule</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-headline font-bold text-on-surface">Enviar a Validación Humana (RRHH)</h3>
+            <span class="text-[11px] text-tertiary">Paso previo obligatorio antes de difundir la microconsulta</span>
+          </div>
+        </div>
+        <button onclick="closeLaunchDraftModal()" class="text-tertiary hover:text-on-surface p-1" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+
+      <form id="launch-draft-form" onsubmit="submitLaunchDraft(event)" class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-on-surface block mb-1">Título de la Consulta</label>
+          <input type="text" id="launch-draft-title" required class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-semibold text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container" placeholder="Ej: Pulso Operativo Q4: Turnos y Clima en Planta">
+          <span class="text-[10px] text-tertiary mt-1 block">Este título identificará la encuesta en el Historial y en el informe de dirección.</span>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold text-on-surface">Departamentos Destinatarios</label>
+            <label class="inline-flex items-center gap-1.5 text-[11px] text-primary font-bold cursor-pointer">
+              <input type="checkbox" id="launch-dept-all" checked onchange="toggleAllDepartments(this.checked)" class="rounded text-primary focus:ring-primary h-3.5 w-3.5">
+              <span>Seleccionar todos</span>
+            </label>
+          </div>
+          <p class="text-[11px] text-tertiary mb-2">Selecciona a qué sectores se destinará esta consulta (puedes marcar uno o varios):</p>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+              <input type="checkbox" name="launch-dept" value="Planta" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
+              <div class="text-xs">
+                <span class="font-bold text-on-surface block">🏭 Fábrica / Planta</span>
+                <span class="text-[10px] text-tertiary">El Prat y líneas</span>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+              <input type="checkbox" name="launch-dept" value="Logística" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
+              <div class="text-xs">
+                <span class="font-bold text-on-surface block">🚛 Logística</span>
+                <span class="text-[10px] text-tertiary">Almacén y rutas</span>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+              <input type="checkbox" name="launch-dept" value="Comercial" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
+              <div class="text-xs">
+                <span class="font-bold text-on-surface block">💼 Comercial</span>
+                <span class="text-[10px] text-tertiary">Horeca y retail</span>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+              <input type="checkbox" name="launch-dept" value="Oficina" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
+              <div class="text-xs">
+                <span class="font-bold text-on-surface block">🏢 Oficinas</span>
+                <span class="text-[10px] text-tertiary">Servicios corporativos</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Preguntas Resumen -->
+        <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] font-bold text-tertiary uppercase">Preguntas a validar</span>
+            <span id="launch-modal-qcount" class="text-[10px] px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold">3 preguntas</span>
+          </div>
+          <div id="launch-modal-questions-summary" class="text-xs text-on-surface space-y-1 max-h-28 overflow-y-auto pr-1">
+            <!-- Rellenado dinámicamente -->
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeLaunchDraftModal()" class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-on-surface transition-all">
+            Cancelar
+          </button>
+          <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-sm active:scale-95">
+            <span class="material-symbols-outlined text-sm">send</span>
+            Enviar a Validación de RRHH
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- QR MODAL VIEWER -->
   <div id="qr-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface-container-lowest max-w-sm w-full rounded-2xl p-space-xl shadow-xl border border-surface-container text-center space-y-4">
@@ -944,7 +1034,7 @@
         </button>
       </div>
       <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center min-h-[200px]">
-        <img id="qr-modal-image" src="" alt="Código QR" onerror="this.onerror=null; this.src='/assets/codigo_qr.png';" class="w-48 h-48 object-contain">
+        <img id="qr-modal-image" src="" alt="Código QR" class="w-48 h-48 object-contain">
       </div>
       <p class="text-xs text-on-surface-variant break-all font-mono select-all bg-surface-container-low p-2 rounded-lg" id="qr-modal-url"></p>
       <div class="grid grid-cols-2 gap-2">
@@ -1325,16 +1415,24 @@
                                  s.status === 'approved' ? '<span class="px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold text-[10px]">Aprobada</span>' :
                                  '<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-bold text-[10px]">Borrador</span>';
 
-              const qrAction = s.status === 'published'
-                ? `<button onclick="openQrModal('${escapeHtml(s.publish_url)}', '${s.id}', '${escapeHtml(s.title)}')" class="p-1 text-primary hover:text-primary-container" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
+              const qrAction = (s.status === 'published' || s.status === 'approved')
+                ? `<button onclick="openQrModal('${escapeHtml(s.publish_url)}', '${s.id}', '${escapeHtml(s.title)}')" class="p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
+                : '';
+
+              const tfAction = s.typeform_id
+                ? `<a href="https://admin.typeform.com/form/${s.typeform_id}/create" target="_blank" class="p-1 text-secondary hover:text-on-surface inline-flex items-center" title="Editar en Typeform Studio"><span class="material-symbols-outlined text-base">edit_note</span></a>`
+                : '';
+
+              const linkAction = s.status === 'published'
+                ? `<a href="${s.publish_url || '/respond/' + s.id}" target="_blank" class="p-1 text-tertiary hover:text-on-surface inline-flex items-center" title="Abrir enlace de respuesta"><span class="material-symbols-outlined text-base">open_in_new</span></a>`
                 : '';
 
               const approveAction = s.status === 'draft'
-                ? `<button onclick="approveSurveyAdmin('${s.id}')" class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-bold text-[10px] hover:bg-secondary">Aprobar</button>`
+                ? `<button onclick="approveSurveyAdmin('${s.id}')" class="px-2.5 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-bold text-[10px] hover:bg-secondary hover:text-on-secondary transition-all shadow-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span>Aprobar</button>`
                 : '';
 
               const publishAction = s.status === 'approved'
-                ? `<button onclick="publishSurveyAdmin('${s.id}')" class="px-2 py-1 rounded bg-primary text-on-primary font-bold text-[10px] hover:bg-primary-container">Publicar</button>`
+                ? `<button onclick="publishSurveyAdmin('${s.id}')" class="px-2.5 py-1 rounded-lg bg-primary text-on-primary font-bold text-[10px] hover:bg-primary-container transition-all shadow-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">send</span>Publicar</button>`
                 : '';
 
               tr.innerHTML = `
@@ -1345,6 +1443,8 @@
                 <td class="p-3 text-center">${statusPill}</td>
                 <td class="p-3 text-right space-x-1">
                   ${qrAction}
+                  ${tfAction}
+                  ${linkAction}
                   ${approveAction}
                   ${publishAction}
                 </td>
@@ -1395,12 +1495,27 @@
 
     async function publishSurveyAdmin(id) {
       try {
-        const res = await fetch(`/api/surveys/${id}/publish`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const res = await fetch(`/api/surveys/${id}/publish`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ force: true })
+        });
         if (res.ok) {
-          showToast('¡Consulta publicada con éxito!', 'success');
+          const data = await res.json();
+          if (data.typeform_id) {
+            window.lastPublishedTypeformId = data.typeform_id;
+            showToast('¡Consulta publicada en Typeform! ID: ' + data.typeform_id, 'success');
+          } else {
+            showToast('¡Consulta publicada con éxito! Código QR activo para plantas.', 'success');
+          }
           loadAdminData();
+        } else {
+          const err = await res.json();
+          showToast(err.error || 'Error al publicar consulta.', 'error');
         }
-      } catch (err) { showToast('Error al publicar.', 'error'); }
+      } catch (err) {
+        showToast('Error al publicar consulta.', 'error');
+      }
     }
 
     async function reviewActionAdmin(id, status) {
@@ -1562,63 +1677,121 @@
       }
     }
 
-    async function publishFromGenerator() {
+    // Abre el creador / editor manual de Typeform
+    function openTypeformStudio() {
+      if (window.lastPublishedTypeformId) {
+        window.open(`https://admin.typeform.com/form/${window.lastPublishedTypeformId}/create`, '_blank');
+      } else {
+        window.open('https://admin.typeform.com/', '_blank');
+      }
+    }
+
+    // Flujo Human-in-the-Loop: Botón "Lanzar a Plantas / Typeform" abre el modal de validación
+    function publishFromGenerator() {
       if (!genQuestions || genQuestions.length === 0) {
-        showToast('Primero escribe una necesidad o pide a Google Gemini que genere preguntas.', 'error');
+        showToast('Primero genera o escribe preguntas antes de enviar la consulta a validación.', 'error');
         return;
       }
+      openLaunchDraftModal();
+    }
 
-      const btn = document.getElementById('generator-publish-btn');
-      btn.disabled = true;
-      btn.classList.add('opacity-50');
+    function openLaunchDraftModal() {
+      const modal = document.getElementById('modal-launch-draft');
+      if (!modal) return;
 
-      showToast('Publicando microconsulta para Fábrica y Logística...', 'info');
+      const titleInput = document.getElementById('launch-draft-title');
+      if (titleInput) {
+        const q1 = genQuestions[0]?.title || '';
+        const cleanQ1 = q1.replace(/^[¿\s]+|[?.\s]+$/g, '');
+        titleInput.value = cleanQ1 ? `Pulso Operativo: ${cleanQ1}` : 'Pulso de Clima y Organización';
+      }
+
+      const allCheckbox = document.getElementById('launch-dept-all');
+      if (allCheckbox) allCheckbox.checked = true;
+      document.querySelectorAll('.dept-checkbox').forEach(cb => { cb.checked = true; });
+
+      const summaryBox = document.getElementById('launch-modal-questions-summary');
+      const countBadge = document.getElementById('launch-modal-qcount');
+      if (countBadge) countBadge.textContent = `${genQuestions.length} preguntas`;
+      if (summaryBox) {
+        summaryBox.innerHTML = genQuestions.map((q, idx) => `
+          <div class="flex items-start gap-1.5 py-1 border-b border-surface-container/50 last:border-0">
+            <span class="font-bold text-primary font-mono text-[10px] shrink-0">${idx + 1}.</span>
+            <span class="text-xs text-on-surface line-clamp-1">${escapeHtml(q.title || '')}</span>
+          </div>
+        `).join('');
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeLaunchDraftModal() {
+      const modal = document.getElementById('modal-launch-draft');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function toggleAllDepartments(checked) {
+      document.querySelectorAll('.dept-checkbox').forEach(cb => { cb.checked = checked; });
+    }
+
+    function onDepartmentChange() {
+      const allCb = document.getElementById('launch-dept-all');
+      const checkboxes = Array.from(document.querySelectorAll('.dept-checkbox'));
+      const allChecked = checkboxes.every(cb => cb.checked);
+      if (allCb) allCb.checked = allChecked;
+    }
+
+    async function submitLaunchDraft(e) {
+      e.preventDefault();
+      const title = document.getElementById('launch-draft-title').value.trim() || 'Pulso de Clima Laboral';
+      const allChecked = document.getElementById('launch-dept-all')?.checked;
+      const checkedBoxes = Array.from(document.querySelectorAll('.dept-checkbox:checked')).map(cb => cb.value);
+
+      let cohort = "Todos";
+      if (!allChecked) {
+        cohort = checkedBoxes.length > 0 ? (checkedBoxes.length === 4 ? "Todos" : checkedBoxes.join(", ")) : "Planta";
+      }
 
       const formattedQuestions = genQuestions.map((q, idx) => ({
         id: `q_${idx + 1}`,
         text: q.title || `Pregunta ${idx + 1}`,
-        type: idx === 0 ? "rating" : "multiple_choice",
+        type: idx === 0 ? "rating" : (q.type || "multiple_choice"),
         dimension: q.dimension || "bienestar",
         required: true,
         choices: q.choices || ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"],
       }));
 
       const payload = {
-        objective: "Microconsulta adaptada con Google Gemini",
-        cohort: "Planta",
-        context: "Planta El Prat, centros logísticos y operaciones Damm",
+        objective: "Consulta de clima laboral y turnicidad adaptada para centros operativos",
+        cohort: cohort,
+        context: "Planta El Prat, centros logísticos y operaciones Estrella Damm",
         max_duration: "2",
         exclusions: "No solicitar datos de identificación personal",
         language: "es",
         channel: "Móvil-QR",
-        title: "Pulso Damm: " + (genQuestions[0]?.title || "Clima Laboral"),
+        title: title,
         intro: "Tu voz es 100% anónima y esencial para ajustar los cuadros y condiciones de trabajo.",
         questions: formattedQuestions
       };
 
       try {
-        const res = await fetch('/api/surveys/publish-direct', {
+        const res = await fetch('/api/surveys', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
         if (res.ok) {
-          const data = await res.json();
-          if (data.typeform_connected) {
-            showToast('¡Encuesta creada en Typeform con éxito!', 'success');
-          } else {
-            showToast('¡Publicada con éxito con código QR y enlace anónimo!', 'success');
-          }
-          setTimeout(() => { showPanel('admin'); }, 1200);
+          closeLaunchDraftModal();
+          showToast(`¡Consulta "${title}" creada con éxito! Aparece en 'Historial y Acciones' pendiente de validación humana.`, 'success');
+          showPanel('admin');
+          loadAdminData();
         } else {
-          showToast('Guardada para validación humana.', 'info');
+          const err = await res.json();
+          showToast(err.error || 'Error al registrar la consulta.', 'error');
         }
-      } catch (e) {
-        showToast('Guardada en modo local.', 'info');
-      } finally {
-        btn.disabled = false;
-        btn.classList.remove('opacity-50');
+      } catch (err) {
+        showToast('Error de conexión al enviar la consulta.', 'error');
       }
     }
 

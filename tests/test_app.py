@@ -344,6 +344,27 @@ class SurveyTests(unittest.TestCase):
             with self.assertRaises(app.RequestError):
                 app.create_survey_draft(payload)
 
+    def test_create_draft_with_custom_departments_and_title(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory, patch.object(
+            app, "DATABASE", Path(directory) / "test.sqlite3"
+        ), patch.dict(app.AI_CONFIG, {"api_key": ""}), patch.dict(
+            app.TYPEFORM_CONFIG, {"token": ""}
+        ):
+            payload = self.survey_payload()
+            payload["cohort"] = "Planta, Logística"
+            payload["title"] = "Pulso de Turnos y Descansos Fábrica"
+            draft = app.create_survey_draft(payload)
+            self.assertEqual(draft["title"], "Pulso de Turnos y Descansos Fábrica")
+            self.assertEqual(draft["cohort"], "Planta, Logística")
+            self.assertEqual(draft["status"], "draft")
+
+            app.approve_survey(draft["id"])
+            pub = app.publish_survey(draft["id"], "http://localhost:8000", force=True)
+            self.assertEqual(pub["status"], "published")
+
     def test_typeform_import_is_anonymous_and_idempotent(self):
         import tempfile
         from pathlib import Path

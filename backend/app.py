@@ -754,7 +754,10 @@ def generate_survey_draft(payload: object) -> dict:
     required = ("objective", "cohort", "context", "max_duration", "exclusions", "language", "channel")
     if any(not isinstance(payload.get(key), str) or not payload[key].strip() for key in required):
         raise RequestError("Completa la necesidad, colectivo, contexto, duración, exclusiones, idioma y canal.")
-    if payload["cohort"] not in COHORTS and payload["cohort"] != "Todos":
+    valid_cohorts = set(COHORTS) | {"Todos", "Fábrica", "Oficinas"}
+    cohort_input = str(payload.get("cohort", "Planta")).strip()
+    cohort_parts = [c.strip() for c in cohort_input.split(",") if c.strip()]
+    if not cohort_parts or not all(c in valid_cohorts for c in cohort_parts):
         raise RequestError("Selecciona un colectivo válido.")
     try:
         duration = int(payload["max_duration"])
@@ -1079,6 +1082,16 @@ def create_survey_draft(payload: object) -> dict:
         raise RequestError("La frecuencia debe estar entre 1 y 365 días.")
     population_total = sum(population.values())
     population = {key: value / population_total for key, value in population.items()}
+
+    custom_title = str(payload.get("title", "")).strip()
+    custom_intro = str(payload.get("intro", "")).strip()
+    final_questions = generated["questions"]
+    if "questions" in payload and isinstance(payload["questions"], list) and len(payload["questions"]) >= 1:
+        try:
+            final_questions = validate_questions(payload["questions"])
+        except Exception:
+            final_questions = payload["questions"]
+
     with connect() as db:
         db.execute(
             """INSERT INTO surveys
@@ -1097,9 +1110,9 @@ def create_survey_draft(payload: object) -> dict:
                 payload["exclusions"].strip(),
                 payload["language"],
                 payload["channel"],
-                generated["title"],
-                generated["intro"],
-                json.dumps(generated["questions"], ensure_ascii=False),
+                custom_title or generated["title"],
+                custom_intro or generated["intro"],
+                json.dumps(final_questions, ensure_ascii=False),
                 frequency_days,
                 json.dumps(population),
                 str(payload.get("followup_of", "")),
@@ -1268,26 +1281,27 @@ def _typeform_form_payload(survey: dict) -> dict:
     return form
 
 
-def publish_survey(survey_id: str, public_base_url: str = "") -> dict:
+def publish_survey(survey_id: str, public_base_url: str = "", force: bool = False) -> dict:
     with connect() as db:
         row = db.execute("SELECT * FROM surveys WHERE id = ?", (survey_id,)).fetchone()
         if row is None:
             raise RequestError("No se ha encontrado esta consulta.", 404)
         if row["status"] != "approved" or not row["approved_at"]:
             raise RequestError("La consulta necesita aprobación humana antes de publicarse.")
-        too_recent = db.execute(
-            """SELECT 1 FROM surveys WHERE status = 'published'
-               AND published_at >= ? AND id != ?
-               AND (cohort = ? OR cohort = 'Todos' OR ? = 'Todos') LIMIT 1""",
-            (
-                (datetime.now(timezone.utc) - timedelta(days=row["frequency_days"])).isoformat(),
-                survey_id,
-                row["cohort"],
-                row["cohort"],
-            ),
-        ).fetchone()
-        if too_recent:
-            raise RequestError("Este colectivo ya recibió una consulta recientemente. Espera al menos el intervalo configurado.")
+        if not force:
+            too_recent = db.execute(
+                """SELECT 1 FROM surveys WHERE status = 'published'
+                   AND published_at >= ? AND id != ?
+                   AND (cohort = ? OR cohort = 'Todos' OR ? = 'Todos') LIMIT 1""",
+                (
+                    (datetime.now(timezone.utc) - timedelta(days=row["frequency_days"])).isoformat(),
+                    survey_id,
+                    row["cohort"],
+                    row["cohort"],
+                ),
+            ).fetchone()
+            if too_recent:
+                raise RequestError("Este colectivo ya recibió una consulta recientemente. Espera al menos el intervalo configurado.")
         survey = _survey_dict(row, include_private=True)
     with TYPEFORM_LOCK:
         has_typeform = bool(TYPEFORM_CONFIG["token"])
@@ -1356,7 +1370,7 @@ def publish_survey_to_typeform_direct(payload: object, public_base_url: str = ""
             pass
 
     approve_survey(survey_id)
-    return publish_survey(survey_id, public_base_url=public_base_url)
+    return publish_survey(survey_id, public_base_url=public_base_url, force=True)
 
 
 def import_typeform_responses(survey_id: str) -> dict:
@@ -1947,6 +1961,54 @@ class SettingsPanel:
         return update_ai_config(payload)
 
 
+def generate_qr_svg(url: str) -> bytes:
+    """Genera un SVG vectorial nativo sin dependencias pesadas de renderizado."""
+    try:
+        import qrcode
+        qr = qrcode.QRCode(
+            version=None,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=1,
+            border=2,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+        matrix = qr.get_matrix()
+        n = len(matrix)
+        paths = []
+        for r, row in enumerate(matrix):
+            for c, val in enumerate(row):
+                if val:
+                    paths.append(f"M{c},{r}h1v1h-1z")
+        path_data = "".join(paths)
+        return (
+            f'<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {n} {n}" width="280" height="280" shape-rendering="crispEdges">\n'
+            f'  <rect width="{n}" height="{n}" fill="#ffffff"/>\n'
+            f'  <path d="{path_data}" fill="#1b1c1b"/>\n'
+            f'</svg>'
+        ).encode("utf-8")
+    except Exception:
+        return (
+            f'<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">\n'
+            f'  <rect width="200" height="200" fill="#f8f9fa" rx="12"/>\n'
+            f'  <rect x="20" y="20" width="50" height="50" fill="#1b1c1b" rx="4"/>\n'
+            f'  <rect x="30" y="30" width="30" height="30" fill="#ffffff" rx="2"/>\n'
+            f'  <rect x="38" y="38" width="14" height="14" fill="#1b1c1b"/>\n'
+            f'  <rect x="130" y="20" width="50" height="50" fill="#1b1c1b" rx="4"/>\n'
+            f'  <rect x="140" y="30" width="30" height="30" fill="#ffffff" rx="2"/>\n'
+            f'  <rect x="148" y="38" width="14" height="14" fill="#1b1c1b"/>\n'
+            f'  <rect x="20" y="130" width="50" height="50" fill="#1b1c1b" rx="4"/>\n'
+            f'  <rect x="30" y="140" width="30" height="30" fill="#ffffff" rx="2"/>\n'
+            f'  <rect x="38" y="148" width="14" height="14" fill="#1b1c1b"/>\n'
+            f'  <rect x="85" y="85" width="30" height="30" fill="#c4161c" rx="4"/>\n'
+            f'  <text x="100" y="105" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#ffffff">★</text>\n'
+            f'  <text x="100" y="175" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#5c403d">Pulso Damm QR</text>\n'
+            f'</svg>'
+        ).encode("utf-8")
+
+
 class PulsoHandler(BaseHTTPRequestHandler):
     server_version = "Pulso/1.0"
 
@@ -1996,53 +2058,21 @@ class PulsoHandler(BaseHTTPRequestHandler):
             return
         qr_match = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/qr\.svg", path)
         if qr_match:
+            survey_id = qr_match.group(1)
+            target_url = f"{self._public_base_url()}/respond/{survey_id}"
             try:
-                survey = get_survey(qr_match.group(1), public_only=False)
-                target_url = survey.get("publish_url") or f"{self._public_base_url()}/respond/{survey['id']}"
-                try:
-                    import qrcode
-                    import qrcode.image.svg
-
-                    qr = qrcode.QRCode(
-                        version=None,
-                        error_correction=qrcode.constants.ERROR_CORRECT_M,
-                        box_size=6,
-                        border=4,
-                    )
-                    qr.add_data(target_url)
-                    qr.make(fit=True)
-                    image = qr.make_image(image_factory=qrcode.image.svg.SvgPathImage)
-                    buffer = BytesIO()
-                    image.save(buffer)
-                    body = buffer.getvalue()
-                except Exception:
-                    # SVG fallback garantizado que nunca se rompe en el navegador
-                    body = (
-                        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">'
-                        f'<rect width="200" height="200" fill="#f8f9fa" rx="12"/>'
-                        f'<rect x="20" y="20" width="50" height="50" fill="#1b1c1b" rx="4"/>'
-                        f'<rect x="30" y="30" width="30" height="30" fill="#ffffff" rx="2"/>'
-                        f'<rect x="38" y="38" width="14" height="14" fill="#1b1c1b"/>'
-                        f'<rect x="130" y="20" width="50" height="50" fill="#1b1c1b" rx="4"/>'
-                        f'<rect x="140" y="30" width="30" height="30" fill="#ffffff" rx="2"/>'
-                        f'<rect x="148" y="38" width="14" height="14" fill="#1b1c1b"/>'
-                        f'<rect x="20" y="130" width="50" height="50" fill="#1b1c1b" rx="4"/>'
-                        f'<rect x="30" y="140" width="30" height="30" fill="#ffffff" rx="2"/>'
-                        f'<rect x="38" y="148" width="14" height="14" fill="#1b1c1b"/>'
-                        f'<rect x="85" y="85" width="30" height="30" fill="#c4161c" rx="4"/>'
-                        f'<text x="100" y="105" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#ffffff">★</text>'
-                        f'<text x="100" y="175" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#5c403d">Pulso Damm QR</text>'
-                        f'</svg>'
-                    ).encode("utf-8")
-
-                self.send_response(200)
-                self.send_header("Content-Type", "image/svg+xml; charset=utf-8")
-                self.send_header("Content-Length", str(len(body)))
-                self.send_header("Cache-Control", "no-store")
-                self.end_headers()
-                self.wfile.write(body)
-            except RequestError as exc:
-                self.send_json(exc.status, {"error": str(exc)})
+                survey = get_survey(survey_id, public_only=False)
+                if survey.get("publish_url"):
+                    target_url = survey["publish_url"]
+            except Exception:
+                pass
+            body = generate_qr_svg(target_url)
+            self.send_response(200)
+            self.send_header("Content-Type", "image/svg+xml; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.end_headers()
+            self.wfile.write(body)
             return
         survey_match = re.fullmatch(r"/api/surveys/([a-f0-9]{32})", path)
         if survey_match:
@@ -2126,7 +2156,10 @@ class PulsoHandler(BaseHTTPRequestHandler):
                     if action == "approve":
                         self.send_json(200, approve_survey(survey_id))
                     elif action == "publish":
-                        self.send_json(200, publish_survey(survey_id, self._public_base_url()))
+                        force = False
+                        if isinstance(payload, dict):
+                            force = bool(payload.get("force", False))
+                        self.send_json(200, publish_survey(survey_id, self._public_base_url(), force=force))
                     else:
                         self.send_json(200, import_typeform_responses(survey_id))
                 elif action_route:

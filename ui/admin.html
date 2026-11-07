@@ -307,10 +307,20 @@
           <span class="material-symbols-outlined text-base">close</span>
         </button>
       </div>
-      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center">
+      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center min-h-[200px]">
         <img id="qr-modal-image" src="" alt="Código QR" class="w-48 h-48 object-contain">
       </div>
-      <p class="text-xs text-on-surface-variant" id="qr-modal-url"></p>
+      <p class="text-xs text-on-surface-variant break-all font-mono select-all bg-surface-container-low p-2 rounded-lg" id="qr-modal-url"></p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="copyQrUrl()" class="py-2 px-3 rounded-lg bg-surface-container hover:bg-secondary-container/40 text-xs font-bold text-on-surface transition-all inline-flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-sm">content_copy</span>
+          Copiar Enlace
+        </button>
+        <a id="qr-modal-download" href="#" download="QR_Pulso_Damm.svg" class="py-2 px-3 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-xs font-bold transition-all inline-flex items-center justify-center gap-1 shadow-xs">
+          <span class="material-symbols-outlined text-sm">download</span>
+          Descargar QR
+        </a>
+      </div>
       <button onclick="closeQrModal()" class="w-full py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition-all">
         Cerrar
       </button>
@@ -388,13 +398,36 @@
     function openQrModal(url, id, title) {
       document.getElementById('qr-modal-title').textContent = title || 'Código QR';
       const targetUrl = url || `${window.location.origin}/respond/${id}`;
-      document.getElementById('qr-modal-image').src = `/api/surveys/${id}/qr.svg?t=${Date.now()}`;
+      const qrImg = document.getElementById('qr-modal-image');
+      if (qrImg) {
+        qrImg.src = `/api/surveys/${id}/qr.svg?t=${Date.now()}`;
+        qrImg.onerror = function() {
+          this.onerror = null;
+          this.src = `/api/surveys/${id}/qr.svg`;
+        };
+      }
       document.getElementById('qr-modal-url').textContent = targetUrl;
+      const downloadLink = document.getElementById('qr-modal-download');
+      if (downloadLink) {
+        downloadLink.href = `/api/surveys/${id}/qr.svg`;
+        downloadLink.download = `QR_${id}.svg`;
+      }
       document.getElementById('qr-modal').classList.remove('hidden');
     }
 
     function closeQrModal() {
       document.getElementById('qr-modal').classList.add('hidden');
+    }
+
+    function copyQrUrl() {
+      const urlText = document.getElementById('qr-modal-url')?.textContent;
+      if (urlText) {
+        navigator.clipboard.writeText(urlText).then(() => {
+          showToast('Enlace copiado al portapapeles.', 'success');
+        }).catch(() => {
+          showToast('Enlace seleccionado para copiar.', 'info');
+        });
+      }
     }
 
     async function loadAdminData() {
@@ -495,12 +528,17 @@
 
     async function publishSurvey(id) {
       try {
-        const res = await fetch(`/api/surveys/${id}/publish`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const res = await fetch(`/api/surveys/${id}/publish`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ force: true })
+        });
         if (res.ok) {
           showToast('¡Consulta publicada con QR y enlace!', 'success');
           loadAdminData();
         } else {
-          showToast('Error al publicar la consulta.', 'error');
+          const err = await res.json();
+          showToast(err.error || 'Error al publicar la consulta.', 'error');
         }
       } catch (err) {
         showToast('Error de conexión.', 'error');
