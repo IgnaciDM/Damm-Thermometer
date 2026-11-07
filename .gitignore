@@ -3,3 +3,4 @@ __pycache__/
 pulso.sqlite3
 pulso.sqlite3-shm
 pulso.sqlite3-wal
+/data/

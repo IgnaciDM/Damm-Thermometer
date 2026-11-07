@@ -146,45 +146,35 @@
         </article>
       </section>
 
-      <section class="pulse-section" id="pulso">
-        <div class="pulse-intro">
-          <div class="eyebrow"><span class="eyebrow-star">✳</span> UN MOMENTO PARA ESCUCHAR</div>
-          <h2>¿Qué tal ha sido<br><em>tu semana?</em></h2>
-          <p>Una pregunta pensada para tu realidad. Sin nombres, sin juicios. Tú marcas el ritmo.</p>
-          <div class="pulse-privacy"><span>⬡</span><div><strong>Tu voz, protegida.</strong><small>Sin nombres. Sin comentarios identificables.</small></div></div>
+      <section class="typeform-promo" id="pulso">
+        <div class="promo-copy">
+          <div class="eyebrow"><span class="eyebrow-star">✳</span> UNA CONVERSACIÓN, NO UN FORMULARIO</div>
+          <h2>Tu voz merece<br><em>un buen espacio.</em></h2>
+          <p>Una pregunta pensada para tu día. Sin listas interminables, sin nombres. Solo una pausa para escucharte.</p>
+          <button class="promo-start" id="open-survey" type="button">Empezar mi pulso <span>↗</span></button>
+          <div class="promo-trust"><span>⬡</span> Anónimo por diseño <i></i> Menos de 30 segundos</div>
         </div>
-        <form class="pulse-card" id="pulse-form">
-          <div class="pulse-card-head"><span class="step-label">TU PULSO <b>·</b> 30 SEG</span><span class="anonymous-chip"><i></i> Anónimo</span></div>
-          <div class="form-controls">
-            <label>¿Dónde trabajas?
-              <select name="site" id="site-select">
-                <option>Fábrica</option><option>Logística</option><option>Comercial</option><option>Oficina</option>
-              </select>
-            </label>
-            <label>¿Qué dimensión escuchamos?
-              <select name="dimension" id="dimension-select"></select>
-            </label>
-          </div>
-          <div class="question-box">
-            <div class="question-kicker"><span>✦</span> PREGUNTA PARA TI <button class="refresh-question" type="button" id="refresh-question" aria-label="Generar otra pregunta">↻</button></div>
-            <p id="question-text">Cargando pregunta…</p>
-            <div class="question-actions"><span class="question-source" id="question-source"></span><a class="teams-share" id="teams-share" href="#" target="_blank" rel="noopener noreferrer" hidden>↗ Compartir en Teams</a></div>
-          </div>
-          <fieldset class="rating-fieldset">
-            <legend>¿Cómo lo valorarías?</legend>
-            <div class="rating-options">
-              <label><input type="radio" name="score" value="1" required><span>1</span></label>
-              <label><input type="radio" name="score" value="2"><span>2</span></label>
-              <label><input type="radio" name="score" value="3"><span>3</span></label>
-              <label><input type="radio" name="score" value="4"><span>4</span></label>
-              <label><input type="radio" name="score" value="5"><span>5</span></label>
-            </div>
-            <div class="rating-captions"><span>Podría mejorar</span><span>Me siento muy bien</span></div>
-          </fieldset>
-          <button class="submit-pulse" type="submit">Compartir mi pulso <span>↗</span></button>
-          <div class="pulse-reassurance"><span>⬡</span> Tus respuestas son anónimas y no incluyen datos personales.</div>
-        </form>
+        <div class="promo-art" aria-hidden="true">
+          <div class="promo-orbit"></div>
+          <div class="promo-note"><span>UNA PREGUNTA</span><strong>¿Qué te haría<br>sentir mejor hoy?</strong><i>♡</i></div>
+          <div class="promo-spark">✳</div>
+          <div class="promo-response"><span>Tu respuesta</span><b>Importa.</b></div>
+        </div>
       </section>
+
+      <dialog class="survey-dialog" id="survey-dialog" aria-labelledby="survey-title">
+        <div class="survey-topbar">
+          <a class="survey-brand" href="#pulso"><span class="brand-mark"><span></span><span></span><span></span></span> pulso<span>.</span></a>
+          <div class="survey-progress" aria-label="Progreso de la encuesta"><span id="survey-progress-fill"></span></div>
+          <span class="survey-counter" id="survey-counter">30 SEG</span>
+          <button class="survey-exit" id="close-survey" type="button" aria-label="Cerrar encuesta">×</button>
+        </div>
+        <div class="survey-body" id="survey-body" aria-live="polite"></div>
+        <div class="survey-footer">
+          <span class="survey-privacy"><span>⬡</span> Tu respuesta es anónima</span>
+          <div class="survey-navigation" id="survey-navigation"></div>
+        </div>
+      </dialog>
 
       <footer class="footer">
         <a class="footer-brand" href="#inicio"><span class="brand-mark"><span></span><span></span><span></span></span> pulso<span>.</span></a>

@@ -15,8 +15,11 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 
-ROOT = Path(__file__).resolve().parent
-DATABASE = Path(os.environ.get("PULSO_DATABASE", ROOT / "pulso.sqlite3"))
+ROOT = Path(__file__).resolve().parents[1]
+UI_DIR = ROOT / "ui"
+DATA_DIR = ROOT / "data"
+LEGACY_DATABASE = ROOT / "pulso.sqlite3"
+DATABASE = Path(os.environ.get("PULSO_DATABASE", DATA_DIR / "pulso.sqlite3"))
 HOST = "127.0.0.1"
 PORT = int(os.environ.get("PORT", "8000"))
 MIN_GROUP_SIZE = 5
@@ -57,6 +60,7 @@ class RequestError(Exception):
 
 @contextmanager
 def connect() -> Iterator[sqlite3.Connection]:
+    DATABASE.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(DATABASE)
     db.row_factory = sqlite3.Row
     try:
@@ -289,16 +293,14 @@ def generate_question(payload: object) -> dict:
             result = json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
         detail = exc.read(1000).decode("utf-8", errors="replace")
+        try:
+            message = json.loads(detail)["error"]["message"]
+        except (json.JSONDecodeError, KeyError, TypeError):
+            message = detail
+        print(f"[AI] Error {exc.code}: {message}")
         raise RequestError(
-            f"La API ha respondido con un error ({exc.code}). Revisa la clave y el modelo.",
-            502,
+            f"La API ha respondido con un error ({exc.code}): {message}", 502
         ) from exc
-    except (URLError, TimeoutError, json.JSONDecodeError) as exc:
-        raise RequestError(
-            "No se pudo conectar con la API. Comprueba el endpoint y la conexión.",
-            502,
-        ) from exc
-
     try:
         text = result["choices"][0]["message"]["content"]
         if not isinstance(text, str):
@@ -334,6 +336,15 @@ def update_ai_config(payload: object) -> dict:
             {"api_key": api_key.strip(), "base_url": base_url, "model": model}
         )
     return {"configured": True, "model": model}
+
+
+def migrate_legacy_database(
+    legacy_database: Path = LEGACY_DATABASE, database: Path = DATABASE
+) -> None:
+    if "PULSO_DATABASE" in os.environ or database.exists() or not legacy_database.exists():
+        return
+    database.parent.mkdir(parents=True, exist_ok=True)
+    legacy_database.replace(database)
 
 
 class PulsoHandler(BaseHTTPRequestHandler):
@@ -382,12 +393,13 @@ class PulsoHandler(BaseHTTPRequestHandler):
             "/index.html": ("index.html", "text/html; charset=utf-8"),
             "/styles.css": ("styles.css", "text/css; charset=utf-8"),
             "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+            "/assets/codigo_qr.png": ("assets/codigo_qr.png", "image/png"),
         }
         if path not in files:
             self.send_json(404, {"error": "No se ha encontrado esta página."})
             return
         filename, content_type = files[path]
-        body = (ROOT / filename).read_bytes()
+        body = (UI_DIR / filename).read_bytes()
         self.send_response(200)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
@@ -414,6 +426,7 @@ class PulsoHandler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
+    migrate_legacy_database()
     with connect() as db:
         seed_demo_data(db)
     server = ThreadingHTTPServer((HOST, PORT), PulsoHandler)

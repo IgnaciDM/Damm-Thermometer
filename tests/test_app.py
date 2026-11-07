@@ -3,7 +3,7 @@ import unittest
 from datetime import date
 from unittest.mock import patch
 
-import app
+from backend import app
 
 
 def response(day, dimension="bienestar", site="Fábrica", score=4, is_demo=0):
@@ -52,6 +52,38 @@ class AggregateTests(unittest.TestCase):
                     }
                 self.assertEqual(columns, {"id", "day", "dimension", "site", "score", "is_demo"})
 
+    def test_legacy_database_moves_without_overwriting_existing_data(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            legacy = root / "pulso.sqlite3"
+            target = root / "data" / "pulso.sqlite3"
+            legacy.write_bytes(b"existing responses")
+
+            app.migrate_legacy_database(legacy, target)
+
+            self.assertFalse(legacy.exists())
+            self.assertEqual(target.read_bytes(), b"existing responses")
+
+    def test_legacy_database_is_not_overwritten(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            legacy = root / "pulso.sqlite3"
+            target = root / "data" / "pulso.sqlite3"
+            legacy.write_bytes(b"legacy responses")
+            target.parent.mkdir()
+            target.write_bytes(b"current responses")
+
+            app.migrate_legacy_database(legacy, target)
+
+            self.assertEqual(legacy.read_bytes(), b"legacy responses")
+            self.assertEqual(target.read_bytes(), b"current responses")
+
 
 class QuestionTests(unittest.TestCase):
     def test_question_generation_has_explicit_demo_mode_without_key(self):
@@ -93,7 +125,7 @@ class QuestionTests(unittest.TestCase):
                 "base_url": "https://example.test/v1/chat/completions",
                 "model": "test-model",
             },
-        ), patch("app.urlopen", return_value=FakeResponse()) as urlopen_mock:
+        ), patch("backend.app.urlopen", return_value=FakeResponse()) as urlopen_mock:
             result = app.generate_question(
                 {"dimension": "bienestar", "site": "Oficina"}
             )
