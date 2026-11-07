@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 import json
+import io
 import math
 import os
+import secrets
+import threading
+import time
 import uuid
+import wave
+from pathlib import Path
 from typing import Optional
 from urllib.request import Request, urlopen
 
@@ -23,6 +29,125 @@ from .common import (
     validate_questions,
 )
 
+VOSK_MODEL_PATH = Path(
+    os.environ.get(
+        "VOSK_MODEL_PATH",
+        Path(__file__).resolve().parent.parent
+        / "ui"
+        / "assets"
+        / "vosk-model-small-es-0.42"
+        / "vosk-model-small-es-0.42",
+    )
+)
+VOSK_MAX_AUDIO_BYTES = 5 * 1024 * 1024
+VOSK_MAX_AUDIO_SECONDS = 45
+VOSK_MAX_CHUNK_BYTES = 64 * 1024
+VOSK_SESSION_TIMEOUT_SECONDS = 120
+_VOSK_MODEL = None
+_VOSK_MODEL_LOCK = threading.Lock()
+_VOSK_SESSIONS = {}
+_VOSK_SESSIONS_LOCK = threading.Lock()
+
+
+def _get_vosk() -> tuple[object, object]:
+    try:
+        import vosk
+    except ImportError as exc:
+        raise RequestError(
+            "Vosk no está instalado. Instala las dependencias de requirements.txt.",
+            503,
+        ) from exc
+
+    global _VOSK_MODEL
+    if _VOSK_MODEL is None:
+        with _VOSK_MODEL_LOCK:
+            if _VOSK_MODEL is None:
+                if not VOSK_MODEL_PATH.is_dir():
+                    raise RequestError(
+                        "No se encuentra el modelo Vosk de español. Configura VOSK_MODEL_PATH.",
+                        503,
+                    )
+                try:
+                    vosk.SetLogLevel(-1)
+                    _VOSK_MODEL = vosk.Model(str(VOSK_MODEL_PATH))
+                except (OSError, RuntimeError) as exc:
+                    raise RequestError("No se pudo cargar el modelo Vosk de español.", 503) from exc
+    return vosk, _VOSK_MODEL
+
+
+def start_voice_transcription(sample_rate: object) -> dict:
+    if (
+        not isinstance(sample_rate, int)
+        or isinstance(sample_rate, bool)
+        or not 8_000 <= sample_rate <= 48_000
+    ):
+        raise RequestError("La frecuencia de muestreo debe estar entre 8 y 48 kHz.")
+
+    vosk, model = _get_vosk()
+    try:
+        recognizer = vosk.KaldiRecognizer(model, sample_rate)
+        recognizer.SetWords(False)
+    except (RuntimeError, ValueError) as exc:
+        raise RequestError("No se pudo iniciar el reconocimiento con Vosk.", 422) from exc
+
+    now = time.monotonic()
+    session_id = secrets.token_urlsafe(24)
+    with _VOSK_SESSIONS_LOCK:
+        expired = [
+            key for key, session in _VOSK_SESSIONS.items()
+            if now - session["last_activity"] > VOSK_SESSION_TIMEOUT_SECONDS
+        ]
+        for key in expired:
+            del _VOSK_SESSIONS[key]
+        _VOSK_SESSIONS[session_id] = {
+            "recognizer": recognizer,
+            "sample_rate": sample_rate,
+            "audio_bytes": 0,
+            "last_activity": now,
+        }
+    return {"session_id": session_id, "source": "vosk", "language": "es"}
+
+
+def feed_voice_transcription(session_id: str, pcm_audio: bytes) -> dict:
+    if not pcm_audio or len(pcm_audio) > VOSK_MAX_CHUNK_BYTES or len(pcm_audio) % 2:
+        raise RequestError("El fragmento de audio no es válido.", 413)
+
+    with _VOSK_SESSIONS_LOCK:
+        session = _VOSK_SESSIONS.get(session_id)
+        if session is None:
+            raise RequestError("La sesión de dictado ha caducado. Inicia otra grabación.", 410)
+        now = time.monotonic()
+        if now - session["last_activity"] > VOSK_SESSION_TIMEOUT_SECONDS:
+            del _VOSK_SESSIONS[session_id]
+            raise RequestError("La sesión de dictado ha caducado. Inicia otra grabación.", 410)
+        session["audio_bytes"] += len(pcm_audio)
+        if session["audio_bytes"] > session["sample_rate"] * 2 * VOSK_MAX_AUDIO_SECONDS:
+            del _VOSK_SESSIONS[session_id]
+            raise RequestError("La grabación supera el límite de 45 segundos.", 413)
+        session["last_activity"] = now
+        recognizer = session["recognizer"]
+        try:
+            complete = recognizer.AcceptWaveform(pcm_audio)
+            result = recognizer.Result() if complete else recognizer.PartialResult()
+            text = json.loads(result).get("text" if complete else "partial", "").strip()
+        except (RuntimeError, ValueError, json.JSONDecodeError) as exc:
+            del _VOSK_SESSIONS[session_id]
+            raise RequestError("No se pudo procesar el fragmento con Vosk.", 422) from exc
+
+    return {"text": text, "partial": not complete}
+
+
+def finish_voice_transcription(session_id: str) -> dict:
+    with _VOSK_SESSIONS_LOCK:
+        session = _VOSK_SESSIONS.pop(session_id, None)
+        if session is None:
+            raise RequestError("La sesión de dictado ha caducado. Inicia otra grabación.", 410)
+        try:
+            text = json.loads(session["recognizer"].FinalResult()).get("text", "").strip()
+        except (RuntimeError, ValueError, json.JSONDecodeError) as exc:
+            raise RequestError("No se pudo finalizar la transcripción con Vosk.", 422) from exc
+    return {"text": text, "partial": False}
+
 
 def extract_ai_content(result: dict) -> str:
     """Extrae el texto de respuesta de Google Gemini o endpoints compatibles."""
@@ -35,6 +160,53 @@ def extract_ai_content(result: dict) -> str:
         if "message" in choice and "content" in choice["message"]:
             return choice["message"]["content"] or ""
     raise ValueError("Formato de respuesta de IA no reconocido.")
+
+
+def transcribe_voice_prompt(audio_data: bytes) -> dict:
+    if not isinstance(audio_data, bytes) or not audio_data:
+        raise RequestError("No se recibió audio para transcribir.")
+    if len(audio_data) > VOSK_MAX_AUDIO_BYTES:
+        raise RequestError("La grabación supera el límite de 5 MB.", 413)
+
+    try:
+        with wave.open(io.BytesIO(audio_data), "rb") as audio:
+            channels = audio.getnchannels()
+            sample_width = audio.getsampwidth()
+            sample_rate = audio.getframerate()
+            frame_count = audio.getnframes()
+            if (
+                audio.getcomptype() != "NONE"
+                or channels != 1
+                or sample_width != 2
+                or not 8_000 <= sample_rate <= 48_000
+                or frame_count <= 0
+                or frame_count > sample_rate * VOSK_MAX_AUDIO_SECONDS
+            ):
+                raise RequestError(
+                    "El audio debe ser WAV PCM mono de 16 bits y durar como máximo 45 segundos."
+                )
+            pcm_audio = audio.readframes(frame_count)
+    except (wave.Error, EOFError) as exc:
+        raise RequestError("El audio no es un archivo WAV válido.") from exc
+
+    vosk, model = _get_vosk()
+
+    try:
+        recognizer = vosk.KaldiRecognizer(model, sample_rate)
+        recognizer.SetWords(False)
+        recognized = []
+        for offset in range(0, len(pcm_audio), 8_000):
+            if recognizer.AcceptWaveform(pcm_audio[offset : offset + 8_000]):
+                segment = json.loads(recognizer.Result()).get("text", "").strip()
+                if segment:
+                    recognized.append(segment)
+        final_segment = json.loads(recognizer.FinalResult()).get("text", "").strip()
+        if final_segment:
+            recognized.append(final_segment)
+    except (RuntimeError, ValueError, json.JSONDecodeError) as exc:
+        raise RequestError("No se pudo procesar la grabación con Vosk.", 422) from exc
+
+    return {"text": " ".join(recognized), "source": "vosk", "language": "es"}
 
 
 def parse_ai_json(text: str) -> dict:
@@ -646,6 +818,21 @@ class GeneratorPanel:
         return refine_survey_with_ai(payload)
 
     @staticmethod
+    def transcribe_voice_prompt(audio_data: bytes) -> dict:
+        return transcribe_voice_prompt(audio_data)
+
+    @staticmethod
+    def start_voice_transcription(sample_rate: object) -> dict:
+        return start_voice_transcription(sample_rate)
+
+    @staticmethod
+    def feed_voice_transcription(session_id: str, pcm_audio: bytes) -> dict:
+        return feed_voice_transcription(session_id, pcm_audio)
+
+    @staticmethod
+    def finish_voice_transcription(session_id: str) -> dict:
+        return finish_voice_transcription(session_id)
+
+    @staticmethod
     def generate_teams_card(payload: object, base_url: str = "") -> dict:
         return send_teams_notification(payload, base_url=base_url)
-

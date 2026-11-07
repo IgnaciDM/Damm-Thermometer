@@ -411,12 +411,102 @@ class SurveyTests(unittest.TestCase):
 
 class GeneratorPanelTests(unittest.TestCase):
     def test_generator_panel_template_exists_and_routes(self):
-        generator_file = app.UI_DIR / "generator.html"
-        self.assertTrue(generator_file.exists())
-        content = generator_file.read_text(encoding="utf-8")
+        current_ui = app.UI_DIR / "index.html"
+        self.assertTrue(current_ui.exists())
+        content = current_ui.read_text(encoding="utf-8")
         self.assertIn("PORTAL DAMM", content)
         self.assertIn("Generador Asistido", content)
-        self.assertIn("Typeform Studio", content)
+        self.assertIn("Dictar con Vosk", content)
+        self.assertIn("/api/voice/start", content)
+        self.assertIn("/chunk", content)
+        self.assertIn("/finish", content)
+        self.assertIn("updateVoiceTranscript", content)
+
+    def test_voice_transcription_rejects_non_wav_audio(self):
+        with self.assertRaises(app.RequestError):
+            app.GeneratorPanel.transcribe_voice_prompt(b"not a wav file")
+
+    def test_voice_transcription_uses_vosk_for_valid_wav(self):
+        import io
+        import sys
+        import wave
+        from types import SimpleNamespace
+
+        from backend import generator
+
+        wav = io.BytesIO()
+        with wave.open(wav, "wb") as audio:
+            audio.setnchannels(1)
+            audio.setsampwidth(2)
+            audio.setframerate(16_000)
+            audio.writeframes(b"\0\0" * 16_000)
+
+        class FakeRecognizer:
+            def __init__(self, model, sample_rate):
+                self.sample_rate = sample_rate
+
+            def SetWords(self, enabled):
+                pass
+
+            def AcceptWaveform(self, samples):
+                return False
+
+            def FinalResult(self):
+                return json.dumps({"text": "hola equipo"})
+
+        fake_vosk = SimpleNamespace(
+            SetLogLevel=lambda level: None,
+            KaldiRecognizer=FakeRecognizer,
+        )
+        with patch.dict(sys.modules, {"vosk": fake_vosk}), patch.object(
+            generator, "_VOSK_MODEL", object()
+        ):
+            result = app.GeneratorPanel.transcribe_voice_prompt(wav.getvalue())
+
+        self.assertEqual(result, {"text": "hola equipo", "source": "vosk", "language": "es"})
+
+    def test_voice_stream_returns_partial_and_final_transcript(self):
+        import sys
+        from types import SimpleNamespace
+
+        from backend import generator
+
+        class FakeRecognizer:
+            def __init__(self, model, sample_rate):
+                self.complete = False
+
+            def SetWords(self, enabled):
+                pass
+
+            def AcceptWaveform(self, samples):
+                self.complete = samples == b"\x02\x00"
+                return self.complete
+
+            def PartialResult(self):
+                return json.dumps({"partial": "hola mun"})
+
+            def Result(self):
+                return json.dumps({"text": "hola"})
+
+            def FinalResult(self):
+                return json.dumps({"text": "mundo"})
+
+        fake_vosk = SimpleNamespace(KaldiRecognizer=FakeRecognizer)
+        with patch.dict(sys.modules, {"vosk": fake_vosk}), patch.object(
+            generator, "_VOSK_MODEL", object()
+        ):
+            session = app.GeneratorPanel.start_voice_transcription(16_000)
+            partial = app.GeneratorPanel.feed_voice_transcription(
+                session["session_id"], b"\x01\x00"
+            )
+            final = app.GeneratorPanel.feed_voice_transcription(
+                session["session_id"], b"\x02\x00"
+            )
+            remaining = app.GeneratorPanel.finish_voice_transcription(session["session_id"])
+
+        self.assertEqual(partial, {"text": "hola mun", "partial": True})
+        self.assertEqual(final, {"text": "hola", "partial": False})
+        self.assertEqual(remaining, {"text": "mundo", "partial": False})
 
     def test_statistical_engine_payload_generates_anonymous_contract(self):
         import tempfile

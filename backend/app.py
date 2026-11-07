@@ -147,6 +147,36 @@ class PulsoHandler(BaseHTTPRequestHandler):
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise RequestError("El contenido JSON no es válido.") from exc
 
+    def read_audio(self) -> bytes:
+        content_type = self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
+        if content_type not in {"audio/wav", "audio/x-wav", "application/octet-stream"}:
+            raise RequestError("Envía la grabación en formato WAV.")
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError as exc:
+            raise RequestError("La solicitud no tiene una longitud válida.") from exc
+        if length <= 0 or length > 5 * 1024 * 1024:
+            raise RequestError("La grabación debe ocupar como máximo 5 MB.", 413)
+        audio_data = self.rfile.read(length)
+        if len(audio_data) != length:
+            raise RequestError("La grabación llegó incompleta.")
+        return audio_data
+
+    def read_voice_chunk(self) -> bytes:
+        content_type = self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
+        if content_type != "application/octet-stream":
+            raise RequestError("Envía el fragmento de voz en formato PCM.")
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError as exc:
+            raise RequestError("La solicitud no tiene una longitud válida.") from exc
+        if length <= 0 or length > 64 * 1024:
+            raise RequestError("El fragmento de audio no es válido.", 413)
+        audio_data = self.rfile.read(length)
+        if len(audio_data) != length:
+            raise RequestError("El fragmento de audio llegó incompleto.")
+        return audio_data
+
     def send_file(self, filename: str, content_type: str) -> None:
         file_path = UI_DIR / filename
         if not file_path.exists():
@@ -265,6 +295,39 @@ class PulsoHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:
         path = urlparse(self.path).path
         try:
+            if path == "/api/voice/start":
+                payload = self.read_json()
+                if not isinstance(payload, dict):
+                    raise RequestError("La configuración de audio no es válida.")
+                self.send_json(
+                    200,
+                    GeneratorPanel.start_voice_transcription(payload.get("sample_rate")),
+                )
+                return
+
+            voice_chunk_route = re.fullmatch(r"/api/voice/([A-Za-z0-9_-]+)/chunk", path)
+            if voice_chunk_route:
+                self.send_json(
+                    200,
+                    GeneratorPanel.feed_voice_transcription(
+                        voice_chunk_route.group(1),
+                        self.read_voice_chunk(),
+                    ),
+                )
+                return
+
+            voice_finish_route = re.fullmatch(r"/api/voice/([A-Za-z0-9_-]+)/finish", path)
+            if voice_finish_route:
+                self.send_json(
+                    200,
+                    GeneratorPanel.finish_voice_transcription(voice_finish_route.group(1)),
+                )
+                return
+
+            if path == "/api/voice/transcribe":
+                self.send_json(200, GeneratorPanel.transcribe_voice_prompt(self.read_audio()))
+                return
+
             payload = self.read_json()
 
             # Rutas de generación de preguntas y encuestas

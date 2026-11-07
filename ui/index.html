@@ -740,9 +740,15 @@
             <!-- AI Prompt Bar -->
             <div class="bg-surface-container-lowest rounded-xl p-3 shadow-md border border-surface-container">
               <form class="relative flex flex-col gap-2" onsubmit="handleGeneratorPrompt(event)">
-                <textarea class="w-full bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Escribe el tema de la encuesta o pide cambios (ej: 'crear encuesta sobre comedores', 'cambia la pregunta 2', 'actualiza la 1 y la 3')..." rows="2"></textarea>
+                <div class="flex items-center gap-2">
+                  <textarea class="min-w-0 flex-1 bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Escribe el tema de la encuesta o pide cambios (ej: 'crear encuesta sobre comedores', 'cambia la pregunta 2', 'actualiza la 1 y la 3')..." rows="2"></textarea>
+                  <button id="gen-voice-button" class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary shadow-sm transition-all hover:bg-primary-container hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" type="button" aria-label="Dictar con Vosk" title="Dictar con Vosk" aria-pressed="false" onclick="toggleVoicePrompt()">
+                    <span class="material-symbols-outlined text-xl" aria-hidden="true">mic</span>
+                  </button>
+                </div>
                 <div class="flex items-center justify-between pt-1">
                   <div class="flex items-center gap-1.5 flex-wrap">
+                    <span id="gen-voice-status" class="text-[10px] text-tertiary" role="status" aria-live="polite"></span>
                     <button class="px-2 py-1 rounded-md text-[11px] font-medium text-tertiary bg-surface-container hover:bg-secondary-container/30 transition-colors" type="button" onclick="appendGenPrompt('Cambia la pregunta 2 por una sobre descansos.')">
                       ✏️ Cambiar pregunta 2
                     </button>
@@ -1279,6 +1285,21 @@
     // State of generator preview (100% persistente al cambiar de pestaña)
     let genQuestions = [];
     let genIndex = 0;
+    let voiceStream = null;
+    let voiceAudioContext = null;
+    let voiceSource = null;
+    let voiceProcessor = null;
+    let voiceSessionId = null;
+    let voicePcmSamples = [];
+    let voiceUploadQueue = Promise.resolve();
+    let voiceUploadError = null;
+    let voiceInputBaseValue = '';
+    let voiceFinalText = '';
+    let voicePartialText = '';
+    let voiceRecordedSamples = 0;
+    let voiceStopping = false;
+    let voiceTimer = null;
+    let voiceRecordingStartedAt = 0;
 
     function saveGeneratorState() {
       const promptInput = document.getElementById('gen-ai-chat-input');
@@ -2450,6 +2471,188 @@
         input.value = t;
         input.focus();
         saveGeneratorState();
+      }
+    }
+
+    function setVoiceButtonState(icon, label, recording = false) {
+      const button = document.getElementById('gen-voice-button');
+      button.querySelector('.material-symbols-outlined').textContent = icon;
+      button.setAttribute('aria-label', label);
+      button.title = label;
+      button.classList.toggle('bg-primary', !recording);
+      button.classList.toggle('text-on-primary', !recording);
+      button.classList.toggle('hover:bg-primary-container', !recording);
+      button.classList.toggle('bg-red-600', recording);
+      button.classList.toggle('text-white', recording);
+      button.classList.toggle('hover:bg-red-700', recording);
+    }
+
+    async function toggleVoicePrompt() {
+      const button = document.getElementById('gen-voice-button');
+      const status = document.getElementById('gen-voice-status');
+      if (voiceAudioContext) {
+        await stopVoicePrompt();
+        return;
+      }
+
+      if (!navigator.mediaDevices?.getUserMedia || !(window.AudioContext || window.webkitAudioContext)) {
+        showToast('Este navegador no permite grabar audio. Puedes escribir la instrucción.', 'error');
+        return;
+      }
+
+      button.disabled = true;
+      try {
+        voiceStream = await navigator.mediaDevices.getUserMedia({
+          audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true }
+        });
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        voiceAudioContext = new AudioContextClass();
+        await voiceAudioContext.resume();
+        const response = await fetch('/api/voice/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sample_rate: voiceAudioContext.sampleRate })
+        });
+        const session = await response.json();
+        if (!response.ok) throw new Error(session.error || 'No se pudo iniciar Vosk.');
+        voiceSessionId = session.session_id;
+
+        voiceInputBaseValue = document.getElementById('gen-ai-chat-input').value.trim();
+        voiceFinalText = '';
+        voicePartialText = '';
+        voicePcmSamples = [];
+        voiceRecordedSamples = 0;
+        voiceUploadQueue = Promise.resolve();
+        voiceUploadError = null;
+        voiceStopping = false;
+        voiceSource = voiceAudioContext.createMediaStreamSource(voiceStream);
+        voiceProcessor = voiceAudioContext.createScriptProcessor(4096, 1, 1);
+        voiceProcessor.onaudioprocess = event => {
+          const inputSamples = event.inputBuffer.getChannelData(0);
+          const remaining = Math.max(0, voiceAudioContext.sampleRate * 45 - voiceRecordedSamples);
+          const count = Math.min(inputSamples.length, remaining);
+          for (let i = 0; i < count; i++) {
+            const value = Math.max(-1, Math.min(1, inputSamples[i]));
+            voicePcmSamples.push(value < 0 ? value * 0x8000 : value * 0x7fff);
+          }
+          voiceRecordedSamples += count;
+          const chunkSize = Math.floor(Math.min(voiceAudioContext.sampleRate / 2, 24_000));
+          while (voicePcmSamples.length >= chunkSize) {
+            enqueueVoiceChunk(voicePcmSamples.splice(0, chunkSize));
+          }
+          event.outputBuffer.getChannelData(0).fill(0);
+          if (remaining <= inputSamples.length) setTimeout(stopVoicePrompt, 0);
+        };
+        voiceSource.connect(voiceProcessor);
+        voiceProcessor.connect(voiceAudioContext.destination);
+        voiceStream.getAudioTracks()[0].addEventListener('ended', stopVoicePrompt, { once: true });
+        document.getElementById('gen-ai-chat-input').readOnly = true;
+        voiceRecordingStartedAt = Date.now();
+        button.disabled = false;
+        button.setAttribute('aria-pressed', 'true');
+        setVoiceButtonState('stop', 'Detener dictado', true);
+        status.textContent = 'Grabando · transcripción en directo';
+        voiceTimer = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - voiceRecordingStartedAt) / 1000);
+          status.textContent = `Grabando · 0:${String(elapsed).padStart(2, '0')} / 0:45`;
+          if (elapsed >= 45) stopVoicePrompt();
+        }, 500);
+      } catch (error) {
+        button.disabled = false;
+        voiceProcessor?.disconnect();
+        voiceSource?.disconnect();
+        voiceStream?.getTracks().forEach(track => track.stop());
+        if (voiceAudioContext && voiceAudioContext.state !== 'closed') await voiceAudioContext.close();
+        voiceAudioContext = null;
+        voiceSource = null;
+        voiceProcessor = null;
+        voiceStream = null;
+        status.textContent = '';
+        showToast(
+          error.name === 'NotAllowedError'
+            ? 'Da permiso al micrófono para dictar la instrucción.'
+            : 'No se pudo iniciar el micrófono.',
+          'error'
+        );
+      }
+    }
+
+    function enqueueVoiceChunk(samples) {
+      if (!samples.length || voiceUploadError || !voiceSessionId) return;
+      const pcm = new Int16Array(samples);
+      voiceUploadQueue = voiceUploadQueue.then(async () => {
+        if (voiceUploadError) return;
+        const response = await fetch(`/api/voice/${voiceSessionId}/chunk`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/octet-stream' },
+          body: pcm.buffer
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'No se pudo transcribir el audio.');
+        updateVoiceTranscript(result);
+      }).catch(error => {
+        voiceUploadError = error;
+        document.getElementById('gen-voice-status').textContent = error.message || 'Error al transcribir.';
+      });
+    }
+
+    function updateVoiceTranscript(result) {
+      if (result.partial) {
+        voicePartialText = result.text;
+      } else {
+        if (result.text) voiceFinalText = [voiceFinalText, result.text].filter(Boolean).join(' ');
+        voicePartialText = '';
+      }
+      const input = document.getElementById('gen-ai-chat-input');
+      input.value = [voiceInputBaseValue, voiceFinalText, voicePartialText].filter(Boolean).join(' ');
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    async function stopVoicePrompt() {
+      if (!voiceAudioContext || voiceStopping) return;
+      voiceStopping = true;
+      const button = document.getElementById('gen-voice-button');
+      const status = document.getElementById('gen-voice-status');
+      clearInterval(voiceTimer);
+      voiceTimer = null;
+      voiceProcessor.onaudioprocess = null;
+      voiceProcessor.disconnect();
+      voiceSource.disconnect();
+      voiceStream?.getTracks().forEach(track => track.stop());
+      voiceStream = null;
+      const audioContext = voiceAudioContext;
+      voiceAudioContext = null;
+      if (audioContext.state !== 'closed') await audioContext.close();
+      enqueueVoiceChunk(voicePcmSamples.splice(0));
+      button.disabled = true;
+      button.setAttribute('aria-pressed', 'false');
+      setVoiceButtonState('hourglass_top', 'Finalizando dictado');
+      status.textContent = 'Cerrando la transcripción local…';
+
+      try {
+        await voiceUploadQueue;
+        if (voiceUploadError) throw voiceUploadError;
+        if (!voiceSessionId) throw new Error('No hay una sesión de transcripción activa.');
+        const response = await fetch(`/api/voice/${voiceSessionId}/finish`, { method: 'POST' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'No se pudo transcribir el audio.');
+        updateVoiceTranscript(result);
+        if (!voiceFinalText && !voicePartialText) {
+          showToast('No se detectó voz. Habla con claridad y vuelve a intentarlo.', 'info');
+        } else {
+          showToast('Dictado listo. Puedes revisar el texto antes de generar la consulta.', 'success');
+        }
+      } catch (error) {
+        showToast(error.message || 'No se pudo transcribir la grabación.', 'error');
+      } finally {
+        document.getElementById('gen-ai-chat-input').readOnly = false;
+        button.disabled = false;
+        setVoiceButtonState('mic', 'Dictar con Vosk');
+        status.textContent = '';
+        voiceSessionId = null;
+        voiceSource = null;
+        voiceProcessor = null;
+        voiceStopping = false;
       }
     }
 

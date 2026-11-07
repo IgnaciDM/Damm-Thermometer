@@ -52,6 +52,12 @@ Abre en tu navegador:
 - **Generador Asistido:** [http://127.0.0.1:8000/generator](http://127.0.0.1:8000/generator)
 - **Gestión y Acciones:** [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 
+### Dictado de instrucciones con Vosk
+
+En el generador, pulsa **Dictar con Vosk**, concede permiso para usar el micrófono y dicta una instrucción de hasta 45 segundos. El texto reconocido aparece progresivamente en el cuadro de instrucciones mientras hablas y se finaliza al detener el dictado. Los fragmentos de audio se transcriben con Vosk en el servidor local; el audio no se guarda. Revisa el texto antes de generar preguntas.
+
+El modelo español `vosk-model-small-es-0.42` no se incluye en Git por su tamaño. Descárgalo y descomprímelo; configura `VOSK_MODEL_PATH` en `.env` con la ruta al directorio del modelo. La ruta predeterminada es `ui/assets/vosk-model-small-es-0.42/vosk-model-small-es-0.42`. El dictado requiere un navegador con soporte de micrófono y permiso concedido; `localhost` funciona sin HTTPS.
+
 ```text
 backend/
   app.py                 Python server, API, and SQLite persistence

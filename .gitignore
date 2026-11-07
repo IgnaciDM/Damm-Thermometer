@@ -7,3 +7,4 @@ pulso.sqlite3-wal
 .env
 .env.*
 !.env.example
+ui/assets/vosk-model-*/
