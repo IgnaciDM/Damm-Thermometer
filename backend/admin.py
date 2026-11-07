@@ -6,6 +6,7 @@ generación de QR vectorial y acciones recomendadas.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -72,6 +73,22 @@ def update_survey(survey_id: str, payload: object) -> dict:
         )
         updated = db.execute("SELECT * FROM surveys WHERE id = ?", (survey_id,)).fetchone()
     return _survey_dict(updated, include_private=True)
+
+
+def delete_survey(survey_id: str) -> dict:
+    """Elimina una encuesta y sus datos locales asociados, sin tocar Typeform."""
+    with connect() as db:
+        row = db.execute("SELECT id FROM surveys WHERE id = ?", (survey_id,)).fetchone()
+        if row is None:
+            raise RequestError("No se ha encontrado esta consulta.", 404)
+        db.execute("DELETE FROM responses WHERE survey_id = ?", (survey_id,))
+        db.execute("DELETE FROM typeform_submissions WHERE survey_id = ?", (survey_id,))
+        db.execute(
+            "UPDATE actions SET followup_survey_id = '' WHERE followup_survey_id = ?",
+            (survey_id,),
+        )
+        db.execute("DELETE FROM surveys WHERE id = ?", (survey_id,))
+    return {"id": survey_id, "deleted": True}
 
 
 def approve_survey(survey_id: str) -> dict:
@@ -253,13 +270,16 @@ def publish_survey(survey_id: str, public_base_url: str = "", force: bool = Fals
 
 
 def import_typeform_responses(survey_id: str) -> dict:
-    """Importa respuestas desde la API de Typeform hacia SQLite."""
+    """Importa y anonimiza las respuestas completas de Typeform en SQLite."""
     survey = get_survey(survey_id)
     with connect() as db:
         row = db.execute("SELECT typeform_id FROM surveys WHERE id = ?", (survey_id,)).fetchone()
     if not row["typeform_id"]:
         raise RequestError("Esta consulta aún no está conectada a un formulario de Typeform.")
+
     imported = 0
+    skipped = 0
+    imported_ratings = 0
     next_url = f"https://api.typeform.com/forms/{row['typeform_id']}/responses?page_size=1000"
     while next_url:
         if urlparse(next_url).scheme != "https" or urlparse(next_url).hostname != "api.typeform.com":
@@ -267,47 +287,122 @@ def import_typeform_responses(survey_id: str) -> dict:
         result = _call_typeform_request("GET", next_url)
         for item in result.get("items", []):
             response_id = item.get("token")
-            if not isinstance(response_id, str) or not response_id:
-                continue
             answers = item.get("answers", [])
-            by_ref = {answer.get("field", {}).get("ref"): answer for answer in answers}
-            cohort = survey["cohort"]
-            if cohort == "Todos":
-                cohort_answer = by_ref.get("cohort", {}).get("choice", {}).get("label")
-                if cohort_answer not in COHORTS:
-                    continue
-                cohort = cohort_answer
-            score = 0
-            comment = ""
-            for question in survey["questions"]:
-                answer = by_ref.get(question["id"], {})
-                if question["type"] == "rating":
-                    score = int(answer.get("number", 0) or 0)
-                elif question["type"] == "open_text":
-                    comment = sanitize_comment(answer.get("text", ""))
-            if not 1 <= score <= 5:
+            if not isinstance(response_id, str) or not response_id or not isinstance(answers, list):
+                skipped += 1
                 continue
+
+            by_ref = {
+                answer.get("field", {}).get("ref"): answer
+                for answer in answers
+                if isinstance(answer, dict) and isinstance(answer.get("field"), dict)
+            }
+            cohort = survey["cohort"] if survey["cohort"] in COHORTS else "Sin especificar"
+            if survey["cohort"] == "Todos":
+                cohort_answer = by_ref.get("cohort", {}).get("choice", {}).get("label")
+                cohort = cohort_answer if cohort_answer in COHORTS else "Sin especificar"
+
+            stored_answers = []
+            ratings = []
+            comments = []
+            for question in survey["questions"]:
+                typeform_answer = by_ref.get(question["id"], {})
+                answer_value = None
+                if question["type"] == "rating":
+                    raw_value = typeform_answer.get("number")
+                    if isinstance(raw_value, (int, float)) and not isinstance(raw_value, bool):
+                        answer_value = int(raw_value) if int(raw_value) == raw_value else None
+                    if isinstance(answer_value, int) and 1 <= answer_value <= 5:
+                        ratings.append((question, answer_value))
+                elif question["type"] == "multiple_choice":
+                    choice = typeform_answer.get("choice")
+                    if isinstance(choice, dict) and isinstance(choice.get("label"), str):
+                        answer_value = choice["label"][:200]
+                    else:
+                        choices = typeform_answer.get("choices")
+                        if isinstance(choices, dict) and isinstance(choices.get("labels"), list):
+                            answer_value = [
+                                label[:200] for label in choices["labels"]
+                                if isinstance(label, str)
+                            ]
+                elif question["type"] == "yes_no":
+                    raw_value = typeform_answer.get("boolean")
+                    if isinstance(raw_value, bool):
+                        answer_value = raw_value
+                elif question["type"] == "open_text":
+                    raw_text = typeform_answer.get("text")
+                    if isinstance(raw_text, str):
+                        answer_value = sanitize_comment(raw_text)
+                        if answer_value:
+                            comments.append(answer_value)
+
+                stored_answers.append(
+                    {
+                        "question_id": question["id"],
+                        "question": question["text"],
+                        "type": question["type"],
+                        "dimension": question.get("dimension", "bienestar"),
+                        "answer": answer_value,
+                    }
+                )
+
+            submitted_at = item.get("submitted_at")
+            if isinstance(submitted_at, str):
+                try:
+                    parsed_date = datetime.fromisoformat(submitted_at.replace("Z", "+00:00"))
+                except ValueError:
+                    submitted_at = _now_iso()
+                    parsed_date = datetime.now(timezone.utc)
+            else:
+                submitted_at = _now_iso()
+                parsed_date = datetime.now(timezone.utc)
+
+            response_key = hashlib.sha256(response_id.encode("utf-8")).hexdigest()
+            comment = " ".join(comments)[:2000]
             with connect() as db:
-                cursor = db.execute(
-                    """INSERT OR IGNORE INTO responses (day, dimension, site, score, cohort, channel,
-                       comment, survey_id, period, typeform_response_id)
-                       VALUES (?, ?, ?, ?, ?, 'Typeform', ?, ?, ?, ?)
-                    """,
+                submission_cursor = db.execute(
+                    """INSERT OR IGNORE INTO typeform_submissions
+                       (survey_id, response_key, submitted_at, cohort, answers_json, imported_at)
+                       VALUES (?, ?, ?, ?, ?, ?)""",
                     (
-                        date.today().isoformat(),
-                        "bienestar",
-                        COHORT_LABELS[cohort],
-                        score,
-                        cohort,
-                        comment,
                         survey_id,
-                        "actual",
-                        response_id,
+                        response_key,
+                        submitted_at,
+                        cohort,
+                        json.dumps(stored_answers, ensure_ascii=False),
+                        _now_iso(),
                     ),
                 )
-            imported += cursor.rowcount
+                if not submission_cursor.rowcount:
+                    continue
+
+                db.execute(
+                    "DELETE FROM responses WHERE survey_id = ? AND typeform_response_id = ?",
+                    (survey_id, response_id),
+                )
+                for index, (question, score) in enumerate(ratings):
+                    cursor = db.execute(
+                        """INSERT OR IGNORE INTO responses
+                           (day, dimension, site, score, cohort, channel, comment,
+                            survey_id, period, typeform_response_id, typeform_submission_key, is_demo)
+                           VALUES (?, ?, ?, ?, ?, 'Typeform', ?, ?, 'actual', ?, ?, 0)""",
+                        (
+                            parsed_date.date().isoformat(),
+                            question.get("dimension", "bienestar"),
+                            COHORT_LABELS.get(cohort, cohort),
+                            score,
+                            cohort,
+                            comment if index == 0 else "",
+                            survey_id,
+                            response_key if index == 0 else "",
+                            response_key,
+                        ),
+                    )
+                    imported_ratings += cursor.rowcount
+            imported += 1
         next_url = result.get("_links", {}).get("next", "")
-    return {"imported": imported}
+
+    return {"imported": imported, "ratings_imported": imported_ratings, "skipped": skipped}
 
 
 def save_survey_response(payload: object) -> dict:

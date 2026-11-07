@@ -189,6 +189,10 @@ def get_dashboard() -> dict:
             "DELETE FROM responses WHERE day < ?",
             ((date.today() - timedelta(days=RETENTION_DAYS)).isoformat(),),
         )
+        db.execute(
+            "DELETE FROM typeform_submissions WHERE substr(submitted_at, 1, 10) < ?",
+            ((date.today() - timedelta(days=RETENTION_DAYS)).isoformat(),),
+        )
         live_rows = db.execute(
             "SELECT * FROM responses WHERE is_demo = 0 ORDER BY day"
         ).fetchall()

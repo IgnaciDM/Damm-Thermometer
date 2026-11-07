@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import statistics
 from collections import Counter
 from datetime import date, timedelta
 from typing import Optional
@@ -16,9 +17,11 @@ from .common import (
     _survey_dict,
     classify_comment,
     connect,
+    sanitize_comment,
 )
 from .statistics_engine import (
     analyze_aggregated_dataset,
+    analyze_qualitative_feedback,
     analyze_survey_dataset,
     calculate_quarter_label,
     generate_mock_responses_for_survey,
@@ -164,6 +167,177 @@ def analyze_responses(
     }
 
 
+def analyze_typeform_submissions(survey: dict, submissions: list[object]) -> dict:
+    """Resume respuestas importadas por pregunta sin exponer texto identificable."""
+    answers_by_question = {
+        question["id"]: []
+        for question in survey.get("questions", [])
+        if isinstance(question, dict) and isinstance(question.get("id"), str)
+    }
+    imported_at = []
+    for submission in submissions:
+        raw_answers = _row_value(submission, "answers_json", "[]")
+        try:
+            answers = json.loads(raw_answers)
+        except (json.JSONDecodeError, TypeError):
+            continue
+        if not isinstance(answers, list):
+            continue
+        imported_value = _row_value(submission, "imported_at", "")
+        if isinstance(imported_value, str) and imported_value:
+            imported_at.append(imported_value)
+        for answer in answers:
+            if (
+                isinstance(answer, dict)
+                and answer.get("question_id") in answers_by_question
+            ):
+                answers_by_question[answer["question_id"]].append(answer.get("answer"))
+
+    question_results = []
+    for question in survey.get("questions", []):
+        question_id = question.get("id")
+        kind = question.get("type")
+        values = answers_by_question.get(question_id, [])
+        answered = [
+            value for value in values
+            if value is not None and value != "" and value != []
+        ]
+        result = {
+            "question_id": question_id,
+            "question": question.get("text", ""),
+            "type": kind,
+            "dimension": question.get("dimension", "bienestar"),
+            "responses": len(answered) if len(answered) >= MIN_GROUP_SIZE else None,
+            "protected": len(answered) < MIN_GROUP_SIZE,
+        }
+
+        if kind == "rating":
+            scores = [
+                value for value in answered
+                if isinstance(value, int) and not isinstance(value, bool) and 1 <= value <= 5
+            ]
+            counts = {str(score): scores.count(score) for score in range(1, 6)}
+            protected = len(scores) < MIN_GROUP_SIZE or any(0 < count < MIN_GROUP_SIZE for count in counts.values())
+            result.update(
+                {
+                    "responses": len(scores) if len(scores) >= MIN_GROUP_SIZE else None,
+                    "protected": protected,
+                    "mean": round(statistics.mean(scores), 2) if len(scores) >= MIN_GROUP_SIZE else None,
+                    "median": statistics.median(scores) if len(scores) >= MIN_GROUP_SIZE else None,
+                    "standard_deviation": round(statistics.stdev(scores), 2) if len(scores) >= MIN_GROUP_SIZE else None,
+                    "distribution": [
+                        {
+                            "label": score,
+                            "count": None if protected else counts[str(score)],
+                            "percentage": round(counts[str(score)] / len(scores) * 100, 1)
+                            if scores and not protected else None,
+                        }
+                        for score in range(1, 6)
+                    ],
+                }
+            )
+        elif kind in {"multiple_choice", "yes_no"}:
+            if kind == "multiple_choice":
+                labels = question.get("choices", [])
+                if not isinstance(labels, list):
+                    labels = []
+                labels = [str(label) for label in labels]
+                selected = [
+                    choice
+                    for value in answered
+                    for choice in (value if isinstance(value, list) else [value])
+                    if isinstance(choice, str)
+                ]
+            else:
+                labels = ["Sí", "No"]
+                selected = [
+                    "Sí" if value else "No"
+                    for value in answered
+                    if isinstance(value, bool)
+                ]
+            counts = {label: selected.count(label) for label in labels}
+            protected = len(answered) < MIN_GROUP_SIZE or any(
+                0 < count < MIN_GROUP_SIZE for count in counts.values()
+            )
+            result.update(
+                {
+                    "responses": len(answered) if len(answered) >= MIN_GROUP_SIZE else None,
+                    "protected": protected,
+                    "distribution": [
+                        {
+                            "label": label,
+                            "count": None if protected else counts[label],
+                            "percentage": round(counts[label] / len(answered) * 100, 1)
+                            if answered and not protected else None,
+                        }
+                        for label in labels
+                    ],
+                }
+            )
+        elif kind == "open_text":
+            comments = [
+                sanitize_comment(value)
+                for value in answered
+                if isinstance(value, str) and len(value.strip()) >= 4
+            ]
+            protected = len(comments) < MIN_GROUP_SIZE
+            result.update(
+                {
+                    "responses": len(comments) if not protected else None,
+                    "protected": protected,
+                    "qualitative": None,
+                }
+            )
+            if not protected:
+                qualitative = analyze_qualitative_feedback(comments)
+                sentiment = qualitative["sentimiento_global"]
+                sentiment_counts = {
+                    "positivo": round(sentiment["positivo_pct"] * len(comments) / 100),
+                    "crítico": round(sentiment["critico_pct"] * len(comments) / 100),
+                    "neutro": round(sentiment["neutro_pct"] * len(comments) / 100),
+                }
+                sentiment_protected = any(0 < count < MIN_GROUP_SIZE for count in sentiment_counts.values())
+                topics = qualitative["temas"]
+                topics_protected = any(
+                    0 < topic["frecuencia"] < MIN_GROUP_SIZE for topic in topics
+                )
+                result["qualitative"] = {
+                    "sentiment": None if sentiment_protected else sentiment,
+                    "topics": [
+                        {
+                            "topic": topic["tema"],
+                            "count": None if topics_protected else topic["frecuencia"],
+                            "percentage": None if topics_protected else topic["porcentaje"],
+                        }
+                        for topic in topics
+                    ],
+                    "protected": sentiment_protected or topics_protected,
+                }
+
+        question_results.append(result)
+
+    return {
+        "survey_id": survey.get("id", ""),
+        "title": survey.get("title", ""),
+        "total_responses": len(submissions),
+        "last_imported_at": max(imported_at, default=""),
+        "questions": question_results,
+    }
+
+
+def _unique_response_rows(rows: list[dict]) -> list[dict]:
+    unique = []
+    seen = set()
+    for row in rows:
+        key = row.get("typeform_submission_key") or row.get("typeform_response_id")
+        if key:
+            if key in seen:
+                continue
+            seen.add(key)
+        unique.append(row)
+    return unique
+
+
 def get_statistical_engine_payload(
     survey_id: str | None = None,
     filter_type: str = "survey",
@@ -197,10 +371,13 @@ def get_statistical_engine_payload(
         filter_value = survey_id
 
     real_responses = []
+    analysis_surveys = []
+    submissions_by_survey = {}
 
     if filter_type == "quarter":
         target_quarter = filter_value or all_quarters[0]
         matching_surveys = [s for s in surveys_list if s.get("quarter") == target_quarter]
+        analysis_surveys = matching_surveys
         matching_ids = [s["id"] for s in matching_surveys]
 
         with connect() as db:
@@ -210,12 +387,22 @@ def get_statistical_engine_payload(
                     f"SELECT * FROM responses WHERE survey_id IN ({placeholders}) ORDER BY day DESC, id DESC",
                     tuple(matching_ids)
                 ).fetchall()
+                submission_rows = db.execute(
+                    f"""SELECT * FROM typeform_submissions
+                        WHERE survey_id IN ({placeholders}) ORDER BY submitted_at DESC, id DESC""",
+                    tuple(matching_ids),
+                ).fetchall()
             else:
                 resp_rows = []
+                submission_rows = []
 
         real_responses = [dict(r) for r in resp_rows]
-        combined_responses = list(real_responses)
-        if len(combined_responses) < 25:
+        submissions_by_survey = {}
+        for submission in submission_rows:
+            submissions_by_survey.setdefault(submission["survey_id"], []).append(dict(submission))
+        combined_responses = _unique_response_rows(real_responses)
+        has_typeform_surveys = any(s.get("typeform_connected") for s in matching_surveys)
+        if len(combined_responses) < 25 and not has_typeform_surveys:
             seed_surveys = matching_surveys if matching_surveys else [
                 {"id": f"seed_q_{target_quarter}", "title": f"Pulso Operativo {target_quarter}", "cohort": "Todos", "created_at": _now_iso()}
             ]
@@ -229,6 +416,7 @@ def get_statistical_engine_payload(
     elif filter_type == "year":
         target_year = filter_value or all_years[0]
         matching_surveys = [s for s in surveys_list if s.get("year") == target_year]
+        analysis_surveys = matching_surveys
         matching_ids = [s["id"] for s in matching_surveys]
 
         with connect() as db:
@@ -238,12 +426,22 @@ def get_statistical_engine_payload(
                     f"SELECT * FROM responses WHERE survey_id IN ({placeholders}) ORDER BY day DESC, id DESC",
                     tuple(matching_ids)
                 ).fetchall()
+                submission_rows = db.execute(
+                    f"""SELECT * FROM typeform_submissions
+                        WHERE survey_id IN ({placeholders}) ORDER BY submitted_at DESC, id DESC""",
+                    tuple(matching_ids),
+                ).fetchall()
             else:
                 resp_rows = []
+                submission_rows = []
 
         real_responses = [dict(r) for r in resp_rows]
-        combined_responses = list(real_responses)
-        if len(combined_responses) < 30:
+        submissions_by_survey = {}
+        for submission in submission_rows:
+            submissions_by_survey.setdefault(submission["survey_id"], []).append(dict(submission))
+        combined_responses = _unique_response_rows(real_responses)
+        has_typeform_surveys = any(s.get("typeform_connected") for s in matching_surveys)
+        if len(combined_responses) < 30 and not has_typeform_surveys:
             seed_surveys = matching_surveys if matching_surveys else [
                 {"id": f"seed_y_{target_year}", "title": f"Pulso Anual {target_year}", "cohort": "Todos", "created_at": _now_iso()}
             ]
@@ -277,23 +475,47 @@ def get_statistical_engine_payload(
                 "cohort": "Todos",
                 "questions": [{"id": "q1", "text": "Clima General", "type": "rating", "dimension": "bienestar"}],
             }
+        analysis_surveys = [target_survey]
 
         with connect() as db:
             resp_rows = db.execute(
                 "SELECT * FROM responses WHERE survey_id = ? ORDER BY day DESC, id DESC",
                 (target_survey["id"],),
             ).fetchall()
+            submission_rows = db.execute(
+                """SELECT * FROM typeform_submissions
+                   WHERE survey_id = ? ORDER BY submitted_at DESC, id DESC""",
+                (target_survey["id"],),
+            ).fetchall()
 
         real_responses = [dict(r) for r in resp_rows]
-        if len(real_responses) < 15:
+        submissions_by_survey = {
+            target_survey["id"]: [dict(row) for row in submission_rows]
+        }
+        response_rows_for_analysis = _unique_response_rows(real_responses)
+        if len(response_rows_for_analysis) < 15 and not target_survey.get("typeform_connected"):
             mock_responses = generate_mock_responses_for_survey(target_survey, count=45)
-            combined_responses = real_responses + mock_responses
+            combined_responses = response_rows_for_analysis + mock_responses
         else:
-            combined_responses = real_responses
+            combined_responses = response_rows_for_analysis
 
         analysis = analyze_survey_dataset(target_survey, combined_responses)
         analysis["survey_id_activo"] = target_survey["id"]
         analysis["filtro_activo"] = {"tipo": "survey", "valor": target_survey["id"]}
+
+    typeform_analyses = [
+        analyze_typeform_submissions(
+            survey,
+            submissions_by_survey.get(survey["id"], []),
+        )
+        for survey in analysis_surveys
+        if survey.get("typeform_connected")
+    ]
+    typeform_submission_count = sum(item["total_responses"] for item in typeform_analyses)
+    analysis["analisis_respuestas_typeform"] = {
+        "total_responses": typeform_submission_count,
+        "surveys": typeform_analyses,
+    }
 
     analysis["encuestas_disponibles"] = [
         {
@@ -304,12 +526,23 @@ def get_statistical_engine_payload(
             "cohort": s.get("cohort", "Todos"),
             "status": s.get("status", "draft"),
             "created_at": s.get("created_at", ""),
+            "typeform_connected": s.get("typeform_connected", False),
         }
         for s in surveys_list
     ]
     analysis["cuatrimestres_disponibles"] = all_quarters
     analysis["anos_disponibles"] = all_years
-    analysis["respuestas_reales_capturadas"] = len(real_responses)
+    analysis["respuestas_typeform_importadas"] = typeform_submission_count
+    analysis["respuestas_reales_capturadas"] = (
+        typeform_submission_count if typeform_analyses else len(_unique_response_rows(real_responses))
+    )
+    if typeform_analyses and filter_type == "survey":
+        analysis["kpis_ejecutivos"]["total_respuestas"] = typeform_submission_count
+        analysis["kpis_ejecutivos"]["nivel_confianza"] = (
+            "Alta" if typeform_submission_count >= 60
+            else "Media" if typeform_submission_count >= 20
+            else "Baja"
+        )
     return analysis
 
 

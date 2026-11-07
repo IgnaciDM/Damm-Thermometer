@@ -137,6 +137,7 @@ def init_db(db: sqlite3.Connection) -> None:
         "survey_id": "TEXT NOT NULL DEFAULT ''",
         "period": "TEXT NOT NULL DEFAULT ''",
         "typeform_response_id": "TEXT NOT NULL DEFAULT ''",
+        "typeform_submission_key": "TEXT NOT NULL DEFAULT ''",
     }
     for column, definition in additions.items():
         if column not in response_columns:
@@ -144,6 +145,22 @@ def init_db(db: sqlite3.Connection) -> None:
     db.execute(
         """CREATE UNIQUE INDEX IF NOT EXISTS idx_responses_typeform_response
            ON responses(typeform_response_id) WHERE typeform_response_id != ''"""
+    )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS typeform_submissions (
+            id INTEGER PRIMARY KEY,
+            survey_id TEXT NOT NULL,
+            response_key TEXT NOT NULL,
+            submitted_at TEXT NOT NULL,
+            cohort TEXT NOT NULL,
+            answers_json TEXT NOT NULL,
+            imported_at TEXT NOT NULL,
+            UNIQUE(survey_id, response_key)
+        )"""
+    )
+    db.execute(
+        """CREATE INDEX IF NOT EXISTS idx_typeform_submissions_survey_date
+           ON typeform_submissions(survey_id, submitted_at)"""
     )
     db.execute(
         """CREATE TABLE IF NOT EXISTS surveys (

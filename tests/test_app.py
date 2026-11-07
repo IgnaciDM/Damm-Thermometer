@@ -401,12 +401,135 @@ class SurveyTests(unittest.TestCase):
                 row = db.execute(
                     "SELECT cohort, comment, typeform_response_id FROM responses"
                 ).fetchone()
+                submission = db.execute(
+                    """SELECT response_key, answers_json FROM typeform_submissions
+                       WHERE survey_id = ?""",
+                    (survey["id"],),
+                ).fetchone()
 
         self.assertEqual(first["imported"], 1)
         self.assertEqual(second["imported"], 0)
         self.assertEqual(row["cohort"], "Planta")
         self.assertNotIn("Ana", row["comment"])
-        self.assertEqual(row["typeform_response_id"], "response-token")
+        self.assertEqual(len(row["typeform_response_id"]), 64)
+        self.assertEqual(submission["response_key"], row["typeform_response_id"])
+        stored_answers = json.loads(submission["answers_json"])
+        self.assertEqual(len(stored_answers), len(questions))
+        self.assertNotIn("Ana", submission["answers_json"])
+
+    def test_delete_survey_removes_local_data_and_clears_followup_reference(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory, patch.object(
+            app, "DATABASE", Path(directory) / "test.sqlite3"
+        ):
+            survey = app.create_survey_draft(self.survey_payload())
+            with app.connect() as db:
+                db.execute(
+                    """INSERT INTO responses
+                       (day, dimension, site, score, survey_id)
+                       VALUES ('2026-11-08', 'bienestar', 'Planta', 4, ?)""",
+                    (survey["id"],),
+                )
+                db.execute(
+                    """INSERT INTO typeform_submissions
+                       (survey_id, response_key, submitted_at, cohort, answers_json, imported_at)
+                       VALUES (?, 'hash', '2026-11-08T00:00:00Z', 'Planta', '[]', '2026-11-08T00:00:00Z')""",
+                    (survey["id"],),
+                )
+                db.execute(
+                    """INSERT INTO actions
+                       (created_at, topic, title, description, rationale, followup_survey_id)
+                       VALUES ('2026-11-08', 'topic', 'title', 'description', 'rationale', ?)""",
+                    (survey["id"],),
+                )
+
+            result = app.delete_survey(survey["id"])
+
+            with app.connect() as db:
+                survey_count = db.execute(
+                    "SELECT COUNT(*) FROM surveys WHERE id = ?", (survey["id"],)
+                ).fetchone()[0]
+                response_count = db.execute(
+                    "SELECT COUNT(*) FROM responses WHERE survey_id = ?", (survey["id"],)
+                ).fetchone()[0]
+                submission_count = db.execute(
+                    "SELECT COUNT(*) FROM typeform_submissions WHERE survey_id = ?",
+                    (survey["id"],),
+                ).fetchone()[0]
+                followup_id = db.execute(
+                    "SELECT followup_survey_id FROM actions"
+                ).fetchone()[0]
+
+        self.assertEqual(result, {"id": survey["id"], "deleted": True})
+        self.assertEqual(survey_count, 0)
+        self.assertEqual(response_count, 0)
+        self.assertEqual(submission_count, 0)
+        self.assertEqual(followup_id, "")
+
+    def test_delete_survey_rejects_unknown_survey(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory, patch.object(
+            app, "DATABASE", Path(directory) / "test.sqlite3"
+        ):
+            with self.assertRaises(app.RequestError) as error:
+                app.delete_survey("unknown")
+
+        self.assertEqual(error.exception.status, 404)
+
+    def test_typeform_import_analyzes_every_answer_without_mixing_demo_data(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory, patch.object(
+            app, "DATABASE", Path(directory) / "test.sqlite3"
+        ), patch.dict(app.AI_CONFIG, {"api_key": ""}), patch.dict(
+            app.TYPEFORM_CONFIG, {"token": "test-token"}
+        ):
+            survey = app.create_survey_draft(self.survey_payload())
+            questions = survey["questions"]
+            with app.connect() as db:
+                db.execute(
+                    """UPDATE surveys SET status = 'published', typeform_id = 'form-id',
+                       publish_url = 'https://form.typeform.com/to/form-id' WHERE id = ?""",
+                    (survey["id"],),
+                )
+            typeform_responses = []
+            for index in range(5):
+                typeform_responses.append(
+                    {
+                        "token": f"response-{index}",
+                        "submitted_at": f"2026-11-0{index + 1}T12:00:00Z",
+                        "answers": [
+                            {"field": {"ref": "cohort"}, "choice": {"label": "Planta"}},
+                            {"field": {"ref": questions[0]["id"]}, "number": index + 1},
+                            {"field": {"ref": questions[1]["id"]}, "boolean": True},
+                            {"field": {"ref": questions[2]["id"]}, "choice": {"label": questions[2]["choices"][0]}},
+                            {"field": {"ref": questions[3]["id"]}, "text": "El descanso mejora el trabajo."},
+                        ],
+                    }
+                )
+            with patch(
+                "backend.app._typeform_request",
+                return_value={"items": typeform_responses, "_links": {}},
+            ):
+                imported = app.import_typeform_responses(survey["id"])
+            metrics = app.get_statistical_engine_payload(survey["id"])
+
+        self.assertEqual(imported["imported"], 5)
+        self.assertEqual(imported["ratings_imported"], 5)
+        self.assertEqual(metrics["respuestas_typeform_importadas"], 5)
+        self.assertEqual(metrics["kpis_ejecutivos"]["total_respuestas"], 5)
+        questions_analysis = metrics["analisis_respuestas_typeform"]["surveys"][0]["questions"]
+        self.assertEqual(questions_analysis[0]["mean"], 3.0)
+        self.assertTrue(questions_analysis[0]["protected"])
+        self.assertEqual(questions_analysis[1]["distribution"][0]["count"], 5)
+        self.assertEqual(questions_analysis[2]["distribution"][0]["count"], 5)
+        self.assertEqual(questions_analysis[3]["responses"], 5)
+        self.assertIsNotNone(questions_analysis[3]["qualitative"])
 
 
 class GeneratorPanelTests(unittest.TestCase):

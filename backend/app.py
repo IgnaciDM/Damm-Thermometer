@@ -101,6 +101,7 @@ from .admin import (  # noqa: F401
     approve_survey,
     create_followup_survey,
     create_recommendations,
+    delete_survey,
     generate_qr_png,
     generate_qr_svg,
     get_admin_data,
@@ -372,7 +373,7 @@ class PulsoHandler(BaseHTTPRequestHandler):
 
             else:
                 # Rutas parametrizadas
-                survey_route = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/(approve|publish|import)", path)
+                survey_route = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/(approve|publish|import|delete)", path)
                 action_route = re.fullmatch(r"/api/actions/(\d+)(?:/(followup))?", path)
                 update_route = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/edit", path)
 
@@ -385,6 +386,8 @@ class PulsoHandler(BaseHTTPRequestHandler):
                         if isinstance(payload, dict):
                             force = bool(payload.get("force", False))
                         self.send_json(200, AdminPanel.publish_survey(survey_id, self._public_base_url(), force=force))
+                    elif action == "delete":
+                        self.send_json(200, delete_survey(survey_id))
                     else:
                         self.send_json(200, AdminPanel.import_responses(survey_id))
                 elif action_route:

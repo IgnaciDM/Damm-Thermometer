@@ -523,6 +523,7 @@ def analyze_survey_dataset(
             "created_at": survey.get("created_at", ""),
             "status": survey.get("status", "published"),
             "cohort": survey.get("cohort", "Todos"),
+            "typeform_connected": survey.get("typeform_connected", False),
             "preguntas": survey.get("questions", []),
         },
         "kpis_ejecutivos": {
