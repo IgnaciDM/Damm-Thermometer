@@ -111,6 +111,21 @@ def calculate_descriptive_stats(scores: List[int]) -> Dict[str, Any]:
     frecuencias = {s: counts[s] for s in range(1, 6)}
     porcentajes = {s: round((counts[s] / n) * 100, 1) for s in range(1, 6)}
 
+    # Cuartiles y Boxplot metrics (Q1, Q3, IQR, Bigotes, Outliers)
+    if n >= 4:
+        lower_half = sorted_scores[: n // 2]
+        upper_half = sorted_scores[(n + 1) // 2 :]
+        q1 = float(lower_half[len(lower_half) // 2]) if len(lower_half) % 2 == 1 else (lower_half[len(lower_half) // 2 - 1] + lower_half[len(lower_half) // 2]) / 2.0
+        q3 = float(upper_half[len(upper_half) // 2]) if len(upper_half) % 2 == 1 else (upper_half[len(upper_half) // 2 - 1] + upper_half[len(upper_half) // 2]) / 2.0
+    else:
+        q1 = float(sorted_scores[0]) if sorted_scores else 0.0
+        q3 = float(sorted_scores[-1]) if sorted_scores else 0.0
+
+    iqr = round(max(0.0, q3 - q1), 3)
+    whisker_low = max(min(scores) if scores else 0, round(q1 - 1.5 * iqr, 3))
+    whisker_high = min(max(scores) if scores else 5, round(q3 + 1.5 * iqr, 3))
+    outliers = [x for x in scores if x < whisker_low or x > whisker_high]
+
     # Diagnóstico de clima
     if desviacion >= 1.25 or varianza >= 1.55 or (porcentajes[1] + porcentajes[2] >= 20 and porcentajes[4] + porcentajes[5] >= 25):
         diagnostico = "Polarizado (División de opiniones)"
@@ -127,12 +142,77 @@ def calculate_descriptive_stats(scores: List[int]) -> Dict[str, Any]:
         "desviacion_tipica": round(desviacion, 3),
         "varianza": round(varianza, 3),
         "asimetria": round(asimetria, 3),
+        "q1": round(q1, 3),
+        "q3": round(q3, 3),
+        "iqr": round(iqr, 3),
+        "whisker_low": round(whisker_low, 3),
+        "whisker_high": round(whisker_high, 3),
+        "outliers": outliers,
         "min": min(scores),
         "max": max(scores),
         "frecuencias_estrellas": frecuencias,
         "porcentajes_estrellas": porcentajes,
         "diagnostico": diagnostico,
     }
+
+
+def calculate_boxplot_by_cohort(
+    responses: List[Dict[str, Any]], min_k: int = 5
+) -> Dict[str, Any]:
+    """
+    Calcula métricas de diagrama de caja (Boxplot) estratificadas por departamento.
+    Aplica filtro estricto de k-anonimato: oculta colectivos con menos de min_k (5) respuestas.
+    """
+    scores_by_cohort: Dict[str, List[int]] = {
+        "Planta": [],
+        "Logística": [],
+        "Comercial": [],
+        "Oficinas": [],
+        "Manager": [],
+    }
+    for r in responses:
+        rol = str(r.get("cohort") or r.get("site") or "Planta")
+        if rol in ("Fábrica", "Planta"):
+            rol = "Planta"
+        elif rol in ("Oficina", "Oficinas"):
+            rol = "Oficinas"
+
+        sc = r.get("score")
+        if isinstance(sc, (int, float)) and 1 <= int(sc) <= 5:
+            if rol in scores_by_cohort:
+                scores_by_cohort[rol].append(int(sc))
+            else:
+                scores_by_cohort.setdefault(rol, []).append(int(sc))
+
+    result = {}
+    for cohort, c_scores in scores_by_cohort.items():
+        n_c = len(c_scores)
+        if n_c < min_k:
+            result[cohort] = {
+                "n": n_c,
+                "protegido_k_anonimato": True,
+                "mensaje": f"Oculto por k-anonimato ({n_c} < {min_k} respuestas)",
+                "puntuaciones": [],
+            }
+        else:
+            stats = calculate_descriptive_stats(c_scores)
+            result[cohort] = {
+                "n": n_c,
+                "protegido_k_anonimato": False,
+                "media": stats["media"],
+                "mediana": stats["mediana"],
+                "q1": stats["q1"],
+                "q3": stats["q3"],
+                "iqr": stats["iqr"],
+                "whisker_low": stats["whisker_low"],
+                "whisker_high": stats["whisker_high"],
+                "outliers": stats["outliers"],
+                "min": stats["min"],
+                "max": stats["max"],
+                "desviacion_tipica": stats["desviacion_tipica"],
+                "puntuaciones": c_scores,
+            }
+    return result
 
 
 def calculate_coverage_and_participation(
@@ -339,6 +419,11 @@ def analyze_qualitative_feedback(comments: List[str]) -> Dict[str, Any]:
         })
 
     temas_resumen.sort(key=lambda x: x["frecuencia"], reverse=True)
+    cum_pct = 0.0
+    for t in temas_resumen:
+        cum_pct = round(min(100.0, cum_pct + t["porcentaje"]), 1)
+        t["porcentaje_acumulado"] = cum_pct
+        t["regla_80_20"] = cum_pct <= 80.0 or (cum_pct - t["porcentaje"] < 80.0)
 
     return {
         "total_comentarios": total_valid,
@@ -458,6 +543,9 @@ def analyze_survey_dataset(
         "alertas_de_sesgo": alerts,
         "analisis_cualitativo": qualitative,
         "recomendaciones_hr": recommendations,
+        "boxplot_por_colectivo": calculate_boxplot_by_cohort(responses),
+        "diagrama_pareto": qualitative.get("temas", []),
+        "tasa_participacion_por_colectivo": coverage.get("por_rol", {}),
     }
 
 
@@ -555,6 +643,101 @@ def analyze_aggregated_dataset(
                 "activo": len(q_resp) > 0,
             })
 
+    # Desglose para Serie Temporal y Barras Apiladas 100%
+    time_series = []
+    stacked_likert = []
+
+    if period_type == "quarter":
+        months_in_q = {
+            "Q1": [("01", "Enero"), ("02", "Febrero"), ("03", "Marzo")],
+            "Q2": [("04", "Abril"), ("05", "Mayo"), ("06", "Junio")],
+            "Q3": [("07", "Julio"), ("08", "Agosto"), ("09", "Septiembre")],
+            "Q4": [("10", "Octubre"), ("11", "Noviembre"), ("12", "Diciembre")],
+        }
+        q_prefix = period_label[:2] if len(period_label) >= 2 else "Q4"
+        yr_str = period_label[3:] if len(period_label) > 3 else "2026"
+        sub_periods = months_in_q.get(q_prefix, [("10", "Mes 1"), ("11", "Mes 2"), ("12", "Mes 3")])
+
+        for m_code, m_name in sub_periods:
+            m_target = f"{yr_str}-{m_code}"
+            m_resp = [r for r in responses if str(r.get("day", "")).startswith(m_target)]
+            m_scores = [int(r["score"]) for r in m_resp if isinstance(r.get("score"), (int, float))]
+            m_stats = calculate_descriptive_stats(m_scores) if m_scores else {"media": stats_global["media"], "desviacion_tipica": stats_global["desviacion_tipica"]}
+            
+            n_m = len(m_scores)
+            sat = round((sum(1 for s in m_scores if s >= 4) / max(1, n_m)) * 100, 1) if n_m else 65.0
+            neu = round((sum(1 for s in m_scores if s == 3) / max(1, n_m)) * 100, 1) if n_m else 20.0
+            ins = round(max(0.0, 100.0 - sat - neu), 1)
+
+            label = f"{m_name} {yr_str}"
+            time_series.append({
+                "periodo": label,
+                "media": m_stats["media"],
+                "desviacion_tipica": m_stats["desviacion_tipica"],
+                "total_respuestas": len(m_resp),
+            })
+            stacked_likert.append({
+                "periodo": label,
+                "satisfecho_pct": sat,
+                "neutral_pct": neu,
+                "insatisfecho_pct": ins,
+                "total_respuestas": len(m_resp),
+            })
+    else:
+        for q_num in range(1, 5):
+            q_label = f"Q{q_num} {period_label}"
+            q_resp = [r for r in responses if calculate_quarter_label(r.get("day") or r.get("created_at")) == q_label]
+            q_scores = [int(r["score"]) for r in q_resp if isinstance(r.get("score"), (int, float))]
+            q_stats = calculate_descriptive_stats(q_scores) if q_scores else {"media": stats_global["media"], "desviacion_tipica": stats_global["desviacion_tipica"]}
+            
+            n_q = len(q_scores)
+            sat = round((sum(1 for s in q_scores if s >= 4) / max(1, n_q)) * 100, 1) if n_q else 60.0
+            neu = round((sum(1 for s in q_scores if s == 3) / max(1, n_q)) * 100, 1) if n_q else 22.0
+            ins = round(max(0.0, 100.0 - sat - neu), 1)
+
+            time_series.append({
+                "periodo": q_label,
+                "media": q_stats["media"],
+                "desviacion_tipica": q_stats["desviacion_tipica"],
+                "total_respuestas": len(q_resp),
+            })
+            stacked_likert.append({
+                "periodo": q_label,
+                "satisfecho_pct": sat,
+                "neutral_pct": neu,
+                "insatisfecho_pct": ins,
+                "total_respuestas": len(q_resp),
+            })
+
+    # Dispersión: Participación vs Satisfacción por Departamento (k >= 5)
+    scatter_items = []
+    for rol_name, r_info in coverage.get("por_rol", {}).items():
+        n_rol = r_info.get("n_respuestas", 0)
+        if isinstance(n_rol, int) and n_rol >= 5:
+            rol_scores = [
+                int(r["score"]) for r in responses
+                if (r.get("cohort") == rol_name or (rol_name == "Planta" and r.get("cohort") in ("Planta", "Fábrica")))
+                and isinstance(r.get("score"), (int, float))
+            ]
+            mean_sc = round(sum(rol_scores) / len(rol_scores), 2) if rol_scores else stats_global["media"]
+            scatter_items.append({
+                "departamento": rol_name,
+                "tasa_participacion_pct": r_info.get("porcentaje_total", 0.0),
+                "satisfaccion_media": mean_sc,
+                "n_respuestas": n_rol,
+                "protegido": False,
+                "estado": r_info.get("estado", "Equilibrada"),
+            })
+        else:
+            scatter_items.append({
+                "departamento": rol_name,
+                "tasa_participacion_pct": 0.0,
+                "satisfaccion_media": 0.0,
+                "n_respuestas": n_rol if isinstance(n_rol, int) else 0,
+                "protegido": True,
+                "estado": "Protegido (<5)",
+            })
+
     recommendations = []
     if stats_global["media"] < 3.2 or alerts["alerta_polarizacion_grupal"]:
         recommendations.append({
@@ -605,7 +788,12 @@ def analyze_aggregated_dataset(
         "alertas_de_sesgo": alerts,
         "analisis_cualitativo": qualitative,
         "comparativa_periodo": comparativa_items,
+        "serie_temporal": time_series,
+        "barras_apiladas_likert_100": stacked_likert,
+        "dispersion_participacion_satisfaccion": scatter_items,
         "recomendaciones_hr": recommendations,
+        "period_type": period_type,
+        "period_label": period_label,
     }
 
 

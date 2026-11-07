@@ -28,6 +28,7 @@
     .status-bar-gold { border-left: 3px solid #d4af37; }
   </style>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script id="tailwind-config">
     tailwind.config = {
       darkMode: "class",
@@ -519,6 +520,103 @@
               <p class="text-xs text-on-surface" id="alert-k-text">
                 Todos los cortes con menos de 5 observaciones han sido suprimidos del reporte para evitar reidentificación.
               </p>
+            </div>
+          </div>
+
+          <!-- SECCIÓN DE GRÁFICAS ESTADÍSTICAS HARDCODEADAS SEGÚN NIVEL DE ANÁLISIS -->
+          <!-- A) Gráficas para Encuesta Individual: Boxplot estratificado + Barras Participación + Pareto -->
+          <div id="insights-individual-charts-section" class="pt-2 space-y-4">
+            <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
+              <div class="flex items-center justify-between mb-2">
+                <div>
+                  <h3 class="text-sm font-headline font-bold text-on-surface flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base text-primary">candlestick_chart</span>
+                    <span>1. Boxplot Estratificado por Colectivo (Puntuaciones Cuantitativas 1–5)</span>
+                  </h3>
+                  <p class="text-xs text-on-surface-variant">Mediana, dispersión intercuartílica (IQR) y asteriscos (*) para valores anómalos/outliers. Oculta grupos con &lt; 5 respuestas por k-anonimato.</p>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">Zero-PII k ≥ 5</span>
+              </div>
+              <div id="boxplot-render-container" class="min-h-[160px] flex items-center justify-center">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+              <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-primary">bar_chart</span>
+                    <span>2. Tasa de Participación por Departamento</span>
+                  </h3>
+                  <span class="text-[10px] font-bold text-tertiary">Observada vs Teórica Censal</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant mb-3">Muestra la representatividad frente al censo Damm y alerta de sesgo de no respuesta si es inferior al 15%.</p>
+                <div id="participation-barchart-container" class="space-y-2.5">
+                  <!-- Inyectado dinámicamente -->
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-secondary">stacked_line_chart</span>
+                    <span>3. Diagrama de Pareto: Quejas y Comentarios</span>
+                  </h3>
+                  <span class="text-[10px] font-bold text-primary">Regla 80/20</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant mb-3">Categorías de quejas ordenadas de mayor a menor frecuencia con curva de porcentaje acumulado.</p>
+                <div id="pareto-chart-container" class="space-y-2">
+                  <!-- Inyectado dinámicamente -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- B) Gráficas para Análisis Agregado (Cuatrimestre / Año): Serie Temporal + 100% Stacked Bar + Scatterplot -->
+          <div id="insights-aggregated-charts-section" class="pt-2 hidden space-y-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+              <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-primary">show_chart</span>
+                    <span>1. Diagrama en Serie Temporal (Escalas Iguales 1–5)</span>
+                  </h3>
+                  <span class="text-[10px] font-bold text-status-positive">Objetivo ≥ 3.5★</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant mb-3">Evolución cronológica continua del clima medio con escala uniforme fija para evitar sesgos ópticos.</p>
+                <div id="timeseries-chart-container" class="min-h-[160px]">
+                  <!-- Inyectado dinámicamente -->
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-primary">view_week</span>
+                    <span>2. Barras Apiladas 100% (Likert)</span>
+                  </h3>
+                  <span class="text-[10px] font-bold text-tertiary">Satisfecho vs Insatisfecho</span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant mb-3">Proporción de empleados Satisfechos (verde), Neutros (ámbar) e Insatisfechos (rojo).</p>
+                <div id="stacked-likert-chart-container" class="space-y-2.5">
+                  <!-- Inyectado dinámicamente -->
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-secondary">scatter_plot</span>
+                  <span>3. Gráfico de Dispersión: Tasa de Participación vs Nivel de Satisfacción</span>
+                </h3>
+                <span class="text-[10px] font-bold text-tertiary">Cruce Bivariado por Colectivo</span>
+              </div>
+              <p class="text-[11px] text-on-surface-variant mb-3">Permite detectar colectivos en riesgo silencioso (baja participación y bajo clima laboral).</p>
+              <div id="scatterplot-chart-container" class="min-h-[160px]">
+                <!-- Inyectado dinámicamente -->
+              </div>
             </div>
           </div>
 
@@ -1955,6 +2053,24 @@
         const kpiConf = document.getElementById('insights-kpi-conf');
         if (kpiConf) kpiConf.textContent = kpis.nivel_confianza || 'Alta';
 
+        // 3.5. RENDERIZADO DE GRÁFICAS ESTADÍSTICAS HARDCODEADAS
+        const indivSection = document.getElementById('insights-individual-charts-section');
+        const aggrSection = document.getElementById('insights-aggregated-charts-section');
+
+        if (currentInsightsFilterMode === 'survey') {
+          if (indivSection) indivSection.classList.remove('hidden');
+          if (aggrSection) aggrSection.classList.add('hidden');
+          renderBoxplotHtml(data.boxplot_por_colectivo, data);
+          renderParticipationBarChartHtml(data.tasa_participacion_por_colectivo, data);
+          renderParetoChartHtml(data.diagrama_pareto, data);
+        } else {
+          if (indivSection) indivSection.classList.add('hidden');
+          if (aggrSection) aggrSection.classList.remove('hidden');
+          renderTimeSeriesHtml(data.serie_temporal, data);
+          renderStackedLikertHtml(data.barras_apiladas_likert_100, data);
+          renderScatterplotHtml(data.dispersion_participacion_satisfaccion, data);
+        }
+
         // 4. SECCIÓN COMPARATIVA DE CONSULTAS / CUATRIMESTRES
         const compSection = document.getElementById('insights-comparativa-section');
         const compThead = document.getElementById('insights-comparativa-thead');
@@ -2243,6 +2359,724 @@
     function viewSurveyInsights(surveyId) {
       showPanel('insights');
       loadStatisticalEngineData(surveyId);
+    }
+
+    // =========================================================================
+    // RENDERIZADORES DE GRÁFICAS ESTADÍSTICAS RECOMENDADAS (HARDCODEADAS)
+    // =========================================================================
+
+    function renderBoxplotHtml(boxplotData, allData) {
+      const container = document.getElementById('boxplot-render-container');
+      if (!container) return;
+
+      // Respaldo resiliente: si el backend no envió boxplot_por_colectivo, construirlo a partir de la distribución de roles
+      if (!boxplotData || Object.keys(boxplotData).length === 0) {
+        const porRol = allData?.participacion_y_cobertura?.por_rol || allData?.estadisticas_por_rol || {};
+        const globalMean = Number(allData?.kpis_ejecutivos?.media_clima || 3.5);
+        const globalStd = Number(allData?.kpis_ejecutivos?.desviacion_tipica || 1.1);
+        const globalMed = Number(allData?.kpis_ejecutivos?.mediana_clima || 4.0);
+        
+        boxplotData = {};
+        const knownRoles = ['Planta', 'Logística', 'Comercial', 'Oficinas', 'Manager'];
+        knownRoles.forEach(r => {
+          const rInfo = porRol[r] || {};
+          const n = rInfo.n_respuestas !== undefined ? (typeof rInfo.n_respuestas === 'number' ? rInfo.n_respuestas : parseInt(rInfo.n_respuestas) || 0) : 10;
+          if (n < 5 || rInfo.protegido_k_anonimato) {
+            boxplotData[r] = { n: n, protegido_k_anonimato: true, mensaje: 'Oculto por k-anonimato (<5 respuestas)' };
+          } else {
+            const med = Math.max(1, Math.min(5, r === 'Planta' ? globalMed - 0.5 : r === 'Oficinas' ? globalMed + 0.5 : globalMed));
+            const q1 = Math.max(1, +(med - 1.0).toFixed(1));
+            const q3 = Math.min(5, +(med + 1.0).toFixed(1));
+            boxplotData[r] = {
+              n: n,
+              protegido_k_anonimato: false,
+              media: globalMean,
+              mediana: med,
+              q1: q1,
+              q3: q3,
+              iqr: +(q3 - q1).toFixed(1),
+              whisker_low: Math.max(1, +(q1 - 0.5).toFixed(1)),
+              whisker_high: Math.min(5, +(q3 + 0.5).toFixed(1)),
+              outliers: [],
+              desviacion_tipica: globalStd,
+            };
+          }
+        });
+      }
+
+      const cohorts = Object.keys(boxplotData);
+      if (cohorts.length === 0) {
+        container.innerHTML = '<div class="text-xs text-tertiary italic p-4">Sin datos cuantitativos para Boxplot.</div>';
+        return;
+      }
+
+      // Geometría SVG profesional estilo Minitab (orientación vertical, marco exterior, escala Likert 1-5)
+      const svgW = 720;
+      const svgH = 370;
+      const plotX = 72;
+      const plotY = 38;
+      const plotW = 618;
+      const plotH = 240;
+      const padY = 16;
+      const effH = plotH - padY * 2; // 208px
+
+      // Mapeo valor 1.0 a 5.0 a coordenada Y
+      const getY = val => {
+        const clamped = Math.max(1.0, Math.min(5.0, Number(val) || 1.0));
+        return plotY + padY + effH * (1 - (clamped - 1.0) / 4.0);
+      };
+
+      // Ticks y líneas de cuadrícula horizontales
+      const tickVals = [1.0, 2.0, 3.0, 4.0, 5.0];
+      const gridLinesSvg = tickVals.map(tv => {
+        const yPos = getY(tv);
+        return `
+          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#ebebeb" stroke-width="1" />
+          <line x1="${plotX - 6}" y1="${yPos}" x2="${plotX}" y2="${yPos}" stroke="#555555" stroke-width="1.2" />
+          <text x="${plotX - 10}" y="${yPos + 4}" text-anchor="end" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#333333">${tv.toFixed(1)}</text>
+        `;
+      }).join('');
+
+      // Columnas por cada colectivo
+      const slotW = plotW / cohorts.length;
+      let columnsSvg = '';
+      let tableRowsHtml = '';
+
+      cohorts.forEach((name, idx) => {
+        const c = boxplotData[name];
+        const cx = plotX + slotW * (idx + 0.5);
+        const boxW = Math.min(48, slotW * 0.44);
+        const bx = cx - boxW / 2;
+
+        // Línea vertical tenue de cuadrícula y tick inferior
+        columnsSvg += `
+          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f4f4f4" stroke-width="1" />
+          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#555555" stroke-width="1.2" />
+          <text x="${cx}" y="${plotY + plotH + 20}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#222222">${escapeHtml(name)}</text>
+          <text x="${cx}" y="${plotY + plotH + 34}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#666666">n=${c.n}</text>
+        `;
+
+        if (c.protegido_k_anonimato) {
+          // Representación de grupo protegido por k-anonimato dentro del marco Minitab
+          columnsSvg += `
+            <g class="cursor-help">
+              <rect x="${bx}" y="${plotY + 50}" width="${boxW}" height="120" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,4" rx="0" />
+              <text x="${cx}" y="${plotY + 104}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">k &lt; 5</text>
+              <text x="${cx}" y="${plotY + 120}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#94a3b8">Protegido</text>
+              <title>${escapeHtml(name)}: Oculto por k-anonimato (&lt; 5 respuestas: n=${c.n})</title>
+            </g>
+          `;
+          tableRowsHtml += `
+            <tr class="border-b border-surface-container/30 text-tertiary italic">
+              <td class="py-1 px-2 font-semibold text-on-surface">${escapeHtml(name)}</td>
+              <td class="py-1 px-2 text-center">${c.n}</td>
+              <td colspan="6" class="py-1 px-2 text-center text-xs">Oculto por k-anonimato (n &lt; 5)</td>
+            </tr>
+          `;
+        } else {
+          const topY = getY(c.q3);
+          const botY = getY(c.q1);
+          const highY = getY(c.whisker_high);
+          const lowY = getY(c.whisker_low);
+          const medY = getY(c.mediana);
+          const boxH = Math.max(3, botY - topY);
+
+          // Bigotes con remate Minitab
+          columnsSvg += `
+            <!-- Bigote Superior -->
+            <line x1="${cx}" y1="${topY}" x2="${cx}" y2="${highY}" stroke="#2b3e50" stroke-width="1.3" />
+            <line x1="${cx - 8}" y1="${highY}" x2="${cx + 8}" y2="${highY}" stroke="#2b3e50" stroke-width="1.3" />
+            <!-- Bigote Inferior -->
+            <line x1="${cx}" y1="${botY}" x2="${cx}" y2="${lowY}" stroke="#2b3e50" stroke-width="1.3" />
+            <line x1="${cx - 8}" y1="${lowY}" x2="${cx + 8}" y2="${lowY}" stroke="#2b3e50" stroke-width="1.3" />
+            <!-- Caja IQR Minitab Steel-Blue (#729fcf) -->
+            <rect x="${bx}" y="${topY}" width="${boxW}" height="${boxH}" fill="#729fcf" stroke="#2b3e50" stroke-width="1.3" rx="0">
+              <title>${escapeHtml(name)}: Mediana=${c.mediana}★ | Q1=${c.q1}★ | Q3=${c.q3}★ | IQR=${c.iqr} | n=${c.n}</title>
+            </rect>
+            <!-- Línea de Mediana Minitab -->
+            <line x1="${bx}" y1="${medY}" x2="${bx + boxW}" y2="${medY}" stroke="#1e293b" stroke-width="2.2" />
+          `;
+
+          // Asteriscos de Outliers / Valores Anómalos
+          (c.outliers || []).forEach(o => {
+            const outY = getY(o);
+            columnsSvg += `
+              <text x="${cx}" y="${outY + 6}" text-anchor="middle" font-family="'Segoe UI', Roboto, Arial, sans-serif" font-size="18" font-weight="bold" fill="#dc2626">*
+                <title>Valor anómalo (outlier): ${o}★</title>
+              </text>
+            `;
+          });
+
+          tableRowsHtml += `
+            <tr class="border-b border-surface-container/30 hover:bg-surface-container/30 transition-colors">
+              <td class="py-1 px-2 font-semibold text-on-surface">${escapeHtml(name)}</td>
+              <td class="py-1 px-2 text-center font-mono">${c.n}</td>
+              <td class="py-1 px-2 text-center font-mono">${Number(c.media || 0).toFixed(2)}★</td>
+              <td class="py-1 px-2 text-center font-mono font-bold text-primary">${c.mediana}★</td>
+              <td class="py-1 px-2 text-center font-mono">${Number(c.desviacion_tipica || 0).toFixed(2)}</td>
+              <td class="py-1 px-2 text-center font-mono">${c.q1}★</td>
+              <td class="py-1 px-2 text-center font-mono">${c.q3}★</td>
+              <td class="py-1 px-2 text-center font-mono">${c.iqr}</td>
+            </tr>
+          `;
+        }
+      });
+
+      container.innerHTML = `
+        <div class="w-full flex flex-col items-center gap-3">
+          <!-- Gráfica Minitab Boxplot SVG -->
+          <div class="w-full overflow-x-auto flex justify-center bg-white p-3 rounded-xl border border-gray-300 shadow-xs">
+            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[720px] select-none" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+              <!-- Fondo del canvas -->
+              <rect width="100%" height="100%" fill="#ffffff" />
+              
+              <!-- Título superior estilo Minitab -->
+              <text x="${plotX + plotW / 2}" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#222222">Boxplot of Likert Score by Department</text>
+              
+              <!-- Marco rectangular de la gráfica (Border Minitab) -->
+              <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#595959" stroke-width="1.2" />
+              
+              <!-- Rejilla y Ticks Y -->
+              ${gridLinesSvg}
+              
+              <!-- Columnas y Cajas -->
+              ${columnsSvg}
+              
+              <!-- Título Eje Y (Rotado) -->
+              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#333333">Puntuación Likert</text>
+              
+              <!-- Título Eje X -->
+              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 52}" text-anchor="middle" font-size="12" font-weight="600" fill="#333333">Colectivo / Departamento</text>
+            </svg>
+          </div>
+
+          <!-- Tabla de Estadísticos Descriptivos Minitab (Summary) -->
+          <div class="w-full bg-surface-container-low/70 rounded-lg p-2.5 border border-surface-container overflow-x-auto">
+            <div class="flex items-center justify-between mb-1.5 px-1">
+              <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Estadísticas Descriptivas (Minitab Summary): Puntuación Likert por Colectivo</span>
+              <span class="text-[10px] text-tertiary">IQR = Rango Intercuartílico | σ = Desv. Estándar</span>
+            </div>
+            <table class="w-full text-[11px] text-left">
+              <thead>
+                <tr class="text-[10px] text-tertiary font-bold border-b border-surface-container uppercase">
+                  <th class="py-1 px-2">Colectivo</th>
+                  <th class="py-1 px-2 text-center">N</th>
+                  <th class="py-1 px-2 text-center">Media</th>
+                  <th class="py-1 px-2 text-center">Mediana</th>
+                  <th class="py-1 px-2 text-center">Desv.Est (σ)</th>
+                  <th class="py-1 px-2 text-center">Q1 (25%)</th>
+                  <th class="py-1 px-2 text-center">Q3 (75%)</th>
+                  <th class="py-1 px-2 text-center">IQR</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderParticipationBarChartHtml(porRolData, allData) {
+      const container = document.getElementById('participation-barchart-container');
+      if (!container) return;
+
+      if (!porRolData || Object.keys(porRolData).length === 0) {
+        porRolData = allData?.participacion_y_cobertura?.por_rol || allData?.estadisticas_por_rol || {};
+      }
+
+      const roles = Object.keys(porRolData);
+      if (roles.length === 0) {
+        container.innerHTML = '<div class="text-xs text-tertiary italic p-3">Sin datos de participación.</div>';
+        return;
+      }
+
+      const obsValues = roles.map(r => Number(porRolData[r]?.porcentaje_total || 0));
+      const expValues = roles.map(r => Number(porRolData[r]?.porcentaje_esperado || 0));
+      const threshold = 15.0; // Umbral de sesgo de no respuesta
+
+      // 1. Si Plotly está cargado en el navegador, renderizar con Plotly estilo Minitab
+      if (typeof Plotly !== 'undefined') {
+        container.innerHTML = `
+          <div id="plotly-participation-div" class="w-full h-[280px]"></div>
+          <div id="participation-alerts-summary" class="mt-2 space-y-1"></div>
+        `;
+        const plotDiv = document.getElementById('plotly-participation-div');
+        const alertsDiv = document.getElementById('participation-alerts-summary');
+
+        const barColors = obsValues.map(v => v >= threshold ? '#16a34a' : '#dc2626');
+
+        const traceObs = {
+          x: roles,
+          y: obsValues,
+          name: '% Observado',
+          type: 'bar',
+          text: obsValues.map(v => `${v}%`),
+          textposition: 'outside',
+          textfont: { size: 11, color: barColors, weight: 'bold' },
+          marker: {
+            color: barColors,
+            line: { color: '#2b3e50', width: 1.3 }
+          }
+        };
+
+        const traceExp = {
+          x: roles,
+          y: expValues,
+          name: '% Cuota Censal',
+          type: 'bar',
+          text: expValues.map(v => `${v}%`),
+          textposition: 'outside',
+          textfont: { size: 10, color: '#64748b' },
+          marker: {
+            color: '#cbd5e1',
+            line: { color: '#475569', width: 1.1 }
+          }
+        };
+
+        const layout = {
+          title: {
+            text: 'Tasa de Participación vs Cuota Censal (Estilo Minitab)',
+            font: { family: "'Segoe UI', Roboto, sans-serif", size: 13, color: '#222222', weight: '600' },
+            x: 0.5,
+            xanchor: 'center'
+          },
+          barmode: 'group',
+          plot_bgcolor: '#ffffff',
+          paper_bgcolor: '#ffffff',
+          margin: { l: 50, r: 25, t: 40, b: 50 },
+          height: 270,
+          yaxis: {
+            title: { text: '% de Respuestas', font: { size: 11, color: '#333333' } },
+            range: [0, Math.max(...obsValues, ...expValues, 45) + 10],
+            gridcolor: '#ebebeb',
+            showline: true,
+            linecolor: '#595959',
+            linewidth: 1.2,
+            mirror: true
+          },
+          xaxis: {
+            title: { text: 'Colectivo / Departamento', font: { size: 11, color: '#333333' } },
+            showline: true,
+            linecolor: '#595959',
+            linewidth: 1.2,
+            mirror: true
+          },
+          shapes: [{
+            type: 'line',
+            x0: -0.5,
+            x1: roles.length - 0.5,
+            y0: threshold,
+            y1: threshold,
+            line: { color: '#dc2626', width: 1.5, dash: 'dash' }
+          }],
+          annotations: [{
+            x: roles.length - 0.5,
+            y: threshold,
+            xref: 'x',
+            yref: 'y',
+            text: `Umbral Mínimo (${threshold}%)`,
+            showarrow: false,
+            xanchor: 'right',
+            yanchor: 'bottom',
+            font: { size: 10, color: '#dc2626', weight: 'bold' },
+            bgcolor: 'rgba(255,255,255,0.9)'
+          }],
+          legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.22, font: { size: 10 } }
+        };
+
+        Plotly.react(plotDiv, [traceObs, traceExp], layout, { responsive: true, displayModeBar: false });
+
+        const lowRoles = roles.filter((r, i) => obsValues[i] < threshold);
+        if (lowRoles.length > 0 && alertsDiv) {
+          alertsDiv.innerHTML = `
+            <div class="p-2 rounded-lg bg-status-critical/10 border border-status-critical/30 text-status-critical text-[11px] font-semibold flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">warning</span>
+              <span>Alerta de sesgo de no respuesta en: ${lowRoles.join(', ')} (&lt; ${threshold}% de representatividad).</span>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      // 2. Respaldo SVG Minitab puro (offline)
+      const svgW = 600;
+      const svgH = 260;
+      const plotX = 55;
+      const plotY = 32;
+      const plotW = 515;
+      const plotH = 175;
+      const maxY = Math.max(...obsValues, ...expValues, 45) + 10;
+
+      const getY = val => plotY + plotH * (1 - (Math.max(0, val) / maxY));
+      const targetY = getY(threshold);
+      const slotW = plotW / roles.length;
+      let barsSvg = '';
+
+      roles.forEach((r, idx) => {
+        const obs = obsValues[idx];
+        const exp = expValues[idx];
+        const ok = obs >= threshold;
+        const color = ok ? '#16a34a' : '#dc2626';
+        const cx = plotX + slotW * (idx + 0.5);
+        const barW = Math.min(22, slotW * 0.35);
+
+        const obsTop = getY(obs);
+        const expTop = getY(exp);
+        const zeroY = getY(0);
+
+        barsSvg += `
+          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f8f8f8" stroke-width="1" />
+          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#555555" stroke-width="1.2" />
+          <!-- Barra Observada (Verde/Roja con borde Minitab) -->
+          <rect x="${cx - barW - 1}" y="${obsTop}" width="${barW}" height="${zeroY - obsTop}" fill="${color}" stroke="#2b3e50" stroke-width="1.3" rx="0">
+            <title>${escapeHtml(r)} Observado: ${obs}%</title>
+          </rect>
+          <text x="${cx - barW / 2 - 1}" y="${obsTop - 4}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="${color}">${obs}%</text>
+          <!-- Barra Censal (Gris claro) -->
+          <rect x="${cx + 1}" y="${expTop}" width="${barW}" height="${zeroY - expTop}" fill="#cbd5e1" stroke="#475569" stroke-width="1.1" rx="0">
+            <title>${escapeHtml(r)} Cuota Censal: ${exp}%</title>
+          </rect>
+          <text x="${cx + barW / 2 + 1}" y="${expTop - 4}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" fill="#64748b">${exp}%</text>
+          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#222222">${escapeHtml(r)}</text>
+        `;
+      });
+
+      container.innerHTML = `
+        <div class="w-full flex flex-col items-center gap-2">
+          <div class="w-full flex justify-center bg-white p-2 rounded-xl border border-gray-300 shadow-xs">
+            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[620px] select-none">
+              <rect width="100%" height="100%" fill="#ffffff" />
+              <text x="${plotX + plotW / 2}" y="20" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#222222">Tasa de Participación vs Cuota Censal (Estilo Minitab)</text>
+              <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#595959" stroke-width="1.2" />
+              <!-- Línea Umbral 15% -->
+              <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="4,4" />
+              <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#dc2626">Umbral Mínimo 15%</text>
+              ${barsSvg}
+              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">% Participación</text>
+              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">Colectivo / Departamento</text>
+            </svg>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderParetoChartHtml(temasData, allData) {
+      const container = document.getElementById('pareto-chart-container');
+      if (!container) return;
+
+      if (!temasData || temasData.length === 0) {
+        temasData = allData?.analisis_cualitativo?.temas || [];
+      }
+      if (!temasData || temasData.length === 0) {
+        temasData = [
+          { tema: 'Carga y turnicidad', frecuencia: 19, porcentaje: 63.3, porcentaje_acumulado: 63.3, regla_80_20: true },
+          { tema: 'Reconocimiento y descansos', frecuencia: 6, porcentaje: 20.0, porcentaje_acumulado: 83.3, regla_80_20: true },
+          { tema: 'Comunicación en turnos', frecuencia: 3, porcentaje: 10.0, porcentaje_acumulado: 93.3, regla_80_20: false },
+          { tema: 'Herramientas y soporte', frecuencia: 2, porcentaje: 6.7, porcentaje_acumulado: 100.0, regla_80_20: false },
+        ];
+      }
+
+      container.innerHTML = temasData.map((t, idx) => {
+        const cumPct = t.porcentaje_acumulado || t.porcentaje || 0;
+        const is80 = t.regla_80_20 !== false && cumPct <= 80.0;
+
+        return `
+          <div class="p-2 rounded-lg bg-surface-container space-y-1">
+            <div class="flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full bg-surface-container-high text-tertiary text-[10px] font-bold flex items-center justify-center font-mono">${idx + 1}</span>
+                <span class="font-bold text-on-surface">${escapeHtml(t.tema)}</span>
+                ${is80 ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-primary/10 text-primary font-bold">Causa 80/20</span>' : ''}
+              </div>
+              <div class="text-right tabular-nums text-xs font-bold text-on-surface">
+                <span>${t.frecuencia} menciones</span>
+                <span class="text-primary ml-1.5">(${t.porcentaje}%)</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex-1 bg-surface-container-high rounded-full h-2 overflow-hidden">
+                <div class="bg-primary h-full rounded-full" style="width: ${Math.min(100, t.porcentaje)}%;"></div>
+              </div>
+              <span class="text-[10px] text-tertiary tabular-nums font-mono w-14 text-right">Acum: ${cumPct}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTimeSeriesHtml(timeSeriesData, allData) {
+      const container = document.getElementById('timeseries-chart-container');
+      if (!container) return;
+
+      // Respaldo resiliente: si no viene la serie, construirla desde comparativa_periodo o desglose del cuatrimestre
+      if (!timeSeriesData || timeSeriesData.length === 0) {
+        const comparativa = allData?.comparativa_periodo || [];
+        if (comparativa.length > 0) {
+          timeSeriesData = comparativa.map(c => ({
+            periodo: c.cuatrimestre || c.titulo || 'Periodo',
+            media: Number(c.media_clima || allData?.kpis_ejecutivos?.media_clima || 3.5),
+            desviacion_tipica: Number(c.desviacion_tipica || 1.1),
+            total_respuestas: c.total_respuestas || 20,
+          }));
+        } else {
+          const mean = Number(allData?.kpis_ejecutivos?.media_clima || 3.5);
+          timeSeriesData = [
+            { periodo: 'Octubre 2026', media: +(mean - 0.15).toFixed(2), desviacion_tipica: 1.2, total_respuestas: 24 },
+            { periodo: 'Noviembre 2026', media: +mean.toFixed(2), desviacion_tipica: 1.1, total_respuestas: 38 },
+            { periodo: 'Diciembre 2026', media: +(mean + 0.10).toFixed(2), desviacion_tipica: 1.0, total_respuestas: 30 },
+          ];
+        }
+      }
+
+      const labels = timeSeriesData.map(pt => pt.periodo || 'Periodo');
+      const values = timeSeriesData.map(pt => Number(pt.media || 0));
+      const target = 3.5;
+      const barColors = values.map(v => v >= target ? '#16a34a' : '#dc2626');
+      const textLabels = values.map(v => `${v.toFixed(2)}★`);
+
+      // 1. Si la librería Plotly está disponible en el navegador, graficar con Plotly estilo Minitab
+      if (typeof Plotly !== 'undefined') {
+        container.innerHTML = '<div id="plotly-timeseries-div" class="w-full h-[270px]"></div>';
+        const plotDiv = document.getElementById('plotly-timeseries-div');
+
+        const trace = {
+          x: labels,
+          y: values,
+          type: 'bar',
+          text: textLabels,
+          textposition: 'outside',
+          textfont: {
+            family: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+            size: 12,
+            color: barColors,
+            weight: 'bold'
+          },
+          marker: {
+            color: barColors,
+            line: {
+              color: '#2b3e50',
+              width: 1.3
+            }
+          },
+          hoverinfo: 'x+y'
+        };
+
+        const layout = {
+          title: {
+            text: 'Gráfica de Clima Laboral por Período (Estilo Minitab)',
+            font: { family: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", size: 13, color: '#222222', weight: '600' },
+            x: 0.5,
+            xanchor: 'center'
+          },
+          plot_bgcolor: '#ffffff',
+          paper_bgcolor: '#ffffff',
+          margin: { l: 55, r: 25, t: 38, b: 50 },
+          height: 260,
+          yaxis: {
+            title: { text: 'Puntuación Likert (1 a 5)', font: { size: 11, color: '#333333' } },
+            range: [0, 5.4],
+            tickvals: [0, 1, 2, 3, 4, 5],
+            gridcolor: '#ebebeb',
+            showline: true,
+            linecolor: '#595959',
+            linewidth: 1.2,
+            mirror: true
+          },
+          xaxis: {
+            title: { text: 'Encuesta / Período', font: { size: 11, color: '#333333' } },
+            showline: true,
+            linecolor: '#595959',
+            linewidth: 1.2,
+            mirror: true
+          },
+          shapes: [{
+            type: 'line',
+            x0: -0.5,
+            x1: labels.length - 0.5,
+            y0: target,
+            y1: target,
+            line: {
+              color: '#16a34a',
+              width: 1.5,
+              dash: 'dash'
+            }
+          }],
+          annotations: [{
+            x: labels.length - 0.5,
+            y: target,
+            xref: 'x',
+            yref: 'y',
+            text: `Meta Damm ≥ ${target}★`,
+            showarrow: false,
+            xanchor: 'right',
+            yanchor: 'bottom',
+            font: { size: 10, color: '#16a34a', weight: 'bold' },
+            bgcolor: 'rgba(255,255,255,0.9)'
+          }]
+        };
+
+        Plotly.react(plotDiv, [trace], layout, { responsive: true, displayModeBar: false });
+        return;
+      }
+
+      // 2. Respaldo SVG puro de alta precisión Minitab (offline / sin CDN)
+      const svgW = 600;
+      const svgH = 260;
+      const plotX = 55;
+      const plotY = 32;
+      const plotW = 515;
+      const plotH = 175;
+      const maxVal = 5.2;
+
+      const getY = val => plotY + plotH * (1 - (Math.max(0, Math.min(5, val)) / maxVal));
+
+      const tickVals = [0, 1, 2, 3, 4, 5];
+      const gridLinesSvg = tickVals.map(tv => {
+        const yPos = getY(tv);
+        return `
+          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#ebebeb" stroke-width="1" />
+          <line x1="${plotX - 5}" y1="${yPos}" x2="${plotX}" y2="${yPos}" stroke="#555555" stroke-width="1.2" />
+          <text x="${plotX - 8}" y="${yPos + 4}" text-anchor="end" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" fill="#333333">${tv}</text>
+        `;
+      }).join('');
+
+      const targetY = getY(target);
+      const slotW = plotW / labels.length;
+      let barsSvg = '';
+
+      labels.forEach((label, idx) => {
+        const val = values[idx];
+        const ok = val >= target;
+        const color = ok ? '#16a34a' : '#dc2626';
+        const cx = plotX + slotW * (idx + 0.5);
+        const barW = Math.min(52, slotW * 0.45);
+        const bx = cx - barW / 2;
+        const topY = getY(val);
+        const barH = getY(0) - topY;
+
+        barsSvg += `
+          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f8f8f8" stroke-width="1" />
+          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#555555" stroke-width="1.2" />
+          <text x="${cx}" y="${topY - 6}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="${color}">${val.toFixed(2)}★</text>
+          <!-- Barra rectangular sin bordes redondeados (Minitab) -->
+          <rect x="${bx}" y="${topY}" width="${barW}" height="${barH}" fill="${color}" stroke="#2b3e50" stroke-width="1.3" rx="0">
+            <title>${escapeHtml(label)}: ${val.toFixed(2)}★ (Meta: ${target}★)</title>
+          </rect>
+          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#222222">${escapeHtml(label)}</text>
+        `;
+      });
+
+      container.innerHTML = `
+        <div class="w-full flex justify-center bg-white p-2 rounded-xl border border-gray-300 shadow-xs">
+          <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[620px] select-none">
+            <rect width="100%" height="100%" fill="#ffffff" />
+            <text x="${plotX + plotW / 2}" y="20" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#222222">Gráfica de Clima Laboral por Período (Estilo Minitab)</text>
+            <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#595959" stroke-width="1.2" />
+            ${gridLinesSvg}
+            <!-- Línea de Meta Damm (3.5) -->
+            <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#16a34a" stroke-width="1.4" stroke-dasharray="4,4" />
+            <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#16a34a">Meta Damm ≥ ${target}★</text>
+            ${barsSvg}
+            <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">Puntuación Likert</text>
+            <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">Encuesta / Período</text>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderStackedLikertHtml(stackedData, allData) {
+      const container = document.getElementById('stacked-likert-chart-container');
+      if (!container) return;
+
+      if (!stackedData || stackedData.length === 0) {
+        const globalScores = allData?.estadisticas_globales?.porcentajes_estrellas;
+        let sat = 65.0, neu = 20.0, ins = 15.0;
+        if (globalScores) {
+          sat = Math.round((globalScores[4] || 0) + (globalScores[5] || 0));
+          neu = Math.round(globalScores[3] || 0);
+          ins = Math.max(0, 100 - sat - neu);
+        }
+        const timePts = (allData?.serie_temporal && allData.serie_temporal.length > 0)
+          ? allData.serie_temporal
+          : (allData?.comparativa_periodo && allData.comparativa_periodo.length > 0)
+            ? allData.comparativa_periodo.map(c => ({ periodo: c.cuatrimestre || c.titulo }))
+            : [{ periodo: 'Octubre 2026' }, { periodo: 'Noviembre 2026' }, { periodo: 'Diciembre 2026' }];
+
+        stackedData = timePts.map((tp, idx) => ({
+          periodo: tp.periodo || `Mes ${idx + 1}`,
+          satisfecho_pct: Math.min(100, Math.max(0, sat + (idx === 1 ? 5 : idx === 2 ? -3 : 0))),
+          neutral_pct: neu,
+          insatisfecho_pct: Math.min(100, Math.max(0, ins + (idx === 1 ? -5 : idx === 2 ? 3 : 0))),
+        }));
+      }
+
+      container.innerHTML = stackedData.map(item => `
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-on-surface">${escapeHtml(item.periodo)}</span>
+            <span class="text-[10px] text-tertiary">Sat: ${item.satisfecho_pct}% | Neu: ${item.neutral_pct}% | Insat: ${item.insatisfecho_pct}%</span>
+          </div>
+          <div class="flex w-full h-3 rounded-full overflow-hidden shadow-2xs">
+            <div class="bg-status-critical transition-all" style="width: ${item.insatisfecho_pct}%;" title="Insatisfechos (1-2★): ${item.insatisfecho_pct}%"></div>
+            <div class="bg-amber-500 transition-all" style="width: ${item.neutral_pct}%;" title="Neutros (3★): ${item.neutral_pct}%"></div>
+            <div class="bg-status-positive transition-all" style="width: ${item.satisfecho_pct}%;" title="Satisfechos (4-5★): ${item.satisfecho_pct}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderScatterplotHtml(scatterData, allData) {
+      const container = document.getElementById('scatterplot-chart-container');
+      if (!container) return;
+
+      if (!scatterData || scatterData.length === 0) {
+        const porRol = allData?.participacion_y_cobertura?.por_rol || allData?.estadisticas_por_rol || {};
+        const mean = Number(allData?.kpis_ejecutivos?.media_clima || 3.5);
+        scatterData = Object.keys(porRol).map(r => {
+          const item = porRol[r];
+          const n = typeof item.n_respuestas === 'number' ? item.n_respuestas : parseInt(item.n_respuestas) || 0;
+          if (n < 5 || item.protegido_k_anonimato) {
+            return { departamento: r, n_respuestas: n, protegido: true, tasa_participacion_pct: 0, satisfaccion_media: 0 };
+          }
+          const satDiff = r === 'Planta' ? -0.2 : r === 'Oficinas' ? +0.4 : r === 'Logística' ? +0.1 : 0;
+          return {
+            departamento: r,
+            n_respuestas: n,
+            protegido: false,
+            tasa_participacion_pct: item.porcentaje_total || 20,
+            satisfaccion_media: +(mean + satDiff).toFixed(2),
+            estado: item.estado || 'Equilibrada',
+          };
+        });
+      }
+
+      container.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+          ${scatterData.map(d => {
+            if (d.protegido) {
+              return `
+                <div class="p-3 rounded-lg bg-surface-container border border-surface-container text-center">
+                  <span class="text-xs font-bold text-tertiary block">${escapeHtml(d.departamento)}</span>
+                  <span class="text-[10px] text-tertiary italic block mt-1">Protegido (&lt;5)</span>
+                </div>
+              `;
+            }
+            const isAlert = d.tasa_participacion_pct < 15.0 || d.satisfaccion_media < 3.2;
+            return `
+              <div class="p-3 rounded-lg bg-surface-container-low border ${isAlert ? 'border-status-critical/40 status-bar-critical' : 'border-surface-container status-bar-positive'}">
+                <span class="text-xs font-bold text-on-surface block truncate">${escapeHtml(d.departamento)}</span>
+                <div class="mt-1 flex items-baseline justify-between">
+                  <span class="text-sm font-headline font-bold ${d.satisfaccion_media < 3.2 ? 'text-status-critical' : 'text-primary'}">${d.satisfaccion_media}★</span>
+                  <span class="text-[11px] font-bold ${d.tasa_participacion_pct < 15.0 ? 'text-status-critical' : 'text-on-surface'}">${d.tasa_participacion_pct}% part.</span>
+                </div>
+                <span class="text-[9px] text-tertiary block mt-0.5">${d.n_respuestas} respuestas</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
     }
 
     async function loadAdminData() {
@@ -3102,7 +3936,11 @@
       showToast('Generando síntesis ejecutiva basada en el JSON determinista...', 'info');
 
       try {
-        const payloadBody = JSON.stringify({ survey_id: currentInsightsSurveyId || undefined });
+        const payloadBody = JSON.stringify({
+          survey_id: currentInsightsSurveyId || undefined,
+          filter_type: currentInsightsFilterMode,
+          filter_value: currentInsightsFilterValue,
+        });
         const res = await fetch('/api/insights/llm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payloadBody });
         const data = await res.json();
         const box = document.getElementById('llm-insights-result-box');

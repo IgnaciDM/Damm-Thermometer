@@ -14,37 +14,34 @@ import urllib.error
 from typing import Any, Dict, Optional
 
 
-PROMPT_SISTEMA = """Eres un consultor senior de People Analytics y Recursos Humanos especializado en entornos industriales para Estrella Damm.
-Tu misión es redactar un informe ejecutivo claro y accionable para el Comité de Dirección.
+PROMPT_SISTEMA = """Eres un Director de Recursos Humanos de Estrella Damm analizando datos estadísticos agregados de clima laboral en plantas productivas y centros logísticos.
+Tu misión es interpretar rigurosamente el informe numérico y devolver una síntesis ejecutiva estructurada y accionable para People Analytics.
 
-REGLAS ESTRICTAS DE INTEGRIDAD:
-1. Basarás tus conclusiones ÚNICA Y EXCLUSIVAMENTE en los datos numéricos y booleanos del JSON adjunto.
-2. NUNCA calcules ni inventes números, medias o porcentajes que no estén explícitamente en el JSON.
-3. Si 'alertas_de_sesgo.resumen_alertas_activas' es true:
-   - Señala con alta prioridad cualquier grupo con alerta de baja representatividad (<15%).
-   - Alerta sobre polarización si la desviación típica supera 1.25, sugiriendo diálogo cualitativo en ese turno/planta.
-4. Redacta el informe con tono profesional, empático y orientado a planes de acción concretos para:
-   - Planta (Fábrica)
-   - Logística
-   - Oficinas
-   - Comercial
-"""
+REGLAS ESTRICTAS DE RESPUESTA:
+Basándote ÚNICAMENTE en el JSON estadístico proporcionado:
+1. NUNCA inventes números o medias que no estén explícitamente en el JSON.
+2. Si detectas colectivos con participación < 15%, señálalo como riesgo de sesgo de no respuesta.
+3. Si la desviación típica supera 1.25, destaca la polarización bimodal y la necesidad de diálogo cualitativo en esos turnos.
+4. Cumple rigurosamente el formato de salida solicitado."""
 
 
 def build_analysis_prompt(statistical_json: str) -> str:
     """Construye el prompt con el JSON numérico inyectado."""
-    return f"""A continuación tienes el informe estadístico determinista procesado de las microconsultas:
+    return f"""Informe estadístico procesado de las microconsultas de Pulso Estrella Damm:
 
 ```json
 {statistical_json}
 ```
 
-Estructura tu respuesta en Markdown con las siguientes secciones:
-1. **Resumen Ejecutivo** (Métricas globales clave).
-2. **Alertas Críticas y Sesgos Muestrales** (Representatividad, K-anonimato y Polarización).
-3. **Diagnóstico Detallado por Colectivo** (Planta, Logística, Comercial, Oficinas).
-4. **Plan de Acción Prioritario** (3 medidas concretas para la dirección de Estrella Damm).
-"""
+Estructura tu respuesta en Markdown con las siguientes 3 secciones obligatorias:
+### 1. Diagnóstico de Alertas Graves y Sesgos
+(Exactamente 3 viñetas destacando problemas graves: caídas de participación por debajo del 15%, riesgos de no respuesta o polarización bimodal en turnos).
+
+### 2. Sugerencias Futuras para Mejorar
+(Exactamente 2 acciones operativas viables para implementar en planta o centros logísticos de Damm).
+
+### 3. Propuesta de Microconsulta de Seguimiento
+(Exactamente 2 preguntas cortas redactadas para enviar al colectivo o turno más afectado)."""
 
 
 def request_llm_insights(
