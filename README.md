@@ -1,16 +1,19 @@
 # Pulso
 
-**Pulso** is a local, Python-powered prototype for measuring workplace climate continuously and responsibly. It turns the six dimensions in the challenge brief into short, context-aware check-ins and an aggregate insights dashboard for factories, logistics, commercial teams, and offices.
+**Pulso** is a local, Python-powered prototype for responsible workplace listening. It turns an HR need into a short, context-aware survey, requires human review before publication, and provides aggregate participation and trend insights.
 
 ## Run it
 
-Requires Python 3.10 or newer. The app uses only the Python standard library.
+Requires Python 3.10 or newer.
 
 ```powershell
+python -m pip install -r requirements.txt
 python -m backend.app
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000). On first launch the dashboard shows clearly labelled synthetic demo data. The first submitted check-in removes that sample data; real responses are then collected without names, email addresses, or free-text comments.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) for the aggregate dashboard or [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) to design a survey. The initial data is synthetic (600 responses across two periods and five cohorts), clearly labelled, and never mixed into live response counts.
+
+The HR flow supports a defined listening need, configurable population shares, 3–6 editable questions, conditional follow-up questions, explicit approval, QR/link sharing, local Typeform-style participation, and (when configured) Typeform publication and response import. Recommendations must also be approved or dismissed by a human before they are treated as actions.
 
 ## Project structure
 
@@ -20,31 +23,25 @@ backend/
   scripts/
     qrgenerator.py       Optional QR image generator
 ui/
-  index.html             Dashboard and check-in interface
-  app.js                 Browser interactions and API client
+  index.html             Aggregate dashboard and check-in interface
+  app.js                 Dashboard and respondent interactions
+  admin.html             HR survey design and insights
+  admin.js               Survey editor and admin API client
+  admin.css              Responsive admin design
   styles.css             Responsive visual design
   assets/
-    codigo_qr.png        Generated QR image
+    codigo_qr.png        Optional static QR image
 tests/
   test_app.py            Backend tests
 data/
   pulso.sqlite3          Local response database (created at runtime)
 ```
 
-The server serves the UI directly; no separate frontend build or package install is required. The check-in opens as a Typeform-style, one-question-at-a-time conversation. Existing root-level database files are moved to `data/pulso.sqlite3` on the next launch, without overwriting an existing database there.
-
-The optional QR generator needs `qrcode[pil]`:
-
-```powershell
-python -m pip install "qrcode[pil]"
-python backend/scripts/qrgenerator.py
-```
+The server serves the UI directly; no separate frontend build is required. The respondent experience is a Typeform-style, one-question-at-a-time conversation. Existing root-level database files are moved to `data/pulso.sqlite3` on the next launch, without overwriting an existing database there.
 
 ## Generate questions with an API
 
-Without credentials, Pulso uses a clearly labelled set of curated demo questions. To use an OpenAI-compatible chat-completions API, choose **Configurar API** in the app and enter the endpoint, model, and API key. The key stays in server memory only and is discarded when the server stops.
-
-Generated questions can also be opened in a Microsoft Teams chat draft using the **Compartir en Teams** link; sharing is always a deliberate user action. The dashboard suggests a small, practical next step when a dimension needs attention.
+Without credentials, Pulso uses curated local survey templates. In **Conexiones** on `/admin`, optionally enter an OpenAI-compatible chat-completions API key, model, and endpoint to generate draft surveys, and/or a Typeform API token to publish to Typeform. Credentials stay in server memory and are discarded when the server stops.
 
 Alternatively, set these environment variables before starting the server:
 
@@ -52,10 +49,14 @@ Alternatively, set these environment variables before starting the server:
 $env:AI_API_KEY = "your-key"
 $env:AI_BASE_URL = "https://api.openai.com/v1/chat/completions"
 $env:AI_MODEL = "gpt-4o-mini"
+$env:TYPEFORM_API_TOKEN = "your-typeform-token"
+$env:PULSO_PUBLIC_URL = "https://your-public-host"
 python -m backend.app
 ```
 
-The server binds to `127.0.0.1` only. Responses are stored in `data/pulso.sqlite3`; only a date, work context, climate dimension, and 1–5 score are retained. Results for groups with fewer than five responses are hidden. No employee identifiers or raw comments are collected.
+`PULSO_PUBLIC_URL` is needed when local surveys/QR codes must be reachable outside the machine running Pulso. Without it, local links use the request host. Typeform-hosted surveys use Typeform's public link.
+
+The server binds to `127.0.0.1` only. Do not expose this prototype's HR endpoints to a network without adding authentication and deployment hardening. Responses are stored locally for up to 90 days; names, email addresses, phone numbers, URLs, and common self-identifying phrases are removed from free-text comments before storage. Only aggregated results are shown, and groups under five responses are hidden. Topic labels are keyword-based signals, not causal findings.
 
 ## Verify
 

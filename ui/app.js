@@ -27,6 +27,8 @@ const survey = {
   model: "",
   error: "",
   loading: false,
+  campaign: null,
+  answers: [],
 };
 let questionGeneration = 0;
 
@@ -162,6 +164,10 @@ function createSurveyElement(tag, className, text) {
 }
 
 function renderSurvey() {
+  if (survey.campaign) {
+    renderCampaignSurvey();
+    return;
+  }
   const body = $("#survey-body");
   const navigation = $("#survey-navigation");
   const progress = $("#survey-progress-fill");
@@ -342,6 +348,225 @@ function renderSurvey() {
   });
 }
 
+function visibleCampaignQuestions() {
+  return survey.campaign.questions.map((question, index) => {
+    const rule = question.logic?.show_when;
+    if (!rule) return index;
+    const earlierAnswer = survey.answers[rule.question_index];
+    if (rule.operator === "less_than" && Number(earlierAnswer) >= Number(rule.value)) return null;
+    return index;
+  }).filter((index) => index !== null);
+}
+
+function renderCampaignSurvey() {
+  const campaign = survey.campaign;
+  const body = $("#survey-body");
+  const navigation = $("#survey-navigation");
+  const progress = $("#survey-progress-fill");
+  const counter = $("#survey-counter");
+  const visible = visibleCampaignQuestions();
+  const questionIndex = survey.step - 2;
+  const currentQuestion = questionIndex >= 0 ? campaign.questions[questionIndex] : null;
+  body.replaceChildren();
+  navigation.replaceChildren();
+  progress.style.width = `${Math.max(0, survey.step - 1) / Math.max(1, visible.length + 1) * 100}%`;
+  counter.textContent = currentQuestion
+    ? `${Math.max(1, visible.indexOf(questionIndex) + 1)} DE ${visible.length}`
+    : `${Math.max(0, Math.min(visible.length, survey.step - 1))} DE ${visible.length}`;
+
+  const screen = createSurveyElement("section", "survey-screen");
+  screen.setAttribute("aria-live", "polite");
+  const setHeading = (text) => {
+    const heading = createSurveyElement("h1", "survey-title", text);
+    heading.id = "survey-title";
+    screen.append(heading);
+  };
+  const addBack = () => {
+    const button = createSurveyElement("button", "survey-back", "← Atrás");
+    button.type = "button";
+    button.addEventListener("click", () => {
+      survey.step -= 1;
+      if (survey.campaign.cohort !== "Todos" && survey.step === 1) survey.step = 0;
+      renderSurvey();
+    });
+    navigation.append(button);
+  };
+  const addContinue = (label, handler, disabled = false) => {
+    const button = createSurveyElement("button", "survey-continue", label);
+    button.type = "button";
+    button.disabled = disabled;
+    button.addEventListener("click", handler);
+    navigation.append(button);
+    return button;
+  };
+  const advance = () => {
+    let nextStep = survey.step + 1;
+    while (nextStep >= 2 && nextStep - 2 < campaign.questions.length) {
+      const question = campaign.questions[nextStep - 2];
+      const rule = question.logic?.show_when;
+      if (!rule || !(rule.operator === "less_than" && Number(survey.answers[rule.question_index]) >= Number(rule.value))) {
+        break;
+      }
+      survey.answers[nextStep - 2] = null;
+      nextStep += 1;
+    }
+    survey.step = nextStep;
+    renderSurvey();
+  };
+
+  if (survey.step === 0) {
+    screen.append(createSurveyElement("span", "survey-kicker", `PULSO ANÓNIMO · ${campaign.estimated_minutes} MIN`));
+    setHeading(campaign.title);
+    screen.append(createSurveyElement("p", "survey-description", campaign.intro));
+    screen.append(createSurveyElement("span", "survey-hint", "No pedimos tu nombre ni guardamos datos que te identifiquen."));
+    addContinue("Empezar ↵", () => {
+      survey.step = campaign.cohort === "Todos" ? 1 : 2;
+      if (campaign.cohort !== "Todos") survey.cohort = campaign.cohort;
+      renderSurvey();
+    });
+  } else if (survey.step === 1) {
+    screen.append(createSurveyElement("span", "survey-kicker", "UNA PREGUNTA PARA CADA REALIDAD"));
+    setHeading("¿En qué colectivo trabajas?");
+    screen.append(createSurveyElement("p", "survey-description", "Solo usamos esta categoría amplia para comprobar que escuchamos voces diversas."));
+    const options = createSurveyElement("div", "survey-choices");
+    for (const cohort of ["Planta", "Logística", "Comercial", "Oficina", "Manager"]) {
+      const button = createSurveyElement("button", "survey-choice", cohort);
+      button.type = "button";
+      button.addEventListener("click", () => {
+        survey.cohort = cohort;
+        survey.step = 2;
+        renderSurvey();
+      });
+      options.append(button);
+    }
+    screen.append(options);
+    addBack();
+  } else if (currentQuestion) {
+    screen.append(createSurveyElement("span", "survey-kicker", `PREGUNTA ${Math.max(1, visible.indexOf(questionIndex) + 1)} · ${visible.length}`));
+    setHeading(currentQuestion.text);
+    const labels = {
+      rating: "Valora tu experiencia del 1 al 5.",
+      multiple_choice: "Elige la opción que mejor representa tu experiencia.",
+      yes_no: "Elige la respuesta que mejor te representa.",
+      open_text: "Comparte una idea breve. No incluyas nombres, correos ni teléfonos.",
+    };
+    screen.append(createSurveyElement("p", "survey-description", labels[currentQuestion.type]));
+    let answer;
+    if (currentQuestion.type === "rating") {
+      const scale = createSurveyElement("div", "survey-scale");
+      for (let score = 1; score <= 5; score += 1) {
+        const option = createSurveyElement("button", "scale-option", String(score));
+        option.type = "button";
+        option.setAttribute("aria-pressed", String(survey.answers[questionIndex] === score));
+        option.addEventListener("click", () => {
+          survey.answers[questionIndex] = score;
+          scale.querySelectorAll(".scale-option").forEach((item, index) => item.setAttribute("aria-pressed", String(index + 1 === score)));
+          next.disabled = false;
+        });
+        scale.append(option);
+      }
+      screen.append(scale);
+      const captions = createSurveyElement("div", "scale-labels");
+      captions.append(createSurveyElement("span", "", "Podría mejorar"), createSurveyElement("span", "", "Me siento muy bien"));
+      screen.append(captions);
+      answer = survey.answers[questionIndex];
+    } else if (currentQuestion.type === "multiple_choice" || currentQuestion.type === "yes_no") {
+      const choices = currentQuestion.type === "yes_no" ? [["Sí", true], ["No", false]] : currentQuestion.choices.map((item) => [item, item]);
+      const options = createSurveyElement("div", "survey-choices");
+      choices.forEach(([label, value], index) => {
+        const option = createSurveyElement("button", "survey-choice", label);
+        option.type = "button";
+        option.dataset.index = String(index + 1);
+        option.setAttribute("aria-pressed", String(survey.answers[questionIndex] === value));
+        option.addEventListener("click", () => {
+          survey.answers[questionIndex] = value;
+          options.querySelectorAll(".survey-choice").forEach((item) => item.setAttribute("aria-pressed", String(item === option)));
+          next.disabled = false;
+        });
+        options.append(option);
+      });
+      screen.append(options);
+      answer = survey.answers[questionIndex];
+    } else {
+      const input = createSurveyElement("textarea", "survey-text-answer");
+      input.maxLength = 2000;
+      input.rows = 3;
+      input.placeholder = "Escribe aquí tu respuesta…";
+      input.value = typeof survey.answers[questionIndex] === "string" ? survey.answers[questionIndex] : "";
+      input.addEventListener("input", () => {
+        survey.answers[questionIndex] = input.value;
+        next.disabled = currentQuestion.required && !input.value.trim();
+      });
+      screen.append(input);
+      answer = survey.answers[questionIndex];
+    }
+    if (!currentQuestion.required) {
+      screen.append(createSurveyElement("span", "survey-hint", "Esta pregunta es opcional."));
+    }
+    addBack();
+    const isLast = visible.filter((index) => index >= questionIndex).length === 1;
+    const next = addContinue(
+      isLast ? "Enviar mi pulso ↗" : "Continuar →",
+      () => {
+        const currentAnswer = survey.answers[questionIndex];
+        if (currentQuestion.required && (currentAnswer === undefined || currentAnswer === null || currentAnswer === "")) return;
+        if (isLast) void submitCampaignSurvey(next);
+        else advance();
+      },
+      currentQuestion.required && (answer === undefined || answer === null || answer === ""),
+    );
+  } else {
+    screen.append(createSurveyElement("span", "survey-success-mark", "✓"));
+    setHeading("Gracias por hacerte escuchar.");
+    screen.append(createSurveyElement("p", "survey-description", "Tu respuesta ya forma parte de una conversación que puede mejorar las cosas."));
+    addContinue("Volver al resumen", () => $("#survey-dialog").close());
+  }
+
+  body.append(screen);
+  requestAnimationFrame(() => {
+    const heading = $("#survey-title");
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+    }
+  });
+}
+
+async function openPublishedSurvey(surveyId) {
+  try {
+    survey.campaign = await request(`/api/surveys/${surveyId}`);
+    survey.step = 0;
+    survey.answers = Array(survey.campaign.questions.length).fill(null);
+    survey.cohort = survey.campaign.cohort === "Todos" ? "" : survey.campaign.cohort;
+    renderSurvey();
+    if (!$("#survey-dialog").open) $("#survey-dialog").showModal();
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+async function submitCampaignSurvey(button) {
+  button.disabled = true;
+  button.textContent = "Enviando tu respuesta…";
+  try {
+    await request("/api/responses", {
+      method: "POST",
+      body: JSON.stringify({
+        survey_id: survey.campaign.id,
+        cohort: survey.cohort,
+        answers: survey.answers,
+      }),
+    });
+    survey.step = 2 + survey.campaign.questions.length;
+    renderSurvey();
+    await loadDashboard();
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "Enviar mi pulso ↗";
+    showToast(error.message);
+  }
+}
+
 async function generateSurveyQuestion() {
   const generation = ++questionGeneration;
   survey.step = 3;
@@ -415,6 +640,8 @@ async function init() {
       model: "",
       error: "",
       loading: false,
+      campaign: null,
+      answers: [],
     });
     renderSurvey();
     $("#survey-dialog").showModal();
@@ -490,6 +717,8 @@ async function init() {
   } catch (error) {
     showToast(error.message);
   }
+  const respondentMatch = window.location.pathname.match(/^\/respond\/([a-f0-9]{32})$/);
+  if (respondentMatch) void openPublishedSurvey(respondentMatch[1]);
 }
 
 document.addEventListener("DOMContentLoaded", init);
