@@ -600,6 +600,10 @@
               <span class="text-xs font-semibold text-tertiary">UAB DCC Ornith 35B MoE</span>
               <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-mono">262k ctx</span>
             </div>
+            <button id="generator-teams-btn" onclick="openTeamsModalFromGenerator()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface text-xs font-bold hover:bg-[#464EB8] hover:text-white transition-all shadow-xs active:scale-95" type="button" title="Generar tarjeta interactiva para Microsoft Teams (M365)">
+              <span class="material-symbols-outlined text-sm text-[#464EB8]">send_to_mobile</span>
+              Difundir en Teams
+            </button>
             <button id="generator-publish-btn" onclick="publishFromGenerator()" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-all shadow-sm active:scale-95" type="button">
               <span class="material-symbols-outlined text-sm">send</span>
               Lanzar a Plantas / Typeform
@@ -678,9 +682,9 @@
                   <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
                   <span class="text-xs font-bold uppercase tracking-wider text-on-surface">Preview en vivo (Typeform Engine)</span>
                 </div>
-                <button onclick="openTypeformStudio()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-bold transition-all shadow-xs" title="Abrir editor de Typeform para edición manual">
-                  <span class="material-symbols-outlined text-sm">open_in_new</span>
-                  <span>Abrir en Typeform</span>
+                <button onclick="openQuestionEditorModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface text-xs font-bold transition-all shadow-xs" title="Modificar, añadir o eliminar preguntas de la encuesta">
+                  <span class="material-symbols-outlined text-sm">edit_note</span>
+                  <span>Editar encuesta</span>
                 </button>
               </div>
 
@@ -1021,6 +1025,56 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITOR VISUAL DE ENCUESTA (AÑADIR, MODIFICAR O ELIMINAR PREGUNTAS) -->
+  <div id="modal-question-editor" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest max-w-3xl w-full rounded-2xl p-space-lg md:p-space-xl shadow-2xl border border-surface-container flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-surface-container pb-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shadow-xs">
+            <span class="material-symbols-outlined text-lg">edit_note</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-headline font-bold text-on-surface">Editor de Preguntas de la Encuesta</h3>
+              <span id="editor-qcount-badge" class="px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold text-[10px]">3 preguntas</span>
+            </div>
+            <p class="text-xs text-on-surface-variant">Modifica los enunciados, dimensiones, opciones o añade y elimina preguntas libremente.</p>
+          </div>
+        </div>
+        <button onclick="closeQuestionEditorModal()" class="text-tertiary hover:text-on-surface p-1 rounded-lg hover:bg-surface-container" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+
+      <!-- Questions List (Scrollable Area) -->
+      <div class="flex-1 overflow-y-auto py-4 space-y-3 pr-1" id="editor-questions-container">
+        <!-- Rellenado dinámicamente -->
+      </div>
+
+      <!-- Add Question Quick Button & Footer Actions -->
+      <div class="border-t border-surface-container pt-3 space-y-3 shrink-0">
+        <button type="button" onclick="addQuestionInEditor()" class="w-full py-2.5 px-3 rounded-xl border-2 border-dashed border-primary/40 hover:border-primary bg-primary/5 hover:bg-primary/10 text-primary font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
+          <span class="material-symbols-outlined text-base">add_circle</span>
+          <span>Añadir Nueva Pregunta a la Encuesta</span>
+        </button>
+
+        <div class="flex items-center justify-between gap-3">
+          <span class="text-[11px] text-tertiary italic">Los cambios se sincronizarán inmediatamente con la tarjeta interactiva.</span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeQuestionEditorModal()" class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-on-surface transition-all">
+              Cancelar
+            </button>
+            <button type="button" onclick="saveQuestionEditorChanges()" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-sm active:scale-95">
+              <span class="material-symbols-outlined text-sm">check</span>
+              Guardar y Aplicar Cambios
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1675,6 +1729,186 @@
       } catch (err) {
         showToast('Error de conexión con el motor.', 'error');
       }
+    }
+
+    // =========================================================================
+    // MODAL DE EDICIÓN VISUAL DE ENCUESTA (MODIFICAR, AÑADIR O ELIMINAR)
+    // =========================================================================
+    let editingQuestions = [];
+
+    const AVAILABLE_DIMENSIONS = [
+      { id: 'bienestar', label: 'Bienestar y Salud' },
+      { id: 'liderazgo', label: 'Liderazgo y Acompañamiento' },
+      { id: 'desarrollo', label: 'Desarrollo Profesional' },
+      { id: 'cultura', label: 'Cultura y Pertenencia' },
+      { id: 'relaciones', label: 'Entorno y Relaciones' },
+      { id: 'condiciones', label: 'Condiciones y Organización' }
+    ];
+
+    function openQuestionEditorModal() {
+      const modal = document.getElementById('modal-question-editor');
+      if (!modal) return;
+
+      if (!genQuestions || genQuestions.length === 0) {
+        editingQuestions = [
+          {
+            title: "¿Qué te ha ayudado a sentirte bien en tu jornada esta semana?",
+            dimension: "bienestar",
+            type: "rating",
+            choices: ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"]
+          },
+          {
+            title: "¿Has recibido el acompañamiento que necesitabas de tus mandos?",
+            dimension: "liderazgo",
+            type: "rating",
+            choices: ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"]
+          },
+          {
+            title: "¿Has contado con los recursos necesarios para realizar tus tareas?",
+            dimension: "condiciones",
+            type: "multiple_choice",
+            choices: ["Siempre", "Casi siempre", "A veces", "Casi nunca"]
+          }
+        ];
+      } else {
+        editingQuestions = JSON.parse(JSON.stringify(genQuestions));
+      }
+
+      renderEditorQuestions();
+      modal.classList.remove('hidden');
+    }
+
+    function closeQuestionEditorModal() {
+      const modal = document.getElementById('modal-question-editor');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function renderEditorQuestions() {
+      const container = document.getElementById('editor-questions-container');
+      const badge = document.getElementById('editor-qcount-badge');
+      if (badge) badge.textContent = `${editingQuestions.length} pregunta${editingQuestions.length !== 1 ? 's' : ''}`;
+      if (!container) return;
+
+      container.innerHTML = editingQuestions.map((q, idx) => {
+        const dimOptions = AVAILABLE_DIMENSIONS.map(d =>
+          `<option value="${d.id}" ${q.dimension === d.id ? 'selected' : ''}>${d.label}</option>`
+        ).join('');
+
+        const isRating = (q.type || 'rating') === 'rating';
+        const isMultiple = q.type === 'multiple_choice';
+        const isOpen = q.type === 'open_text';
+
+        const choicesStr = Array.isArray(q.choices) ? q.choices.join(', ') : (q.choices || '');
+
+        return `
+          <div class="p-3.5 rounded-xl border border-surface-container bg-surface-container-low space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center font-mono">
+                  ${idx + 1}
+                </span>
+                <span class="text-xs font-bold text-on-surface">Pregunta ${idx + 1}</span>
+              </div>
+              <button type="button" onclick="deleteQuestionInEditor(${idx})" class="p-1 rounded text-tertiary hover:text-error hover:bg-error-container/30 transition-all ${editingQuestions.length <= 1 ? 'opacity-40 cursor-not-allowed' : ''}" title="Eliminar pregunta" ${editingQuestions.length <= 1 ? 'disabled' : ''}>
+                <span class="material-symbols-outlined text-base">delete</span>
+              </button>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-bold text-tertiary block mb-1">Enunciado de la Pregunta</label>
+              <textarea rows="2" class="w-full bg-surface-container-lowest p-2.5 rounded-lg text-xs text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" oninput="updateEditorQTitle(${idx}, this.value)" placeholder="Escribe el enunciado de la pregunta...">${escapeHtml(q.title || '')}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <div>
+                <label class="text-[11px] font-bold text-tertiary block mb-1">Dimensión del Clima</label>
+                <select class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs font-medium text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onchange="updateEditorQDimension(${idx}, this.value)">
+                  ${dimOptions}
+                </select>
+              </div>
+
+              <div>
+                <label class="text-[11px] font-bold text-tertiary block mb-1">Tipo de Respuesta</label>
+                <select class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs font-medium text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onchange="updateEditorQType(${idx}, this.value)">
+                  <option value="rating" ${isRating ? 'selected' : ''}>⭐ Escala de valoración (1 a 5)</option>
+                  <option value="multiple_choice" ${isMultiple ? 'selected' : ''}>🔘 Opción múltiple</option>
+                  <option value="open_text" ${isOpen ? 'selected' : ''}>✍️ Pregunta abierta (Texto)</option>
+                </select>
+              </div>
+            </div>
+
+            ${isMultiple ? `
+              <div class="pt-1">
+                <label class="text-[11px] font-bold text-tertiary block mb-1">Opciones de Respuesta (separadas por comas)</label>
+                <input type="text" value="${escapeHtml(choicesStr)}" class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none font-mono" oninput="updateEditorQChoices(${idx}, this.value)" placeholder="Ej: Muy de acuerdo, De acuerdo, En desacuerdo, Muy en desacuerdo">
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateEditorQTitle(idx, val) {
+      if (editingQuestions[idx]) editingQuestions[idx].title = val;
+    }
+
+    function updateEditorQDimension(idx, val) {
+      if (editingQuestions[idx]) editingQuestions[idx].dimension = val;
+    }
+
+    function updateEditorQType(idx, val) {
+      if (editingQuestions[idx]) {
+        editingQuestions[idx].type = val;
+        if (val === 'multiple_choice' && (!editingQuestions[idx].choices || editingQuestions[idx].choices.length === 0)) {
+          editingQuestions[idx].choices = ['Muy de acuerdo', 'De acuerdo', 'En desacuerdo', 'Muy en desacuerdo'];
+        }
+        renderEditorQuestions();
+      }
+    }
+
+    function updateEditorQChoices(idx, val) {
+      if (editingQuestions[idx]) {
+        editingQuestions[idx].choices = val.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    }
+
+    function addQuestionInEditor() {
+      editingQuestions.push({
+        title: '¿Cómo calificarías la comunicación en tu equipo de trabajo?',
+        dimension: 'relaciones',
+        type: 'rating',
+        choices: ['Muy de acuerdo', 'De acuerdo', 'En desacuerdo', 'Muy en desacuerdo']
+      });
+      renderEditorQuestions();
+      const container = document.getElementById('editor-questions-container');
+      if (container) {
+        setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+      }
+    }
+
+    function deleteQuestionInEditor(idx) {
+      if (editingQuestions.length <= 1) {
+        showToast('La encuesta debe contener al menos una pregunta.', 'error');
+        return;
+      }
+      editingQuestions.splice(idx, 1);
+      renderEditorQuestions();
+    }
+
+    function saveQuestionEditorChanges() {
+      for (let i = 0; i < editingQuestions.length; i++) {
+        if (!editingQuestions[i].title || !editingQuestions[i].title.trim()) {
+          showToast(`La pregunta ${i + 1} no tiene texto. Introduce un enunciado.`, 'error');
+          return;
+        }
+      }
+
+      genQuestions = JSON.parse(JSON.stringify(editingQuestions));
+      genIndex = 0;
+      saveGeneratorState();
+      renderGenCard();
+      closeQuestionEditorModal();
+      showToast(`¡Encuesta actualizada con éxito! (${genQuestions.length} preguntas)`, 'success');
     }
 
     // Abre el creador / editor manual de Typeform
