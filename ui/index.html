@@ -416,17 +416,77 @@
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold uppercase tracking-wider text-primary">Motor Estadístico Python</span>
-                <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-[11px] font-bold">
-                  100% Determinista (Pandas / SciPy)
+                <span id="insights-quarter-badge" class="px-2 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container text-[11px] font-bold">
+                  Q4 2026
+                </span>
+                <span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary text-[11px] font-bold">
+                  100% Determinista
                 </span>
               </div>
               <h2 class="text-xl font-headline font-bold text-on-surface mt-1">Detección de Sesgos, Polarización y Cobertura</h2>
-              <p class="text-xs text-on-surface-variant">Cálculos matemáticos estrictamente separados del LLM para garantizar exactitud y confidencialidad.</p>
+              <p class="text-xs text-on-surface-variant">Análisis estadístico insesgado por encuesta según los objetivos del caso Estrella Damm.</p>
             </div>
-            <button onclick="requestLlmSynthesis()" id="btn-request-llm-synthesis" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-transform active:scale-95 shadow-xs" type="button">
-              <span class="material-symbols-outlined text-base">auto_awesome</span>
-              <span>Generar Síntesis RRHH con LLM</span>
-            </button>
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Filtro Avanzado: Encuesta / Cuatrimestre / Año -->
+              <div class="flex flex-wrap items-center gap-2 bg-surface-container-low p-1.5 px-3 rounded-xl border border-surface-container shadow-xs">
+                <div class="flex items-center gap-1 bg-surface-container rounded-lg p-0.5">
+                  <button type="button" id="filter-mode-survey" onclick="setInsightsFilterMode('survey')" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs">
+                    Por Encuesta
+                  </button>
+                  <button type="button" id="filter-mode-quarter" onclick="setInsightsFilterMode('quarter')" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50">
+                    Por Cuatrimestre
+                  </button>
+                  <button type="button" id="filter-mode-year" onclick="setInsightsFilterMode('year')" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50">
+                    Por Año
+                  </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-primary">filter_list</span>
+                  <select id="insights-filter-select" onchange="onInsightsFilterValueChanged(this.value)" class="bg-surface-container-lowest border border-surface-container px-2.5 py-1 rounded text-xs font-semibold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary min-w-[240px]">
+                    <option value="">Cargando opciones...</option>
+                  </select>
+                </div>
+              </div>
+
+              <button onclick="requestLlmSynthesis()" id="btn-request-llm-synthesis" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-transform active:scale-95 shadow-xs" type="button">
+                <span class="material-symbols-outlined text-base">auto_awesome</span>
+                <span>Generar Síntesis RRHH con LLM</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Resumen de Métricas Ejecutivas de la Encuesta -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-sm">
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Cuatrimestre</span>
+              <span id="insights-kpi-quarter" class="text-xs font-bold text-primary block truncate">Q4 2026</span>
+              <span id="insights-kpi-status" class="text-[10px] text-tertiary">Publicada</span>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Total Respuestas</span>
+              <span id="insights-kpi-total-resp" class="text-base font-headline font-bold text-on-surface block">0</span>
+              <span id="insights-kpi-real-resp" class="text-[10px] text-status-positive font-semibold">0 vía QR/Typeform</span>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Media Clima (μ)</span>
+              <span id="insights-kpi-mean" class="text-base font-headline font-bold text-primary block">0.0</span>
+              <span class="text-[10px] text-tertiary">Escala 1–5 estrellas</span>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Mediana Clima</span>
+              <span id="insights-kpi-median" class="text-base font-headline font-bold text-on-surface block">0.0</span>
+              <span class="text-[10px] text-tertiary">Valor central</span>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Polarización (σ)</span>
+              <span id="insights-kpi-std" class="text-base font-headline font-bold text-on-surface block">0.00</span>
+              <span id="insights-kpi-diag" class="text-[10px] font-semibold text-status-positive">Consistente</span>
+            </div>
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Confianza Muestral</span>
+              <span id="insights-kpi-conf" class="text-base font-headline font-bold text-on-surface block">Alta</span>
+              <span class="text-[10px] text-tertiary">k ≥ 5 garantizado</span>
+            </div>
           </div>
 
           <!-- Anomaly and Bias Alert Chips -->
@@ -437,7 +497,7 @@
                 <span>Alerta de Representatividad (&lt;15%)</span>
               </div>
               <p class="text-xs text-on-surface" id="alert-rep-text">
-                <strong>Comercial:</strong> 10.0% de participación global. Riego de subrepresentación frente a Planta (45%).
+                Participación equilibrada entre los colectivos principales.
               </p>
             </div>
 
@@ -447,7 +507,7 @@
                 <span>Alerta de Polarización (σ ≥ 1.25)</span>
               </div>
               <p class="text-xs text-on-surface" id="alert-pol-text">
-                <strong>Planta (q2_liderazgo):</strong> Desviación típica de 1.68. Respuestas divididas entre valores 1 y 5.
+                Sin polarización bimodal detectada en esta encuesta.
               </p>
             </div>
 
@@ -459,6 +519,30 @@
               <p class="text-xs text-on-surface" id="alert-k-text">
                 Todos los cortes con menos de 5 observaciones han sido suprimidos del reporte para evitar reidentificación.
               </p>
+            </div>
+          </div>
+
+          <!-- Comparativa del Periodo e Índices de Participación -->
+          <div id="insights-comparativa-section" class="pt-2 hidden space-y-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-headline font-bold text-on-surface flex items-center gap-1.5" id="insights-comparativa-title">
+                  <span class="material-symbols-outlined text-base text-primary">equalizer</span>
+                  <span>Comparativa de Consultas e Índices de Participación</span>
+                </h3>
+                <p class="text-xs text-on-surface-variant" id="insights-comparativa-subtitle">Comparativa entre encuestas realizadas en el periodo seleccionado.</p>
+              </div>
+              <span id="insights-comparativa-badge" class="px-2.5 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold text-[10px]">Cuatrimestre</span>
+            </div>
+            <div class="overflow-x-auto rounded-lg border border-surface-container">
+              <table class="w-full text-left text-xs text-on-surface">
+                <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]" id="insights-comparativa-thead">
+                  <!-- Inyectado dinámicamente -->
+                </thead>
+                <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="insights-comparativa-tbody">
+                  <!-- Inyectado dinámicamente -->
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -479,36 +563,7 @@
                 </thead>
                 <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="coverage-matrix-body">
                   <tr>
-                    <td class="p-3 font-semibold">Planta / Fábrica</td>
-                    <td class="p-3 text-center tabular-nums">92 (23.0%)</td>
-                    <td class="p-3 text-center tabular-nums">60 (15.0%)</td>
-                    <td class="p-3 text-center tabular-nums">28 (7.0%)</td>
-                    <td class="p-3 text-center font-bold tabular-nums">180</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">45.0%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="p-3 font-semibold">Logística</td>
-                    <td class="p-3 text-center tabular-nums">48 (12.0%)</td>
-                    <td class="p-3 text-center tabular-nums">36 (9.0%)</td>
-                    <td class="p-3 text-center tabular-nums">16 (4.0%)</td>
-                    <td class="p-3 text-center font-bold tabular-nums">100</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">25.0%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="p-3 font-semibold">Oficinas Centrales</td>
-                    <td class="p-3 text-center tabular-nums">80 (20.0%)</td>
-                    <td class="p-3 text-center text-tertiary">—</td>
-                    <td class="p-3 text-center text-tertiary">—</td>
-                    <td class="p-3 text-center font-bold tabular-nums">80</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">20.0%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="p-3 font-semibold">Comercial</td>
-                    <td class="p-3 text-center tabular-nums">40 (10.0%)</td>
-                    <td class="p-3 text-center text-tertiary">—</td>
-                    <td class="p-3 text-center text-tertiary">—</td>
-                    <td class="p-3 text-center font-bold tabular-nums">40</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-warning/10 text-status-warning font-bold text-[10px]">10.0% (Bajo)</span></td>
+                    <td colspan="6" class="p-4 text-center text-tertiary">Cargando matriz de cobertura...</td>
                   </tr>
                 </tbody>
               </table>
@@ -531,36 +586,69 @@
                     <th class="p-3 text-center">Diagnóstico</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-surface-container bg-surface-container-lowest">
+                <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="descriptive-stats-tbody">
                   <tr>
-                    <td class="p-3 font-semibold">q1_bienestar</td>
-                    <td class="p-3 text-center font-bold tabular-nums text-primary">3.425</td>
-                    <td class="p-3 text-center tabular-nums">3.000</td>
-                    <td class="p-3 text-center tabular-nums">0.782</td>
-                    <td class="p-3 text-center tabular-nums">0.612</td>
-                    <td class="p-3 text-center tabular-nums">-0.114</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive text-[10px] font-bold">Consistente</span></td>
-                  </tr>
-                  <tr>
-                    <td class="p-3 font-semibold">q2_liderazgo</td>
-                    <td class="p-3 text-center font-bold tabular-nums text-primary">3.475</td>
-                    <td class="p-3 text-center tabular-nums">4.000</td>
-                    <td class="p-3 text-center tabular-nums text-status-critical font-bold">1.285</td>
-                    <td class="p-3 text-center tabular-nums">1.651</td>
-                    <td class="p-3 text-center tabular-nums">-0.428</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-critical/10 text-status-critical text-[10px] font-bold">Polarizado</span></td>
-                  </tr>
-                  <tr>
-                    <td class="p-3 font-semibold">q3_recursos</td>
-                    <td class="p-3 text-center font-bold tabular-nums text-primary">3.325</td>
-                    <td class="p-3 text-center tabular-nums">3.000</td>
-                    <td class="p-3 text-center tabular-nums">0.894</td>
-                    <td class="p-3 text-center tabular-nums">0.799</td>
-                    <td class="p-3 text-center tabular-nums">-0.052</td>
-                    <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive text-[10px] font-bold">Estable</span></td>
+                    <td colspan="7" class="p-4 text-center text-tertiary">Cargando estadísticas descriptivas...</td>
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+
+          <!-- Análisis Cualitativo & Sentimiento en Respuestas Abiertas -->
+          <div class="pt-4 grid grid-cols-1 md:grid-cols-12 gap-space-md">
+            <div class="md:col-span-5 p-4 rounded-xl bg-surface-container-low border border-surface-container space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-primary">sentiment_satisfied</span>
+                  Sentimiento en Respuestas Abiertas
+                </h3>
+                <span id="qualitative-total-comments" class="text-[11px] font-bold text-tertiary">0 comentarios</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="p-2.5 rounded-lg bg-status-positive/10 border border-status-positive/20">
+                  <div class="text-[10px] uppercase font-bold text-status-positive">Positivo</div>
+                  <div class="text-base font-headline font-bold text-status-positive" id="qualitative-pos-pct">0%</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-surface-container border border-surface-container-high">
+                  <div class="text-[10px] uppercase font-bold text-on-surface-variant">Neutro</div>
+                  <div class="text-base font-headline font-bold text-on-surface" id="qualitative-neu-pct">0%</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-status-critical/10 border border-status-critical/20">
+                  <div class="text-[10px] uppercase font-bold text-status-critical">Crítico</div>
+                  <div class="text-base font-headline font-bold text-status-critical" id="qualitative-crit-pct">0%</div>
+                </div>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold text-on-surface-variant block mb-1.5">Temas Emergentes Detectados:</span>
+                <div id="qualitative-topics-list" class="space-y-1.5">
+                  <!-- Inyectado dinámicamente -->
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-7 p-4 rounded-xl bg-surface-container-low border border-surface-container space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-secondary">forum</span>
+                  Extractos Anonimizados (Zero-PII)
+                </h3>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive">100% Anónimo</span>
+              </div>
+              <div id="qualitative-quotes-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recomendaciones Inmediatas para HR Partners -->
+          <div class="pt-2">
+            <h3 class="text-sm font-headline font-bold text-on-surface mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-base text-primary">lightbulb</span>
+              Recomendaciones Inmediatas para HR Partners (Derivadas de esta Encuesta)
+            </h3>
+            <div id="insights-recommendations-container" class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+              <!-- Inyectado dinámicamente -->
             </div>
           </div>
 
@@ -765,6 +853,7 @@
               <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
                 <tr>
                   <th class="p-3">Título de la Consulta</th>
+                  <th class="p-3 text-center">Cuatrimestre</th>
                   <th class="p-3">Colectivo</th>
                   <th class="p-3 text-center">Duración</th>
                   <th class="p-3 text-center">Canal</th>
@@ -774,7 +863,7 @@
               </thead>
               <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="admin-surveys-table-body">
                 <tr>
-                  <td colspan="6" class="p-4 text-center text-tertiary">Cargando consultas...</td>
+                  <td colspan="7" class="p-4 text-center text-tertiary">Cargando consultas...</td>
                 </tr>
               </tbody>
             </table>
@@ -1078,6 +1167,79 @@
     </div>
   </div>
 
+  <!-- MODAL DE RESPUESTA A CONSULTA / QR PARTICIPANTE -->
+  <div id="respondent-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-surface-container-lowest max-w-xl w-full rounded-2xl p-space-xl shadow-2xl border border-surface-container space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-surface-container pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shadow-xs">
+            ★
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-primary">Pulso Estrella Damm</span>
+              <span id="resp-modal-quarter" class="px-2 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container text-[10px] font-bold">Q4 2026</span>
+            </div>
+            <h3 class="text-base font-headline font-bold text-on-surface" id="resp-modal-title">Cargando consulta...</h3>
+          </div>
+        </div>
+        <button onclick="closeRespondentModal()" class="text-tertiary hover:text-on-surface p-1" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+
+      <div class="p-3 rounded-lg bg-surface-container-low text-xs text-on-surface-variant leading-relaxed" id="resp-modal-intro">
+        Tu opinión es 100% anónima. Ninguna persona sabrá quién ha respondido ni se almacenan credenciales ni dispositivos.
+      </div>
+
+      <form id="respondent-survey-form" onsubmit="submitSurveyResponse(event)" class="space-y-4">
+        <input type="hidden" id="resp-survey-id" value="">
+
+        <!-- Colectivo y Turno -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-on-surface block mb-1">Colectivo / Rol *</label>
+            <select id="resp-cohort-select" required class="w-full bg-surface-container-low p-2 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <option value="Planta">Planta / Fábrica (Operaciones)</option>
+              <option value="Logística">Logística / Almacén</option>
+              <option value="Comercial">Comercial / Red de Ventas</option>
+              <option value="Oficinas">Oficinas Centrales</option>
+              <option value="Manager">Manager / Mandos Intermedios</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold text-on-surface block mb-1">Turno de Trabajo *</label>
+            <select id="resp-turno-select" required class="w-full bg-surface-container-low p-2 rounded-lg text-xs font-medium text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <option value="Mañana">Turno de Mañana</option>
+              <option value="Tarde">Turno de Tarde</option>
+              <option value="Noche">Turno de Noche (Planta / Logística)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dynamic Questions Container -->
+        <div id="resp-questions-container" class="space-y-4 pt-1">
+          <!-- Inyectado dinámicamente según preguntas -->
+        </div>
+
+        <div class="p-2.5 rounded-lg bg-secondary-container/20 border border-secondary/20 flex items-center gap-2 text-xs text-on-surface">
+          <span class="material-symbols-outlined text-secondary text-base">verified_user</span>
+          <span class="text-[11px]"><strong>Privacidad garantizada:</strong> Respuestas agregadas matemáticamente con umbral de k-anonimato (k ≥ 5).</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-surface-container">
+          <button type="button" onclick="closeRespondentModal()" class="px-4 py-2 rounded-lg bg-surface-container text-xs font-bold text-on-surface hover:bg-surface-container-high transition-all">
+            Cancelar
+          </button>
+          <button type="submit" id="resp-submit-btn" class="px-5 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-transform active:scale-95 shadow-sm inline-flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">send</span>
+            Enviar Mi Respuesta Anónima
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- QR MODAL VIEWER -->
   <div id="qr-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface-container-lowest max-w-sm w-full rounded-2xl p-space-xl shadow-xl border border-surface-container text-center space-y-4">
@@ -1087,18 +1249,22 @@
           <span class="material-symbols-outlined text-base">close</span>
         </button>
       </div>
-      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center min-h-[200px]">
-        <img id="qr-modal-image" src="" alt="Código QR" class="w-48 h-48 object-contain">
+      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center min-h-[240px]" id="qr-modal-container">
+        <img id="qr-modal-image" src="" alt="Código QR" class="w-52 h-52 object-contain mx-auto">
       </div>
       <p class="text-xs text-on-surface-variant break-all font-mono select-all bg-surface-container-low p-2 rounded-lg" id="qr-modal-url"></p>
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="copyQrUrl()" class="py-2 px-3 rounded-lg bg-surface-container hover:bg-secondary-container/40 text-xs font-bold text-on-surface transition-all inline-flex items-center justify-center gap-1">
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="copyQrUrl()" class="py-2 px-2 rounded-lg bg-surface-container hover:bg-secondary-container/40 text-xs font-bold text-on-surface transition-all inline-flex items-center justify-center gap-1" title="Copiar enlace al portapapeles">
           <span class="material-symbols-outlined text-sm">content_copy</span>
-          Copiar Enlace
+          Copiar
         </button>
-        <a id="qr-modal-download" href="#" download="QR_Pulso_Damm.svg" class="py-2 px-3 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-xs font-bold transition-all inline-flex items-center justify-center gap-1 shadow-xs">
+        <a id="qr-modal-open-link" href="#" target="_blank" class="py-2 px-2 rounded-lg bg-surface-container hover:bg-secondary-container/40 text-xs font-bold text-on-surface transition-all inline-flex items-center justify-center gap-1" title="Abrir enlace en pestaña nueva">
+          <span class="material-symbols-outlined text-sm">open_in_new</span>
+          Abrir
+        </a>
+        <a id="qr-modal-download" href="#" download="QR_Pulso_Damm.svg" class="py-2 px-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-xs font-bold transition-all inline-flex items-center justify-center gap-1 shadow-xs" title="Descargar código vectorial SVG">
           <span class="material-symbols-outlined text-sm">download</span>
-          Descargar QR
+          Descargar
         </a>
       </div>
       <button onclick="closeQrModal()" class="w-full py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition-all">
@@ -1286,27 +1452,81 @@
 
     function escapeHtml(t) {
       if (!t) return '';
-      return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return String(t)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     // Modal Handlers
     function openCheckinModal() { document.getElementById('checkin-modal').classList.remove('hidden'); }
     function closeCheckinModal() { document.getElementById('checkin-modal').classList.add('hidden'); }
+    
+    function openQrModalById(id) {
+      const s = window.adminSurveysMap?.[id] || { id: id };
+      openQrModal(s.publish_url, s.id, s.title);
+    }
+
     function openQrModal(url, id, title) {
-      document.getElementById('qr-modal-title').textContent = title || 'Código QR';
+      document.getElementById('qr-modal-title').textContent = title || 'Código QR de Encuesta';
       const targetUrl = url || `${window.location.origin}/respond/${id}`;
-      const qrImg = document.getElementById('qr-modal-image');
-      if (qrImg) {
-        qrImg.src = `/api/surveys/${id}/qr.svg?t=${Date.now()}`;
-      }
+      const qrContainer = document.getElementById('qr-modal-container');
+      
       document.getElementById('qr-modal-url').textContent = targetUrl;
       const downloadLink = document.getElementById('qr-modal-download');
       if (downloadLink) {
         downloadLink.href = `/api/surveys/${id}/qr.svg`;
         downloadLink.download = `QR_${id}.svg`;
       }
+      const openLink = document.getElementById('qr-modal-open-link');
+      if (openLink) {
+        openLink.href = targetUrl;
+      }
+
+      if (qrContainer) {
+        qrContainer.innerHTML = '<div class="text-xs text-tertiary p-6 flex items-center justify-center animate-pulse">Generando código QR vectorial...</div>';
+        
+        fetch(`/api/surveys/${id}/qr.svg?t=${Date.now()}`)
+          .then(res => {
+            if (!res.ok) throw new Error('Status ' + res.status);
+            return res.text();
+          })
+          .then(svgText => {
+            if (svgText && svgText.includes('<svg')) {
+              // Limpiar declaración XML si viniera en el cuerpo para inyección segura en HTML5
+              const cleanSvg = svgText.replace(/<\?xml[\s\S]*?\?>/i, '').trim();
+              qrContainer.innerHTML = cleanSvg;
+              const svgEl = qrContainer.querySelector('svg');
+              if (svgEl) {
+                svgEl.setAttribute('width', '220');
+                svgEl.setAttribute('height', '220');
+                svgEl.classList.add('mx-auto');
+              }
+            } else {
+              throw new Error('Payload SVG inválido');
+            }
+          })
+          .catch(() => {
+            // Fallback 1: Imagen PNG desde backend
+            const imgEl = document.createElement('img');
+            imgEl.id = 'qr-modal-image';
+            imgEl.src = `/api/surveys/${id}/qr.png?t=${Date.now()}`;
+            imgEl.alt = 'Código QR';
+            imgEl.className = 'w-52 h-52 object-contain mx-auto';
+            imgEl.onerror = () => {
+              // Fallback 2: Generador de alta disponibilidad online
+              imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(targetUrl)}`;
+            };
+            qrContainer.innerHTML = '';
+            qrContainer.appendChild(imgEl);
+          });
+      }
+      
       document.getElementById('qr-modal').classList.remove('hidden');
     }
+
     function closeQrModal() { document.getElementById('qr-modal').classList.add('hidden'); }
     function copyQrUrl() {
       const urlText = document.getElementById('qr-modal-url')?.textContent;
@@ -1316,6 +1536,188 @@
         }).catch(() => {
           showToast('Enlace seleccionado para copiar.', 'info');
         });
+      }
+    }
+
+    // Modal de Respuesta de Encuesta (Acceso por QR o Link de Encuesta)
+    let currentRespondentSurvey = null;
+    let respondentRatings = {};
+
+    async function openCampaignRespondentModal(surveyId) {
+      try {
+        const res = await fetch(`/api/surveys/${surveyId}`);
+        if (!res.ok) {
+          showToast('No se pudo cargar la consulta solicitada.', 'error');
+          return;
+        }
+        currentRespondentSurvey = await res.json();
+        respondentRatings = {};
+
+        document.getElementById('resp-survey-id').value = currentRespondentSurvey.id;
+        document.getElementById('resp-modal-title').textContent = currentRespondentSurvey.title || 'Microconsulta de Clima';
+        document.getElementById('resp-modal-quarter').textContent = currentRespondentSurvey.quarter || 'Q4 2026';
+        document.getElementById('resp-modal-intro').textContent = currentRespondentSurvey.intro || 'Tu opinión es 100% anónima. Ninguna persona sabrá quién ha respondido.';
+
+        const cohortSelect = document.getElementById('resp-cohort-select');
+        if (cohortSelect && currentRespondentSurvey.cohort && currentRespondentSurvey.cohort !== 'Todos') {
+          cohortSelect.value = currentRespondentSurvey.cohort;
+        }
+
+        const questionsContainer = document.getElementById('resp-questions-container');
+        questionsContainer.innerHTML = '';
+
+        (currentRespondentSurvey.questions || []).forEach((q, idx) => {
+          const qBox = document.createElement('div');
+          qBox.className = 'p-3.5 rounded-xl bg-surface-container-low border border-surface-container space-y-2';
+          const dimLabel = q.dimension ? `<span class="text-[10px] uppercase font-bold text-primary px-2 py-0.5 rounded bg-primary/10 ml-2">${escapeHtml(q.dimension)}</span>` : '';
+          
+          if (q.type === 'rating') {
+            qBox.innerHTML = `
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-on-surface">${idx + 1}. ${escapeHtml(q.text)} ${dimLabel}</label>
+                <span class="text-[10px] text-tertiary font-semibold">1–5 estrellas</span>
+              </div>
+              <input type="hidden" id="resp-q-${idx}" name="resp-q-${idx}" value="3">
+              <div class="flex items-center justify-between gap-1 pt-1">
+                ${[1, 2, 3, 4, 5].map(star => `
+                  <button type="button" onclick="selectRespondentRating(${idx}, ${star})" id="btn-star-${idx}-${star}" class="flex-1 py-2 rounded-lg ${star === 3 ? 'bg-secondary-container text-on-secondary-container ring-1 ring-secondary font-bold' : 'bg-surface-container text-on-surface hover:bg-secondary-container/40'} text-xs font-headline font-bold transition-all flex flex-col items-center">
+                    <span class="material-symbols-outlined text-base">${star <= 3 ? 'star' : 'star_rate'}</span>
+                    <span>${star}</span>
+                  </button>
+                `).join('')}
+              </div>
+              <div class="flex justify-between text-[10px] text-tertiary px-1">
+                <span>Podría mejorar</span>
+                <span>Muy satisfecho</span>
+              </div>
+            `;
+            respondentRatings[idx] = 3;
+          } else if (q.type === 'open_text') {
+            qBox.innerHTML = `
+              <label class="text-xs font-bold text-on-surface block">${idx + 1}. ${escapeHtml(q.text)} ${dimLabel}</label>
+              <textarea id="resp-q-${idx}" rows="2" class="w-full bg-surface-container-lowest border border-surface-container p-2.5 rounded-lg text-xs text-on-surface focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-tertiary/70" placeholder="Escribe tu opinión de forma 100% anónima (sin nombres ni datos personales)..."></textarea>
+            `;
+          } else if (q.type === 'multiple_choice') {
+            const choices = q.choices || ['Opción A', 'Opción B'];
+            qBox.innerHTML = `
+              <label class="text-xs font-bold text-on-surface block mb-1.5">${idx + 1}. ${escapeHtml(q.text)} ${dimLabel}</label>
+              <div class="space-y-1.5">
+                ${choices.map((ch, cIdx) => `
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs text-on-surface cursor-pointer">
+                    <input type="radio" name="resp-q-${idx}" value="${escapeHtml(ch)}" ${cIdx === 0 ? 'checked' : ''} class="accent-primary">
+                    <span>${escapeHtml(ch)}</span>
+                  </label>
+                `).join('')}
+              </div>
+            `;
+          } else if (q.type === 'yes_no') {
+            qBox.innerHTML = `
+              <label class="text-xs font-bold text-on-surface block mb-1.5">${idx + 1}. ${escapeHtml(q.text)} ${dimLabel}</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface cursor-pointer">
+                  <input type="radio" name="resp-q-${idx}" value="true" checked class="accent-primary">
+                  <span>Sí</span>
+                </label>
+                <label class="flex items-center justify-center gap-1.5 p-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface cursor-pointer">
+                  <input type="radio" name="resp-q-${idx}" value="false" class="accent-primary">
+                  <span>No</span>
+                </label>
+              </div>
+            `;
+          }
+          questionsContainer.appendChild(qBox);
+        });
+
+        document.getElementById('respondent-modal').classList.remove('hidden');
+      } catch (err) {
+        showToast('Error cargando la consulta: ' + err, 'error');
+      }
+    }
+
+    function closeRespondentModal() {
+      document.getElementById('respondent-modal').classList.add('hidden');
+    }
+
+    function selectRespondentRating(qIdx, val) {
+      respondentRatings[qIdx] = val;
+      const hiddenInput = document.getElementById(`resp-q-${qIdx}`);
+      if (hiddenInput) hiddenInput.value = val;
+
+      for (let s = 1; s <= 5; s++) {
+        const btn = document.getElementById(`btn-star-${qIdx}-${s}`);
+        if (btn) {
+          if (s === val) {
+            btn.className = 'flex-1 py-2 rounded-lg bg-secondary-container text-on-secondary-container ring-1 ring-secondary font-bold text-xs font-headline transition-all flex flex-col items-center';
+          } else {
+            btn.className = 'flex-1 py-2 rounded-lg bg-surface-container text-on-surface hover:bg-secondary-container/40 text-xs font-headline font-bold transition-all flex flex-col items-center';
+          }
+        }
+      }
+    }
+
+    async function submitSurveyResponse(e) {
+      e.preventDefault();
+      if (!currentRespondentSurvey) return;
+
+      const surveyId = document.getElementById('resp-survey-id').value;
+      const cohort = document.getElementById('resp-cohort-select').value;
+      const turno = document.getElementById('resp-turno-select').value;
+
+      const answers = [];
+      let openComment = '';
+
+      (currentRespondentSurvey.questions || []).forEach((q, idx) => {
+        if (q.type === 'rating') {
+          const val = respondentRatings[idx] !== undefined ? respondentRatings[idx] : parseInt(document.getElementById(`resp-q-${idx}`)?.value || '3', 10);
+          answers.push(val);
+        } else if (q.type === 'open_text') {
+          const txt = document.getElementById(`resp-q-${idx}`)?.value || '';
+          answers.push(txt);
+          if (txt && !openComment) openComment = txt;
+        } else if (q.type === 'multiple_choice') {
+          const checked = document.querySelector(`input[name="resp-q-${idx}"]:checked`);
+          answers.push(checked ? checked.value : (q.choices ? q.choices[0] : ''));
+        } else if (q.type === 'yes_no') {
+          const checked = document.querySelector(`input[name="resp-q-${idx}"]:checked`);
+          answers.push(checked ? (checked.value === 'true') : true);
+        }
+      });
+
+      const submitBtn = document.getElementById('resp-submit-btn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Guardando...';
+      }
+
+      try {
+        const res = await fetch('/api/responses', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            survey_id: surveyId,
+            cohort: cohort,
+            turno: turno,
+            answers: answers,
+            comment: openComment
+          })
+        });
+
+        if (res.ok) {
+          showToast('¡Respuesta registrada con éxito! Tu valoración se ha sumado a los estadísticos de la encuesta.', 'success');
+          closeRespondentModal();
+          loadDashboardData();
+          loadStatisticalEngineData(surveyId);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          showToast(errData.error || 'No se pudo guardar la respuesta.', 'error');
+        }
+      } catch (err) {
+        showToast('Error de conexión al enviar respuesta.', 'error');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span class="material-symbols-outlined text-sm">send</span> Enviar Mi Respuesta Anónima';
+        }
       }
     }
 
@@ -1386,65 +1788,440 @@
       }
     }
 
-    async function loadStatisticalEngineData() {
+    let currentInsightsFilterMode = 'survey'; // 'survey' | 'quarter' | 'year'
+    let currentInsightsFilterValue = '';
+    let currentInsightsSurveyId = '';
+    let cachedAvailableSurveys = [];
+    let cachedAvailableQuarters = [];
+    let cachedAvailableYears = [];
+
+    function setInsightsFilterMode(mode) {
+      currentInsightsFilterMode = mode;
+
+      const btnSurvey = document.getElementById('filter-mode-survey');
+      const btnQuarter = document.getElementById('filter-mode-quarter');
+      const btnYear = document.getElementById('filter-mode-year');
+
+      const activeClass = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs';
+      const inactiveClass = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50';
+
+      if (btnSurvey) btnSurvey.className = mode === 'survey' ? activeClass : inactiveClass;
+      if (btnQuarter) btnQuarter.className = mode === 'quarter' ? activeClass : inactiveClass;
+      if (btnYear) btnYear.className = mode === 'year' ? activeClass : inactiveClass;
+
+      populateInsightsFilterSelect();
+      loadStatisticalEngineData();
+    }
+
+    function populateInsightsFilterSelect() {
+      const select = document.getElementById('insights-filter-select');
+      if (!select) return;
+
+      if (currentInsightsFilterMode === 'quarter') {
+        const quarters = cachedAvailableQuarters.length > 0 ? cachedAvailableQuarters : ['Q4 2026', 'Q3 2026', 'Q2 2026', 'Q1 2026'];
+        if (!currentInsightsFilterValue || !quarters.includes(currentInsightsFilterValue)) {
+          currentInsightsFilterValue = quarters[0];
+        }
+        select.innerHTML = quarters.map(q => `
+          <option value="${escapeHtml(q)}" ${q === currentInsightsFilterValue ? 'selected' : ''}>
+            📅 ${escapeHtml(q)} (Consolidado)
+          </option>
+        `).join('');
+      } else if (currentInsightsFilterMode === 'year') {
+        const years = cachedAvailableYears.length > 0 ? cachedAvailableYears : ['2026', '2025'];
+        if (!currentInsightsFilterValue || !years.includes(currentInsightsFilterValue)) {
+          currentInsightsFilterValue = years[0];
+        }
+        select.innerHTML = years.map(y => `
+          <option value="${escapeHtml(y)}" ${y === currentInsightsFilterValue ? 'selected' : ''}>
+            📆 Año ${escapeHtml(y)} (Consolidado)
+          </option>
+        `).join('');
+      } else {
+        const surveys = cachedAvailableSurveys || [];
+        if (!currentInsightsSurveyId && surveys.length > 0) {
+          currentInsightsSurveyId = surveys[0].id;
+        }
+        currentInsightsFilterValue = currentInsightsSurveyId;
+        select.innerHTML = surveys.map(s => `
+          <option value="${escapeHtml(s.id)}" ${s.id === currentInsightsSurveyId ? 'selected' : ''}>
+            [${escapeHtml(s.quarter || 'Q4 2026')}] ${escapeHtml(s.title)} (${escapeHtml(s.status)})
+          </option>
+        `).join('');
+      }
+    }
+
+    function onInsightsFilterValueChanged(val) {
+      currentInsightsFilterValue = val;
+      if (currentInsightsFilterMode === 'survey') {
+        currentInsightsSurveyId = val;
+      }
+      loadStatisticalEngineData();
+    }
+
+    async function loadStatisticalEngineData(targetSurveyId) {
       try {
-        const res = await fetch('/api/stats/engine');
+        if (targetSurveyId) {
+          currentInsightsFilterMode = 'survey';
+          currentInsightsSurveyId = targetSurveyId;
+          currentInsightsFilterValue = targetSurveyId;
+
+          const btnSurvey = document.getElementById('filter-mode-survey');
+          const btnQuarter = document.getElementById('filter-mode-quarter');
+          const btnYear = document.getElementById('filter-mode-year');
+          if (btnSurvey) btnSurvey.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs';
+          if (btnQuarter) btnQuarter.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50';
+          if (btnYear) btnYear.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50';
+        }
+
+        let url = '/api/stats/engine?';
+        if (currentInsightsFilterMode === 'quarter') {
+          url += `filter_type=quarter&filter_value=${encodeURIComponent(currentInsightsFilterValue || 'Q4 2026')}`;
+        } else if (currentInsightsFilterMode === 'year') {
+          url += `filter_type=year&filter_value=${encodeURIComponent(currentInsightsFilterValue || '2026')}`;
+        } else {
+          url += `filter_type=survey&filter_value=${encodeURIComponent(currentInsightsSurveyId || '')}`;
+        }
+
+        const res = await fetch(url);
         if (!res.ok) return;
         const data = await res.json();
 
+        cachedAvailableSurveys = data.encuestas_disponibles || [];
+        cachedAvailableQuarters = data.cuatrimestres_disponibles || [];
+        cachedAvailableYears = data.anos_disponibles || [];
+
+        if (currentInsightsFilterMode === 'survey' && data.survey_id_activo) {
+          currentInsightsSurveyId = data.survey_id_activo;
+          currentInsightsFilterValue = data.survey_id_activo;
+        }
+
+        populateInsightsFilterSelect();
+
+        // 2. Metadatos y Cuatrimestre
+        const meta = data.metadatos_encuesta || {};
+        const quarterBadge = document.getElementById('insights-quarter-badge');
+        if (quarterBadge) quarterBadge.textContent = meta.quarter || 'Q4 2026';
+
+        // 3. Resumen de KPIs Ejecutivos
+        const kpis = data.kpis_ejecutivos || {};
+        const statsGlobal = data.estadisticas_globales || {};
+
+        const kpiQuarter = document.getElementById('insights-kpi-quarter');
+        if (kpiQuarter) kpiQuarter.textContent = meta.quarter || 'Q4 2026';
+
+        const kpiStatus = document.getElementById('insights-kpi-status');
+        if (kpiStatus) kpiStatus.textContent = currentInsightsFilterMode === 'quarter' ? 'Cuatrimestre Consolidado' : currentInsightsFilterMode === 'year' ? 'Año Completo' : `${meta.status === 'published' ? 'Publicada' : meta.status === 'approved' ? 'Aprobada' : 'Borrador'} • ${meta.cohort || 'Todos'}`;
+
+        const kpiTotalResp = document.getElementById('insights-kpi-total-resp');
+        if (kpiTotalResp) kpiTotalResp.textContent = kpis.total_respuestas !== undefined ? kpis.total_respuestas : (data.participacion_y_cobertura ? data.participacion_y_cobertura.total_respuestas : 0);
+
+        const kpiRealResp = document.getElementById('insights-kpi-real-resp');
+        if (kpiRealResp) kpiRealResp.textContent = `${data.respuestas_reales_capturadas || 0} vía QR/Typeform`;
+
+        const kpiMean = document.getElementById('insights-kpi-mean');
+        if (kpiMean) kpiMean.textContent = kpis.media_clima !== undefined ? Number(kpis.media_clima).toFixed(2) : (statsGlobal.media !== undefined ? Number(statsGlobal.media).toFixed(2) : '0.00');
+
+        const kpiMedian = document.getElementById('insights-kpi-median');
+        if (kpiMedian) kpiMedian.textContent = kpis.mediana_clima !== undefined ? Number(kpis.mediana_clima).toFixed(1) : (statsGlobal.mediana !== undefined ? Number(statsGlobal.mediana).toFixed(1) : '0.0');
+
+        const kpiStd = document.getElementById('insights-kpi-std');
+        if (kpiStd) kpiStd.textContent = kpis.desviacion_tipica !== undefined ? Number(kpis.desviacion_tipica).toFixed(2) : (statsGlobal.desviacion_tipica !== undefined ? Number(statsGlobal.desviacion_tipica).toFixed(2) : '0.00');
+
+        const kpiDiag = document.getElementById('insights-kpi-diag');
+        if (kpiDiag) kpiDiag.textContent = kpis.diagnostico || statsGlobal.diagnostico || 'Consistente';
+
+        const kpiConf = document.getElementById('insights-kpi-conf');
+        if (kpiConf) kpiConf.textContent = kpis.nivel_confianza || 'Alta';
+
+        // 4. SECCIÓN COMPARATIVA DE CONSULTAS / CUATRIMESTRES
+        const compSection = document.getElementById('insights-comparativa-section');
+        const compThead = document.getElementById('insights-comparativa-thead');
+        const compTbody = document.getElementById('insights-comparativa-tbody');
+        const compTitle = document.getElementById('insights-comparativa-title');
+        const compSubtitle = document.getElementById('insights-comparativa-subtitle');
+        const compBadge = document.getElementById('insights-comparativa-badge');
+
+        const comparativa = data.comparativa_periodo || [];
+
+        if (compSection) {
+          if (currentInsightsFilterMode !== 'survey' && comparativa.length > 0) {
+            compSection.classList.remove('hidden');
+
+            if (currentInsightsFilterMode === 'quarter') {
+              if (compTitle) compTitle.innerHTML = `<span class="material-symbols-outlined text-base text-primary">equalizer</span><span>Comparativa de Consultas del Cuatrimestre (${escapeHtml(currentInsightsFilterValue)})</span>`;
+              if (compSubtitle) compSubtitle.textContent = 'Relación de índices de participación y clima entre encuestas del cuatrimestre.';
+              if (compBadge) compBadge.textContent = 'Por Cuatrimestre';
+
+              if (compThead) {
+                compThead.innerHTML = `
+                  <tr>
+                    <th class="p-3">Consulta / Campaña</th>
+                    <th class="p-3">Colectivo</th>
+                    <th class="p-3 text-center">Respuestas</th>
+                    <th class="p-3 text-center">Media Clima (μ)</th>
+                    <th class="p-3 text-center">Desv. Típica (σ)</th>
+                    <th class="p-3">Índice de Participación Relativo</th>
+                    <th class="p-3 text-right">Acción</th>
+                  </tr>
+                `;
+              }
+
+              if (compTbody) {
+                compTbody.innerHTML = comparativa.map(item => `
+                  <tr>
+                    <td class="p-3 font-semibold text-on-surface">${escapeHtml(item.titulo)}</td>
+                    <td class="p-3 text-tertiary">${escapeHtml(item.colectivo)}</td>
+                    <td class="p-3 text-center font-bold tabular-nums">${item.total_respuestas}</td>
+                    <td class="p-3 text-center font-bold text-primary tabular-nums">${Number(item.media_clima || 0).toFixed(2)}</td>
+                    <td class="p-3 text-center tabular-nums">${Number(item.desviacion_tipica || 0).toFixed(2)}</td>
+                    <td class="p-3">
+                      <div class="flex items-center gap-2">
+                        <div class="flex-1 bg-surface-container rounded-full h-2 overflow-hidden">
+                          <div class="bg-primary h-full rounded-full transition-all" style="width: ${Math.min(100, item.indice_participacion_pct)}%"></div>
+                        </div>
+                        <span class="text-[11px] font-bold tabular-nums text-on-surface w-10 text-right">${item.indice_participacion_pct}%</span>
+                      </div>
+                    </td>
+                    <td class="p-3 text-right">
+                      <button onclick="viewSurveyInsights('${item.id}')" class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container hover:bg-secondary hover:text-on-secondary text-[10px] font-bold transition-all shadow-xs inline-flex items-center gap-1">
+                        <span class="material-symbols-outlined text-xs">visibility</span>
+                        Ver Detalle
+                      </button>
+                    </td>
+                  </tr>
+                `).join('');
+              }
+            } else if (currentInsightsFilterMode === 'year') {
+              if (compTitle) compTitle.innerHTML = `<span class="material-symbols-outlined text-base text-primary">calendar_month</span><span>Evolución por Cuatrimestres del Año (${escapeHtml(currentInsightsFilterValue)})</span>`;
+              if (compSubtitle) compSubtitle.textContent = 'Relación de participación y clima a lo largo de los 4 cuatrimestres del año.';
+              if (compBadge) compBadge.textContent = 'Anual';
+
+              if (compThead) {
+                compThead.innerHTML = `
+                  <tr>
+                    <th class="p-3">Cuatrimestre</th>
+                    <th class="p-3 text-center">Respuestas Acumuladas</th>
+                    <th class="p-3 text-center">Media Clima (μ)</th>
+                    <th class="p-3 text-center">Desv. Típica (σ)</th>
+                    <th class="p-3">Cuota de Participación Anual</th>
+                    <th class="p-3 text-right">Acción</th>
+                  </tr>
+                `;
+              }
+
+              if (compTbody) {
+                compTbody.innerHTML = comparativa.map(item => `
+                  <tr>
+                    <td class="p-3 font-semibold text-on-surface">
+                      <span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-bold text-[10px]">${escapeHtml(item.cuatrimestre)}</span>
+                    </td>
+                    <td class="p-3 text-center font-bold tabular-nums">${item.total_respuestas}</td>
+                    <td class="p-3 text-center font-bold text-primary tabular-nums">${item.activo ? Number(item.media_clima || 0).toFixed(2) : '—'}</td>
+                    <td class="p-3 text-center tabular-nums">${item.activo ? Number(item.desviacion_tipica || 0).toFixed(2) : '—'}</td>
+                    <td class="p-3">
+                      <div class="flex items-center gap-2">
+                        <div class="flex-1 bg-surface-container rounded-full h-2 overflow-hidden">
+                          <div class="bg-primary h-full rounded-full transition-all" style="width: ${Math.min(100, item.indice_participacion_pct)}%"></div>
+                        </div>
+                        <span class="text-[11px] font-bold tabular-nums text-on-surface w-10 text-right">${item.indice_participacion_pct}%</span>
+                      </div>
+                    </td>
+                    <td class="p-3 text-right">
+                      <button onclick="filterByQuarterDirect('${item.cuatrimestre}')" class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container hover:bg-secondary hover:text-on-secondary text-[10px] font-bold transition-all shadow-xs inline-flex items-center gap-1" ${!item.activo ? 'disabled opacity-40 cursor-not-allowed' : ''}>
+                        <span class="material-symbols-outlined text-xs">filter_alt</span>
+                        Filtrar Cuatrimestre
+                      </button>
+                    </td>
+                  </tr>
+                `).join('');
+              }
+            }
+          } else {
+            compSection.classList.add('hidden');
+          }
+        }
+
+        // 5. Alertas de sesgo y polarización
         const alerts = data.alertas_de_sesgo || {};
         const repAlerts = alerts.alerta_representatividad_baja_participacion || [];
         const polAlerts = alerts.alerta_polarizacion_grupal || [];
 
-        if (repAlerts.length > 0) {
-          const first = repAlerts[0];
-          document.getElementById('alert-rep-text').innerHTML = `
-            <strong>${escapeHtml(first.rol)}:</strong> ${first.porcentaje_observado}% de participación. Bajo el umbral mínimo (${first.umbral_minimo}%).
-          `;
-        }
-        if (polAlerts.length > 0) {
-          const first = polAlerts[0];
-          document.getElementById('alert-pol-text').innerHTML = `
-            <strong>${escapeHtml(first.rol)} (${escapeHtml(first.pregunta)}):</strong> Desviación típica de ${first.desviacion_tipica}.
-          `;
+        const repTextEl = document.getElementById('alert-rep-text');
+        if (repTextEl) {
+          if (repAlerts.length > 0) {
+            repTextEl.innerHTML = `<strong>${escapeHtml(repAlerts[0].rol)}:</strong> ${escapeHtml(repAlerts[0].mensaje || `${repAlerts[0].porcentaje_observado}% de participación. Bajo el umbral mínimo (${repAlerts[0].umbral_minimo}%).`)}`;
+          } else {
+            repTextEl.textContent = 'Participación equilibrada entre los colectivos según la plantilla de Damm.';
+          }
         }
 
-        const totalAlerts = repAlerts.length + polAlerts.length;
-        document.getElementById('kpi-bias-status').textContent = totalAlerts > 0 ? `${totalAlerts} Alertas Activas` : "Equilibrado";
+        const polTextEl = document.getElementById('alert-pol-text');
+        if (polTextEl) {
+          if (polAlerts.length > 0) {
+            polTextEl.innerHTML = `<strong>${escapeHtml(polAlerts[0].rol || 'Colectivo')}:</strong> ${escapeHtml(polAlerts[0].mensaje || `Desviación típica de ${polAlerts[0].desviacion_tipica} en ${polAlerts[0].pregunta}.`)}`;
+          } else {
+            polTextEl.textContent = 'Sin polarización bimodal detectada en este periodo (σ < 1.25).';
+          }
+        }
 
+        const kTextEl = document.getElementById('alert-k-text');
+        if (kTextEl) {
+          kTextEl.textContent = alerts.garantia_k_anonimato || 'Garantía estricta de k-anonimato (k ≥ 5). Cortes < 5 suprimidos.';
+        }
+
+        const kpiBiasStatus = document.getElementById('kpi-bias-status');
+        if (kpiBiasStatus) {
+          const totalAlerts = (repAlerts.length + polAlerts.length);
+          kpiBiasStatus.textContent = totalAlerts > 0 ? `${totalAlerts} Alertas Activas` : "Equilibrado";
+        }
+
+        // 6. Matriz de Cobertura Rol x Turno
         const matrixBody = document.getElementById('coverage-matrix-body');
         const porRolTurno = (data.participacion_y_cobertura && data.participacion_y_cobertura.por_rol_turno) || {};
         const porRol = (data.participacion_y_cobertura && data.participacion_y_cobertura.por_rol) || {};
 
-        if (Object.keys(porRolTurno).length > 0 && matrixBody) {
-          matrixBody.innerHTML = '';
-          for (const [rol, turnos] of Object.entries(porRolTurno)) {
-            const m = turnos['Mañana'] ? `${turnos['Mañana'].n_respuestas} (${turnos['Mañana'].porcentaje_total}%)` : '—';
-            const t = turnos['Tarde'] ? `${turnos['Tarde'].n_respuestas} (${turnos['Tarde'].porcentaje_total}%)` : '—';
-            const n = turnos['Noche'] ? `${turnos['Noche'].n_respuestas} (${turnos['Noche'].porcentaje_total}%)` : '—';
-            const totalR = porRol[rol] ? porRol[rol].n_respuestas : 0;
-            const pctR = porRol[rol] ? porRol[rol].porcentaje_total : 0;
-            const isLow = pctR < 15;
+        if (matrixBody) {
+          if (Object.keys(porRolTurno).length > 0) {
+            matrixBody.innerHTML = '';
+            for (const [rol, turnos] of Object.entries(porRolTurno)) {
+              const m = turnos['Mañana'] ? `${turnos['Mañana'].n_respuestas} (${turnos['Mañana'].porcentaje_total}%)` : '—';
+              const t = turnos['Tarde'] ? `${turnos['Tarde'].n_respuestas} (${turnos['Tarde'].porcentaje_total}%)` : '—';
+              const n = turnos['Noche'] ? `${turnos['Noche'].n_respuestas} (${turnos['Noche'].porcentaje_total}%)` : '—';
+              const totalR = porRol[rol] ? porRol[rol].n_respuestas : 0;
+              const pctR = porRol[rol] ? porRol[rol].porcentaje_total : 0;
+              const isLow = porRol[rol] ? Boolean(porRol[rol].es_baja_participacion) : false;
 
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td class="p-3 font-semibold">${escapeHtml(rol)}</td>
-              <td class="p-3 text-center tabular-nums">${m}</td>
-              <td class="p-3 text-center tabular-nums">${t}</td>
-              <td class="p-3 text-center tabular-nums">${n}</td>
-              <td class="p-3 text-center font-bold tabular-nums">${totalR}</td>
-              <td class="p-3 text-center">
-                <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                  isLow ? 'bg-status-warning/10 text-status-warning' : 'bg-status-positive/10 text-status-positive'
-                }">${pctR}% ${isLow ? '(Bajo)' : ''}</span>
-              </td>
-            `;
-            matrixBody.appendChild(tr);
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td class="p-3 font-semibold">${escapeHtml(rol)}</td>
+                <td class="p-3 text-center tabular-nums">${m}</td>
+                <td class="p-3 text-center tabular-nums">${t}</td>
+                <td class="p-3 text-center tabular-nums">${n}</td>
+                <td class="p-3 text-center font-bold tabular-nums">${totalR}</td>
+                <td class="p-3 text-center">
+                  <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                    isLow ? 'bg-status-warning/10 text-status-warning' : 'bg-status-positive/10 text-status-positive'
+                  }">${pctR}% ${isLow ? '(Bajo)' : ''}</span>
+                </td>
+              `;
+              matrixBody.appendChild(tr);
+            }
           }
         }
+
+        // 7. Tabla de Estadísticas Descriptivas
+        const descTbody = document.getElementById('descriptive-stats-tbody');
+        const statsDescriptivas = data.estadisticas_descriptivas || {};
+        if (descTbody) {
+          if (Object.keys(statsDescriptivas).length > 0) {
+            descTbody.innerHTML = '';
+            for (const [dimKey, s] of Object.entries(statsDescriptivas)) {
+              const isPol = (s.desviacion_tipica >= 1.25 || s.varianza >= 1.55);
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td class="p-3 font-semibold">${escapeHtml(dimKey)}</td>
+                <td class="p-3 text-center font-bold tabular-nums text-primary">${Number(s.media || 0).toFixed(3)}</td>
+                <td class="p-3 text-center tabular-nums">${Number(s.mediana || 0).toFixed(3)}</td>
+                <td class="p-3 text-center tabular-nums font-bold ${isPol ? 'text-status-critical' : ''}">${Number(s.desviacion_tipica || 0).toFixed(3)}</td>
+                <td class="p-3 text-center tabular-nums">${Number(s.varianza || 0).toFixed(3)}</td>
+                <td class="p-3 text-center tabular-nums">${Number(s.asimetria || 0).toFixed(3)}</td>
+                <td class="p-3 text-center">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isPol ? 'bg-status-critical/10 text-status-critical' : 'bg-status-positive/10 text-status-positive'}">
+                    ${escapeHtml(s.diagnostico || 'Consistente')}
+                  </span>
+                </td>
+              `;
+              descTbody.appendChild(tr);
+            }
+          }
+        }
+
+        // 8. Análisis Cualitativo & Sentimiento
+        const quali = data.analisis_cualitativo || {};
+        const sent = quali.sentimiento_global || {};
+        const totalCommentsEl = document.getElementById('qualitative-total-comments');
+        if (totalCommentsEl) totalCommentsEl.textContent = `${quali.total_comentarios || 0} comentarios analizados`;
+
+        const posEl = document.getElementById('qualitative-pos-pct');
+        if (posEl) posEl.textContent = `${sent.positivo_pct || 0}%`;
+        const neuEl = document.getElementById('qualitative-neu-pct');
+        if (neuEl) neuEl.textContent = `${sent.neutro_pct || 0}%`;
+        const critEl = document.getElementById('qualitative-crit-pct');
+        if (critEl) critEl.textContent = `${sent.critico_pct || 0}%`;
+
+        const topicsList = document.getElementById('qualitative-topics-list');
+        if (topicsList) {
+          const temas = quali.temas || [];
+          if (temas.length === 0) {
+            topicsList.innerHTML = '<span class="text-xs text-tertiary italic">Sin temas suficientes</span>';
+          } else {
+            topicsList.innerHTML = temas.map(t => `
+              <div class="flex items-center justify-between text-xs p-1.5 rounded bg-surface-container">
+                <span class="font-medium text-on-surface">${escapeHtml(t.tema)}</span>
+                <span class="font-bold ${t.es_emergente ? 'text-status-warning' : 'text-tertiary'}">${t.porcentaje}% (${t.frecuencia})</span>
+              </div>
+            `).join('');
+          }
+        }
+
+        const quotesList = document.getElementById('qualitative-quotes-list');
+        if (quotesList) {
+          const quotes = quali.extractos_anonimizados || [];
+          if (quotes.length === 0) {
+            quotesList.innerHTML = '<div class="text-xs text-tertiary italic p-3 text-center">Aún no hay comentarios abiertos registrados para este periodo.</div>';
+          } else {
+            quotesList.innerHTML = quotes.map(q => `
+              <div class="p-2.5 rounded-lg bg-surface-container text-xs text-on-surface border-l-2 ${q.sentimiento === 'positivo' ? 'border-status-positive' : q.sentimiento === 'crítico' ? 'border-status-critical' : 'border-surface-container-high'}">
+                <p class="italic">"${escapeHtml(q.text)}"</p>
+                <span class="text-[10px] text-tertiary font-semibold uppercase mt-1 block">${escapeHtml(q.sentimiento || 'neutro')}</span>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 9. Recomendaciones para HR
+        const recContainer = document.getElementById('insights-recommendations-container');
+        if (recContainer) {
+          const recs = data.recomendaciones_hr || [];
+          if (recs.length === 0) {
+            recContainer.innerHTML = '<div class="p-4 rounded-xl bg-surface-container text-xs text-tertiary">No hay acciones requeridas de momento. Clima en rango óptimo.</div>';
+          } else {
+            recContainer.innerHTML = recs.map(r => `
+              <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container status-bar-gold space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-base">task_alt</span>
+                  <h4 class="text-xs font-bold text-on-surface">${escapeHtml(r.titulo)}</h4>
+                </div>
+                <p class="text-xs text-on-surface-variant">${escapeHtml(r.motivo)}</p>
+                <div class="p-2 rounded bg-surface-container text-[11px] text-on-surface font-medium">
+                  <strong>Acción propuesta:</strong> ${escapeHtml(r.accion)}
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
       } catch (e) {
         console.warn('Statistical engine fetch error', e);
       }
+    }
+
+    function filterByQuarterDirect(quarterLabel) {
+      setInsightsFilterMode('quarter');
+      currentInsightsFilterValue = quarterLabel;
+      const select = document.getElementById('insights-filter-select');
+      if (select) select.value = quarterLabel;
+      loadStatisticalEngineData();
+    }
+
+    function onInsightsSurveyChanged(surveyId) {
+      loadStatisticalEngineData(surveyId);
+    }
+
+    function viewSurveyInsights(surveyId) {
+      showPanel('insights');
+      loadStatisticalEngineData(surveyId);
     }
 
     async function loadAdminData() {
@@ -1456,11 +2233,13 @@
         const tbody = document.getElementById('admin-surveys-table-body');
         const countLabel = document.getElementById('admin-surveys-count-label');
         const surveys = data.surveys || [];
+        window.adminSurveysMap = {};
+        surveys.forEach(s => { window.adminSurveysMap[s.id] = s; });
         if (countLabel) countLabel.textContent = `${surveys.length} consultas registradas`;
 
         if (tbody) {
           if (surveys.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-tertiary">No hay consultas registradas. Usa el Generador Asistido para crear una.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-tertiary">No hay consultas registradas. Usa el Generador Asistido para crear una.</td></tr>';
           } else {
             tbody.innerHTML = '';
             surveys.forEach(s => {
@@ -1470,11 +2249,7 @@
                                  '<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-bold text-[10px]">Borrador</span>';
 
               const qrAction = (s.status === 'published' || s.status === 'approved')
-                ? `<button onclick="openQrModal('${escapeHtml(s.publish_url)}', '${s.id}', '${escapeHtml(s.title)}')" class="p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
-                : '';
-
-              const tfAction = s.typeform_id
-                ? `<a href="https://admin.typeform.com/form/${s.typeform_id}/create" target="_blank" class="p-1 text-secondary hover:text-on-surface inline-flex items-center" title="Editar en Typeform Studio"><span class="material-symbols-outlined text-base">edit_note</span></a>`
+                ? `<button onclick="openQrModalById('${s.id}')" class="p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
                 : '';
 
               const linkAction = s.status === 'published'
@@ -1491,13 +2266,14 @@
 
               tr.innerHTML = `
                 <td class="p-3 font-semibold">${escapeHtml(s.title)}</td>
+                <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-bold text-[10px]">${escapeHtml(s.quarter || 'Q4 2026')}</span></td>
                 <td class="p-3 text-tertiary">${escapeHtml(s.cohort)}</td>
                 <td class="p-3 text-center tabular-nums text-tertiary">${s.estimated_minutes} min</td>
                 <td class="p-3 text-center">${escapeHtml(s.channel)}</td>
                 <td class="p-3 text-center">${statusPill}</td>
                 <td class="p-3 text-right space-x-1">
+                  <button onclick="viewSurveyInsights('${s.id}')" class="p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver Estadísticas en Insights"><span class="material-symbols-outlined text-base">analytics</span></button>
                   ${qrAction}
-                  ${tfAction}
                   ${linkAction}
                   ${approveAction}
                   ${publishAction}
@@ -1783,6 +2559,74 @@
       if (modal) modal.classList.add('hidden');
     }
 
+    // Drag and Drop para reordenar preguntas en el editor
+    let draggedQIndex = null;
+
+    function disableCardDrag(el) {
+      const card = el.closest('.question-editor-card');
+      if (card) card.setAttribute('draggable', 'false');
+    }
+
+    function enableCardDrag(el) {
+      const card = el.closest('.question-editor-card');
+      if (card) card.setAttribute('draggable', 'true');
+    }
+
+    function onQDragStart(e, idx) {
+      draggedQIndex = idx;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(idx));
+      const card = e.currentTarget;
+      setTimeout(() => {
+        card.classList.add('opacity-40', 'border-dashed', 'border-primary');
+      }, 0);
+    }
+
+    function onQDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+
+    function onQDragEnter(e, targetIdx) {
+      e.preventDefault();
+      const card = e.currentTarget;
+      if (draggedQIndex !== null && draggedQIndex !== targetIdx) {
+        card.classList.add('ring-2', 'ring-primary', 'bg-surface-container');
+      }
+    }
+
+    function onQDragLeave(e) {
+      const card = e.currentTarget;
+      card.classList.remove('ring-2', 'ring-primary', 'bg-surface-container');
+    }
+
+    function onQDrop(e, targetIdx) {
+      e.preventDefault();
+      const card = e.currentTarget;
+      card.classList.remove('ring-2', 'ring-primary', 'bg-surface-container');
+      if (draggedQIndex !== null && draggedQIndex !== targetIdx) {
+        const moved = editingQuestions.splice(draggedQIndex, 1)[0];
+        editingQuestions.splice(targetIdx, 0, moved);
+        renderEditorQuestions();
+        showToast(`Pregunta reordenada a la posición ${targetIdx + 1}.`, 'info');
+      }
+    }
+
+    function onQDragEnd(e) {
+      draggedQIndex = null;
+      document.querySelectorAll('.question-editor-card').forEach(el => {
+        el.classList.remove('opacity-40', 'border-dashed', 'border-primary', 'ring-2', 'ring-primary', 'bg-surface-container');
+      });
+    }
+
+    function moveQuestionInEditor(fromIdx, direction) {
+      const toIdx = fromIdx + direction;
+      if (toIdx < 0 || toIdx >= editingQuestions.length) return;
+      const moved = editingQuestions.splice(fromIdx, 1)[0];
+      editingQuestions.splice(toIdx, 0, moved);
+      renderEditorQuestions();
+    }
+
     function renderEditorQuestions() {
       const container = document.getElementById('editor-questions-container');
       const badge = document.getElementById('editor-qcount-badge');
@@ -1801,35 +2645,52 @@
         const choicesStr = Array.isArray(q.choices) ? q.choices.join(', ') : (q.choices || '');
 
         return `
-          <div class="p-3.5 rounded-xl border border-surface-container bg-surface-container-low space-y-2.5">
+          <div class="question-editor-card p-3.5 rounded-xl border border-surface-container bg-surface-container-low space-y-2.5 transition-all select-none hover:border-primary/50 relative"
+               draggable="true"
+               data-idx="${idx}"
+               ondragstart="onQDragStart(event, ${idx})"
+               ondragover="onQDragOver(event)"
+               ondragenter="onQDragEnter(event, ${idx})"
+               ondragleave="onQDragLeave(event)"
+               ondrop="onQDrop(event, ${idx})"
+               ondragend="onQDragEnd(event)">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 cursor-grab active:cursor-grabbing" title="Arrastra para mover la pregunta arriba o abajo">
+                <span class="material-symbols-outlined text-lg text-tertiary select-none">drag_indicator</span>
                 <span class="w-6 h-6 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center font-mono">
                   ${idx + 1}
                 </span>
                 <span class="text-xs font-bold text-on-surface">Pregunta ${idx + 1}</span>
               </div>
-              <button type="button" onclick="deleteQuestionInEditor(${idx})" class="p-1 rounded text-tertiary hover:text-error hover:bg-error-container/30 transition-all ${editingQuestions.length <= 1 ? 'opacity-40 cursor-not-allowed' : ''}" title="Eliminar pregunta" ${editingQuestions.length <= 1 ? 'disabled' : ''}>
-                <span class="material-symbols-outlined text-base">delete</span>
-              </button>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="moveQuestionInEditor(${idx}, -1)" class="p-1 rounded text-tertiary hover:text-on-surface hover:bg-surface-container ${idx === 0 ? 'opacity-30 cursor-not-allowed' : ''}" title="Subir pregunta (pasa a ser Pregunta ${idx})" ${idx === 0 ? 'disabled' : ''}>
+                  <span class="material-symbols-outlined text-base">arrow_upward</span>
+                </button>
+                <button type="button" onclick="moveQuestionInEditor(${idx}, 1)" class="p-1 rounded text-tertiary hover:text-on-surface hover:bg-surface-container ${idx === editingQuestions.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}" title="Bajar pregunta (pasa a ser Pregunta ${idx + 2})" ${idx === editingQuestions.length - 1 ? 'disabled' : ''}>
+                  <span class="material-symbols-outlined text-base">arrow_downward</span>
+                </button>
+                <button type="button" onclick="deleteQuestionInEditor(${idx})" class="p-1 rounded text-tertiary hover:text-error hover:bg-error-container/30 transition-all ${editingQuestions.length <= 1 ? 'opacity-40 cursor-not-allowed' : ''}" title="Eliminar pregunta" ${editingQuestions.length <= 1 ? 'disabled' : ''}>
+                  <span class="material-symbols-outlined text-base">delete</span>
+                </button>
+              </div>
             </div>
 
-            <div>
+            <div class="select-text">
               <label class="text-[11px] font-bold text-tertiary block mb-1">Enunciado de la Pregunta</label>
-              <textarea rows="2" class="w-full bg-surface-container-lowest p-2.5 rounded-lg text-xs text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" oninput="updateEditorQTitle(${idx}, this.value)" placeholder="Escribe el enunciado de la pregunta...">${escapeHtml(q.title || '')}</textarea>
+              <textarea rows="2" class="w-full bg-surface-container-lowest p-2.5 rounded-lg text-xs text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onfocus="disableCardDrag(this)" onblur="enableCardDrag(this)" oninput="updateEditorQTitle(${idx}, this.value)" placeholder="Escribe el enunciado de la pregunta...">${escapeHtml(q.title || '')}</textarea>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 select-text">
               <div>
                 <label class="text-[11px] font-bold text-tertiary block mb-1">Dimensión del Clima</label>
-                <select class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs font-medium text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onchange="updateEditorQDimension(${idx}, this.value)">
+                <select class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs font-medium text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onfocus="disableCardDrag(this)" onblur="enableCardDrag(this)" onchange="updateEditorQDimension(${idx}, this.value)">
                   ${dimOptions}
                 </select>
               </div>
 
               <div>
                 <label class="text-[11px] font-bold text-tertiary block mb-1">Tipo de Respuesta</label>
-                <select class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs font-medium text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onchange="updateEditorQType(${idx}, this.value)">
+                <select class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs font-medium text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none" onfocus="disableCardDrag(this)" onblur="enableCardDrag(this)" onchange="updateEditorQType(${idx}, this.value)">
                   <option value="rating" ${isRating ? 'selected' : ''}>⭐ Escala de valoración (1 a 5)</option>
                   <option value="multiple_choice" ${isMultiple ? 'selected' : ''}>🔘 Opción múltiple</option>
                   <option value="open_text" ${isOpen ? 'selected' : ''}>✍️ Pregunta abierta (Texto)</option>
@@ -1838,9 +2699,9 @@
             </div>
 
             ${isMultiple ? `
-              <div class="pt-1">
+              <div class="pt-1 select-text">
                 <label class="text-[11px] font-bold text-tertiary block mb-1">Opciones de Respuesta (separadas por comas)</label>
-                <input type="text" value="${escapeHtml(choicesStr)}" class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none font-mono" oninput="updateEditorQChoices(${idx}, this.value)" placeholder="Ej: Muy de acuerdo, De acuerdo, En desacuerdo, Muy en desacuerdo">
+                <input type="text" value="${escapeHtml(choicesStr)}" class="w-full bg-surface-container-lowest p-2 rounded-lg text-xs text-on-surface border border-surface-container focus:ring-2 focus:ring-primary focus:outline-none font-mono" onfocus="disableCardDrag(this)" onblur="enableCardDrag(this)" oninput="updateEditorQChoices(${idx}, this.value)" placeholder="Ej: Muy de acuerdo, De acuerdo, En desacuerdo, Muy en desacuerdo">
               </div>
             ` : ''}
           </div>
@@ -2038,7 +2899,8 @@
       showToast('Generando síntesis ejecutiva basada en el JSON determinista...', 'info');
 
       try {
-        const res = await fetch('/api/insights/llm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const payloadBody = JSON.stringify({ survey_id: currentInsightsSurveyId || undefined });
+        const res = await fetch('/api/insights/llm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payloadBody });
         const data = await res.json();
         const box = document.getElementById('llm-insights-result-box');
         const content = document.getElementById('llm-insights-content');
@@ -2154,7 +3016,7 @@
       showPanel(initialHash);
       
       // Check if visiting respondent URL
-      const respondentMatch = window.location.pathname.match(/^\/respond\/([a-f0-9]{32})$/);
+      const respondentMatch = window.location.pathname.match(/^\/respond\/([a-zA-Z0-9_-]{8,64})$/);
       if (respondentMatch) {
         openCampaignRespondentModal(respondentMatch[1]);
       }

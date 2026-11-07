@@ -480,6 +480,18 @@ class GeneratorPanelTests(unittest.TestCase):
         content = card["attachments"][0]["content"]
         self.assertEqual(content["type"], "AdaptiveCard")
 
+    def test_qr_code_svg_and_png_generation(self):
+        from backend.admin import generate_qr_svg, generate_qr_png
+        target_url = "http://127.0.0.1:8000/respond/test_survey_123"
+        svg_bytes = generate_qr_svg(target_url)
+        self.assertIn(b"<svg", svg_bytes)
+        self.assertIn(b"</svg>", svg_bytes)
+        self.assertTrue(len(svg_bytes) > 200)
+
+        png_bytes = generate_qr_png(target_url)
+        self.assertTrue(png_bytes.startswith(b"\x89PNG"))
+        self.assertTrue(len(png_bytes) > 100)
+
 
 if __name__ == "__main__":
     unittest.main()

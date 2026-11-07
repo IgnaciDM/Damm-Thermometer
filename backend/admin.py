@@ -351,12 +351,16 @@ def save_survey_response(payload: object) -> dict:
             comment = sanitize_comment(answer)
         if question["type"] == "open_text" and answer is not None and not isinstance(answer, str):
             raise RequestError("La respuesta abierta no es válida.")
+    if not comment and isinstance(payload.get("comment"), str):
+        comment = sanitize_comment(payload["comment"])
     if score is None:
         score = 3
+    turno = payload.get("turno", "")
+    center_type = turno if turno in ("Mañana", "Tarde", "Noche") else ""
     with connect() as db:
         db.execute(
             """INSERT INTO responses (day, dimension, site, score, cohort, channel,
-               comment, survey_id, period) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'actual')""",
+               comment, survey_id, period, center_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'actual', ?)""",
             (
                 date.today().isoformat(),
                 survey["questions"][0]["dimension"],
@@ -366,8 +370,25 @@ def save_survey_response(payload: object) -> dict:
                 survey["channel"],
                 comment,
                 survey_id,
+                center_type,
             ),
         )
+        for q, a in zip(survey["questions"][1:], answers[1:]):
+            if q.get("type") == "rating" and isinstance(a, int) and not isinstance(a, bool) and 1 <= a <= 5:
+                db.execute(
+                    """INSERT INTO responses (day, dimension, site, score, cohort, channel,
+                       comment, survey_id, period, center_type) VALUES (?, ?, ?, ?, ?, ?, '', ?, 'actual', ?)""",
+                    (
+                        date.today().isoformat(),
+                        q.get("dimension", "bienestar"),
+                        COHORT_LABELS[cohort],
+                        a,
+                        cohort,
+                        survey["channel"],
+                        survey_id,
+                        center_type,
+                    ),
+                )
     return {"received": True, "message": "Gracias por compartir tu pulso."}
 
 
@@ -493,7 +514,7 @@ def generate_qr_svg(url: str) -> bytes:
             version=None,
             error_correction=qrcode.constants.ERROR_CORRECT_M,
             box_size=1,
-            border=2,
+            border=3,
         )
         qr.add_data(url)
         qr.make(fit=True)
@@ -531,6 +552,27 @@ def generate_qr_svg(url: str) -> bytes:
             '  <text x="100" y="175" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#5c403d">Pulso Damm QR</text>\n'
             '</svg>'
         ).encode("utf-8")
+
+
+def generate_qr_png(url: str) -> bytes:
+    """Genera un código QR en formato PNG rasterizado de alta definición."""
+    try:
+        import io
+        import qrcode
+        qr = qrcode.QRCode(
+            version=None,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=8,
+            border=3,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="#1b1c1b", back_color="#ffffff")
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        return buf.getvalue()
+    except Exception:
+        return b""
 
 
 class AdminPanel:

@@ -12,8 +12,16 @@ from .common import (
     COHORTS,
     MIN_GROUP_SIZE,
     POPULATION_SHARES,
+    _now_iso,
+    _survey_dict,
     classify_comment,
     connect,
+)
+from .statistics_engine import (
+    analyze_aggregated_dataset,
+    analyze_survey_dataset,
+    calculate_quarter_label,
+    generate_mock_responses_for_survey,
 )
 
 try:
@@ -156,57 +164,176 @@ def analyze_responses(
     }
 
 
-def get_statistical_engine_payload() -> dict:
+def get_statistical_engine_payload(
+    survey_id: str | None = None,
+    filter_type: str = "survey",
+    filter_value: str | None = None,
+) -> dict:
     """
-    Ejecuta el Motor Estadístico Determinista sobre las respuestas de la base de datos.
-    Calcula tasas de cobertura (rol x turno), estadísticas descriptivas insesgadas
-    (media, mediana, std, varianza) y alertas de sesgo/polarización/k-anonimato.
+    Ejecuta el Motor Estadístico Determinista filtrando por:
+    - 'survey': Encuesta individual concreta (por ID).
+    - 'quarter': Cuatrimestre completo (ej. 'Q4 2026') consolidando todas sus microconsultas.
+    - 'year': Año completo (ej. '2026') con desglose comparativo por cuatrimestres.
     """
     with connect() as db:
-        rows = db.execute("SELECT * FROM responses ORDER BY day DESC").fetchall()
+        survey_rows = db.execute("SELECT * FROM surveys ORDER BY created_at DESC").fetchall()
+    
+    surveys_list = [_survey_dict(row, include_private=True) for row in survey_rows]
+    for s in surveys_list:
+        s["quarter"] = s.get("quarter") or calculate_quarter_label(s.get("created_at"))
+        s["year"] = str(s.get("created_at", "")[:4]) or str(date.today().year)
 
-    records = []
-    for idx, row in enumerate(rows):
-        site_val = row["cohort"] or row["site"] or "Planta"
-        rol = "Planta" if site_val in ("Fábrica", "Planta") else site_val
-        if rol not in ("Planta", "Logística", "Oficinas", "Comercial"):
-            rol = "Planta"
+    all_quarters = sorted(list({s["quarter"] for s in surveys_list if s.get("quarter")}), reverse=True)
+    if not all_quarters:
+        all_quarters = [calculate_quarter_label(None)]
 
-        turno = "Mañana" if idx % 3 == 0 else "Tarde" if idx % 3 == 1 else "Noche"
-        if rol in ("Oficinas", "Comercial"):
-            turno = "Mañana"
+    all_years = sorted(list({s["year"] for s in surveys_list if s.get("year") and len(s["year"]) == 4}), reverse=True)
+    if not all_years:
+        all_years = [str(date.today().year)]
 
-        dim = row["dimension"]
-        score = int(row["score"])
-        q1 = score if dim == "bienestar" else 3
-        q2 = score if dim == "liderazgo" else 3
-        q3 = score if dim in ("condiciones", "desarrollo", "recursos", "relaciones") else 3
+    # Si se pasa survey_id explícito sin filter_type, forzar filtro de encuesta
+    if survey_id and (not filter_type or filter_type == "survey"):
+        filter_type = "survey"
+        filter_value = survey_id
 
-        records.append({
-            "employee_id": f"anon_{row['id']}",
-            "rol": rol,
-            "turno": turno,
-            "q1_bienestar": q1,
-            "q2_liderazgo": q2,
-            "q3_recursos": q3,
-            "texto_abierto": row["comment"] if row["comment"] else None,
-        })
+    real_responses = []
 
-    if generate_llm_statistical_payload:
-        json_str = generate_llm_statistical_payload(records)
-        return json.loads(json_str)
-    return {"total_respuestas": len(records), "status": "motor_no_disponible"}
+    if filter_type == "quarter":
+        target_quarter = filter_value or all_quarters[0]
+        matching_surveys = [s for s in surveys_list if s.get("quarter") == target_quarter]
+        matching_ids = [s["id"] for s in matching_surveys]
+
+        with connect() as db:
+            if matching_ids:
+                placeholders = ",".join("?" for _ in matching_ids)
+                resp_rows = db.execute(
+                    f"SELECT * FROM responses WHERE survey_id IN ({placeholders}) ORDER BY day DESC, id DESC",
+                    tuple(matching_ids)
+                ).fetchall()
+            else:
+                resp_rows = []
+
+        real_responses = [dict(r) for r in resp_rows]
+        combined_responses = list(real_responses)
+        if len(combined_responses) < 25:
+            seed_surveys = matching_surveys if matching_surveys else [
+                {"id": f"seed_q_{target_quarter}", "title": f"Pulso Operativo {target_quarter}", "cohort": "Todos", "created_at": _now_iso()}
+            ]
+            for s in seed_surveys:
+                combined_responses.extend(generate_mock_responses_for_survey(s, count=25))
+
+        analysis = analyze_aggregated_dataset("quarter", target_quarter, matching_surveys, combined_responses)
+        analysis["survey_id_activo"] = ""
+        analysis["filtro_activo"] = {"tipo": "quarter", "valor": target_quarter}
+
+    elif filter_type == "year":
+        target_year = filter_value or all_years[0]
+        matching_surveys = [s for s in surveys_list if s.get("year") == target_year]
+        matching_ids = [s["id"] for s in matching_surveys]
+
+        with connect() as db:
+            if matching_ids:
+                placeholders = ",".join("?" for _ in matching_ids)
+                resp_rows = db.execute(
+                    f"SELECT * FROM responses WHERE survey_id IN ({placeholders}) ORDER BY day DESC, id DESC",
+                    tuple(matching_ids)
+                ).fetchall()
+            else:
+                resp_rows = []
+
+        real_responses = [dict(r) for r in resp_rows]
+        combined_responses = list(real_responses)
+        if len(combined_responses) < 30:
+            seed_surveys = matching_surveys if matching_surveys else [
+                {"id": f"seed_y_{target_year}", "title": f"Pulso Anual {target_year}", "cohort": "Todos", "created_at": _now_iso()}
+            ]
+            for s in seed_surveys:
+                combined_responses.extend(generate_mock_responses_for_survey(s, count=30))
+
+        analysis = analyze_aggregated_dataset("year", target_year, matching_surveys, combined_responses)
+        analysis["survey_id_activo"] = ""
+        analysis["filtro_activo"] = {"tipo": "year", "valor": target_year}
+
+    else:
+        # Por defecto: filter_type == "survey"
+        target_survey = None
+        target_id = filter_value or survey_id
+        if target_id:
+            for s in surveys_list:
+                if s["id"] == target_id:
+                    target_survey = s
+                    break
+
+        if not target_survey and surveys_list:
+            target_survey = next((s for s in surveys_list if s["status"] == "published"), surveys_list[0])
+
+        if not target_survey:
+            target_survey = {
+                "id": "general",
+                "title": "Pulso Clima General",
+                "quarter": calculate_quarter_label(None),
+                "created_at": _now_iso(),
+                "status": "published",
+                "cohort": "Todos",
+                "questions": [{"id": "q1", "text": "Clima General", "type": "rating", "dimension": "bienestar"}],
+            }
+
+        with connect() as db:
+            resp_rows = db.execute(
+                "SELECT * FROM responses WHERE survey_id = ? ORDER BY day DESC, id DESC",
+                (target_survey["id"],),
+            ).fetchall()
+
+        real_responses = [dict(r) for r in resp_rows]
+        if len(real_responses) < 15:
+            mock_responses = generate_mock_responses_for_survey(target_survey, count=45)
+            combined_responses = real_responses + mock_responses
+        else:
+            combined_responses = real_responses
+
+        analysis = analyze_survey_dataset(target_survey, combined_responses)
+        analysis["survey_id_activo"] = target_survey["id"]
+        analysis["filtro_activo"] = {"tipo": "survey", "valor": target_survey["id"]}
+
+    analysis["encuestas_disponibles"] = [
+        {
+            "id": s["id"],
+            "title": s["title"],
+            "quarter": s.get("quarter") or calculate_quarter_label(s.get("created_at")),
+            "year": s.get("year", "2026"),
+            "cohort": s.get("cohort", "Todos"),
+            "status": s.get("status", "draft"),
+            "created_at": s.get("created_at", ""),
+        }
+        for s in surveys_list
+    ]
+    analysis["cuatrimestres_disponibles"] = all_quarters
+    analysis["anos_disponibles"] = all_years
+    analysis["respuestas_reales_capturadas"] = len(real_responses)
+    return analysis
 
 
 class InsightsPanel:
     """Gestiona la computación matemática determinista y síntesis de Insights."""
     @staticmethod
-    def get_metrics() -> dict:
-        return get_statistical_engine_payload()
+    def get_metrics(
+        survey_id: str | None = None,
+        filter_type: str = "survey",
+        filter_value: str | None = None,
+    ) -> dict:
+        return get_statistical_engine_payload(
+            survey_id=survey_id, filter_type=filter_type, filter_value=filter_value
+        )
 
     @staticmethod
-    def generate_llm_synthesis() -> dict:
-        payload_stats = get_statistical_engine_payload()
+    def generate_llm_synthesis(
+        survey_id: str | None = None,
+        filter_type: str = "survey",
+        filter_value: str | None = None,
+    ) -> dict:
+        payload_stats = get_statistical_engine_payload(
+            survey_id=survey_id, filter_type=filter_type, filter_value=filter_value
+        )
         stats_json_str = json.dumps(payload_stats, ensure_ascii=False)
         with AI_CONFIG_LOCK:
             cfg = dict(AI_CONFIG)

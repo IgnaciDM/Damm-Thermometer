@@ -19,7 +19,7 @@ import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
 # Asegurar rutas y resolución de paquete para ejecución directa: `python backend/app.py`
@@ -101,6 +101,7 @@ from .admin import (  # noqa: F401
     approve_survey,
     create_followup_survey,
     create_recommendations,
+    generate_qr_png,
     generate_qr_svg,
     get_admin_data,
     get_survey,
@@ -183,13 +184,25 @@ class PulsoHandler(BaseHTTPRequestHandler):
             self.send_json(200, SettingsPanel.get_status())
             return
         if path == "/api/stats/engine":
-            self.send_json(200, InsightsPanel.get_metrics())
+            query_params = parse_qs(parsed_url.query)
+            survey_id = query_params.get("survey_id", [None])[0]
+            filter_type = query_params.get("filter_type", ["survey"])[0]
+            filter_value = query_params.get("filter_value", [None])[0]
+            self.send_json(
+                200,
+                InsightsPanel.get_metrics(
+                    survey_id=survey_id,
+                    filter_type=filter_type,
+                    filter_value=filter_value,
+                ),
+            )
             return
 
-        # Código QR vectorial
-        qr_match = re.fullmatch(r"/api/surveys/([a-zA-Z0-9_-]{8,64})/qr\.svg", path)
+        # Código QR vectorial (SVG) o rasterizado (PNG)
+        qr_match = re.fullmatch(r"/api/surveys/([a-zA-Z0-9_-]{8,64})/qr\.(svg|png)", path)
         if qr_match:
             survey_id = qr_match.group(1)
+            ext = qr_match.group(2).lower()
             target_url = f"{self._public_base_url()}/respond/{survey_id}"
             try:
                 survey = get_survey(survey_id, public_only=False)
@@ -197,9 +210,14 @@ class PulsoHandler(BaseHTTPRequestHandler):
                     target_url = survey["publish_url"]
             except Exception:
                 pass
-            body = generate_qr_svg(target_url)
-            self.send_response(200)
-            self.send_header("Content-Type", "image/svg+xml")
+            if ext == "png":
+                body = generate_qr_png(target_url)
+                self.send_response(200)
+                self.send_header("Content-Type", "image/png")
+            else:
+                body = generate_qr_svg(target_url)
+                self.send_response(200)
+                self.send_header("Content-Type", "image/svg+xml; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))
             self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -208,7 +226,7 @@ class PulsoHandler(BaseHTTPRequestHandler):
             return
 
         # Consulta pública por ID
-        survey_match = re.fullmatch(r"/api/surveys/([a-f0-9]{32})", path)
+        survey_match = re.fullmatch(r"/api/surveys/([a-zA-Z0-9_-]{8,64})", path)
         if survey_match:
             try:
                 self.send_json(200, get_survey(survey_match.group(1), public_only=True))
@@ -217,7 +235,7 @@ class PulsoHandler(BaseHTTPRequestHandler):
             return
 
         # Pantalla de respuesta de microconsulta
-        if re.fullmatch(r"/respond/[a-f0-9]{32}", path):
+        if re.fullmatch(r"/respond/[a-zA-Z0-9_-]{8,64}", path):
             self.send_file("index.html", "text/html; charset=utf-8")
             return
 
@@ -269,7 +287,17 @@ class PulsoHandler(BaseHTTPRequestHandler):
 
             # Rutas de insights y motor estadístico
             elif path == "/api/insights/llm":
-                self.send_json(200, InsightsPanel.generate_llm_synthesis())
+                survey_id = payload.get("survey_id") if isinstance(payload, dict) else None
+                filter_type = payload.get("filter_type", "survey") if isinstance(payload, dict) else "survey"
+                filter_value = payload.get("filter_value") if isinstance(payload, dict) else None
+                self.send_json(
+                    200,
+                    InsightsPanel.generate_llm_synthesis(
+                        survey_id=survey_id,
+                        filter_type=filter_type,
+                        filter_value=filter_value,
+                    ),
+                )
 
             # Rutas de configuración
             elif path == "/api/settings":

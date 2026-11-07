@@ -342,6 +342,29 @@ def validate_questions(questions: object) -> list[dict]:
     return normalized
 
 
+def calculate_quarter_label(dt_or_iso: datetime | str | None) -> str:
+    """Calcula el cuatrimestre (Q1, Q2, Q3, Q4) y el año usando la librería estándar datetime."""
+    if not dt_or_iso:
+        dt = datetime.now()
+    elif isinstance(dt_or_iso, str):
+        try:
+            dt = datetime.fromisoformat(dt_or_iso.replace("Z", "+00:00"))
+        except Exception:
+            try:
+                dt = datetime.strptime(dt_or_iso[:10], "%Y-%m-%d")
+            except Exception:
+                dt = datetime.now()
+    elif isinstance(dt_or_iso, datetime):
+        dt = dt_or_iso
+    elif isinstance(dt_or_iso, date):
+        dt = datetime.combine(dt_or_iso, datetime.min.time())
+    else:
+        dt = datetime.now()
+
+    quarter = (dt.month - 1) // 3 + 1
+    return f"Q{quarter} {dt.year}"
+
+
 def _survey_dict(row: sqlite3.Row, include_private: bool = False) -> dict:
     result = {
         "id": row["id"],
@@ -355,6 +378,8 @@ def _survey_dict(row: sqlite3.Row, include_private: bool = False) -> dict:
         "estimated_minutes": min(row["max_duration"], max(1, round(len(json.loads(row["questions_json"])) * 0.25))),
         "frequency_days": row["frequency_days"],
         "followup_of": row["followup_of"],
+        "quarter": calculate_quarter_label(row["created_at"]),
+        "created_at": row["created_at"],
     }
     if include_private:
         result.update(
