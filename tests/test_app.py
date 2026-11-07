@@ -143,6 +143,23 @@ class QuestionTests(unittest.TestCase):
         self.assertEqual(json.loads(api_request.data)["model"], "test-model")
         self.assertEqual(api_request.get_header("Authorization"), "Bearer test-key")
 
+    def test_gemini_candidate_and_markdown_fence_parsing(self):
+        gemini_response = {
+            "candidates": [
+                {
+                    "content": {
+                        "parts": [
+                            {"text": "```json\n{\"title\": \"Pulso Damm\", \"intro\": \"Bienvenido\", \"questions\": []}\n```"}
+                        ]
+                    }
+                }
+            ]
+        }
+        content = app.extract_ai_content(gemini_response)
+        parsed = app.parse_ai_json(content)
+        self.assertEqual(parsed["title"], "Pulso Damm")
+        self.assertEqual(parsed["intro"], "Bienvenido")
+
 
 class SubmissionTests(unittest.TestCase):
     def test_submission_rejects_personal_or_invalid_payload(self):
@@ -394,6 +411,53 @@ class GeneratorPanelTests(unittest.TestCase):
                 self.assertIn("estadisticas_por_rol", payload)
                 self.assertIn("alertas_de_sesgo", payload)
                 self.assertGreater(payload["participacion_y_cobertura"]["total_respuestas"], 0)
+
+
+    def test_refine_survey_updates_specific_question(self):
+        initial_questions = [
+            {"title": "¿Cómo valoras los horarios?", "dimension": "Organización", "choices": ["A", "B", "C", "D"]},
+            {"title": "¿Cómo valoras la ergonomía?", "dimension": "Salud", "choices": ["A", "B", "C", "D"]},
+            {"title": "¿Cómo es la comunicación?", "dimension": "Liderazgo", "choices": ["A", "B", "C", "D"]}
+        ]
+        result = app.GeneratorPanel.refine_survey({
+            "user_prompt": "cambia la pregunta 2 por una sobre descansos en turno de noche",
+            "current_questions": initial_questions,
+            "cohort": "Planta"
+        })
+        self.assertEqual(len(result["questions"]), 3)
+        self.assertEqual(result["updated_indices"], [1])
+        self.assertIn("descansos", result["questions"][1]["title"].lower())
+        # Question 1 and 3 should remain untouched
+        self.assertEqual(result["questions"][0]["title"], initial_questions[0]["title"])
+        self.assertEqual(result["questions"][2]["title"], initial_questions[2]["title"])
+
+    def test_refine_survey_generates_all_questions_for_new_need(self):
+        result = app.GeneratorPanel.refine_survey({
+            "user_prompt": "clima general en centros logísticos tras la campaña de Navidad",
+            "current_questions": [],
+            "cohort": "Logística"
+        })
+        self.assertGreaterEqual(len(result["questions"]), 3)
+        self.assertIn("synthesis", result)
+        self.assertIn("questions", result)
+
+    def test_refine_survey_rejects_empty_prompt(self):
+        with self.assertRaises(app.RequestError):
+            app.GeneratorPanel.refine_survey({"user_prompt": "   "})
+
+    def test_teams_adaptive_card_structure(self):
+        result = app.GeneratorPanel.generate_teams_card({
+            "title": "Pulso Clima Planta",
+            "cohort": "Planta",
+            "publish_url": "http://127.0.0.1:8000/respond/test"
+        }, base_url="http://127.0.0.1:8000")
+        self.assertIn("adaptive_card", result)
+        self.assertEqual(result["status"], "simulated")
+        card = result["adaptive_card"]
+        self.assertEqual(card["type"], "message")
+        self.assertEqual(len(card["attachments"]), 1)
+        content = card["attachments"][0]["content"]
+        self.assertEqual(content["type"], "AdaptiveCard")
 
 
 if __name__ == "__main__":

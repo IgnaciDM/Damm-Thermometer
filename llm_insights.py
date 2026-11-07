@@ -50,14 +50,14 @@ Estructura tu respuesta en Markdown con las siguientes secciones:
 def request_llm_insights(
     statistical_json: str,
     api_key: Optional[str] = None,
-    base_url: str = "https://api.openai.com/v1/chat/completions",
-    model: str = "gpt-4o-mini"
+    base_url: str = "https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions",
+    model: str = "ornith"
 ) -> Dict[str, Any]:
     """
-    Envía el JSON determinista al LLM para obtener el informe cualitativo.
+    Envía el JSON determinista al modelo Ornith del DCC de la UAB (o endpoint compatible) para obtener el informe cualitativo.
     Si no hay API key configurada, devuelve una respuesta sintética estructurada de prueba.
     """
-    api_key = api_key or os.environ.get("AI_API_KEY", "")
+    api_key = api_key or os.environ.get("UTH_KEY") or os.environ.get("GEMINI_API_KEY") or os.environ.get("AI_API_KEY", "")
 
     if not api_key:
         return {
@@ -65,8 +65,9 @@ def request_llm_insights(
             "informe_markdown": (
                 "### Resumen Ejecutivo (Modo Demo)\n"
                 "Para generar conclusiones en lenguaje natural con IA en tiempo real, "
-                "configura tu API Key en la barra lateral o mediante la variable de entorno `AI_API_KEY`.\n\n"
-                "El JSON numérico determinista se ha calculado con 100% de precisión y privacidad."
+                "introduce tu clave de UAB The Hack! (DCC Ornith: `uth-...`) en la pestaña de Configuración "
+                "o define la variable de entorno `UTH_KEY`.\n\n"
+                "El JSON numérico determinista se ha calculado con 100% de precisión y estricta privacidad."
             ),
             "payload_estadistico_utilizado": json.loads(statistical_json)
         }
@@ -79,6 +80,8 @@ def request_llm_insights(
     body = {
         "model": model,
         "temperature": 0.2,  # Temperatura baja para maximizar rigor analítico
+        "max_tokens": 4096,
+        "chat_template_kwargs": {"enable_thinking": False},
         "messages": [
             {"role": "system", "content": PROMPT_SISTEMA},
             {"role": "user", "content": build_analysis_prompt(statistical_json)}
@@ -93,9 +96,14 @@ def request_llm_insights(
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=30) as response:
+        with urllib.request.urlopen(req, timeout=60) as response:
             result = json.loads(response.read().decode("utf-8"))
-            content = result["choices"][0]["message"]["content"]
+            if "candidates" in result and result["candidates"]:
+                content = result["candidates"][0]["content"]["parts"][0]["text"]
+            elif "choices" in result and result["choices"]:
+                content = result["choices"][0]["message"]["content"]
+            else:
+                content = str(result)
             return {
                 "modo": "produccion_llm",
                 "informe_markdown": content,

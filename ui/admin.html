@@ -261,9 +261,12 @@
 
         <form id="admin-settings-form" onsubmit="saveAdminSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
           <div>
-            <label class="text-xs font-bold text-on-surface block mb-1">OpenAI / Gemini API Key</label>
-            <input type="password" id="admin-api-key" placeholder="sk-..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
-            <span class="text-[10px] text-tertiary mt-1 block">Para generación asistida de preguntas y síntesis ejecutiva.</span>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-xs font-bold text-on-surface">Clave API UAB The Hack! (DCC Ornith)</label>
+              <span class="text-[10px] bg-secondary-container/40 text-on-secondary-container px-2 py-0.5 rounded-full font-semibold">8 GPU DCC UAB</span>
+            </div>
+            <input type="password" id="admin-api-key" placeholder="Pega aquí tu clave API (ej. uth-...)" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <span class="text-[10px] text-tertiary mt-1 block">Clave de equipo para el modelo Ornith servido en la UAB.</span>
           </div>
 
           <div>
@@ -274,12 +277,14 @@
 
           <div>
             <label class="text-xs font-bold text-on-surface block mb-1">API Endpoint Base URL</label>
-            <input type="text" id="admin-base-url" value="https://api.openai.com/v1/chat/completions" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <input type="text" id="admin-base-url" value="https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <span class="text-[10px] text-tertiary mt-1 block">Servidor oficial del Departament de Ciències de la Computació (UAB).</span>
           </div>
 
           <div>
-            <label class="text-xs font-bold text-on-surface block mb-1">Modelo Seleccionado</label>
-            <input type="text" id="admin-model" value="gpt-4o-mini" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <label class="text-xs font-bold text-on-surface block mb-1">Modelo de Lenguaje</label>
+            <input type="text" id="admin-model" value="ornith" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary">
+            <span class="text-[10px] text-tertiary mt-1 block">Ornith 1.5 (35B MoE, 3B activos por token).</span>
           </div>
 
           <div class="md:col-span-2 pt-2">
@@ -382,8 +387,9 @@
 
     function openQrModal(url, id, title) {
       document.getElementById('qr-modal-title').textContent = title || 'Código QR';
-      document.getElementById('qr-modal-image').src = `/api/surveys/${id}/qr.svg`;
-      document.getElementById('qr-modal-url').textContent = url || `/respond/${id}`;
+      const targetUrl = url || `${window.location.origin}/respond/${id}`;
+      document.getElementById('qr-modal-image').src = `/api/surveys/${id}/qr.svg?t=${Date.now()}`;
+      document.getElementById('qr-modal-url').textContent = targetUrl;
       document.getElementById('qr-modal').classList.remove('hidden');
     }
 

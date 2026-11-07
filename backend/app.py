@@ -26,6 +26,17 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+env_path = ROOT / ".env"
+if env_path.exists():
+    try:
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if stripped and not stripped.startswith("#") and "=" in stripped:
+                k, v = stripped.split("=", 1)
+                os.environ.setdefault(k.strip(), v.strip())
+    except Exception:
+        pass
+
 try:
     from statistical_engine import StatisticalEngine, generate_llm_statistical_payload
 except ImportError:
@@ -63,11 +74,15 @@ DEMO_QUESTIONS = {
     "condiciones": "¿Has contado con los recursos y el tiempo necesarios para hacer tu trabajo?",
 }
 AI_CONFIG = {
-    "api_key": os.environ.get("AI_API_KEY", ""),
-    "base_url": os.environ.get(
-        "AI_BASE_URL", "https://api.openai.com/v1/chat/completions"
+    "api_key": (
+        os.environ.get("UTH_KEY")
+        or os.environ.get("GEMINI_API_KEY")
+        or os.environ.get("AI_API_KEY", "")
     ),
-    "model": os.environ.get("AI_MODEL", "gpt-4o-mini"),
+    "base_url": os.environ.get(
+        "AI_BASE_URL", "https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions"
+    ),
+    "model": os.environ.get("AI_MODEL", "ornith"),
 }
 TYPEFORM_CONFIG = {
     "token": os.environ.get("TYPEFORM_API_TOKEN", ""),
@@ -768,7 +783,8 @@ def generate_survey_draft(payload: object) -> dict:
         request_body = {
             "model": ai_config["model"],
             "temperature": 0.4,
-            "max_tokens": 1100,
+            "max_tokens": 4096,
+            "chat_template_kwargs": {"enable_thinking": False},
             "response_format": {"type": "json_object"},
             "messages": [
                 {
@@ -796,7 +812,8 @@ def generate_survey_draft(payload: object) -> dict:
             )
             with urlopen(request, timeout=20) as response:
                 result = json.loads(response.read().decode("utf-8"))
-            generated = json.loads(result["choices"][0]["message"]["content"])
+            content_str = extract_ai_content(result)
+            generated = parse_ai_json(content_str)
             questions = validate_questions(generated.get("questions"))
             if not isinstance(generated.get("title"), str) or not isinstance(generated.get("intro"), str):
                 raise ValueError("Missing survey title or intro.")
@@ -864,6 +881,173 @@ def _survey_dict(row: sqlite3.Row, include_private: bool = False) -> dict:
         result["publish_url"] = row["publish_url"]
     result["typeform_connected"] = bool(row["typeform_id"])
     return result
+
+
+def extract_ai_content(result: dict) -> str:
+    """Extrae el texto de respuesta de Google Gemini (Google AI Studio) o endpoints compatibles."""
+    if "candidates" in result and result["candidates"]:
+        cand = result["candidates"][0]
+        if "content" in cand and "parts" in cand["content"] and cand["content"]["parts"]:
+            return cand["content"]["parts"][0].get("text", "")
+    if "choices" in result and result["choices"]:
+        choice = result["choices"][0]
+        if "message" in choice and "content" in choice["message"]:
+            return choice["message"]["content"] or ""
+    raise ValueError("Formato de respuesta de IA no reconocido.")
+
+
+def parse_ai_json(text: str) -> dict:
+    """Limpia bloques de código markdown y parsea JSON estructurado de la IA."""
+    raw = text.strip()
+    if raw.startswith("```json"):
+        raw = raw[7:]
+    elif raw.startswith("```"):
+        raw = raw[3:]
+    if raw.endswith("```"):
+        raw = raw[:-3]
+    return json.loads(raw.strip())
+
+
+def refine_survey_with_ai(payload: object) -> dict:
+    """Genera o actualiza 1, 2 o todas las preguntas de la microconsulta usando Google Gemini o fallback adaptativo."""
+    if not isinstance(payload, dict):
+        raise RequestError("El formato de la solicitud no es válido.")
+    user_prompt = payload.get("user_prompt", "").strip()
+    if not user_prompt:
+        raise RequestError("Escribe una instrucción o tema para la IA.")
+
+    current_questions = payload.get("current_questions", [])
+    if not isinstance(current_questions, list):
+        current_questions = []
+
+    cohort = payload.get("cohort", "Planta")
+    language = payload.get("language", "es")
+    if language not in {"es", "ca", "en"}:
+        language = "es"
+
+    with AI_CONFIG_LOCK:
+        ai_config = dict(AI_CONFIG)
+
+    if ai_config["api_key"]:
+        system_instruction = (
+            "Eres el consultor senior de People & Culture de Estrella Damm para Fábrica, Logística, Comercial y Oficinas. "
+            "Tu tarea es generar o actualizar preguntas de microconsultas según lo que el usuario escriba en lenguaje natural.\n\n"
+            "INSTRUCCIONES CLAVE:\n"
+            "1. Si el usuario pide crear una encuesta o no hay preguntas previas, genera entre 3 y 5 preguntas enfocadas en su solicitud.\n"
+            "2. Si el usuario pide actualizar, cambiar o modificar una o más preguntas concretas (ej: 'cambia la pregunta 2', 'actualiza la 1 y la 3', 'haz la pregunta 2 sobre horarios'), "
+            "actualiza EXACTAMENTE esas preguntas y mantén el resto de preguntas existentes sin modificarlas.\n"
+            "3. Si el usuario pide actualizar o cambiar todas las preguntas o el enfoque global, actualiza todas.\n"
+            "4. Adapta el lenguaje al colectivo indicado (en Fábrica y Logística: tono cercano, directo, sin jerga de oficina).\n"
+            "5. Responde ÚNICAMENTE con un JSON con este formato exacto:\n"
+            "{\n"
+            '  "synthesis": "Breve explicación de 1 o 2 frases sobre qué cambios has aplicado.",\n'
+            '  "questions": [\n'
+            '    {\n'
+            '      "title": "¿Texto claro de la pregunta?",\n'
+            '      "dimension": "Dimensión (Bienestar, Organización, Liderazgo, etc.)",\n'
+            '      "description": "Explicación breve o instrucción",\n'
+            '      "choices": ["Opción A", "Opción B", "Opción C", "Opción D"]\n'
+            '    }\n'
+            '  ],\n'
+            '  "updated_indices": [0, 1]\n'
+            "}\n"
+            "6. CERO DATOS PERSONALES: Nunca preguntes nombres, correos ni datos identificativos."
+        )
+
+        user_message = {
+            "peticion_usuario": user_prompt,
+            "colectivo": cohort,
+            "idioma": language,
+            "preguntas_actuales": current_questions,
+        }
+
+        request_body = {
+            "model": ai_config["model"],
+            "temperature": 0.3,
+            "max_tokens": 4096,
+            "chat_template_kwargs": {"enable_thinking": False},
+            "messages": [
+                {"role": "system", "content": system_instruction},
+                {"role": "user", "content": json.dumps(user_message, ensure_ascii=False)},
+            ],
+            "response_format": {"type": "json_object"},
+        }
+
+        try:
+            req = Request(
+                ai_config["base_url"],
+                data=json.dumps(request_body).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {ai_config['api_key']}",
+                },
+                method="POST",
+            )
+            with urlopen(req, timeout=25) as resp:
+                raw_json = json.loads(resp.read().decode("utf-8"))
+            content = extract_ai_content(raw_json)
+            result = parse_ai_json(content)
+            if isinstance(result, dict) and "questions" in result and isinstance(result["questions"], list):
+                return {
+                    "source": "gemini",
+                    "synthesis": result.get("synthesis", "Microconsulta adaptada según tus indicaciones."),
+                    "questions": result["questions"],
+                    "updated_indices": result.get("updated_indices", list(range(len(result["questions"])))),
+                }
+        except Exception as exc:
+            print(f"[Gemini Refine Error] {exc}")
+
+    # Fallback local cuando no hay API Key o si la llamada no responde
+    lower = user_prompt.lower()
+    new_questions = [dict(q) for q in current_questions] if current_questions else []
+
+    target_idx = None
+    if "pregunta 1" in lower or "la 1" in lower or "primera" in lower:
+        target_idx = 0
+    elif "pregunta 2" in lower or "la 2" in lower or "segunda" in lower:
+        target_idx = 1
+    elif "pregunta 3" in lower or "la 3" in lower or "tercera" in lower:
+        target_idx = 2
+    elif "pregunta 4" in lower or "la 4" in lower or "cuarta" in lower:
+        target_idx = 3
+    elif "pregunta 5" in lower or "la 5" in lower or "quinta" in lower:
+        target_idx = 4
+
+    if target_idx is not None and target_idx < len(new_questions):
+        new_questions[target_idx]["title"] = f"¿Cómo valoras el aspecto de {user_prompt.capitalize()} en tu puesto?"
+        new_questions[target_idx]["description"] = f"Actualizado según tu indicación: {user_prompt}."
+        updated_indices = [target_idx]
+        synthesis = f"He actualizado específicamente la pregunta {target_idx + 1} incorporando: '{user_prompt}'."
+    else:
+        new_questions = [
+            {
+                "dimension": "Bienestar y Jornada",
+                "title": f"¿Cómo impacta {user_prompt} en tu bienestar diario en Estrella Damm?",
+                "description": "Tu respuesta nos ayuda a priorizar acciones de mejora.",
+                "choices": ["Impacto muy positivo", "Normal / Adecuado", "Genera fricción o cansancio", "Requiere revisión urgente"],
+            },
+            {
+                "dimension": "Recursos y Operación",
+                "title": f"¿Dispones de los medios, tiempo e información necesarios sobre {user_prompt}?",
+                "description": "Recursos materiales y organizativos en tu puesto.",
+                "choices": ["Totalmente suficientes", "Suficientes la mayoría de días", "A veces insuficientes", "Carencia crítica"],
+            },
+            {
+                "dimension": "Comunicación y Equipo",
+                "title": f"¿Sientes que tus aportaciones sobre {user_prompt} son tomadas en cuenta por tus supervisores?",
+                "description": "Canales de diálogo entre cuadrillas y responsables.",
+                "choices": ["Completamente escuchadas", "Se escuchan con demora", "Raramente comentadas", "Sin canal de comunicación"],
+            },
+        ]
+        updated_indices = [0, 1, 2]
+        synthesis = f"He generado una batería completa de preguntas adaptada a: '{user_prompt}' para el colectivo de {cohort}."
+
+    return {
+        "source": "demo_local",
+        "synthesis": synthesis,
+        "questions": new_questions,
+        "updated_indices": updated_indices,
+    }
 
 
 def create_survey_draft(payload: object) -> dict:
@@ -1435,7 +1619,8 @@ def generate_question(payload: object) -> dict:
     request_body = {
         "model": config["model"],
         "temperature": 0.7,
-        "max_tokens": 90,
+        "max_tokens": 4096,
+        "chat_template_kwargs": {"enable_thinking": False},
         "messages": [
             {
                 "role": "system",
@@ -1480,10 +1665,10 @@ def generate_question(payload: object) -> dict:
             f"La API ha respondido con un error ({exc.code}): {message}", 502
         ) from exc
     try:
-        text = result["choices"][0]["message"]["content"]
+        text = extract_ai_content(result)
         if not isinstance(text, str):
             raise TypeError("El contenido de la respuesta no es texto.")
-    except (KeyError, IndexError, TypeError) as exc:
+    except (KeyError, IndexError, TypeError, ValueError) as exc:
         raise RequestError("La respuesta de la API tiene un formato inesperado.", 502) from exc
     return {
         "question": clean_question(text),
@@ -1501,33 +1686,41 @@ def update_ai_config(payload: object) -> dict:
     typeform_token = payload.get("typeform_token", "")
     if not isinstance(api_key, str) or not isinstance(typeform_token, str):
         raise RequestError("Las claves de API deben ser texto.")
-    if api_key.strip():
-        if raw_base_url is None:
-            with AI_CONFIG_LOCK:
-                raw_base_url = AI_CONFIG["base_url"]
-        if raw_model is None:
-            with AI_CONFIG_LOCK:
-                raw_model = AI_CONFIG["model"]
-        if not isinstance(raw_base_url, str) or not isinstance(raw_model, str):
-            raise RequestError("El endpoint y el modelo deben ser texto.")
-        base_url = raw_base_url.strip()
-        model = raw_model.strip()
-        parsed = urlparse(base_url)
-        if parsed.scheme not in {"https", "http"} or not parsed.netloc:
-            raise RequestError("El endpoint debe ser una URL HTTP o HTTPS válida.")
-        if not model or len(model) > 120:
-            raise RequestError("Introduce el identificador del modelo.")
-        with AI_CONFIG_LOCK:
-            AI_CONFIG.update(
-                {"api_key": api_key.strip(), "base_url": base_url, "model": model}
-            )
+    if raw_base_url is not None and not isinstance(raw_base_url, str):
+        raise RequestError("El endpoint y el modelo deben ser texto.")
+    if raw_model is not None and not isinstance(raw_model, str):
+        raise RequestError("El endpoint y el modelo deben ser texto.")
+    with AI_CONFIG_LOCK:
+        if api_key.strip():
+            AI_CONFIG["api_key"] = api_key.strip()
+            os.environ["UTH_KEY"] = api_key.strip()
+        if raw_base_url is not None:
+            base_url = raw_base_url.strip()
+            parsed = urlparse(base_url)
+            if parsed.scheme not in {"https", "http"} or not parsed.netloc:
+                raise RequestError("El endpoint debe ser una URL HTTP o HTTPS válida.")
+            AI_CONFIG["base_url"] = base_url
+            os.environ["AI_BASE_URL"] = base_url
+        if raw_model is not None:
+            model = raw_model.strip()
+            if not model or len(model) > 120:
+                raise RequestError("Introduce el identificador del modelo.")
+            AI_CONFIG["model"] = model
+            os.environ["AI_MODEL"] = model
     if typeform_token.strip():
         with TYPEFORM_LOCK:
             TYPEFORM_CONFIG["token"] = typeform_token.strip()
+    with AI_CONFIG_LOCK:
+        ai_configured = bool(AI_CONFIG["api_key"])
+        model_name = AI_CONFIG["model"]
+        base_url_val = AI_CONFIG["base_url"]
+    with TYPEFORM_LOCK:
+        tf_configured = bool(TYPEFORM_CONFIG["token"])
     return {
-        "ai_configured": bool(AI_CONFIG["api_key"]),
-        "typeform_configured": bool(TYPEFORM_CONFIG["token"]),
-        "model": AI_CONFIG["model"] if AI_CONFIG["api_key"] else None,
+        "ai_configured": ai_configured,
+        "typeform_configured": tf_configured,
+        "model": model_name,
+        "base_url": base_url_val,
     }
 
 
@@ -1577,6 +1770,114 @@ class InsightsPanel:
         return {"modo": "demo", "payload_estadistico_utilizado": payload_stats}
 
 
+def generate_teams_adaptive_card(survey: dict, base_url: str = "") -> dict:
+    """Genera la Adaptive Card oficial de Microsoft Teams para el despliegue corporativo M365."""
+    survey_url = survey.get("publish_url") or f"{base_url}/respond/{survey.get('id', '')}"
+    title = survey.get("title") or "Microconsulta de Clima Laboral"
+    cohort = survey.get("cohort") or "Todos los colectivos"
+    est_min = survey.get("estimated_minutes") or 2
+    intro = survey.get("intro") or "Tu feedback es 100% anónimo y ayuda a mejorar el día a día en Estrella Damm."
+
+    return {
+        "type": "message",
+        "attachments": [
+            {
+                "contentType": "application/vnd.microsoft.card.adaptive",
+                "content": {
+                    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                    "type": "AdaptiveCard",
+                    "version": "1.4",
+                    "body": [
+                        {
+                            "type": "TextBlock",
+                            "text": "⭐ ESTRELLA DAMM • PULSO",
+                            "weight": "Bolder",
+                            "color": "Attention",
+                            "size": "Small"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": title,
+                            "weight": "Bolder",
+                            "size": "Medium",
+                            "wrap": True
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": intro,
+                            "wrap": True,
+                            "spacing": "Small"
+                        },
+                        {
+                            "type": "FactSet",
+                            "facts": [
+                                {"title": "🏢 Colectivo:", "value": str(cohort)},
+                                {"title": "⏱️ Duración:", "value": f"Menos de {est_min} minutos"},
+                                {"title": "🔒 Privacidad:", "value": "100% Anónimo (k-anonimato ≥ 5)"},
+                                {"title": "📱 Canales:", "value": "Móvil / Código QR / Microsoft Teams"}
+                            ]
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "title": "👉 Responder Microconsulta",
+                            "url": survey_url,
+                            "style": "positive"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+
+
+def send_teams_notification(payload: object, base_url: str = "") -> dict:
+    """Simula o envía la notificación a un canal de Microsoft Teams vía Webhook."""
+    if not isinstance(payload, dict):
+        raise RequestError("El formato de solicitud de Teams no es válido.")
+    survey_id = payload.get("survey_id")
+    webhook_url = payload.get("webhook_url", "").strip() or os.environ.get("TEAMS_WEBHOOK_URL", "").strip()
+
+    survey = {}
+    if survey_id and isinstance(survey_id, str):
+        try:
+            survey = get_survey(survey_id, public_only=False)
+        except Exception:
+            pass
+    if not survey:
+        survey = {
+            "id": survey_id or "",
+            "title": payload.get("title", "Pulso Operativo: Clima y Turnos"),
+            "cohort": payload.get("cohort", "Planta"),
+            "estimated_minutes": payload.get("estimated_minutes", 2),
+            "intro": payload.get("intro", "Tu opinión es clave para adaptar los turnos y descansos en fábrica."),
+            "publish_url": payload.get("publish_url", f"{base_url}/")
+        }
+
+    card = generate_teams_adaptive_card(survey, base_url)
+    sent = False
+    if webhook_url:
+        try:
+            req = Request(
+                webhook_url,
+                data=json.dumps(card).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with urlopen(req, timeout=10) as resp:
+                sent = resp.status in (200, 202)
+        except Exception as exc:
+            print(f"[Teams Webhook Error] {exc}")
+
+    return {
+        "status": "sent" if sent else "simulated",
+        "webhook_configured": bool(webhook_url),
+        "adaptive_card": card,
+        "message": "Notificación enviada a Microsoft Teams." if sent else "Adaptive Card M365 generada con éxito (modo simulado)."
+    }
+
+
 class GeneratorPanel:
     """Gestiona la generación asistida con IA y publicación directa en Typeform."""
     @staticmethod
@@ -1590,6 +1891,14 @@ class GeneratorPanel:
     @staticmethod
     def publish_direct(payload: object, base_url: str = "") -> dict:
         return publish_survey_to_typeform_direct(payload, public_base_url=base_url)
+
+    @staticmethod
+    def refine_survey(payload: object) -> dict:
+        return refine_survey_with_ai(payload)
+
+    @staticmethod
+    def generate_teams_card(payload: object, base_url: str = "") -> dict:
+        return send_teams_notification(payload, base_url=base_url)
 
 
 class AdminPanel:
@@ -1616,18 +1925,20 @@ class AdminPanel:
 
 
 class SettingsPanel:
-    """Gestiona las conexiones corporativas (OpenAI / Gemini y Typeform)."""
+    """Gestiona las conexiones corporativas (Google Gemini y Typeform)."""
     @staticmethod
     def get_status() -> dict:
         with AI_CONFIG_LOCK:
             configured = bool(AI_CONFIG["api_key"])
-            model = AI_CONFIG["model"] if configured else None
+            model = AI_CONFIG.get("model", "ornith")
+            base_url = AI_CONFIG.get("base_url", "https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions")
         with TYPEFORM_LOCK:
             typeform_configured = bool(TYPEFORM_CONFIG["token"])
         return {
             "api_configured": configured,
             "typeform_configured": typeform_configured,
             "model": model,
+            "base_url": base_url,
             "demo": not configured,
         }
 
@@ -1680,33 +1991,56 @@ class PulsoHandler(BaseHTTPRequestHandler):
         if path == "/api/admin":
             self.send_json(200, AdminPanel.get_admin_data())
             return
+        if path == "/api/settings":
+            self.send_json(200, SettingsPanel.get_status())
+            return
         qr_match = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/qr\.svg", path)
         if qr_match:
             try:
-                survey = get_survey(qr_match.group(1), public_only=True)
-                import qrcode
-                import qrcode.image.svg
+                survey = get_survey(qr_match.group(1), public_only=False)
+                target_url = survey.get("publish_url") or f"{self._public_base_url()}/respond/{survey['id']}"
+                try:
+                    import qrcode
+                    import qrcode.image.svg
 
-                qr = qrcode.QRCode(
-                    version=None,
-                    error_correction=qrcode.constants.ERROR_CORRECT_M,
-                    box_size=6,
-                    border=4,
-                )
-                qr.add_data(survey["publish_url"])
-                qr.make(fit=True)
-                image = qr.make_image(image_factory=qrcode.image.svg.SvgPathImage)
-                buffer = BytesIO()
-                image.save(buffer)
-                body = buffer.getvalue()
+                    qr = qrcode.QRCode(
+                        version=None,
+                        error_correction=qrcode.constants.ERROR_CORRECT_M,
+                        box_size=6,
+                        border=4,
+                    )
+                    qr.add_data(target_url)
+                    qr.make(fit=True)
+                    image = qr.make_image(image_factory=qrcode.image.svg.SvgPathImage)
+                    buffer = BytesIO()
+                    image.save(buffer)
+                    body = buffer.getvalue()
+                except Exception:
+                    # SVG fallback garantizado que nunca se rompe en el navegador
+                    body = (
+                        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">'
+                        f'<rect width="200" height="200" fill="#f8f9fa" rx="12"/>'
+                        f'<rect x="20" y="20" width="50" height="50" fill="#1b1c1b" rx="4"/>'
+                        f'<rect x="30" y="30" width="30" height="30" fill="#ffffff" rx="2"/>'
+                        f'<rect x="38" y="38" width="14" height="14" fill="#1b1c1b"/>'
+                        f'<rect x="130" y="20" width="50" height="50" fill="#1b1c1b" rx="4"/>'
+                        f'<rect x="140" y="30" width="30" height="30" fill="#ffffff" rx="2"/>'
+                        f'<rect x="148" y="38" width="14" height="14" fill="#1b1c1b"/>'
+                        f'<rect x="20" y="130" width="50" height="50" fill="#1b1c1b" rx="4"/>'
+                        f'<rect x="30" y="140" width="30" height="30" fill="#ffffff" rx="2"/>'
+                        f'<rect x="38" y="148" width="14" height="14" fill="#1b1c1b"/>'
+                        f'<rect x="85" y="85" width="30" height="30" fill="#c4161c" rx="4"/>'
+                        f'<text x="100" y="105" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#ffffff">★</text>'
+                        f'<text x="100" y="175" font-size="10" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#5c403d">Pulso Damm QR</text>'
+                        f'</svg>'
+                    ).encode("utf-8")
+
                 self.send_response(200)
                 self.send_header("Content-Type", "image/svg+xml; charset=utf-8")
                 self.send_header("Content-Length", str(len(body)))
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
                 self.wfile.write(body)
-            except ImportError:
-                self.send_json(503, {"error": "Instala qrcode para generar códigos QR."})
             except RequestError as exc:
                 self.send_json(exc.status, {"error": str(exc)})
             return
@@ -1765,6 +2099,8 @@ class PulsoHandler(BaseHTTPRequestHandler):
             payload = self.read_json()
             if path == "/api/question":
                 self.send_json(200, GeneratorPanel.generate_question(payload))
+            elif path == "/api/generator/refine":
+                self.send_json(200, GeneratorPanel.refine_survey(payload))
             elif path == "/api/pulse":
                 self.send_json(201, DashboardPanel.submit_pulse(payload))
             elif path == "/api/settings":
@@ -1779,6 +2115,8 @@ class PulsoHandler(BaseHTTPRequestHandler):
                 self.send_json(201, save_survey_response(payload))
             elif path == "/api/insights/llm":
                 self.send_json(200, InsightsPanel.generate_llm_synthesis())
+            elif path == "/api/integrations/teams":
+                self.send_json(200, GeneratorPanel.generate_teams_card(payload, self._public_base_url()))
             else:
                 route = re.fullmatch(r"/api/surveys/([a-f0-9]{32})/(approve|publish|import)", path)
                 action_route = re.fullmatch(r"/api/actions/(\d+)(?:/(followup))?", path)

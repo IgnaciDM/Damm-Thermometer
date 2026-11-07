@@ -268,11 +268,11 @@
                 </div>
                 <div class="flex-1">
                   <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-xs font-bold text-on-surface">Dirección de Personas • Envasado y Logística</span>
-                    <span class="text-[11px] text-tertiary">Hoy, 10:42</span>
+                    <span class="text-xs font-bold text-on-surface">Dirección de Personas • Solicitud de Consulta</span>
+                    <span class="text-[11px] text-tertiary">Interactivo</span>
                   </div>
-                  <div class="p-3.5 rounded-xl bg-surface-container-low text-on-surface text-body-md leading-relaxed shadow-xs" id="current-user-need-display">
-                    “Evaluar el clima laboral, satisfacción con los turnos rotativos en las plantas de envasado y la conciliación familiar tras el nuevo plan operativo Q4.”
+                  <div class="p-3.5 rounded-xl bg-surface-container-low text-tertiary text-body-md leading-relaxed shadow-xs italic" id="current-user-need-display">
+                    Sin consulta activa. Escribe una necesidad (ej: "turnos en fábrica", "ergonomía en almacén") para generar la microconsulta interactiva.
                   </div>
                 </div>
               </div>
@@ -284,7 +284,7 @@
                 <div class="flex-1 space-y-space-md">
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                      <span class="text-xs font-bold text-primary">Damm-HR Gemini Pro v4</span>
+                      <span class="text-xs font-bold text-primary">Asistente Google Gemini</span>
                       <span class="text-[10px] bg-secondary-container/40 text-on-secondary-container px-2 py-0.5 rounded-full font-semibold">100% Determinista &amp; Privado</span>
                     </div>
                     <span class="text-[11px] text-secondary flex items-center gap-1 font-medium">
@@ -293,7 +293,7 @@
                   </div>
                   <!-- Structured AI Synthesis -->
                   <p class="text-body-md text-on-surface leading-relaxed" id="ai-synthesis-text">
-                    He sintetizado una batería diagnóstica de <strong>5 dimensiones clave</strong> adaptada a operarios de planta y turnicidad continua (Planta El Prat, Santa Coloma y Murcia). El tiempo proyectado de respuesta es de <strong>2 minutos y 10 segundos</strong> para minimizar fricción operativa.
+                    El asistente de Google Gemini generará o actualizará preguntas (1, 2 o todas) según lo que le indiques en lenguaje natural en la barra de IA.
                   </p>
 
                   <!-- 5 Dimensional Metric Badges Grid -->
@@ -840,34 +840,46 @@
       if (card) card.style.opacity = '0.4';
 
       try {
-        // Call backend API if configured, otherwise smart local simulation
-        const response = await fetch('/api/question', {
+        const response = await fetch('/api/generator/refine', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dimension: 'bienestar', site: 'Fábrica', prompt: userText })
+          body: JSON.stringify({
+            user_prompt: userText,
+            current_questions: surveyState.questions,
+            cohort: 'Planta',
+            language: 'es'
+          })
         }).catch(() => null);
 
-        let newQuestionText = "";
         if (response && response.ok) {
           const data = await response.json();
-          newQuestionText = data.question;
-        }
-
-        // Apply iteration to question
-        const currentQ = surveyState.questions[surveyState.currentIndex];
-        if (newQuestionText) {
-          currentQ.title = newQuestionText;
+          if (Array.isArray(data.questions) && data.questions.length > 0) {
+            surveyState.questions = data.questions;
+            if (Array.isArray(data.updated_indices) && data.updated_indices.length > 0) {
+              surveyState.currentIndex = Math.min(data.updated_indices[0], surveyState.questions.length - 1);
+            }
+          }
+          const needEl = document.getElementById('current-user-need-display');
+          if (needEl) {
+            needEl.classList.remove('italic', 'text-tertiary');
+            needEl.classList.add('text-on-surface');
+            needEl.textContent = `“${userText}”`;
+          }
+          const synthEl = document.getElementById('ai-synthesis-text');
+          if (synthEl) {
+            synthEl.innerHTML = data.synthesis || `He recalculado las preguntas integrando: <em>"${escapeHtml(userText)}"</em>.`;
+          }
+          renderLiveCard();
+          showToast(data.source === 'gemini' ? 'Google Gemini ha actualizado las preguntas.' : 'Microconsulta actualizada con éxito.', 'success');
         } else {
-          currentQ.title = `¿Cómo afecta "${userText.slice(0, 50)}" a tu jornada habitual en planta?`;
+          // Fallback a pregunta individual si falla
+          const currentQ = surveyState.questions[surveyState.currentIndex];
+          if (currentQ) {
+            currentQ.title = `¿Cómo afecta "${userText.slice(0, 50)}" a tu jornada habitual en planta?`;
+          }
+          renderLiveCard();
+          showToast('Microconsulta actualizada.', 'info');
         }
-
-        document.getElementById('current-user-need-display').textContent = `“${userText}”`;
-        document.getElementById('ai-synthesis-text').innerHTML = `
-          He recalculado la batería de preguntas integrando tu observación: <em>"${escapeHtml(userText)}"</em>. Se han ajustado las opciones para operarios de envasado y turnos rotativos.
-        `;
-
-        renderLiveCard();
-        showToast('Microconsulta actualizada con éxito.', 'success');
       } catch (err) {
         showToast('Se aplicó la iteración localmente.', 'info');
       } finally {

@@ -597,8 +597,8 @@
           <div class="flex items-center gap-3">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low shadow-xs">
               <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
-              <span class="text-xs font-semibold text-tertiary">Damm-HR Gemini Pro v4</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-mono">24k ctx</span>
+              <span class="text-xs font-semibold text-tertiary">UAB DCC Ornith 35B MoE</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-mono">262k ctx</span>
             </div>
             <button id="generator-publish-btn" onclick="publishFromGenerator()" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-all shadow-sm active:scale-95" type="button">
               <span class="material-symbols-outlined text-sm">send</span>
@@ -618,11 +618,11 @@
                 </div>
                 <div class="flex-1">
                   <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-xs font-bold text-on-surface">Dirección de Personas • Envasado y Logística</span>
-                    <span class="text-[11px] text-tertiary">Hoy, 10:42</span>
+                    <span class="text-xs font-bold text-on-surface">Dirección de Personas • Solicitud de Consulta</span>
+                    <span class="text-[11px] text-tertiary">Interactivo</span>
                   </div>
-                  <div class="p-3.5 rounded-xl bg-surface-container-low text-on-surface text-xs leading-relaxed shadow-xs" id="gen-user-prompt-text">
-                    “Evaluar el clima laboral, satisfacción con los turnos rotativos en las plantas de envasado y la conciliación familiar tras el nuevo plan operativo Q4.”
+                  <div class="p-3.5 rounded-xl bg-surface-container-low text-tertiary text-xs leading-relaxed shadow-xs italic" id="gen-user-prompt-text">
+                    Sin consulta activa. Escribe una necesidad o tema (ej: "turnos en fábrica", "ergonomía en almacén", "comedor") para generar tu microconsulta.
                   </div>
                 </div>
               </div>
@@ -633,13 +633,13 @@
                 </div>
                 <div class="flex-1 space-y-space-md">
                   <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-primary">Damm-HR Gemini Pro v4</span>
+                    <span class="text-xs font-bold text-primary">Asistente LLM (UAB DCC Ornith)</span>
                     <span class="text-[11px] text-secondary flex items-center gap-1 font-medium">
-                      <span class="material-symbols-outlined text-xs">verified</span> Estrella Damm Standards
+                      <span class="material-symbols-outlined text-xs">verified</span> Servidor DCC UAB
                     </span>
                   </div>
                   <p class="text-xs text-on-surface leading-relaxed" id="gen-synthesis-text">
-                    He sintetizado una batería diagnóstica de <strong>5 dimensiones clave</strong> adaptada a operarios de planta y turnicidad continua (Planta El Prat, Santa Coloma y Murcia). El tiempo proyectado de respuesta es de <strong>2 minutos y 10 segundos</strong> para minimizar fricción operativa.
+                    El modelo Ornith generará o actualizará preguntas (1, 2 o todas) según lo que le indiques en lenguaje natural en la barra inferior.
                   </p>
                 </div>
               </div>
@@ -648,18 +648,21 @@
             <!-- AI Prompt Bar -->
             <div class="bg-surface-container-lowest rounded-xl p-3 shadow-md border border-surface-container">
               <form class="relative flex flex-col gap-2" onsubmit="handleGeneratorPrompt(event)">
-                <textarea class="w-full bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Pide ajustes a la IA (ej: 'añade una pregunta sobre la rotación de carretillas en el almacén central')..." rows="2"></textarea>
+                <textarea class="w-full bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Escribe el tema de la encuesta o pide cambios (ej: 'crear encuesta sobre comedores', 'cambia la pregunta 2', 'actualiza la 1 y la 3')..." rows="2"></textarea>
                 <div class="flex items-center justify-between pt-1">
-                  <div class="flex items-center gap-2">
-                    <button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button" title="Adjuntar necesidad" onclick="appendGenPrompt('Considera el impacto de la rotación en el turno de noche.')">
-                      <span class="material-symbols-outlined text-base">attach_file</span>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <button class="px-2 py-1 rounded-md text-[11px] font-medium text-tertiary bg-surface-container hover:bg-secondary-container/30 transition-colors" type="button" onclick="appendGenPrompt('Cambia la pregunta 2 por una sobre descansos.')">
+                      ✏️ Cambiar pregunta 2
                     </button>
-                    <button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button" title="Estándar Damm" onclick="appendGenPrompt('Usa escala Likert estándar de 1 a 5.')">
-                      <span class="material-symbols-outlined text-base">history_edu</span>
+                    <button class="px-2 py-1 rounded-md text-[11px] font-medium text-tertiary bg-surface-container hover:bg-secondary-container/30 transition-colors" type="button" onclick="appendGenPrompt('Adapta todas las preguntas para operarios de fábrica.')">
+                      🏭 Para Fábrica
+                    </button>
+                    <button class="px-2 py-1 rounded-md text-[11px] font-medium text-tertiary bg-surface-container hover:bg-secondary-container/30 transition-colors" type="button" onclick="appendGenPrompt('Añade una pregunta sobre ergonomía y carga física.')">
+                      ⚡ Ergonomía
                     </button>
                   </div>
-                  <button class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container shadow-sm" type="submit">
-                    <span>Iterar</span>
+                  <button class="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container shadow-sm shrink-0" type="submit">
+                    <span>Generar / Actualizar</span>
                     <span class="material-symbols-outlined text-sm">arrow_upward</span>
                   </button>
                 </div>
@@ -811,35 +814,57 @@
           <div class="border-b border-surface-container pb-3">
             <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Integración &amp; Credenciales</span>
             <h2 class="text-lg font-headline font-bold text-on-surface">Configuración de Conexiones</h2>
-            <p class="text-xs text-on-surface-variant mt-1">Conecta el motor de IA (OpenAI / Gemini) y la cuenta de Typeform para sincronización en la nube.</p>
+            <p class="text-xs text-on-surface-variant mt-1">Conecta el modelo de lenguaje servido en las GPUs del DCC de la UAB (Ornith 35B) y la cuenta de Typeform.</p>
           </div>
 
-          <form id="settings-panel-form" onsubmit="savePanelSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-space-md max-w-4xl">
+          <!-- Live Status Banner -->
+          <div id="settings-status-card" class="p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 transition-all bg-surface-container-low border-surface-container">
+            <div class="flex items-center gap-3">
+              <span id="settings-status-dot" class="w-3 h-3 rounded-full bg-secondary"></span>
+              <div>
+                <h4 id="settings-status-title" class="text-xs font-bold text-on-surface">Estado del LLM: Comprobando conexión...</h4>
+                <p id="settings-status-desc" class="text-[11px] text-tertiary">Introduce la clave API asignada para activar la generación asistida con IA.</p>
+              </div>
+            </div>
+            <span id="settings-status-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-container-highest text-tertiary">Comprobando</span>
+          </div>
+
+          <form id="settings-panel-form" onsubmit="savePanelSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-space-md max-w-4xl pt-2">
             <div>
-              <label class="text-xs font-bold text-on-surface block mb-1">OpenAI / Gemini API Key</label>
-              <input type="password" id="set-api-key" placeholder="sk-..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
-              <span class="text-[10px] text-tertiary mt-1 block">Para generación asistida de preguntas y síntesis ejecutiva.</span>
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-bold text-on-surface">Clave API UAB The Hack! (DCC Ornith)</label>
+                <span class="text-[10px] bg-secondary-container/40 text-on-secondary-container px-2 py-0.5 rounded-full font-semibold">8 GPU DCC UAB</span>
+              </div>
+              <input type="password" id="set-api-key" placeholder="Pega aquí tu clave API (ej. uth-...)" autocomplete="off" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <span class="text-[10px] text-tertiary mt-1 block">Clave asignada a tu equipo (262k tokens contexto, sin límite de peticiones).</span>
             </div>
 
             <div>
               <label class="text-xs font-bold text-on-surface block mb-1">Typeform Personal Access Token</label>
-              <input type="password" id="set-typeform-token" placeholder="tfp_..." class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <input type="password" id="set-typeform-token" placeholder="tfp_..." autocomplete="off" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
               <span class="text-[10px] text-tertiary mt-1 block">Permite publicar encuestas y sincronizar respuestas de Typeform.</span>
             </div>
 
             <div>
               <label class="text-xs font-bold text-on-surface block mb-1">API Endpoint Base URL</label>
-              <input type="text" id="set-base-url" value="https://api.openai.com/v1/chat/completions" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <input type="text" id="set-base-url" value="https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <span class="text-[10px] text-tertiary mt-1 block">Servidor oficial del Departament de Ciències de la Computació (UAB).</span>
             </div>
 
             <div>
               <label class="text-xs font-bold text-on-surface block mb-1">Modelo de Lenguaje</label>
-              <input type="text" id="set-model" value="gpt-4o-mini" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <input type="text" id="set-model" value="ornith" class="w-full bg-surface-container-low p-2.5 rounded-lg text-xs font-mono text-on-surface focus:outline-none focus:ring-2 focus:ring-primary border border-surface-container">
+              <span class="text-[10px] text-tertiary mt-1 block">Ornith 1.5 (35B MoE, 3B activos por token).</span>
             </div>
 
-            <div class="md:col-span-2 pt-2">
-              <button type="submit" class="px-5 py-2.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-xs">
+            <div class="md:col-span-2 pt-2 flex items-center gap-3">
+              <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-xs active:scale-95">
+                <span class="material-symbols-outlined text-sm">save</span>
                 Guardar Configuración
+              </button>
+              <button type="button" onclick="loadPanelSettings()" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-surface-container-high text-on-surface font-semibold text-xs hover:bg-surface-container-highest transition-all">
+                <span class="material-symbols-outlined text-sm">refresh</span>
+                Recargar Estado
               </button>
             </div>
           </form>
@@ -918,10 +943,20 @@
           <span class="material-symbols-outlined text-base">close</span>
         </button>
       </div>
-      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center">
-        <img id="qr-modal-image" src="" alt="Código QR" class="w-48 h-48 object-contain">
+      <div class="p-4 bg-white rounded-xl shadow-inner flex items-center justify-center min-h-[200px]">
+        <img id="qr-modal-image" src="" alt="Código QR" onerror="this.onerror=null; this.src='/assets/codigo_qr.png';" class="w-48 h-48 object-contain">
       </div>
-      <p class="text-xs text-on-surface-variant break-all" id="qr-modal-url"></p>
+      <p class="text-xs text-on-surface-variant break-all font-mono select-all bg-surface-container-low p-2 rounded-lg" id="qr-modal-url"></p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="copyQrUrl()" class="py-2 px-3 rounded-lg bg-surface-container hover:bg-secondary-container/40 text-xs font-bold text-on-surface transition-all inline-flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-sm">content_copy</span>
+          Copiar Enlace
+        </button>
+        <a id="qr-modal-download" href="#" download="QR_Pulso_Damm.svg" class="py-2 px-3 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-xs font-bold transition-all inline-flex items-center justify-center gap-1 shadow-xs">
+          <span class="material-symbols-outlined text-sm">download</span>
+          Descargar QR
+        </a>
+      </div>
       <button onclick="closeQrModal()" class="w-full py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-bold text-on-surface transition-all">
         Cerrar
       </button>
@@ -931,63 +966,66 @@
 
   <!-- UNIFIED MASTER SCRIPT -->
   <script>
-    // State of generator preview
-    const genQuestions = [
-      {
-        dimension: "Organización del trabajo",
-        title: "¿Con cuánta antelación recibes la confirmación de tus turnos rotativos en planta?",
-        description: "Selecciona una opción para que Recursos Humanos optimice el cuadro de descansos.",
-        choices: [
-          "Más de 3 semanas (Tiempo óptimo)",
-          "Entre 1 y 2 semanas",
-          "Menos de 7 días (Dificulta la conciliación)",
-          "Cambios imprevistos en menos de 48h"
-        ],
-        selected: null
-      },
-      {
-        dimension: "Seguridad y Ergonomía",
-        title: "¿Cómo valoras la carga física y el ritmo en tu puesto habitual de envasado?",
-        description: "Evalúa si las pausas y rotaciones entre líneas son adecuadas.",
-        choices: [
-          "Ritmo adecuado y pausas bien distribuidas",
-          "Cansancio acumulado hacia final de semana",
-          "Puesto con alta fatiga muscular o posturas forzadas",
-          "Necesidad urgente de rotación de puesto"
-        ],
-        selected: null
-      },
-      {
-        dimension: "Flexibilidad y Conciliación",
-        title: "¿Tienes facilidad para cambiar turnos o descansos con compañeros cuando lo necesitas?",
-        description: "Queremos simplificar los trámites con los supervisores de cuadrilla.",
-        choices: [
-          "Sí, aviso simple y aprobación rápida",
-          "A veces, depende del supervisor de turno",
-          "Difícil por falta de relevo en plantilla",
-          "Nunca es posible cambiar turnos"
-        ],
-        selected: null
-      },
-      {
-        dimension: "Comunicación y Liderazgo",
-        title: "¿Sientes que tus dudas o sugerencias sobre el proceso en planta son escuchadas?",
-        description: "La comunicación en los cambios de turno es esencial para Estrella Damm.",
-        choices: [
-          "Totalmente escuchadas y se aplican mejoras",
-          "Se escuchan pero tardan en dar respuesta",
-          "Poca comunicación durante la jornada",
-          "Sensación de desconexión con supervisión"
-        ],
-        selected: null
-      }
-    ];
+    // State of generator preview (100% persistente al cambiar de pestaña)
+    let genQuestions = [];
     let genIndex = 0;
+
+    function saveGeneratorState() {
+      const promptInput = document.getElementById('gen-ai-chat-input');
+      const userPromptEl = document.getElementById('gen-user-prompt-text');
+      const synthEl = document.getElementById('gen-synthesis-text');
+      const state = {
+        inputValue: promptInput ? promptInput.value : '',
+        userPromptText: userPromptEl ? userPromptEl.innerHTML : '',
+        userPromptIsItalic: userPromptEl ? userPromptEl.classList.contains('italic') : true,
+        synthesisText: synthEl ? synthEl.innerHTML : '',
+        questions: genQuestions,
+        index: genIndex
+      };
+      try {
+        localStorage.setItem('damm_generator_state', JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function restoreGeneratorState() {
+      try {
+        const raw = localStorage.getItem('damm_generator_state');
+        if (!raw) return;
+        const state = JSON.parse(raw);
+        if (state.inputValue !== undefined) {
+          const promptInput = document.getElementById('gen-ai-chat-input');
+          if (promptInput && !promptInput.value) {
+            promptInput.value = state.inputValue;
+          }
+        }
+        if (state.userPromptText) {
+          const userPromptEl = document.getElementById('gen-user-prompt-text');
+          if (userPromptEl) {
+            userPromptEl.innerHTML = state.userPromptText;
+            if (state.userPromptIsItalic === false) {
+              userPromptEl.classList.remove('italic', 'text-tertiary');
+              userPromptEl.classList.add('text-on-surface');
+            }
+          }
+        }
+        if (state.synthesisText) {
+          const synthEl = document.getElementById('gen-synthesis-text');
+          if (synthEl) synthEl.innerHTML = state.synthesisText;
+        }
+        if (Array.isArray(state.questions) && state.questions.length > 0) {
+          genQuestions = state.questions;
+          genIndex = Math.min(state.index || 0, genQuestions.length - 1);
+        }
+      } catch (e) {}
+    }
 
     // 1. DEDICATED PANEL SWITCHING (Single-Page / Distinct View Router)
     const panelNames = ['dashboard', 'insights', 'generator', 'admin', 'settings'];
 
     function showPanel(name) {
+      // Guardar el estado de lo escrito antes de salir de cualquier panel
+      saveGeneratorState();
+
       if (!panelNames.includes(name)) name = 'dashboard';
 
       // Hide all panels, show selected panel
@@ -1031,8 +1069,12 @@
       // Lazy loaders
       if (name === 'insights') loadStatisticalEngineData();
       if (name === 'admin') loadAdminData();
-      if (name === 'generator') renderGenCard();
+      if (name === 'generator') {
+        restoreGeneratorState();
+        renderGenCard();
+      }
       if (name === 'dashboard') loadDashboardData();
+      if (name === 'settings') loadPanelSettings();
     }
 
     // Retractile Sidebar with LocalStorage
@@ -1108,11 +1150,30 @@
     function closeCheckinModal() { document.getElementById('checkin-modal').classList.add('hidden'); }
     function openQrModal(url, id, title) {
       document.getElementById('qr-modal-title').textContent = title || 'Código QR';
-      document.getElementById('qr-modal-image').src = `/api/surveys/${id}/qr.svg`;
-      document.getElementById('qr-modal-url').textContent = url || `/respond/${id}`;
+      const targetUrl = url || `${window.location.origin}/respond/${id}`;
+      const qrImg = document.getElementById('qr-modal-image');
+      if (qrImg) {
+        qrImg.src = `/api/surveys/${id}/qr.svg?t=${Date.now()}`;
+      }
+      document.getElementById('qr-modal-url').textContent = targetUrl;
+      const downloadLink = document.getElementById('qr-modal-download');
+      if (downloadLink) {
+        downloadLink.href = `/api/surveys/${id}/qr.svg`;
+        downloadLink.download = `QR_${id}.svg`;
+      }
       document.getElementById('qr-modal').classList.remove('hidden');
     }
     function closeQrModal() { document.getElementById('qr-modal').classList.add('hidden'); }
+    function copyQrUrl() {
+      const urlText = document.getElementById('qr-modal-url')?.textContent;
+      if (urlText) {
+        navigator.clipboard.writeText(urlText).then(() => {
+          showToast('Enlace copiado al portapapeles.', 'success');
+        }).catch(() => {
+          showToast('Enlace seleccionado para copiar.', 'info');
+        });
+      }
+    }
 
     function selectScore(val) {
       document.getElementById('checkin-score-value').value = val;
@@ -1352,31 +1413,69 @@
       } catch (err) { showToast('Error al procesar acción.', 'error'); }
     }
 
-    // Generator Live Preview Logic
+    // Generator Live Preview Logic (Empty-State + Interactive Typeform Cards)
     function renderGenCard() {
+      const card = document.getElementById('gen-preview-card');
+      const progressEl = document.getElementById('gen-card-progress');
+
+      if (!genQuestions || genQuestions.length === 0) {
+        if (card) {
+          card.innerHTML = `
+            <div class="text-center py-12 px-4 space-y-3">
+              <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto shadow-xs">
+                <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+              </div>
+              <h3 class="text-sm font-headline font-bold text-on-surface">Ninguna microconsulta activa</h3>
+              <p class="text-xs text-tertiary max-w-xs mx-auto leading-relaxed">
+                Escribe en la barra de IA inferior lo que deseas consultar (o qué cambios aplicar) y Google Gemini creará o actualizará las preguntas en tiempo real.
+              </p>
+            </div>
+          `;
+        }
+        if (progressEl) progressEl.style.width = '0%';
+        return;
+      }
+
+      if (genIndex < 0) genIndex = 0;
+      if (genIndex >= genQuestions.length) genIndex = genQuestions.length - 1;
+
       const q = genQuestions[genIndex];
       if (!q) return;
 
-      document.getElementById('gen-card-index').textContent = genIndex + 1;
-      document.getElementById('gen-card-dimension').textContent = q.dimension;
-      document.getElementById('gen-card-title').textContent = q.title;
-      document.getElementById('gen-card-desc').textContent = q.description;
+      if (card) {
+        card.innerHTML = `
+          <div class="flex items-center gap-2 text-primary font-bold text-xs mb-2">
+            <span id="gen-card-index">${genIndex + 1}</span>
+            <span class="material-symbols-outlined text-xs">arrow_forward</span>
+            <span class="text-[10px] uppercase tracking-wider text-tertiary font-semibold" id="gen-card-dimension">${escapeHtml(q.dimension || 'Dimensión')}</span>
+          </div>
+          <h2 class="text-base font-headline font-bold text-on-surface mb-1.5" id="gen-card-title">
+            ${escapeHtml(q.title || '')}
+          </h2>
+          <p class="text-xs text-on-surface-variant mb-4" id="gen-card-desc">
+            ${escapeHtml(q.description || '')}
+          </p>
+          <div class="space-y-2" id="gen-card-options-box"></div>
+        `;
+      }
 
       const progress = ((genIndex + 1) / genQuestions.length) * 100;
-      document.getElementById('gen-card-progress').style.width = `${progress}%`;
+      if (progressEl) progressEl.style.width = `${progress}%`;
 
       const box = document.getElementById('gen-card-options-box');
+      if (!box) return;
       box.innerHTML = '';
       const letters = ['A', 'B', 'C', 'D'];
+      const choices = q.choices || ['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4'];
 
-      q.choices.forEach((c, idx) => {
+      choices.forEach((c, idx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         const isSel = q.selected === idx;
         btn.className = `w-full text-left p-2.5 rounded-lg flex items-center justify-between text-xs transition-all ${
           isSel ? 'bg-secondary-container/40 ring-2 ring-secondary' : 'bg-surface-container hover:bg-secondary-container/20'
         }`;
-        btn.onclick = () => { q.selected = idx; renderGenCard(); };
+        btn.onclick = () => { q.selected = idx; renderGenCard(); saveGeneratorState(); };
         btn.innerHTML = `
           <div class="flex items-center gap-2">
             <span class="w-5 h-5 rounded font-mono font-bold text-[10px] flex items-center justify-center ${
@@ -1391,16 +1490,22 @@
     }
 
     function navigateGenPreview(d) {
+      if (!genQuestions || genQuestions.length === 0) return;
       const next = genIndex + d;
       if (next >= 0 && next < genQuestions.length) {
         genIndex = next;
         renderGenCard();
+        saveGeneratorState();
       }
     }
 
     function appendGenPrompt(t) {
       const input = document.getElementById('gen-ai-chat-input');
-      if (input) { input.value = t; input.focus(); }
+      if (input) {
+        input.value = t;
+        input.focus();
+        saveGeneratorState();
+      }
     }
 
     async function handleGeneratorPrompt(e) {
@@ -1408,34 +1513,61 @@
       const input = document.getElementById('gen-ai-chat-input');
       if (!input || !input.value.trim()) return;
       const val = input.value.trim();
-      input.value = '';
 
-      showToast('Adaptando microconsulta con IA...', 'info');
+      showToast('Google Gemini está analizando tu petición...', 'info');
 
       try {
-        const res = await fetch('/api/question', {
+        const res = await fetch('/api/generator/refine', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ dimension: 'bienestar', site: 'Fábrica', prompt: val })
+          body: JSON.stringify({
+            user_prompt: val,
+            current_questions: genQuestions,
+            cohort: 'Planta',
+            language: 'es'
+          })
         });
+
         if (res.ok) {
-          const d = await res.json();
-          genQuestions[genIndex].title = d.question;
+          const data = await res.json();
+          if (Array.isArray(data.questions) && data.questions.length > 0) {
+            genQuestions = data.questions;
+            if (Array.isArray(data.updated_indices) && data.updated_indices.length > 0) {
+              genIndex = Math.min(data.updated_indices[0], genQuestions.length - 1);
+            } else {
+              genIndex = 0;
+            }
+          }
+
+          const promptEl = document.getElementById('gen-user-prompt-text');
+          if (promptEl) {
+            promptEl.classList.remove('italic', 'text-tertiary');
+            promptEl.classList.add('text-on-surface');
+            promptEl.textContent = `“${val}”`;
+          }
+
+          const synthEl = document.getElementById('gen-synthesis-text');
+          if (synthEl) {
+            synthEl.innerHTML = data.synthesis || `He adaptado la consulta según tu instrucción: <em>"${escapeHtml(val)}"</em>.`;
+          }
+
+          renderGenCard();
+          saveGeneratorState();
+          showToast(data.source === 'gemini' ? 'Google Gemini ha generado / actualizado las preguntas.' : 'Preguntas actualizadas.', 'success');
         } else {
-          genQuestions[genIndex].title = `¿Cómo influye "${val}" en tu jornada habitual en planta?`;
+          showToast('No se pudo procesar la solicitud con el motor.', 'error');
         }
-        document.getElementById('gen-user-prompt-text').textContent = `“${val}”`;
-        document.getElementById('gen-synthesis-text').innerHTML = `
-          He adaptado la consulta incorporando: <em>"${escapeHtml(val)}"</em> para los turnos de envasado y planta.
-        `;
-        renderGenCard();
-        showToast('Pregunta actualizada.', 'success');
       } catch (err) {
-        showToast('Pregunta adaptada localmente.', 'info');
+        showToast('Error de conexión con el motor.', 'error');
       }
     }
 
     async function publishFromGenerator() {
+      if (!genQuestions || genQuestions.length === 0) {
+        showToast('Primero escribe una necesidad o pide a Google Gemini que genere preguntas.', 'error');
+        return;
+      }
+
       const btn = document.getElementById('generator-publish-btn');
       btn.disabled = true;
       btn.classList.add('opacity-50');
@@ -1444,23 +1576,23 @@
 
       const formattedQuestions = genQuestions.map((q, idx) => ({
         id: `q_${idx + 1}`,
-        text: q.title,
+        text: q.title || `Pregunta ${idx + 1}`,
         type: idx === 0 ? "rating" : "multiple_choice",
-        dimension: "bienestar",
+        dimension: q.dimension || "bienestar",
         required: true,
-        choices: q.choices,
+        choices: q.choices || ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"],
       }));
 
       const payload = {
-        objective: "Evaluar turnos rotativos y carga física en plantas Q4",
+        objective: "Microconsulta adaptada con Google Gemini",
         cohort: "Planta",
-        context: "Planta El Prat y centros logísticos",
+        context: "Planta El Prat, centros logísticos y operaciones Damm",
         max_duration: "2",
         exclusions: "No solicitar datos de identificación personal",
         language: "es",
         channel: "Móvil-QR",
-        title: "Pulso Operativo Q4: Turnicidad y Clima en Planta",
-        intro: "Tu voz es 100% anónima y esencial para ajustar los cuadros de relevo y descansos.",
+        title: "Pulso Damm: " + (genQuestions[0]?.title || "Clima Laboral"),
+        intro: "Tu voz es 100% anónima y esencial para ajustar los cuadros y condiciones de trabajo.",
         questions: formattedQuestions
       };
 
@@ -1511,7 +1643,7 @@
           content.innerHTML = `
             <p><strong>Modo Determinista:</strong> El cálculo estadístico se ejecutó al 100% sin alucinaciones numéricas.</p>
             <p>Total respuestas analizadas: <strong>${data.payload_estadistico_utilizado?.participacion_y_cobertura?.total_respuestas || 600}</strong>.</p>
-            <p>Para activar el reporte generado con OpenAI / Gemini, configura tu API Key en la barra lateral.</p>
+            <p>Para activar el reporte generado con Google Gemini, introduce tu API Key en la pestaña de Configuración.</p>
           `;
         }
         box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1533,13 +1665,51 @@
         .replace(/\n- (.*)/g, '<li class="ml-4 list-disc">$1</li>');
     }
 
+    // Load and Display Status in Settings Panel
+    async function loadPanelSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        if (!res.ok) return;
+        const data = await res.json();
+        const dot = document.getElementById('settings-status-dot');
+        const title = document.getElementById('settings-status-title');
+        const desc = document.getElementById('settings-status-desc');
+        const badge = document.getElementById('settings-status-badge');
+        const baseUrlInput = document.getElementById('set-base-url');
+        const modelInput = document.getElementById('set-model');
+
+        if (baseUrlInput && data.base_url) baseUrlInput.value = data.base_url;
+        if (modelInput && data.model) modelInput.value = data.model;
+
+        if (data.api_configured) {
+          if (dot) dot.className = 'w-3 h-3 rounded-full bg-status-positive animate-pulse';
+          if (title) title.textContent = 'Modelo LLM Conectado y Activo';
+          if (desc) desc.textContent = `Servidor DCC UAB • Modelo: ${data.model || 'ornith'} (262k ctx). Las consultas se generan dinámicamente con IA.`;
+          if (badge) {
+            badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-status-positive/10 text-status-positive';
+            badge.textContent = 'Activo';
+          }
+        } else {
+          if (dot) dot.className = 'w-3 h-3 rounded-full bg-secondary';
+          if (title) title.textContent = 'Sin clave API configurada (Modo Local)';
+          if (desc) desc.textContent = 'Pega aquí la clave API asignada a tu equipo (uth-...) para habilitar la generación asistida con IA.';
+          if (badge) {
+            badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-secondary-container/40 text-on-secondary-container';
+            badge.textContent = 'Pendiente de Clave';
+          }
+        }
+      } catch (err) {
+        console.warn('Error al verificar estado de la configuración:', err);
+      }
+    }
+
     // Save Settings from Settings Panel
     async function savePanelSettings(e) {
       e.preventDefault();
-      const apiKey = document.getElementById('set-api-key').value;
-      const typeformToken = document.getElementById('set-typeform-token').value;
-      const baseUrl = document.getElementById('set-base-url').value;
-      const model = document.getElementById('set-model').value;
+      const apiKey = document.getElementById('set-api-key').value.trim();
+      const typeformToken = document.getElementById('set-typeform-token').value.trim();
+      const baseUrl = document.getElementById('set-base-url').value.trim();
+      const model = document.getElementById('set-model').value.trim();
 
       try {
         const res = await fetch('/api/settings', {
@@ -1548,18 +1718,29 @@
           body: JSON.stringify({ api_key: apiKey, typeform_token: typeformToken, base_url: baseUrl, model: model })
         });
         if (res.ok) {
-          showToast('Credenciales guardadas con éxito.', 'success');
+          const data = await res.json();
+          document.getElementById('set-api-key').value = '';
+          showToast('¡Configuración guardada! El modelo LLM ya está listo.', 'success');
+          loadPanelSettings();
         } else {
-          showToast('Error al guardar credenciales.', 'error');
+          const errData = await res.json();
+          showToast(errData.error || 'Error al guardar credenciales.', 'error');
         }
       } catch (err) {
-        showToast('Error de conexión.', 'error');
+        showToast('Error de conexión con el servidor.', 'error');
       }
     }
 
     // Initial Routing
     document.addEventListener('DOMContentLoaded', () => {
       applySidebarState();
+      restoreGeneratorState();
+      loadPanelSettings();
+
+      const chatInput = document.getElementById('gen-ai-chat-input');
+      if (chatInput) {
+        chatInput.addEventListener('input', saveGeneratorState);
+      }
       
       // Check hash route
       const initialHash = window.location.hash ? window.location.hash.replace('#', '') : 'dashboard';
