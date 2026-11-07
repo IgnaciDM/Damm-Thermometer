@@ -1,0 +1,153 @@
+{
+  "seed": 20261107,
+  "responses_csv": {
+    "total": 644,
+    "por_periodo_cohorte": {
+      "actual|Comercial": 12,
+      "actual|Logística": 80,
+      "actual|Manager": 3,
+      "actual|Oficina": 60,
+      "actual|Planta": 170,
+      "anterior|Comercial": 35,
+      "anterior|Logística": 70,
+      "anterior|Manager": 9,
+      "anterior|Oficina": 55,
+      "anterior|Planta": 150
+    },
+    "representacion_actual": {
+      "Planta": {
+        "n": 170,
+        "observed_pct": 52,
+        "expected_pct": 42,
+        "status": "Equilibrada"
+      },
+      "Logística": {
+        "n": 80,
+        "observed_pct": 25,
+        "expected_pct": 20,
+        "status": "Equilibrada"
+      },
+      "Comercial": {
+        "n": 12,
+        "observed_pct": 4,
+        "expected_pct": 16,
+        "status": "Baja"
+      },
+      "Oficina": {
+        "n": 60,
+        "observed_pct": 18,
+        "expected_pct": 16,
+        "status": "Equilibrada"
+      },
+      "Manager": {
+        "n": 3,
+        "observed_pct": null,
+        "expected_pct": 6,
+        "status": "Protegida"
+      }
+    },
+    "celdas_menores_k": [
+      "actual|Comercial|bienestar|n=2",
+      "actual|Comercial|condiciones|n=2",
+      "actual|Comercial|cultura|n=2",
+      "actual|Comercial|desarrollo|n=2",
+      "actual|Comercial|liderazgo|n=2",
+      "actual|Comercial|relaciones|n=2",
+      "actual|Manager|bienestar|n=1",
+      "actual|Manager|desarrollo|n=1",
+      "actual|Manager|liderazgo|n=1",
+      "anterior|Manager|bienestar|n=2",
+      "anterior|Manager|condiciones|n=1",
+      "anterior|Manager|cultura|n=1",
+      "anterior|Manager|desarrollo|n=2",
+      "anterior|Manager|liderazgo|n=2",
+      "anterior|Manager|relaciones|n=1"
+    ],
+    "polarizacion_cohorte_dimension_std_muestral_ge_1.25": [
+      {
+        "period": "actual",
+        "cohort": "Planta",
+        "dimension": "liderazgo",
+        "n": 29,
+        "std": 1.916
+      }
+    ],
+    "temas": {
+      "comunicacion": {
+        "actual": 34,
+        "anterior": 6,
+        "change_pct": 9,
+        "emerging": true
+      },
+      "turnos": {
+        "actual": 33,
+        "anterior": 4,
+        "change_pct": 9,
+        "emerging": true
+      },
+      "herramientas": {
+        "actual": 17,
+        "anterior": 24,
+        "change_pct": -2,
+        "emerging": false
+      },
+      "liderazgo": {
+        "actual": 12,
+        "anterior": 22,
+        "change_pct": -3,
+        "emerging": false
+      },
+      "reconocimiento": {
+        "actual": 4,
+        "anterior": 18,
+        "change_pct": -4,
+        "emerging": false
+      },
+      "desarrollo": {
+        "actual": 6,
+        "anterior": 17,
+        "change_pct": -3,
+        "emerging": false
+      },
+      "bienestar": {
+        "actual": 19,
+        "anterior": 29,
+        "change_pct": -3,
+        "emerging": false
+      }
+    },
+    "temas_emergentes_esperados": [
+      "comunicacion",
+      "turnos"
+    ],
+    "typeform_ids_unicos": 164
+  },
+  "engine_csv": {
+    "total": 500,
+    "porcentaje_por_rol": {
+      "Comercial": 8.0,
+      "Logística": 28.0,
+      "Oficinas": 16.0,
+      "Planta": 48.0
+    },
+    "roles_bajo_15pct": [
+      "Comercial"
+    ],
+    "celdas_rol_turno_menores_k": [
+      "Oficinas|Tarde|n=3"
+    ],
+    "polarizacion_rol_pregunta": [
+      {
+        "rol": "Planta",
+        "pregunta": "q2_liderazgo",
+        "std": 1.823
+      }
+    ],
+    "tokens_pii_que_no_deben_aparecer_en_el_payload": [
+      "juan.perez@example.com",
+      "600 123 456",
+      "Marta López",
+      "intranet.example.com"
+    ]
+  }
+}

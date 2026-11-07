@@ -1,0 +1,501 @@
+﻿employee_id,rol,turno,q1_bienestar,q2_liderazgo,q3_recursos,texto_abierto
+beee4d56e95f9638,Logística,Noche,5,3,3,Herramientas informáticas lentas durante el cierre.
+8084dd90fca1daf8,Logística,Mañana,4,4,3,
+cf4824cf720eb4e7,Planta,Tarde,4,4,3,
+d5d0b045ede58fad,Planta,Tarde,5,1,5,Buen ambiente entre compañeros de turno.
+96aa9b884f6e52c8,Logística,Tarde,2,3,2,
+8c945c3a1a37d2b2,Planta,Tarde,4,5,3,
+fca60d64b9785d18,Oficinas,Mañana,4,4,4,
+d4df900266d87298,Planta,Mañana,3,1,2,
+c982f3236f6cd601,Planta,Tarde,5,2,3,
+57803b4d60857eb3,Planta,Tarde,4,4,4,
+aa41a1bc895a93f2,Planta,Mañana,3,2,2,
+36eb73aa90c16e8e,Planta,Mañana,4,5,4,
+25fb955c6b2b4e33,Planta,Mañana,3,2,4,
+d869a2d339338ef1,Planta,Mañana,4,5,3,
+942fcc724ae6d157,Planta,Tarde,4,5,2,
+a176523050bdfefc,Comercial,Mañana,3,5,3,Más claridad en las instrucciones de cambio de formato.
+e9db813d59a8510f,Oficinas,Mañana,4,3,5,Más claridad en las instrucciones de cambio de formato.
+1d9464149b8db0e6,Planta,Tarde,2,4,3,
+5e47b1de54746d1c,Comercial,Mañana,5,3,4,
+80179e9a5c2be193,Planta,Mañana,3,2,4,
+54959ac08a1cc4b4,Oficinas,Mañana,3,4,4,
+3fa2c759e2870db7,Planta,Tarde,3,2,4,
+593114c4aefd5111,Planta,Mañana,4,5,3,
+ff7b6dd5bb7591f3,Planta,Tarde,3,1,2,Los relevos de turno requieren mejor coordinación.
+81c215abc285567d,Logística,Tarde,4,4,3,Buen ambiente entre compañeros de turno.
+455a98874e47b81e,Logística,Tarde,3,4,3,Buen ambiente entre compañeros de turno.
+22055357ab6e1e41,Logística,Mañana,2,4,2,Buen ambiente entre compañeros de turno.
+0348c0f61ded6ed0,Planta,Tarde,5,4,2,Más detalle en https://intranet.example.com/turnos por favor.
+6912a87f8ba85a0e,Planta,Tarde,5,1,4,
+cb89072943094c90,Logística,Mañana,2,4,3,
+d8333d0d25ca646a,Planta,Tarde,4,5,4,
+656307307a027c41,Comercial,Mañana,4,4,4,Buen ambiente entre compañeros de turno.
+3f5172d1594bd4cb,Planta,Mañana,3,2,3,
+84dba5de4bb6503a,Oficinas,Mañana,3,4,5,
+5ed52cf3ec4fd3f8,Logística,Mañana,3,3,4,
+7608b2aea33b381b,Oficinas,Mañana,3,4,5,
+76874b626fe84798,Logística,Mañana,3,4,3,
+9c8e8221af24417c,Oficinas,Mañana,4,4,5,
+66833ea1ecc17811,Planta,Mañana,5,2,2,El equipo agradece las pausas programadas.
+480f5be2adcfcc85,Planta,Mañana,4,4,3,
+e6e4b12501fb48a9,Planta,Mañana,2,1,3,
+f788b0477242a11b,Logística,Mañana,4,4,3,
+df4952dac8e7a915,Logística,Noche,3,4,4,
+57c166c53ec33fee,Planta,Noche,2,1,3,Herramientas informáticas lentas durante el cierre.
+05b24fb06d8f9038,Oficinas,Mañana,4,4,4,Herramientas informáticas lentas durante el cierre.
+c3969d918a6dd614,Planta,Tarde,4,5,3,
+8e70bd0c090c466b,Comercial,Mañana,3,4,3,
+b78911275a1de05b,Planta,Noche,2,5,3,
+b7a5ce4b66ecccff,Comercial,Mañana,3,4,4,
+29a4bb592f1c6e02,Logística,Mañana,3,4,3,
+ee79d19851a9c71a,Planta,Mañana,4,1,3,
+de9a65ad910191c8,Oficinas,Mañana,4,4,3,
+ee9ad77c95d8dedc,Planta,Tarde,3,5,3,
+c3f664b9276781d8,Oficinas,Mañana,4,4,5,
+b94cf4b7f1cc1b3e,Oficinas,Mañana,4,5,3,
+261c1a60d0c18765,Logística,Tarde,3,3,4,
+f208ab8c714739ad,Planta,Mañana,3,4,3,
+617d0510afdf1317,Logística,Mañana,3,3,4,Herramientas informáticas lentas durante el cierre.
+730084b9caad5520,Logística,Tarde,3,4,4,
+7ac89d62e8615588,Logística,Mañana,3,3,3,
+966105fe7207a23e,Oficinas,Mañana,3,3,5,
+463ba7a673912820,Planta,Tarde,4,5,3,
+8efd8ebe2402c4f2,Logística,Tarde,2,4,2,
+3adcb1cf67fd38eb,Planta,Mañana,4,5,5,
+b6aebd273f6a61e9,Oficinas,Mañana,4,3,4,
+56a1f70d39b3d108,Planta,Mañana,3,4,5,
+a1f9916b31f8c772,Logística,Tarde,3,4,1,
+fd6f5c277afd1780,Planta,Noche,4,5,2,
+1dd97d8b6b5a6dc3,Oficinas,Mañana,5,4,4,
+ae8330804f18f2f8,Oficinas,Mañana,4,5,4,Buen ambiente entre compañeros de turno.
+b6d764fc413b7aa4,Logística,Mañana,3,4,3,
+449ee5b6a1a405f7,Planta,Mañana,4,5,3,Más claridad en las instrucciones de cambio de formato.
+473c4a8bd92ec30e,Logística,Tarde,3,4,2,
+2303c00cb205fc72,Comercial,Mañana,3,3,4,
+6d380ffdbb644448,Planta,Mañana,5,5,3,El equipo agradece las pausas programadas.
+123653c683fce7b4,Planta,Tarde,3,4,5,
+f8285591120bd565,Logística,Tarde,3,4,2,Falta agilidad en la reposición de repuestos en línea.
+fec745a5eebd25a7,Planta,Tarde,4,1,2,
+d0472f32cd84f1e9,Planta,Noche,4,1,2,
+c304d5948be075d9,Logística,Mañana,3,3,3,
+c3e33d79d42354d1,Planta,Mañana,4,1,3,
+cc08cb45363ef98c,Planta,Tarde,4,5,2,
+3a2d93392f1cb473,Oficinas,Mañana,4,4,4,
+7f01bfc6fcf95534,Logística,Mañana,2,3,2,
+2300267a624e6b74,Planta,Tarde,3,5,3,El equipo agradece las pausas programadas.
+18982bdac85644a3,Logística,Noche,3,2,2,Buen ambiente entre compañeros de turno.
+b2e4e7323af196a9,Planta,Noche,4,5,4,
+793974887c7ceb6c,Planta,Tarde,4,5,4,Más claridad en las instrucciones de cambio de formato.
+a8fc84a774cfbe5e,Planta,Tarde,3,5,3,
+8702f43f5aa9370e,Oficinas,Mañana,3,3,4,
+8f904a0e06917555,Oficinas,Mañana,3,4,4,Más claridad en las instrucciones de cambio de formato.
+79e25b9d0b7b3a9f,Oficinas,Mañana,3,3,4,
+4ea866232e1daf9a,Planta,Noche,5,4,3,
+709d68e3e1f35319,Comercial,Mañana,4,3,3,
+7a98130a0a3bfcbf,Logística,Noche,3,3,3,Herramientas informáticas lentas durante el cierre.
+d1a4827d15927d71,Planta,Mañana,4,5,3,Los relevos de turno requieren mejor coordinación.
+c61e9744bc709587,Planta,Tarde,4,5,2,El equipo agradece las pausas programadas.
+2ac769ce0fb9acf7,Planta,Mañana,4,5,5,
+67b15435a3ab8fa6,Logística,Tarde,3,4,3,
+5309a0b24bd2d9b9,Logística,Tarde,4,4,3,
+2cf640f3de91780b,Oficinas,Tarde,4,4,4,Más claridad en las instrucciones de cambio de formato.
+9fff2a9b597c2f27,Planta,Mañana,4,5,5,
+6c6b11abb95dd053,Comercial,Mañana,3,3,5,
+662104fe4c67b7a0,Planta,Mañana,3,4,2,
+a92e992b5aa77663,Planta,Mañana,2,1,3,
+f04568ceb881b306,Oficinas,Mañana,3,4,4,
+0772f4d4a4af9462,Planta,Mañana,4,1,2,
+03f64e3e8e055039,Logística,Mañana,4,3,3,
+31fadf6a741759ac,Planta,Tarde,4,5,3,Falta agilidad en la reposición de repuestos en línea.
+f54a34c5107b3b15,Oficinas,Mañana,4,4,5,
+7354e4f60fd0f941,Logística,Mañana,2,3,4,Falta agilidad en la reposición de repuestos en línea.
+96fe5d9a6c1ab19e,Oficinas,Mañana,4,5,4,
+506f45492857a8ea,Logística,Tarde,2,3,4,
+3d096a6e61d7115e,Planta,Mañana,2,5,3,Falta agilidad en la reposición de repuestos en línea.
+d1a7332aae326e50,Oficinas,Mañana,4,4,4,
+2e14782a51ea949d,Planta,Tarde,4,5,3,
+c7effb7a157f8912,Planta,Mañana,4,1,4,
+01ce5508e7e4d776,Logística,Mañana,4,4,4,
+10442a59d4fdb5f1,Oficinas,Mañana,4,4,5,
+e2459fcd714ded8d,Planta,Mañana,4,4,4,
+9dfb452f6b33f51d,Planta,Mañana,3,5,3,Buen ambiente entre compañeros de turno.
+8fc69471bdfe45ac,Logística,Mañana,3,3,2,El equipo agradece las pausas programadas.
+f41a73c5f8586bfd,Logística,Mañana,3,3,2,Buen ambiente entre compañeros de turno.
+1654baf2cb5a6df4,Planta,Mañana,3,4,3,
+7f4510f0203fb129,Planta,Mañana,4,5,4,
+bdda31cc31d90935,Logística,Mañana,2,4,3,Más claridad en las instrucciones de cambio de formato.
+64b17c99141267a3,Logística,Mañana,4,4,4,
+3f1932b76f3a2d00,Planta,Mañana,4,4,2,Falta agilidad en la reposición de repuestos en línea.
+30a392cf55879d5d,Planta,Mañana,4,5,4,
+e3d3e7a1a7f24c10,Planta,Mañana,4,5,2,
+2e0c0137a532ef7b,Planta,Mañana,3,2,4,Herramientas informáticas lentas durante el cierre.
+77cd1da1cf36217d,Planta,Mañana,5,5,2,
+ff7f64f25e55dbbd,Planta,Mañana,2,5,3,Buen ambiente entre compañeros de turno.
+c3c0fe7f66eecb14,Logística,Mañana,2,4,3,Buen ambiente entre compañeros de turno.
+c3cc25574a171d7c,Logística,Tarde,3,3,3,
+4abbb7d7ce33895e,Comercial,Mañana,5,4,3,Herramientas informáticas lentas durante el cierre.
+3848a532ea0a9336,Logística,Mañana,3,3,3,Herramientas informáticas lentas durante el cierre.
+1f1821e06de97b45,Planta,Mañana,3,1,4,Los relevos de turno requieren mejor coordinación.
+0754e67ec3af539e,Oficinas,Mañana,4,4,4,
+2666d1f16cb2b0b8,Comercial,Mañana,3,3,2,
+af2cace204920bc2,Planta,Tarde,4,2,5,Más claridad en las instrucciones de cambio de formato.
+c68d6bd8a0b954a7,Planta,Tarde,4,5,4,Más claridad en las instrucciones de cambio de formato.
+9dd2fa567c37aac8,Planta,Mañana,4,1,3,
+da2ca6c878e2e2dd,Planta,Noche,2,4,3,
+f9cbcccc13851768,Planta,Mañana,3,5,4,
+7e2aab31eb1da792,Planta,Tarde,5,1,2,Más claridad en las instrucciones de cambio de formato.
+d88a6a6fd4a5754d,Planta,Tarde,5,5,3,
+3dd5c7bb3a562edb,Logística,Tarde,4,3,4,
+deb089684b4d184a,Planta,Tarde,4,1,4,
+a172432b153bb0ce,Logística,Tarde,4,3,2,
+523968408a8d766f,Planta,Tarde,4,5,3,
+6d816c5592bd7d49,Oficinas,Mañana,4,4,3,Falta agilidad en la reposición de repuestos en línea.
+a679649724bd9fc0,Comercial,Mañana,5,4,4,El equipo agradece las pausas programadas.
+c4b12f5f271f408e,Comercial,Mañana,4,3,4,
+3c2de3919f71fabe,Oficinas,Mañana,4,4,5,El equipo agradece las pausas programadas.
+ed660f179dbd8fa2,Planta,Noche,5,1,3,
+434871e1ee703968,Planta,Tarde,3,1,3,
+23607caf70c08bf5,Logística,Mañana,4,3,2,Buen ambiente entre compañeros de turno.
+6454f8d3f4be07c8,Planta,Mañana,3,5,5,Más claridad en las instrucciones de cambio de formato.
+21c7cb06cc546a03,Planta,Tarde,5,1,3,
+ffc8aabaa6f1206c,Logística,Mañana,3,3,4,
+d4487e17cf454392,Logística,Mañana,4,3,5,
+bc499be1c303ac6c,Planta,Tarde,4,5,4,
+c9f9498c879e8802,Oficinas,Mañana,3,4,5,Falta agilidad en la reposición de repuestos en línea.
+9792361ed765c5ce,Planta,Noche,5,1,4,
+01d8029fc82d19e7,Planta,Mañana,3,1,4,
+281fa1222e58cae2,Planta,Mañana,4,1,2,Los relevos de turno requieren mejor coordinación.
+791612798941c7a6,Logística,Noche,3,3,2,Herramientas informáticas lentas durante el cierre.
+6ae596b45712c033,Logística,Mañana,3,3,3,
+1bad55c1081b6780,Logística,Noche,4,3,3,
+28be2f4e6e151129,Oficinas,Mañana,4,4,5,Los relevos de turno requieren mejor coordinación.
+804b0f4aff2e0243,Comercial,Mañana,3,3,4,
+7cdf97d2ceb36d1d,Oficinas,Mañana,3,4,4,
+1b13bab5b9c62349,Logística,Mañana,3,3,3,
+ad48dec738602d51,Planta,Mañana,3,5,4,
+6f85cb6588ef7173,Planta,Mañana,3,5,3,
+1d85e115eaad3bce,Oficinas,Mañana,4,5,4,
+1fabc60eab54988c,Planta,Tarde,4,5,5,
+118f7262c45e2c0f,Comercial,Mañana,3,4,4,
+6071675efc4749cf,Planta,Noche,2,1,4,
+6a9f43c2d3d682fb,Planta,Noche,4,5,2,
+6c1454e6f97bbd9d,Logística,Tarde,2,3,4,Buen ambiente entre compañeros de turno.
+f73bc5f0c3f0e485,Planta,Tarde,1,5,2,
+8afc095156ceba2c,Logística,Mañana,3,4,3,
+2875cb222ac8e646,Oficinas,Mañana,4,4,4,El equipo agradece las pausas programadas.
+bd82a16058aa414e,Logística,Tarde,3,4,2,El equipo agradece las pausas programadas.
+22c16658e956057b,Logística,Mañana,3,2,2,
+867b98f6826ce20c,Logística,Mañana,2,3,3,Más claridad en las instrucciones de cambio de formato.
+cf7fcd4b7b00958b,Planta,Mañana,4,1,1,Los relevos de turno requieren mejor coordinación.
+2702a7890032d11c,Planta,Noche,4,1,3,
+bda8f9c3d3e5168c,Oficinas,Mañana,3,4,4,El equipo agradece las pausas programadas.
+b1c1cdea34d61de5,Logística,Mañana,4,3,2,
+d912453aa8f3f08e,Oficinas,Mañana,5,3,4,El equipo agradece las pausas programadas.
+42b29cb793eb8823,Logística,Noche,3,3,3,
+7711bfa4fe53aeae,Logística,Tarde,3,4,3,
+46b6e80ba95244ab,Planta,Tarde,1,1,3,Herramientas informáticas lentas durante el cierre.
+f6d660ade84abc9c,Planta,Tarde,3,5,4,
+1a2416a63d631792,Planta,Tarde,4,1,4,
+f14583668c384951,Planta,Mañana,4,1,4,Los relevos de turno requieren mejor coordinación.
+c4f7122858e42d8b,Logística,Mañana,3,3,4,
+1ad91728e3d9c6c6,Oficinas,Mañana,4,4,4,
+e2a3a6e0cbc5a00d,Oficinas,Mañana,4,4,4,
+bbde46a138cef362,Planta,Noche,3,5,4,
+c202dfbf5858ecf6,Comercial,Mañana,4,4,4,El equipo agradece las pausas programadas.
+50ebd5682acb0868,Logística,Tarde,3,4,2,
+99940bf795eb0271,Oficinas,Mañana,3,4,4,
+7a9ac4369aabe59e,Logística,Mañana,3,3,3,Llamad al 600 123 456 si hay cambios de última hora.
+113c2c9768a7ec35,Logística,Tarde,3,4,2,
+091a290fa1085e39,Oficinas,Mañana,4,4,4,
+5d05cb4fe06b9065,Logística,Mañana,4,4,3,
+347508e396d956de,Planta,Tarde,3,4,4,Buen ambiente entre compañeros de turno.
+87b03076788d246c,Logística,Tarde,3,4,2,Más claridad en las instrucciones de cambio de formato.
+ed3431e313aa3824,Oficinas,Mañana,4,4,5,El equipo agradece las pausas programadas.
+0804c69bda25993a,Planta,Mañana,2,5,5,Herramientas informáticas lentas durante el cierre.
+5847c871f2f91b1c,Planta,Mañana,3,1,4,
+61d069773a413b23,Comercial,Mañana,2,3,3,
+9bc0b7bbd536150c,Logística,Tarde,3,4,1,
+58e9d664b3696486,Planta,Noche,3,1,4,
+755f945fa6d19c8b,Comercial,Mañana,4,3,4,
+4c6b82fe4dd2e3be,Planta,Mañana,4,1,4,
+cdd67076d20e8fab,Planta,Tarde,4,5,3,El equipo agradece las pausas programadas.
+b81f2f99da4c969b,Planta,Mañana,3,1,2,
+fe19f0c49c6a51fc,Planta,Mañana,2,5,4,Más claridad en las instrucciones de cambio de formato.
+862204f39f8c97ea,Logística,Tarde,3,4,3,Los relevos de turno requieren mejor coordinación.
+3db43bdd68772b37,Planta,Noche,2,4,4,
+b883d5a37a888bc3,Comercial,Mañana,4,5,3,El equipo agradece las pausas programadas.
+21780ab560d934f5,Logística,Tarde,3,3,2,
+73a9aa1f5a39dea7,Planta,Mañana,1,5,4,
+3e860bcc7a827a7c,Oficinas,Mañana,4,4,4,
+ee80c2525dd522f3,Logística,Mañana,2,3,2,Los relevos de turno requieren mejor coordinación.
+dabd6b218705f1ee,Planta,Tarde,3,1,4,
+049cb6bcefd93f77,Planta,Noche,3,1,2,
+bd37a890f0dc6a36,Planta,Mañana,5,1,3,
+a7c0522cdb00fed1,Logística,Tarde,3,3,2,Falta agilidad en la reposición de repuestos en línea.
+a2b41a6e2bcd9f51,Planta,Mañana,4,1,3,Los relevos de turno requieren mejor coordinación.
+bca2730ee5672280,Planta,Tarde,3,4,4,
+cb62c3fcace76852,Planta,Mañana,3,4,2,
+9ba0ade5d21f76e4,Oficinas,Mañana,4,4,4,
+8985c228c4f07db5,Planta,Mañana,4,5,3,
+dffdb3188d3147bc,Planta,Mañana,4,2,4,
+549974f418627c10,Logística,Mañana,3,3,3,
+573e559302f0fb21,Planta,Tarde,4,1,3,
+822404797a47d9bd,Comercial,Mañana,4,3,4,
+1e17b49f4d772e04,Logística,Tarde,2,3,2,
+3921b28207e1499a,Oficinas,Mañana,4,4,4,
+58641fe56d6a0127,Planta,Mañana,3,1,4,
+eef91ae11c9abc72,Comercial,Mañana,3,3,3,Buen ambiente entre compañeros de turno.
+eaf1025bc001460f,Logística,Tarde,4,4,3,
+96b43e6a7f2dce68,Planta,Mañana,4,5,4,Más claridad en las instrucciones de cambio de formato.
+c40939eb4a68c496,Logística,Mañana,4,3,3,
+c68f12ba88075e64,Oficinas,Mañana,3,4,4,
+0dca990664dc377f,Logística,Mañana,2,4,1,
+30e653c0d9abb0d5,Planta,Mañana,4,2,3,
+678817cfa29d046f,Oficinas,Tarde,4,5,4,
+2cec9b976ed8da0a,Planta,Noche,4,5,4,Los relevos de turno requieren mejor coordinación.
+1bd962ff8d657f12,Logística,Tarde,3,4,2,
+b2893528b2cf4098,Oficinas,Mañana,4,4,4,
+2503324fb42c5987,Planta,Noche,4,4,4,
+31aacf697165f8f5,Logística,Mañana,3,2,2,
+568a44894ff3070a,Oficinas,Mañana,4,5,4,Los relevos de turno requieren mejor coordinación.
+1317107e473324bb,Planta,Mañana,5,1,1,Más claridad en las instrucciones de cambio de formato.
+863544d89d080889,Oficinas,Mañana,4,4,3,
+291e73412a1fa043,Planta,Mañana,3,2,2,Más claridad en las instrucciones de cambio de formato.
+75f1c5d2ba891402,Planta,Mañana,4,5,5,
+0bc2a413ddcbb0b8,Oficinas,Mañana,4,5,4,
+5c539df0f9ea8c01,Planta,Tarde,4,4,3,El equipo agradece las pausas programadas.
+20114d44ba599db7,Oficinas,Mañana,4,4,5,
+1f289a4e5a409ccf,Logística,Mañana,3,4,3,
+1a988de9c50efb81,Logística,Mañana,2,2,3,El equipo agradece las pausas programadas.
+8627eb2190d42446,Planta,Noche,4,1,3,Buen ambiente entre compañeros de turno.
+26af19dc994ff0db,Planta,Mañana,3,5,4,
+c32ba374204f54a7,Planta,Tarde,4,1,2,El equipo agradece las pausas programadas.
+d309b4501099bf6e,Planta,Mañana,3,5,3,
+a775e4900dd64e87,Logística,Mañana,3,3,2,Los relevos de turno requieren mejor coordinación.
+e94822f893965457,Oficinas,Mañana,4,4,4,
+49cc834c90adf36c,Comercial,Mañana,3,4,4,
+b5c921f21f2c3b22,Planta,Tarde,5,1,4,
+53cc0f45ba86ea02,Planta,Noche,4,5,3,
+7b74dbce3e3190de,Comercial,Mañana,4,4,4,
+c1a939df6ed9b7aa,Oficinas,Mañana,4,4,4,
+d5edc45faee1d483,Planta,Mañana,4,5,3,
+a5a2746d438ac53f,Planta,Mañana,5,5,3,El equipo agradece las pausas programadas.
+515a93eaf1adab37,Logística,Mañana,3,3,3,
+726b34ac2ac193ed,Planta,Tarde,3,4,4,
+dee92b6a50919052,Logística,Mañana,2,3,5,
+067323b489f4c345,Comercial,Mañana,4,4,4,
+1b8b28a49459eee7,Planta,Noche,4,1,5,
+aad0b562e6702703,Planta,Tarde,3,5,2,
+17e1e51bb11318de,Planta,Tarde,2,4,4,
+20125c57332cb72f,Planta,Tarde,2,5,3,
+12f2d0a6658e381c,Planta,Noche,2,2,4,
+82b1bee5281cc0bb,Planta,Mañana,3,1,3,
+8877ec692446cfa1,Logística,Mañana,3,4,3,
+cd4217d18906e4dc,Planta,Noche,2,5,2,
+f307ed7553dd73da,Logística,Mañana,2,2,2,El equipo agradece las pausas programadas.
+5c90e9de784a3316,Planta,Noche,3,5,3,
+10ecf6dbde591903,Planta,Mañana,3,4,2,Falta agilidad en la reposición de repuestos en línea.
+2ea2eda16fd43a6d,Oficinas,Mañana,4,5,4,
+227b7a23b8a24f78,Logística,Mañana,2,3,2,
+3ed484f5e07ef653,Logística,Mañana,3,3,3,
+ccaee914dd9a1125,Logística,Mañana,3,3,3,
+090fa8e3d8bd4a92,Oficinas,Mañana,4,4,4,Falta agilidad en la reposición de repuestos en línea.
+107c161fcdfaa293,Logística,Noche,2,4,2,Buen ambiente entre compañeros de turno.
+2fce27a399866c60,Logística,Tarde,2,3,3,
+9cbdd80af477cc13,Comercial,Mañana,4,4,4,Los relevos de turno requieren mejor coordinación.
+7549e5ca81022d04,Planta,Mañana,2,5,2,
+f01fb0e5be3340b5,Planta,Mañana,3,1,4,
+a8301ab74393817c,Planta,Noche,3,4,3,
+5ec5f23bbaad1800,Planta,Tarde,3,1,4,
+2f82af60105d8d9e,Planta,Noche,4,1,5,
+b2a4105ead5a0d3b,Logística,Tarde,3,4,3,
+7e5107dc1ab8c0e0,Planta,Tarde,3,5,2,Más claridad en las instrucciones de cambio de formato.
+3cc2875aa684973b,Logística,Tarde,4,3,3,
+ab85d5ca7b020d44,Oficinas,Mañana,4,4,4,Herramientas informáticas lentas durante el cierre.
+6fa0d392133515ba,Comercial,Mañana,4,4,4,
+1f741c3f8f9ddba5,Comercial,Mañana,5,4,4,Falta agilidad en la reposición de repuestos en línea.
+263018a5d4d10d08,Planta,Tarde,3,1,4,Falta agilidad en la reposición de repuestos en línea.
+bea99811801d8b1b,Planta,Noche,2,1,4,
+3c461002052fa740,Oficinas,Mañana,4,4,4,
+c6c80ff70067191a,Oficinas,Mañana,5,4,5,
+0c289a9e7c6b8f7f,Logística,Tarde,3,4,2,
+3e46a058e8c686d0,Planta,Tarde,4,5,2,
+7808f763607b1754,Planta,Tarde,3,1,5,
+2e5729b7f9b7ef92,Oficinas,Mañana,4,3,5,
+ba3b55f9f162738a,Planta,Mañana,2,1,4,Falta agilidad en la reposición de repuestos en línea.
+921c14e258acf409,Planta,Noche,4,5,4,Más claridad en las instrucciones de cambio de formato.
+e859a79c1b30adb7,Planta,Noche,3,4,3,Herramientas informáticas lentas durante el cierre.
+a1fda98ad4054831,Logística,Mañana,4,3,1,
+072c75651ceee950,Logística,Tarde,3,3,2,
+c4fc267af5ea16d8,Logística,Tarde,4,4,4,El equipo agradece las pausas programadas.
+b7f989fdf24763c4,Logística,Tarde,3,4,3,El equipo agradece las pausas programadas.
+0a79e11852919a2d,Logística,Tarde,3,4,2,
+d211caa75a206c7e,Planta,Mañana,3,2,3,
+c6f458f31710d4a8,Planta,Mañana,3,5,2,
+2809690bdf780537,Planta,Tarde,4,5,3,Falta agilidad en la reposición de repuestos en línea.
+65b7ca73359975a7,Logística,Tarde,3,3,2,
+b72e870414bc1303,Comercial,Mañana,3,3,3,
+4bb4437e6691261d,Oficinas,Mañana,4,5,5,
+90e5060be7ff512c,Planta,Mañana,5,2,3,
+fe072dda2f6cfbf4,Planta,Mañana,4,2,2,
+67e19e98f2b0f82d,Oficinas,Mañana,4,3,4,Buen ambiente entre compañeros de turno.
+4295546729677d29,Planta,Tarde,4,1,4,Más claridad en las instrucciones de cambio de formato.
+9f4b26cbc841145f,Logística,Tarde,3,5,3,
+7c84d12169b849fa,Logística,Noche,4,3,3,Falta agilidad en la reposición de repuestos en línea.
+1a8a60f405b06f07,Planta,Mañana,3,5,4,
+ca6eee97743db7d9,Comercial,Mañana,2,4,4,
+51f547b775219299,Planta,Mañana,2,1,2,
+7a636cae199893ad,Oficinas,Mañana,4,3,4,
+e73cf278444aac63,Logística,Noche,4,3,3,Los relevos de turno requieren mejor coordinación.
+80cbb25ed69c134b,Logística,Mañana,2,3,4,
+a9e02df83f63f259,Planta,Mañana,3,5,2,
+de94fc10435bb46d,Logística,Mañana,3,4,2,Los relevos de turno requieren mejor coordinación.
+5a39a93a402b2fc7,Logística,Mañana,3,3,3,
+ac2ec7fe13c0e407,Logística,Mañana,3,4,3,
+78b96141a74a72af,Comercial,Mañana,5,4,4,
+27e2d734c5ab3962,Oficinas,Mañana,3,4,5,
+affcdd0426326cbe,Logística,Noche,3,3,4,Más claridad en las instrucciones de cambio de formato.
+47943766d5ecf177,Oficinas,Mañana,5,4,4,
+09281d19e8142df5,Planta,Mañana,3,1,2,
+0156b420c103e27e,Planta,Tarde,4,2,3,
+6b9427771e66cd25,Comercial,Mañana,2,3,3,El equipo agradece las pausas programadas.
+5f5860df67cb86af,Logística,Mañana,3,4,4,
+f3e21271c853fca2,Logística,Tarde,2,4,2,
+5155577fd97d0786,Logística,Mañana,2,4,4,
+3e8e6f73f21dfa31,Logística,Tarde,3,2,1,
+86df897ff7f3aa09,Logística,Tarde,3,3,2,
+9f61156943dcfab0,Planta,Mañana,4,5,3,
+df1a5178cfc7e5f0,Planta,Tarde,3,1,1,
+e244e21aa3aa2f92,Comercial,Mañana,3,5,3,
+0d32c52a1a665bc0,Oficinas,Mañana,4,3,4,
+29af0a6192b98727,Oficinas,Mañana,4,4,4,
+bcf0aea37d6fb3da,Planta,Mañana,3,1,3,Buen ambiente entre compañeros de turno.
+970670552e1cca62,Planta,Mañana,5,1,4,
+7288d69e727209fa,Oficinas,Mañana,4,4,5,Buen ambiente entre compañeros de turno.
+346926d0b3b39cce,Planta,Tarde,4,5,4,
+cbc8d0e68072d7f4,Planta,Mañana,4,5,3,
+c115d00a3d9fd65e,Comercial,Mañana,4,3,4,
+facd45bdb2b6d208,Planta,Mañana,3,1,2,Más claridad en las instrucciones de cambio de formato.
+a25acee2e50e5f07,Planta,Noche,4,1,5,
+89c1d667ac3484ff,Oficinas,Mañana,3,5,4,
+84d758ae9e5363b1,Planta,Tarde,4,4,3,
+6d3dd80e1b3a69de,Planta,Mañana,4,5,3,
+0926aa2ef66e19fe,Logística,Mañana,4,4,4,Más claridad en las instrucciones de cambio de formato.
+d26f29a625ba4e13,Oficinas,Mañana,3,5,4,
+b340fbc497487e15,Logística,Tarde,4,3,3,
+8335f405e263d31a,Planta,Mañana,3,5,3,
+03397bc2e0ba015f,Logística,Mañana,4,4,3,El equipo agradece las pausas programadas.
+8b995876eae0b0c3,Logística,Tarde,2,4,1,
+6170057ae7408974,Comercial,Mañana,4,3,3,Buen ambiente entre compañeros de turno.
+4e19807e361d3167,Logística,Mañana,3,3,3,Herramientas informáticas lentas durante el cierre.
+388cb23e1a5e3150,Planta,Tarde,4,5,2,Soy Marta López y llevo diez años en la línea 3.
+c259f551ac407dca,Planta,Mañana,3,1,3,
+02de518da2d48597,Planta,Tarde,2,1,2,
+bccd2c99fcc4d157,Oficinas,Mañana,4,3,3,
+7f56214166bbc345,Logística,Mañana,3,4,4,
+487fc3cc8179e1db,Planta,Mañana,4,5,3,
+3cf63e8049266c31,Logística,Mañana,3,3,3,Buen ambiente entre compañeros de turno.
+25da35fb00a382b0,Planta,Mañana,3,1,3,
+4d1fb26aa8377d00,Comercial,Mañana,4,2,5,
+8a84da062f072b88,Oficinas,Mañana,4,4,5,
+d9013604360e344e,Planta,Tarde,3,5,3,
+092da3036ccc4af1,Comercial,Mañana,4,4,4,
+6833e6eb9cb6860a,Oficinas,Tarde,4,5,4,
+5bff5efe045ef2ff,Planta,Noche,4,5,5,
+274cde6156649f0c,Logística,Mañana,4,3,2,
+c432fc984e28aaa8,Planta,Tarde,3,5,2,
+748c9ea666c15f9c,Planta,Mañana,4,2,4,
+3d9265e801f3bdb4,Logística,Tarde,4,3,3,
+ab5477e6ba542545,Logística,Mañana,3,4,2,
+85849574949ecd7b,Planta,Noche,3,5,4,El equipo agradece las pausas programadas.
+2c165ac63a3f9814,Planta,Mañana,4,4,4,Los relevos de turno requieren mejor coordinación.
+c1c59ab3d9fca706,Planta,Noche,3,1,2,
+b41831666f77aa67,Logística,Tarde,3,3,3,Más claridad en las instrucciones de cambio de formato.
+0dbc2e1b435a3570,Logística,Tarde,3,3,4,
+1a218af6a74f012f,Logística,Noche,4,2,4,
+e97d1f9a7a8b2bfc,Planta,Noche,2,1,2,
+34bdb55ed2c84c2a,Logística,Mañana,3,4,3,
+c3fdb7cbf427bcab,Planta,Noche,3,2,3,
+463a6cc5cfb2a89e,Logística,Mañana,4,3,2,
+95b867a473e0a2ea,Oficinas,Mañana,4,4,4,
+b7e2551d00eb9f34,Planta,Mañana,4,5,3,
+7e7e1b093870faff,Planta,Mañana,5,1,4,
+5259b5af7c713f15,Comercial,Mañana,3,4,4,
+86bdbabe6c0f44e9,Planta,Noche,4,2,1,
+e1276eeb656d63a6,Planta,Mañana,3,1,4,
+a57adea5d0f3be8a,Planta,Mañana,3,1,2,
+0ee5a957dfbd3ed5,Planta,Tarde,5,5,4,
+b6d4915f71bcd09e,Logística,Mañana,2,3,3,Buen ambiente entre compañeros de turno.
+53311a2162e96d32,Planta,Tarde,4,1,3,
+1d5251781ba96c2b,Logística,Tarde,3,2,4,Los relevos de turno requieren mejor coordinación.
+f4fa5b9214438467,Planta,Mañana,3,5,4,Más claridad en las instrucciones de cambio de formato.
+765d7341f0189cb3,Planta,Mañana,3,5,4,
+2154ce5c85534383,Planta,Tarde,4,4,4,
+76549b75a9a1103d,Planta,Tarde,4,5,4,
+dc3fc396893da35c,Planta,Mañana,3,5,2,
+09bf86d9e9d1b779,Logística,Mañana,4,4,2,
+3e6b7415713e820e,Comercial,Mañana,4,3,4,
+d5d96d686f576770,Oficinas,Mañana,3,4,4,Buen ambiente entre compañeros de turno.
+949a051275c3436a,Logística,Mañana,4,3,3,
+443dbee5d6d9ad82,Planta,Tarde,4,5,2,
+97dcfbf6e4f37372,Planta,Mañana,2,5,2,
+1bfabf3ed042c4bf,Logística,Noche,2,3,3,
+8967b2604a5d9730,Planta,Mañana,5,5,4,
+c7e249c567103c04,Planta,Tarde,5,1,4,
+4922188eb8b11903,Planta,Tarde,4,5,4,
+559fc8434f414081,Planta,Tarde,4,2,5,
+ad8a0d23df773f02,Oficinas,Mañana,4,4,4,Herramientas informáticas lentas durante el cierre.
+1dd6098bac142c88,Logística,Tarde,3,2,2,Más claridad en las instrucciones de cambio de formato.
+caf108f06746260b,Comercial,Mañana,4,4,4,
+e4ed6f19e6f3a2f5,Oficinas,Mañana,4,5,5,
+1d6875afecb906e8,Planta,Mañana,4,4,4,
+4aea48a2869367f0,Logística,Mañana,3,3,2,Falta agilidad en la reposición de repuestos en línea.
+9ee7bf69f9b4272a,Logística,Tarde,2,4,3,
+9ab671139213c245,Planta,Mañana,4,1,2,
+eed4ef9ebf404f5c,Planta,Mañana,3,5,2,
+5707c7d19caf7f5b,Planta,Mañana,2,1,3,
+c383d3caaa2175db,Planta,Tarde,1,4,3,
+094ad2709c630135,Planta,Mañana,4,1,3,
+5b831d403ac19376,Logística,Noche,3,4,2,
+0ef132df1c286109,Planta,Mañana,2,5,4,Los relevos de turno requieren mejor coordinación.
+e5e1a73b45c1ce48,Logística,Noche,4,4,3,
+7781071619275e5e,Planta,Mañana,3,1,4,Buen ambiente entre compañeros de turno.
+eee4d3eccdb43e7d,Logística,Mañana,3,4,3,
+6b7d669d307aa6ec,Planta,Tarde,3,4,3,
+1bdbaa95c5e5bc08,Oficinas,Mañana,4,3,4,Buen ambiente entre compañeros de turno.
+c636d3b221eae384,Logística,Mañana,2,4,4,Falta agilidad en la reposición de repuestos en línea.
+900a1185c12f2c15,Planta,Noche,4,4,2,
+f7ab3b1b833810b1,Planta,Mañana,4,1,4,
+b8f791c5256aaf70,Planta,Tarde,3,1,3,
+d4d36926256ac078,Oficinas,Mañana,4,4,4,Herramientas informáticas lentas durante el cierre.
+4c68f27e51c41320,Oficinas,Mañana,4,4,4,Escribidme a juan.perez@example.com para lo del turno.
+eb3f8ad5c68c10e8,Logística,Mañana,3,3,4,
+db48bcde06b11e89,Planta,Tarde,2,1,2,
+651628e2f64cb950,Comercial,Mañana,3,3,3,
+fa3eef5e913727db,Comercial,Mañana,3,4,4,
+84041b6235606df6,Oficinas,Mañana,5,3,4,
+8ac2d438be646f85,Oficinas,Mañana,4,4,4,
+75a143cacf1e3fb0,Logística,Mañana,4,4,4,
+0f7ad6a32f634b15,Planta,Noche,3,5,3,
+3a5494326c01c10d,Planta,Mañana,5,5,3,
+54a77e84e7be1e2c,Planta,Tarde,4,1,5,
+bc1ba98b310b8bbe,Oficinas,Mañana,4,3,5,El equipo agradece las pausas programadas.
+3b0cfa185f44de0f,Planta,Mañana,4,1,5,
+70fc3b10e400a6a4,Planta,Mañana,3,1,4,
+7dfcfdbee87978b8,Planta,Tarde,3,1,3,
+b9cc7321c6277160,Planta,Tarde,3,1,3,
+a48fabf1f7958948,Planta,Mañana,4,5,3,
+2d297011bbf35443,Planta,Mañana,3,1,2,Falta agilidad en la reposición de repuestos en línea.
+fbdd73124d24868d,Planta,Tarde,4,1,4,
+3e9c07cd1a61ad32,Planta,Mañana,4,5,3,
+35b10a28644b7233,Planta,Tarde,2,5,4,
+f100ecc03c0eea37,Planta,Noche,4,5,3,Más claridad en las instrucciones de cambio de formato.
+ca72be28990709e2,Logística,Mañana,3,4,4,
+50dcd6bfbbc0f94c,Planta,Mañana,3,5,2,Herramientas informáticas lentas durante el cierre.
+b34e8f81c381f87e,Planta,Tarde,4,1,2,Falta agilidad en la reposición de repuestos en línea.
+0e4b562e55a0417f,Planta,Noche,3,1,1,El equipo agradece las pausas programadas.
+a01c865fc6c0c771,Logística,Tarde,3,3,3,
+0bcef5ca86642127,Logística,Mañana,4,3,2,
+6e53d16423626092,Logística,Noche,3,3,4,El equipo agradece las pausas programadas.
+d869c4fa0a22b280,Planta,Mañana,3,5,1,

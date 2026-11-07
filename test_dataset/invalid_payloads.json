@@ -1,0 +1,170 @@
+{
+  "valid": [
+    {
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": 1
+      }
+    },
+    {
+      "payload": {
+        "dimension": "liderazgo",
+        "site": "Logística",
+        "score": 5
+      }
+    },
+    {
+      "payload": {
+        "dimension": "desarrollo",
+        "site": "Comercial",
+        "score": 3
+      }
+    },
+    {
+      "payload": {
+        "dimension": "cultura",
+        "site": "Oficina",
+        "score": 4
+      }
+    },
+    {
+      "payload": {
+        "dimension": "relaciones",
+        "site": "Fábrica",
+        "score": 2
+      }
+    },
+    {
+      "payload": {
+        "dimension": "condiciones",
+        "site": "Logística",
+        "score": 5
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "case": "score_cero",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": 0
+      }
+    },
+    {
+      "case": "score_seis",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": 6
+      }
+    },
+    {
+      "case": "score_negativo",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": -1
+      }
+    },
+    {
+      "case": "score_string",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": "3"
+      }
+    },
+    {
+      "case": "score_float",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": 3.5
+      }
+    },
+    {
+      "case": "score_bool",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica",
+        "score": true
+      }
+    },
+    {
+      "case": "score_ausente",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Fábrica"
+      }
+    },
+    {
+      "case": "dimension_desconocida",
+      "payload": {
+        "dimension": "salario",
+        "site": "Fábrica",
+        "score": 3
+      }
+    },
+    {
+      "case": "dimension_mayuscula",
+      "payload": {
+        "dimension": "Bienestar",
+        "site": "Fábrica",
+        "score": 3
+      }
+    },
+    {
+      "case": "dimension_ausente",
+      "payload": {
+        "site": "Fábrica",
+        "score": 3
+      }
+    },
+    {
+      "case": "site_desconocido",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Almacén",
+        "score": 3
+      }
+    },
+    {
+      "case": "site_es_cohorte_no_site",
+      "payload": {
+        "dimension": "bienestar",
+        "site": "Planta",
+        "score": 3
+      }
+    },
+    {
+      "case": "site_ausente",
+      "payload": {
+        "dimension": "bienestar",
+        "score": 3
+      }
+    },
+    {
+      "case": "payload_lista",
+      "payload": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "case": "payload_null",
+      "payload": null
+    },
+    {
+      "case": "payload_string",
+      "payload": "hola"
+    },
+    {
+      "case": "payload_vacio",
+      "payload": {}
+    }
+  ],
+  "nota": "Todos los 'invalid' deben lanzar RequestError (HTTP 400) en validate_response."
+}
