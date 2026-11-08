@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import csv
+import io
 import json
 import math
+import random
 import statistics
+import unicodedata
 from collections import Counter
 from datetime import date, timedelta
 from typing import Optional
@@ -13,6 +17,7 @@ from .common import (
     COHORTS,
     MIN_GROUP_SIZE,
     POPULATION_SHARES,
+    RequestError,
     _now_iso,
     _survey_dict,
     classify_comment,
@@ -39,6 +44,26 @@ except ImportError:
     request_llm_insights = None
 
 
+TEST_DATASET_SCENARIOS = {
+    "balanced": {
+        "title": "Muestra equilibrada",
+        "count": 150,
+    },
+    "polarization": {
+        "title": "Polarización en Planta",
+        "count": 150,
+    },
+    "underrepresented": {
+        "title": "Colectivos poco representados",
+        "count": 150,
+    },
+    "small_sample": {
+        "title": "Muestra pequeña",
+        "count": 14,
+    },
+}
+
+
 def _row_value(row: object, key: str, default: object = "") -> object:
     try:
         return row[key]  # type: ignore[index]
@@ -54,6 +79,305 @@ def confidence_label(sample_size: int) -> str:
     if sample_size >= MIN_GROUP_SIZE:
         return "Limitada"
     return "Insuficiente"
+
+
+def _normalized_csv_header(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value.strip().casefold())
+    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
+    return "".join(char for char in normalized if char.isalnum())
+
+
+def _parse_test_csv(content: object) -> list[dict]:
+    if not isinstance(content, str) or not content.strip():
+        raise RequestError("Selecciona un archivo CSV con datos.")
+    if len(content.encode("utf-8")) > 1_000_000:
+        raise RequestError("El CSV no puede superar 1 MB.", 413)
+
+    try:
+        dialect = csv.Sniffer().sniff(content[:4096], delimiters=",;\t")
+    except csv.Error:
+        dialect = csv.excel
+
+    reader = csv.DictReader(io.StringIO(content.lstrip("\ufeff")), dialect=dialect)
+    if not reader.fieldnames:
+        raise RequestError("El CSV debe incluir una fila de cabeceras.")
+
+    aliases = {
+        "cohort": {"cohort", "colectivo", "departamento", "area"},
+        "score": {"score", "puntuacion", "valoracion", "rating"},
+        "dimension": {"dimension"},
+        "comment": {"comment", "comentario", "respuestaabierta"},
+        "day": {"day", "fecha", "date"},
+        "turno": {"turno", "shift"},
+    }
+    columns = {}
+    seen_headers = set()
+    for header in reader.fieldnames:
+        normalized = _normalized_csv_header(header or "")
+        if not normalized or normalized in seen_headers:
+            raise RequestError("El CSV contiene cabeceras vacías o duplicadas.")
+        seen_headers.add(normalized)
+        for field, names in aliases.items():
+            if normalized in names:
+                if field in columns:
+                    raise RequestError(
+                        f"El CSV contiene más de una columna para «{field}»."
+                    )
+                columns[field] = header
+                break
+    if "score" not in columns:
+        raise RequestError(
+            "Falta la columna obligatoria de puntuación: score, puntuación o rating."
+        )
+
+    cohort_aliases = {
+        "fabrica": "Planta",
+        "planta": "Planta",
+        "logistica": "Logística",
+        "comercial": "Comercial",
+        "oficina": "Oficinas",
+        "oficinas": "Oficinas",
+        "manager": "Manager",
+    }
+    allowed_dimensions = {
+        "bienestar", "liderazgo", "desarrollo", "cultura", "relaciones", "condiciones"
+    }
+    responses = []
+    for row_number, raw in enumerate(reader, start=2):
+        if row_number > 5002:
+            raise RequestError("El CSV puede contener como máximo 5.000 respuestas.")
+        if None in raw:
+            raise RequestError(
+                f"La fila {row_number} tiene más columnas que la cabecera del CSV."
+            )
+        if not raw or not any((value or "").strip() for value in raw.values()):
+            continue
+        raw_score = (raw.get(columns["score"]) or "").strip()
+        try:
+            score = int(raw_score)
+        except ValueError as exc:
+            raise RequestError(
+                f"La puntuación de la fila {row_number} debe ser un número entero del 1 al 5."
+            ) from exc
+        if not 1 <= score <= 5:
+            raise RequestError(
+                f"La puntuación de la fila {row_number} debe estar entre 1 y 5."
+            )
+
+        raw_cohort = (raw.get(columns.get("cohort", "")) or "Planta").strip()
+        cohort_key = _normalized_csv_header(raw_cohort)
+        if cohort_key not in cohort_aliases:
+            raise RequestError(
+                f"El colectivo de la fila {row_number} no se reconoce. "
+                "Usa Planta, Logística, Comercial, Oficina u Manager."
+            )
+        raw_dimension = (raw.get(columns.get("dimension", "")) or "bienestar").strip()
+        dimension_key = _normalized_csv_header(raw_dimension)
+        if dimension_key not in allowed_dimensions:
+            dimension_key = "bienestar"
+        raw_day = (raw.get(columns.get("day", "")) or date.today().isoformat()).strip()
+        if raw_day:
+            try:
+                date.fromisoformat(raw_day[:10])
+            except ValueError as exc:
+                raise RequestError(
+                    f"La fecha de la fila {row_number} debe tener formato AAAA-MM-DD."
+                ) from exc
+        responses.append(
+            {
+                "id": f"test_csv_{len(responses) + 1}",
+                "day": raw_day[:10],
+                "dimension": dimension_key,
+                "site": cohort_aliases[cohort_key],
+                "score": score,
+                "cohort": cohort_aliases[cohort_key],
+                "turno": (raw.get(columns.get("turno", "")) or "").strip(),
+                "channel": "Dataset de prueba",
+                "comment": sanitize_comment(
+                    (raw.get(columns.get("comment", "")) or "").strip()
+                ),
+            }
+        )
+    if not responses:
+        raise RequestError("El CSV no contiene respuestas válidas.")
+    return responses
+
+
+def analyze_test_dataset(payload: object) -> dict:
+    """Analiza un escenario sintético o un CSV sin guardar ni mezclar respuestas."""
+    if not isinstance(payload, dict):
+        raise RequestError("La solicitud del dataset de prueba no es válida.")
+
+    rng = random.Random(20261108)
+    if "csv" in payload:
+        responses = _parse_test_csv(payload["csv"])
+        title = str(payload.get("title") or "Dataset CSV de prueba")[:100]
+        source = "csv"
+    else:
+        scenario = payload.get("scenario", "balanced")
+        if scenario not in TEST_DATASET_SCENARIOS:
+            raise RequestError("Selecciona un escenario de prueba válido.")
+        config = TEST_DATASET_SCENARIOS[scenario]
+        title = config["title"]
+        source = scenario
+        if scenario == "underrepresented":
+            role_pool = (
+                ["Planta"] * 10 + ["Logística"] * 65 + ["Comercial"] * 40
+                + ["Oficinas"] * 25 + ["Manager"] * 10
+            )
+        elif scenario == "small_sample":
+            role_pool = ["Planta", "Logística", "Comercial", "Oficinas", "Manager"]
+        else:
+            role_pool = (
+                ["Planta"] * 46 + ["Logística"] * 22 + ["Comercial"] * 17
+                + ["Oficinas"] * 10 + ["Manager"] * 5
+            )
+        score_pool = [1, 5] if scenario == "polarization" else [3, 4, 4, 5]
+        comments = [
+            "La comunicación del equipo ha mejorado.",
+            "El ritmo de trabajo y los turnos podrían organizarse mejor.",
+            "Buen ambiente y apoyo entre compañeros.",
+            "Faltan herramientas para algunas tareas.",
+            "",
+        ]
+        today = date.today()
+        responses = []
+        for index in range(config["count"]):
+            cohort = rng.choice(role_pool)
+            score = rng.choice(score_pool if scenario == "polarization" and cohort == "Planta" else [3, 4, 4, 5])
+            responses.append(
+                {
+                    "id": f"test_{source}_{index + 1}",
+                    "day": (today - timedelta(days=index % 21)).isoformat(),
+                    "dimension": rng.choice(
+                        ["bienestar", "liderazgo", "desarrollo", "condiciones"]
+                    ),
+                    "site": cohort,
+                    "score": score,
+                    "cohort": cohort,
+                    "turno": rng.choice(["Mañana", "Tarde", "Noche"]),
+                    "channel": "Dataset sintético",
+                    "comment": rng.choice(comments),
+                }
+            )
+
+    survey_id = f"test_{source}"
+    today = date.today().isoformat()
+    survey = {
+        "id": survey_id,
+        "title": f"Encuesta de prueba · {title}",
+        "quarter": calculate_quarter_label(today),
+        "created_at": today,
+        "status": "test",
+        "cohort": "Todos",
+        "typeform_connected": True,
+        "questions": [
+            {
+                "id": "test_q1",
+                "text": "En general, ¿cómo valorarías tu bienestar en el trabajo?",
+                "type": "rating",
+                "dimension": "bienestar",
+            },
+            {
+                "id": "test_q2",
+                "text": "¿Con qué frecuencia recibes apoyo cuando lo necesitas?",
+                "type": "multiple_choice",
+                "dimension": "liderazgo",
+                "choices": [
+                    "Casi siempre",
+                    "Varias veces por semana",
+                    "Una vez por semana",
+                    "Rara vez",
+                ],
+            },
+            {
+                "id": "test_q3",
+                "text": "¿Qué mejorarías de tu experiencia de trabajo?",
+                "type": "open_text",
+                "dimension": "condiciones",
+            },
+        ],
+    }
+    analysis = analyze_survey_dataset(survey, responses)
+    test_submissions = []
+    for index, response in enumerate(responses):
+        score = response["score"]
+        frequency = (
+            "Casi siempre" if score >= 5
+            else "Varias veces por semana" if score >= 4
+            else "Una vez por semana" if score >= 3
+            else "Rara vez"
+        )
+        comment = (
+            "Buen ambiente y apoyo entre compañeros."
+            if score >= 4
+            else "Faltan herramientas y tiempo para algunas tareas."
+            if score <= 2
+            else "La comunicación del equipo podría mejorar."
+        )
+        test_submissions.append(
+            {
+                "answers_json": json.dumps(
+                    [
+                        {"question_id": "test_q1", "answer": score},
+                        {"question_id": "test_q2", "answer": frequency},
+                        {"question_id": "test_q3", "answer": comment},
+                    ],
+                    ensure_ascii=False,
+                ),
+                "imported_at": today,
+                "response_key": f"synthetic-{index + 1}",
+            }
+        )
+    test_survey_analysis = analyze_typeform_submissions(survey, test_submissions)
+    test_survey_analysis["synthetic"] = True
+    analysis.update(
+        {
+            "test_dataset": {
+                "active": True,
+                "source": source,
+                "title": title,
+                "responses": len(responses),
+                "persisted": False,
+                "survey": {
+                    "id": survey_id,
+                    "title": survey["title"],
+                    "status": "test",
+                    "questions": survey["questions"],
+                },
+            },
+            "metadatos_encuesta": {
+                **analysis["metadatos_encuesta"],
+                "title": survey["title"],
+                "status": "test",
+                "typeform_connected": False,
+                "preguntas": survey["questions"],
+            },
+            "survey_id_activo": survey_id,
+            "filtro_activo": {"tipo": "survey", "valor": survey_id},
+            "analisis_respuestas_typeform": {
+                "total_responses": len(test_submissions),
+                "surveys": [test_survey_analysis],
+            },
+            "respuestas_reales_capturadas": 0,
+            "respuestas_typeform_importadas": 0,
+            "encuestas_disponibles": [
+                {
+                    "id": survey_id,
+                    "title": survey["title"],
+                    "quarter": survey["quarter"],
+                    "year": str(today[:4]),
+                    "cohort": "Todos",
+                    "status": "test",
+                    "created_at": today,
+                    "typeform_connected": False,
+                }
+            ],
+            "cuatrimestres_disponibles": [survey["quarter"]],
+            "anos_disponibles": [str(today[:4])],
+        }
+    )
+    return analysis
 
 
 def analyze_responses(
@@ -548,6 +872,10 @@ def get_statistical_engine_payload(
 
 class InsightsPanel:
     """Gestiona la computación matemática determinista y síntesis de Insights."""
+    @staticmethod
+    def test_dataset(payload: object) -> dict:
+        return analyze_test_dataset(payload)
+
     @staticmethod
     def get_metrics(
         survey_id: str | None = None,

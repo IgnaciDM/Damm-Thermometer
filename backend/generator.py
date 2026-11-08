@@ -26,6 +26,7 @@ from .common import (
     _now_iso,
     _survey_dict,
     connect,
+    validate_generator_history,
     validate_questions,
 )
 
@@ -356,6 +357,7 @@ def refine_survey_with_ai(payload: object) -> dict:
     current_questions = payload.get("current_questions", [])
     if not isinstance(current_questions, list):
         current_questions = []
+    prompt_history = validate_generator_history(payload.get("prompt_history", []))
 
     cohort = payload.get("cohort", "Planta")
     language = payload.get("language", "es")
@@ -394,6 +396,7 @@ def refine_survey_with_ai(payload: object) -> dict:
 
         user_content = {
             "instruction": user_prompt,
+            "previous_instructions": prompt_history,
             "cohort": cohort,
             "language": language,
             "existing_questions": current_questions,
@@ -517,6 +520,7 @@ def create_survey_draft(payload: object) -> dict:
 
     custom_title = str(payload.get("title", "")).strip()
     custom_intro = str(payload.get("intro", "")).strip()
+    generator_history = validate_generator_history(payload.get("generator_history", []))
     final_questions = generated["questions"]
     if "questions" in payload and isinstance(payload["questions"], list) and len(payload["questions"]) >= 1:
         try:
@@ -529,8 +533,8 @@ def create_survey_draft(payload: object) -> dict:
             """INSERT INTO surveys
                (id, created_at, updated_at, objective, cohort, context, max_duration,
                 exclusions, language, channel, title, intro, questions_json, status,
-                frequency_days, population_json, followup_of)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?, ?)""",
+                frequency_days, population_json, followup_of, generator_history_json)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?, ?, ?)""",
             (
                 survey_id,
                 now,
@@ -548,6 +552,7 @@ def create_survey_draft(payload: object) -> dict:
                 frequency_days,
                 json.dumps(population),
                 str(payload.get("followup_of", "")),
+                json.dumps(generator_history, ensure_ascii=False),
             ),
         )
         row = db.execute("SELECT * FROM surveys WHERE id = ?", (survey_id,)).fetchone()

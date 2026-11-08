@@ -136,12 +136,12 @@ class PulsoHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def read_json(self) -> object:
+    def read_json(self, max_bytes: int = 65_536) -> object:
         try:
             length = int(self.headers.get("Content-Length", "0"))
         except ValueError as exc:
             raise RequestError("La solicitud no tiene una longitud válida.") from exc
-        if length <= 0 or length > 65_536:
+        if length <= 0 or length > max_bytes:
             raise RequestError("El contenido de la solicitud no es válido.", 413)
         try:
             return json.loads(self.rfile.read(length).decode("utf-8"))
@@ -327,6 +327,13 @@ class PulsoHandler(BaseHTTPRequestHandler):
 
             if path == "/api/voice/transcribe":
                 self.send_json(200, GeneratorPanel.transcribe_voice_prompt(self.read_audio()))
+                return
+
+            if path == "/api/stats/test-dataset":
+                self.send_json(
+                    200,
+                    InsightsPanel.test_dataset(self.read_json(max_bytes=2_100_000)),
+                )
                 return
 
             payload = self.read_json()

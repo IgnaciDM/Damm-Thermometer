@@ -26,6 +26,30 @@
     .status-bar-critical { border-left: 3px solid #ef4444; }
     .status-bar-brand { border-left: 3px solid #c4161c; }
     .status-bar-gold { border-left: 3px solid #d4af37; }
+    .admin-history-table { width: 100%; table-layout: fixed; }
+    @media (max-width: 1100px) {
+      .admin-history-table col:nth-child(1) { width: 50%; }
+      .admin-history-table col:nth-child(2),
+      .admin-history-table col:nth-child(4),
+      .admin-history-table col:nth-child(5) { display: none; }
+      .admin-history-table col:nth-child(3) { width: 15%; }
+      .admin-history-table col:nth-child(6) { width: 15%; }
+      .admin-history-table col:nth-child(7) { width: 20%; }
+      .admin-history-table tr > :nth-child(2),
+      .admin-history-table tr > :nth-child(4),
+      .admin-history-table tr > :nth-child(5) { display: none; }
+    }
+    @media (max-width: 600px) {
+      .admin-history-table col:nth-child(1) { width: 60%; }
+      .admin-history-table col:nth-child(3),
+      .admin-history-table col:nth-child(6) { display: none; }
+      .admin-history-table col:nth-child(7) { width: 40%; }
+      .admin-history-table tr > :nth-child(3),
+      .admin-history-table tr > :nth-child(6) { display: none; }
+      .admin-history-table .admin-action-label { display: none; }
+      .admin-history-table .admin-icon-action { padding: 2px; }
+      .admin-history-table .admin-icon-action .material-symbols-outlined { font-size: 18px; }
+    }
   </style>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
@@ -209,7 +233,7 @@
               <span class="material-symbols-outlined text-sm text-primary">query_stats</span>
               <span>Ver Insights Estadísticos</span>
             </button>
-            <button onclick="showPanel('generator')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold text-xs hover:bg-primary-container transition-transform active:scale-95 shadow-xs">
+            <button onclick="startNewGenerator()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary font-semibold text-xs hover:bg-primary-container transition-transform active:scale-95 shadow-xs">
               <span class="material-symbols-outlined text-base">auto_awesome</span>
               <span>Diseñar Consulta IA</span>
             </button>
@@ -413,12 +437,15 @@
       <!-- ===================================================================== -->
       <div id="panel-insights" class="panel-view hidden space-y-space-lg">
         <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
-          <div class="flex flex-wrap items-center justify-between gap-space-md border-b border-surface-container pb-4">
+          <div class="space-y-space-md border-b border-surface-container pb-4">
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold uppercase tracking-wider text-primary">Motor Estadístico Python</span>
                 <span id="insights-quarter-badge" class="px-2 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container text-[11px] font-bold">
                   Q4 2026
+                </span>
+                <span id="insights-test-badge" class="hidden px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold">
+                  Dataset de prueba
                 </span>
                 <span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary text-[11px] font-bold">
                   100% Determinista
@@ -427,9 +454,9 @@
               <h2 class="text-xl font-headline font-bold text-on-surface mt-1">Detección de Sesgos, Polarización y Cobertura</h2>
               <p class="text-xs text-on-surface-variant">Análisis estadístico insesgado por encuesta según los objetivos del caso Estrella Damm.</p>
             </div>
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="grid grid-cols-1 items-center gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
               <!-- Filtro Avanzado: Encuesta / Cuatrimestre / Año -->
-              <div class="flex flex-wrap items-center gap-2 bg-surface-container-low p-1.5 px-3 rounded-xl border border-surface-container shadow-xs">
+              <div class="flex min-w-0 flex-wrap items-center gap-2 rounded-xl border border-surface-container bg-surface-container-low p-1.5 px-3 shadow-xs">
                 <div class="flex items-center gap-1 bg-surface-container rounded-lg p-0.5">
                   <button type="button" id="filter-mode-survey" onclick="setInsightsFilterMode('survey')" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs">
                     Por Encuesta
@@ -441,24 +468,70 @@
                     Por Año
                   </button>
                 </div>
-                <div class="flex items-center gap-1.5">
+                <div class="flex min-w-0 flex-1 items-center gap-1.5">
                   <span class="material-symbols-outlined text-sm text-primary">filter_list</span>
-                  <select id="insights-filter-select" onchange="onInsightsFilterValueChanged(this.value)" class="bg-surface-container-lowest border border-surface-container px-2.5 py-1 rounded text-xs font-semibold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary min-w-[240px]">
+                  <select id="insights-filter-select" onchange="onInsightsFilterValueChanged(this.value)" class="w-80 max-w-[26vw] min-w-0 truncate rounded border border-surface-container bg-surface-container-lowest px-2.5 py-1 text-xs font-semibold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary max-sm:max-w-full">
                     <option value="">Cargando opciones...</option>
                   </select>
                 </div>
               </div>
 
-              <button onclick="requestLlmSynthesis()" id="btn-request-llm-synthesis" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container transition-transform active:scale-95 shadow-xs" type="button">
-                <span class="material-symbols-outlined text-base">auto_awesome</span>
-                <span>Generar Síntesis RRHH con LLM</span>
-              </button>
-              <button onclick="syncTypeformResponses()" id="btn-sync-typeform" class="hidden inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-high text-on-surface text-xs font-bold hover:bg-secondary-container transition-colors shadow-xs" type="button">
-                <span class="material-symbols-outlined text-base">sync</span>
-                <span>Actualizar desde Typeform</span>
-              </button>
+              <div class="ml-auto flex shrink-0 flex-nowrap items-center justify-end gap-3">
+                <button onclick="requestLlmSynthesis()" id="btn-request-llm-synthesis" class="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-xs font-bold text-on-primary shadow-xs transition-transform hover:bg-primary-container active:scale-95" type="button">
+                  <span class="material-symbols-outlined text-base">auto_awesome</span>
+                  <span>Generar Síntesis RRHH con LLM</span>
+                </button>
+                <button onclick="syncTypeformResponses()" id="btn-sync-typeform" class="invisible inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-surface-container-high px-4 py-2 text-xs font-bold text-on-surface shadow-xs transition-colors hover:bg-secondary-container" type="button" aria-hidden="true" disabled>
+                  <span class="material-symbols-outlined text-base">sync</span>
+                  <span>Actualizar desde Typeform</span>
+                </button>
+              </div>
             </div>
           </div>
+
+          <section class="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-3">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 class="flex items-center gap-1.5 text-sm font-bold text-on-surface">
+                  <span class="material-symbols-outlined text-base text-primary">science</span>
+                  Laboratorio de datos
+                </h3>
+                <p class="mt-1 text-[11px] text-on-surface-variant">
+                  Prueba Insights sin modificar Typeform ni tus respuestas reales. Los datasets de ejemplo son sintéticos y no se guardan.
+                </p>
+              </div>
+              <button id="btn-exit-test-dataset" onclick="exitTestDatasetMode()" type="button" class="hidden rounded-lg border border-surface-container bg-surface-container-lowest px-3 py-1.5 text-xs font-bold text-on-surface hover:bg-surface-container-high">
+                Volver a datos reales
+              </button>
+            </div>
+            <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              <div class="flex flex-wrap items-center gap-2 rounded-lg bg-surface-container-lowest p-3">
+                <label for="test-dataset-scenario" class="text-xs font-semibold text-on-surface">Escenarios generados</label>
+                <select id="test-dataset-scenario" class="min-w-[190px] flex-1 rounded border border-surface-container bg-white px-2.5 py-2 text-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary">
+                  <option value="balanced">Muestra equilibrada · 150</option>
+                  <option value="polarization">Polarización en Planta · 150</option>
+                  <option value="underrepresented">Colectivos poco representados · 150</option>
+                  <option value="small_sample">Muestra pequeña · 14</option>
+                </select>
+                <button onclick="runTestScenario()" type="button" class="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-on-primary hover:bg-primary-container">
+                  Probar escenario
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 rounded-lg bg-surface-container-lowest p-3">
+                <label for="test-dataset-file" class="text-xs font-semibold text-on-surface">Tu archivo CSV</label>
+                <input id="test-dataset-file" type="file" accept=".csv,text/csv" class="min-w-0 flex-1 text-[11px] text-on-surface-variant file:mr-2 file:rounded-md file:border-0 file:bg-surface-container-high file:px-2 file:py-1.5 file:text-[11px] file:font-semibold file:text-on-surface">
+                <button onclick="runUploadedTestDataset()" type="button" class="rounded-lg border border-primary px-3 py-2 text-xs font-bold text-primary hover:bg-primary/5">
+                  Analizar CSV
+                </button>
+                <button onclick="downloadTestCsvTemplate()" type="button" class="text-[11px] font-semibold text-primary underline">
+                  Descargar plantilla
+                </button>
+              </div>
+            </div>
+            <p class="text-[10px] text-tertiary">
+              CSV: una fila por respuesta; columna obligatoria <code>score</code> (1–5). Opcionales: <code>cohort</code>, <code>dimension</code>, <code>comment</code>, <code>day</code> (AAAA-MM-DD) y <code>turno</code>. Máximo 1 MB / 5.000 filas. No incluyas nombres, correos ni identificadores personales.
+            </p>
+          </section>
 
           <!-- Resumen de Métricas Ejecutivas de la Encuesta -->
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-sm">
@@ -497,13 +570,24 @@
           <section id="typeform-analysis-section" class="hidden bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-surface-container pb-3">
               <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-primary">Respuestas sincronizadas</span>
-                <h3 class="text-base font-headline font-bold text-on-surface">Resultados completos de Typeform</h3>
+                <span id="typeform-analysis-eyebrow" class="text-[10px] font-bold uppercase tracking-wider text-primary">Respuestas sincronizadas</span>
+                <h3 id="typeform-analysis-title" class="text-base font-headline font-bold text-on-surface">Resultados completos de Typeform</h3>
                 <p id="typeform-analysis-summary" class="text-xs text-on-surface-variant mt-1"></p>
               </div>
-              <span class="text-[10px] text-tertiary">Los grupos con menos de 5 respuestas se protegen</span>
+              <span id="typeform-analysis-privacy-note" class="text-[10px] text-tertiary">Los grupos con menos de 5 respuestas se protegen</span>
             </div>
-            <div id="typeform-question-results" class="grid grid-cols-1 xl:grid-cols-2 gap-space-md"></div>
+            <div id="typeform-question-results" class="w-full"></div>
+            <div class="flex items-center justify-between border-t border-surface-container pt-3">
+              <button id="typeform-question-prev" onclick="navigateTypeformQuestion(-1)" type="button" class="inline-flex items-center gap-1 rounded-lg border border-surface-container px-3 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-40">
+                <span class="material-symbols-outlined text-base">arrow_back</span>
+                Anterior
+              </button>
+              <span id="typeform-question-position" class="text-xs font-semibold text-on-surface-variant"></span>
+              <button id="typeform-question-next" onclick="navigateTypeformQuestion(1)" type="button" class="inline-flex items-center gap-1 rounded-lg border border-surface-container px-3 py-2 text-xs font-semibold text-on-surface hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-40">
+                Siguiente
+                <span class="material-symbols-outlined text-base">arrow_forward</span>
+              </button>
+            </div>
           </section>
 
           <!-- Anomaly and Bias Alert Chips -->
@@ -664,7 +748,7 @@
           <div class="pt-2">
             <h3 class="text-sm font-headline font-bold text-on-surface mb-2">Matriz de Participación y Cobertura (Rol x Turno)</h3>
             <div class="overflow-x-auto rounded-lg border border-surface-container">
-              <table class="w-full text-left text-xs text-on-surface">
+                <table class="w-full text-left text-xs text-on-surface">
                 <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
                   <tr>
                     <th class="p-3">Colectivo Damm</th>
@@ -827,7 +911,7 @@
                     <span class="text-xs font-bold text-on-surface">Dirección de Personas • Solicitud de Consulta</span>
                     <span class="text-[11px] text-tertiary">Interactivo</span>
                   </div>
-                  <div class="p-3.5 rounded-xl bg-surface-container-low text-tertiary text-xs leading-relaxed shadow-xs italic" id="gen-user-prompt-text">
+                  <div class="max-h-32 overflow-y-auto whitespace-pre-line rounded-xl bg-surface-container-low p-3.5 text-xs leading-relaxed text-tertiary shadow-xs italic" id="gen-user-prompt-text">
                     Sin consulta activa. Escribe una necesidad o tema (ej: "turnos en fábrica", "ergonomía en almacén", "comedor") para generar tu microconsulta.
                   </div>
                 </div>
@@ -855,7 +939,7 @@
             <div class="bg-surface-container-lowest rounded-xl p-3 shadow-md border border-surface-container">
               <form class="relative flex flex-col gap-2" onsubmit="handleGeneratorPrompt(event)">
                 <div class="flex items-center gap-2">
-                  <textarea class="min-w-0 flex-1 bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Escribe el tema de la encuesta o pide cambios (ej: 'crear encuesta sobre comedores', 'cambia la pregunta 2', 'actualiza la 1 y la 3')..." rows="2"></textarea>
+                  <textarea maxlength="1000" class="min-w-0 flex-1 bg-surface-container-low rounded-lg p-3 text-xs text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:bg-surface-container resize-none" id="gen-ai-chat-input" placeholder="Escribe el tema de la encuesta o pide cambios (ej: 'crear encuesta sobre comedores', 'cambia la pregunta 2', 'actualiza la 1 y la 3')..." rows="2"></textarea>
                   <button id="gen-voice-button" class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary shadow-sm transition-all hover:bg-primary-container hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" type="button" aria-label="Dictar con Vosk" title="Dictar con Vosk" aria-pressed="false" onclick="toggleVoicePrompt()">
                     <span class="material-symbols-outlined text-xl" aria-hidden="true">mic</span>
                   </button>
@@ -952,7 +1036,7 @@
             <h1 class="text-2xl font-headline font-bold text-on-surface">Gestión de Consultas y Ciclo de Acción</h1>
             <p class="text-xs text-on-surface-variant mt-1">Supervisión humana obligatoria en cada fase: la IA propone, las personas deciden y validan.</p>
           </div>
-          <button onclick="showPanel('generator')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container shadow-xs">
+          <button onclick="startNewGenerator()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container shadow-xs">
             <span class="material-symbols-outlined text-base">add</span>
             <span>Nueva Microconsulta</span>
           </button>
@@ -968,8 +1052,17 @@
             <span class="text-xs text-tertiary" id="admin-surveys-count-label">Cargando...</span>
           </div>
 
-          <div class="overflow-x-auto rounded-lg border border-surface-container">
-            <table class="w-full text-left text-xs text-on-surface">
+          <div class="overflow-hidden rounded-lg border border-surface-container">
+            <table class="admin-history-table text-left text-xs text-on-surface">
+              <colgroup>
+                <col class="w-[34%]">
+                <col class="w-[9%]">
+                <col class="w-[10%]">
+                <col class="w-[8%]">
+                <col class="w-[8%]">
+                <col class="w-[11%]">
+                <col class="w-[20%]">
+              </colgroup>
               <thead class="bg-surface-container-high text-tertiary font-bold uppercase text-[11px]">
                 <tr>
                   <th class="p-3">Título de la Consulta</th>
@@ -1431,6 +1524,8 @@
     // State of generator preview (100% persistente al cambiar de pestaña)
     let genQuestions = [];
     let genIndex = 0;
+    let genPromptHistory = [];
+    let editingSurvey = null;
     let launchDraftSubmitting = false;
     let pendingDeleteSurveyId = null;
     let deleteSurveySubmitting = false;
@@ -1460,7 +1555,9 @@
         userPromptIsItalic: userPromptEl ? userPromptEl.classList.contains('italic') : true,
         synthesisText: synthEl ? synthEl.innerHTML : '',
         questions: genQuestions,
-        index: genIndex
+        index: genIndex,
+        promptHistory: genPromptHistory,
+        editingSurvey
       };
       try {
         localStorage.setItem('damm_generator_state', JSON.stringify(state));
@@ -1496,7 +1593,67 @@
           genQuestions = state.questions;
           genIndex = Math.min(state.index || 0, genQuestions.length - 1);
         }
+        if (Array.isArray(state.promptHistory)) {
+          genPromptHistory = state.promptHistory;
+        }
+        if (state.editingSurvey && typeof state.editingSurvey.id === 'string') {
+          editingSurvey = state.editingSurvey;
+          updateGeneratorEditingBanner();
+        }
       } catch (e) {}
+    }
+
+    function updateGeneratorEditingBanner() {
+      const banner = document.getElementById('gen-editing-survey-banner');
+      const label = document.getElementById('gen-editing-survey-label');
+      if (!banner || !label) return;
+      if (!editingSurvey) {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+        return;
+      }
+
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+      label.textContent = editingSurvey.status === 'draft'
+        ? `Editando borrador: ${editingSurvey.title}. Al enviar, se actualizará esta encuesta.`
+        : `Basada en «${editingSurvey.title}» (${editingSurvey.status}). Al enviar, se creará un nuevo borrador para no modificar la encuesta existente.`;
+    }
+
+    function renderGeneratorPromptHistory() {
+      const promptEl = document.getElementById('gen-user-prompt-text');
+      if (!promptEl) return;
+      if (genPromptHistory.length) {
+        promptEl.classList.remove('italic', 'text-tertiary');
+        promptEl.classList.add('text-on-surface');
+        promptEl.textContent = `Instrucciones enviadas al modelo:\n${genPromptHistory
+          .map((prompt, index) => `${index + 1}. ${prompt}`)
+          .join('\n')}`;
+      } else {
+        promptEl.classList.add('italic', 'text-tertiary');
+        promptEl.classList.remove('text-on-surface');
+        promptEl.textContent = editingSurvey
+          ? 'Esta encuesta se creó antes de guardar el historial de instrucciones. Puedes continuar escribiendo nuevas indicaciones.'
+          : 'Sin consulta activa. Escribe una necesidad o tema (ej: "turnos en fábrica", "ergonomía en almacén", "comedor") para generar tu microconsulta.';
+      }
+    }
+
+    function startNewGenerator() {
+      editingSurvey = null;
+      genPromptHistory = [];
+      genQuestions = [];
+      genIndex = 0;
+      const input = document.getElementById('gen-ai-chat-input');
+      if (input) input.value = '';
+      renderGeneratorPromptHistory();
+      const synth = document.getElementById('gen-synthesis-text');
+      if (synth) {
+        synth.textContent = 'El modelo generará o actualizará preguntas según lo que le indiques en lenguaje natural.';
+      }
+      updateGeneratorEditingBanner();
+      showPanel('generator');
+      renderGenCard();
+      saveGeneratorState();
     }
 
     // 1. DEDICATED PANEL SWITCHING (Single-Page / Distinct View Router)
@@ -1964,8 +2121,100 @@
     let cachedAvailableSurveys = [];
     let cachedAvailableQuarters = [];
     let cachedAvailableYears = [];
+    let testDatasetActive = false;
+    let testDatasetSubmitting = false;
+
+    function setTestDatasetLoading(isLoading) {
+      testDatasetSubmitting = isLoading;
+      document.querySelectorAll('#panel-insights button[onclick="runTestScenario()"], #panel-insights button[onclick="runUploadedTestDataset()"]').forEach(button => {
+        button.disabled = isLoading;
+      });
+    }
+
+    function setTestDatasetMode(active) {
+      testDatasetActive = active;
+      const badge = document.getElementById('insights-test-badge');
+      const exitButton = document.getElementById('btn-exit-test-dataset');
+      const filterButtons = [
+        'filter-mode-survey',
+        'filter-mode-quarter',
+        'filter-mode-year',
+        'insights-filter-select',
+        'btn-request-llm-synthesis',
+      ];
+      if (badge) badge.classList.toggle('hidden', !active);
+      if (exitButton) exitButton.classList.toggle('hidden', !active);
+      filterButtons.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.disabled = active;
+      });
+    }
+
+    async function runTestScenario() {
+      if (testDatasetSubmitting) return;
+      const scenario = document.getElementById('test-dataset-scenario')?.value || 'balanced';
+      setTestDatasetLoading(true);
+      try {
+        await loadStatisticalEngineData(null, { scenario });
+      } finally {
+        setTestDatasetLoading(false);
+      }
+    }
+
+    async function runUploadedTestDataset() {
+      if (testDatasetSubmitting) return;
+      const input = document.getElementById('test-dataset-file');
+      const file = input?.files?.[0];
+      if (!file) {
+        showToast('Selecciona un archivo CSV antes de analizarlo.', 'error');
+        return;
+      }
+      if (file.size > 1_000_000) {
+        showToast('El CSV no puede superar 1 MB.', 'error');
+        return;
+      }
+      setTestDatasetLoading(true);
+      try {
+        await loadStatisticalEngineData(null, {
+          csv: await file.text(),
+          title: file.name.replace(/\.csv$/i, ''),
+        });
+      } catch (error) {
+        showToast(error.message || 'No se pudo leer el archivo CSV.', 'error');
+      } finally {
+        setTestDatasetLoading(false);
+      }
+    }
+
+    function downloadTestCsvTemplate() {
+      const content = [
+        'cohort,score,dimension,comment,day,turno',
+        'Planta,4,bienestar,"Buen ambiente y apoyo entre compañeros",2026-10-12,Mañana',
+        'Planta,3,bienestar,"La comunicación del equipo ha mejorado",2026-10-12,Tarde',
+        'Planta,4,liderazgo,"Buen apoyo entre compañeros",2026-10-13,Noche',
+        'Planta,5,condiciones,"Las herramientas ayudan en las tareas",2026-10-13,Mañana',
+        'Planta,2,condiciones,"El ritmo de trabajo podría organizarse mejor",2026-10-14,Tarde',
+        'Planta,4,bienestar,"Buen ambiente en el equipo",2026-10-14,Noche',
+        'Planta,3,liderazgo,"La comunicación podría mejorar",2026-10-15,Mañana',
+        'Planta,5,bienestar,"Agradezco el apoyo recibido",2026-10-15,Tarde',
+        'Planta,4,condiciones,"Tenemos buenos recursos para trabajar",2026-10-16,Noche',
+        'Planta,3,liderazgo,"La organización de turnos se puede mejorar",2026-10-16,Mañana',
+      ].join('\r\n');
+      const url = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'plantilla-dataset-pulso.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exitTestDatasetMode() {
+      setTestDatasetMode(false);
+      loadStatisticalEngineData();
+    }
 
     function setInsightsFilterMode(mode) {
+      if (testDatasetActive) setTestDatasetMode(false);
       currentInsightsFilterMode = mode;
 
       const btnSurvey = document.getElementById('filter-mode-survey');
@@ -2029,103 +2278,193 @@
       loadStatisticalEngineData();
     }
 
+    let typeformQuestionSlides = [];
+    let typeformQuestionIndex = 0;
+    let typeformQuestionSlidesKey = '';
+
+    function navigateTypeformQuestion(direction) {
+      const nextIndex = typeformQuestionIndex + direction;
+      if (nextIndex < 0 || nextIndex >= typeformQuestionSlides.length) return;
+      typeformQuestionIndex = nextIndex;
+      renderTypeformQuestionSlide();
+    }
+
+    function renderTypeformQuestionSlide() {
+      const container = document.getElementById('typeform-question-results');
+      const position = document.getElementById('typeform-question-position');
+      const previous = document.getElementById('typeform-question-prev');
+      const next = document.getElementById('typeform-question-next');
+      if (!container) return;
+
+      const total = typeformQuestionSlides.length;
+      const slide = typeformQuestionSlides[typeformQuestionIndex];
+      container.replaceChildren();
+      if (!slide) {
+        if (position) position.textContent = '';
+        if (previous) previous.disabled = true;
+        if (next) next.disabled = true;
+        return;
+      }
+
+      if (position) position.textContent = `Pregunta ${typeformQuestionIndex + 1} de ${total}`;
+      if (previous) previous.disabled = typeformQuestionIndex === 0;
+      if (next) next.disabled = typeformQuestionIndex === total - 1;
+
+      const { survey, question } = slide;
+      const card = document.createElement('article');
+      card.className = 'grid min-h-[300px] grid-cols-1 items-center gap-4 rounded-lg border border-surface-container bg-surface-container-low p-4 md:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]';
+
+      const details = document.createElement('div');
+      details.className = 'min-w-0 space-y-3';
+      if (survey.synthetic || typeformQuestionSlides.some(item => item.survey.id !== survey.id)) {
+        const surveyTitle = document.createElement('p');
+        surveyTitle.className = 'text-[10px] font-bold uppercase tracking-wide text-primary';
+        surveyTitle.textContent = survey.title;
+        details.appendChild(surveyTitle);
+      }
+
+      const title = document.createElement('h4');
+      title.className = 'text-sm font-bold text-on-surface';
+      title.textContent = question.question;
+      const detail = document.createElement('p');
+      detail.className = 'text-[11px] text-tertiary';
+      detail.textContent = `${question.dimension || 'Encuesta'} · ${
+        question.responses === null ? 'Muestra protegida (<5)' : `${question.responses} respuestas`
+      }`;
+      details.append(title, detail);
+
+      if (question.type === 'rating' && question.mean !== null) {
+        const stats = document.createElement('p');
+        stats.className = 'text-xs font-semibold text-primary';
+        stats.textContent = `Media ${question.mean}/5 · Mediana ${question.median} · Desviación ${question.standard_deviation}`;
+        details.appendChild(stats);
+      }
+
+      if (question.type === 'open_text' && question.qualitative) {
+        const qualitative = question.qualitative;
+        if (qualitative.sentiment) {
+          const sentiment = document.createElement('p');
+          sentiment.className = 'text-[11px] text-on-surface-variant';
+          sentiment.textContent = `Sentimiento: ${qualitative.sentiment.positivo_pct}% positivo · ${qualitative.sentiment.neutro_pct}% neutro · ${qualitative.sentiment.critico_pct}% crítico`;
+          details.appendChild(sentiment);
+        }
+        const topics = qualitative.topics.filter(topic => topic.count === null || topic.count > 0);
+        if (topics.length) {
+          const topicsText = document.createElement('p');
+          topicsText.className = 'text-[11px] text-on-surface-variant';
+          topicsText.textContent = `Temas: ${topics.map(topic => `${topic.topic} (${topic.count === null ? 'protegido' : topic.count})`).join(' · ')}`;
+          details.appendChild(topicsText);
+        }
+        if (qualitative.protected) {
+          const protectedNote = document.createElement('p');
+          protectedNote.className = 'text-[10px] text-tertiary';
+          protectedNote.textContent = 'Algunos grupos de respuestas abiertas se han ocultado por privacidad.';
+          details.appendChild(protectedNote);
+        }
+      }
+
+      const chart = document.createElement('div');
+      chart.className = 'h-[300px] min-w-0 w-full rounded-lg bg-surface-container-lowest';
+      const distribution = question.type === 'open_text'
+        ? question.qualitative?.sentiment
+          ? [
+              { label: 'Positivo', percentage: question.qualitative.sentiment.positivo_pct },
+              { label: 'Neutro', percentage: question.qualitative.sentiment.neutro_pct },
+              { label: 'Crítico', percentage: question.qualitative.sentiment.critico_pct },
+            ]
+          : []
+        : question.distribution || [];
+      const protectedDistribution = question.protected
+        || (question.type === 'open_text' && question.qualitative?.protected)
+        || distribution.some(item => item.count === null && item.percentage === null);
+
+      if (!distribution.length || protectedDistribution) {
+        const protectedMessage = document.createElement('p');
+        protectedMessage.className = 'max-w-xs px-6 text-center text-xs text-tertiary';
+        protectedMessage.textContent = 'La distribución está protegida porque el grupo no alcanza el mínimo de respuestas necesario para mostrar un gráfico.';
+        chart.appendChild(protectedMessage);
+      } else if (typeof Plotly !== 'undefined') {
+        const chartId = `typeform-pie-${typeformQuestionIndex}`;
+        chart.id = chartId;
+        chart.style.height = '300px';
+        chart.style.width = '100%';
+        requestAnimationFrame(() => {
+          if (!document.getElementById(chartId)) return;
+          const labels = distribution.map(item => String(item.label));
+          const values = question.type === 'open_text'
+            ? distribution.map(item => Number(item.percentage) || 0)
+            : distribution.map(item => Number(item.count) || 0);
+          Plotly.react(
+            chartId,
+            [{
+              type: 'pie',
+              labels,
+              values,
+              hole: 0.38,
+              sort: false,
+              direction: 'clockwise',
+              pull: 0.025,
+              textinfo: 'label+percent',
+              textposition: 'outside',
+              automargin: true,
+              marker: {
+                colors: ['#c4161c', '#d4af37', '#782126', '#e88b42', '#8d7a75', '#efb7a5'],
+                line: { color: '#ffffff', width: 2 },
+              },
+              hovertemplate: question.type === 'open_text'
+                ? '%{label}: %{value:.1f}%<extra></extra>'
+                : '%{label}: %{value} respuestas (%{percent})<extra></extra>',
+            }],
+            {
+              autosize: true,
+              margin: { t: 20, r: 48, b: 56, l: 48 },
+              showlegend: true,
+              legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.12 },
+              paper_bgcolor: 'rgba(0,0,0,0)',
+              font: { family: 'Inter, sans-serif', color: '#34302f', size: 11 },
+            },
+            { responsive: true, displayModeBar: false },
+          );
+        });
+      } else {
+        const fallback = document.createElement('p');
+        fallback.className = 'px-4 text-center text-xs text-tertiary';
+        fallback.textContent = 'No se ha podido cargar el gráfico circular.';
+        chart.appendChild(fallback);
+      }
+
+      card.append(details, chart);
+      container.appendChild(card);
+    }
+
     function renderTypeformQuestionAnalysis(data) {
       const section = document.getElementById('typeform-analysis-section');
       const summary = document.getElementById('typeform-analysis-summary');
-      const container = document.getElementById('typeform-question-results');
+      const eyebrow = document.getElementById('typeform-analysis-eyebrow');
+      const heading = document.getElementById('typeform-analysis-title');
+      const privacyNote = document.getElementById('typeform-analysis-privacy-note');
       const analysis = data.analisis_respuestas_typeform || { total_responses: 0, surveys: [] };
+      const isTestDataset = Boolean(data.test_dataset?.active);
       section.classList.toggle('hidden', !analysis.surveys.length);
-      container.replaceChildren();
-
-      for (const survey of analysis.surveys) {
-        const group = document.createElement('div');
-        group.className = 'space-y-3';
-        if (analysis.surveys.length > 1) {
-          const heading = document.createElement('h4');
-          heading.className = 'text-sm font-bold text-on-surface';
-          heading.textContent = survey.title;
-          group.appendChild(heading);
-        }
-
-        for (const question of survey.questions) {
-          const card = document.createElement('article');
-          card.className = 'rounded-lg border border-surface-container bg-surface-container-low p-3 space-y-2';
-          const title = document.createElement('h5');
-          title.className = 'text-xs font-bold text-on-surface';
-          title.textContent = question.question;
-          const detail = document.createElement('p');
-          detail.className = 'text-[10px] text-tertiary';
-          detail.textContent = `${question.dimension || 'Encuesta'} · ${
-            question.responses === null ? 'Muestra protegida (<5)' : `${question.responses} respuestas`
-          }`;
-          card.append(title, detail);
-
-          if (question.type === 'rating' && question.mean !== null) {
-            const stats = document.createElement('p');
-            stats.className = 'text-xs font-semibold text-primary';
-            stats.textContent = `Media ${question.mean}/5 · Mediana ${question.median} · Desviación ${question.standard_deviation}`;
-            card.appendChild(stats);
-          }
-
-          if (question.distribution?.length) {
-            if (question.protected) {
-              const protectedNote = document.createElement('p');
-              protectedNote.className = 'text-[10px] text-tertiary';
-              protectedNote.textContent = 'Distribución protegida para evitar identificar respuestas poco frecuentes.';
-              card.appendChild(protectedNote);
-            }
-            const distribution = document.createElement('div');
-            distribution.className = 'space-y-1.5';
-            for (const item of question.distribution) {
-              const row = document.createElement('div');
-              row.className = 'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2';
-              const label = document.createElement('span');
-              label.className = 'truncate text-[11px] text-on-surface-variant';
-              label.textContent = item.label;
-              const value = document.createElement('span');
-              value.className = 'text-[10px] font-semibold text-tertiary';
-              value.textContent = item.count === null ? 'Protegido' : `${item.count} · ${item.percentage}%`;
-              row.append(label, value);
-              distribution.appendChild(row);
-              if (item.percentage !== null) {
-                const track = document.createElement('div');
-                track.className = 'h-1.5 overflow-hidden rounded-full bg-surface-container-high';
-                const bar = document.createElement('div');
-                bar.className = 'h-full rounded-full bg-primary';
-                bar.style.width = `${Math.max(0, Math.min(100, item.percentage))}%`;
-                track.appendChild(bar);
-                distribution.appendChild(track);
-              }
-            }
-            card.appendChild(distribution);
-          }
-
-          if (question.type === 'open_text' && question.qualitative) {
-            const qualitative = question.qualitative;
-            if (qualitative.sentiment) {
-              const sentiment = document.createElement('p');
-              sentiment.className = 'text-[11px] text-on-surface-variant';
-              sentiment.textContent = `Sentimiento: ${qualitative.sentiment.positivo_pct}% positivo · ${qualitative.sentiment.neutro_pct}% neutro · ${qualitative.sentiment.critico_pct}% crítico`;
-              card.appendChild(sentiment);
-            }
-            const topics = qualitative.topics.filter(topic => topic.count === null || topic.count > 0);
-            if (topics.length) {
-              const topicsText = document.createElement('p');
-              topicsText.className = 'text-[11px] text-on-surface-variant';
-              topicsText.textContent = `Temas: ${topics.map(topic => `${topic.topic} (${topic.count === null ? 'protegido' : topic.count})`).join(' · ')}`;
-              card.appendChild(topicsText);
-            }
-            if (qualitative.protected) {
-              const protectedNote = document.createElement('p');
-              protectedNote.className = 'text-[10px] text-tertiary';
-              protectedNote.textContent = 'Algunos grupos de respuestas abiertas se han ocultado por privacidad.';
-              card.appendChild(protectedNote);
-            }
-          }
-          group.appendChild(card);
-        }
-        container.appendChild(group);
+      if (eyebrow) eyebrow.textContent = isTestDataset ? 'Encuesta sintética' : 'Respuestas sincronizadas';
+      if (heading) heading.textContent = isTestDataset
+        ? 'Resultados de la encuesta de prueba'
+        : 'Resultados completos de Typeform';
+      if (privacyNote) privacyNote.textContent = isTestDataset
+        ? 'Simulación temporal · No se guarda ni publica'
+        : 'Los grupos con menos de 5 respuestas se protegen';
+      const slides = analysis.surveys.flatMap(survey =>
+        (survey.questions || []).map(question => ({ survey, question }))
+      );
+      const slidesKey = slides
+        .map(({ survey, question }) => `${survey.id}:${question.question_id}`)
+        .join('|');
+      if (slidesKey !== typeformQuestionSlidesKey) {
+        typeformQuestionIndex = 0;
+        typeformQuestionSlidesKey = slidesKey;
       }
+      typeformQuestionSlides = slides;
+      renderTypeformQuestionSlide();
 
       const lastImport = analysis.surveys
         .map(survey => survey.last_imported_at)
@@ -2133,7 +2472,9 @@
         .sort()
         .pop();
       summary.textContent = analysis.total_responses
-        ? `${analysis.total_responses} respuestas Typeform importadas${lastImport ? ` · Última sincronización: ${new Date(lastImport).toLocaleString('es-ES')}` : ''}.`
+        ? isTestDataset
+          ? `${analysis.total_responses} respuestas sintéticas vinculadas a esta encuesta de prueba.`
+          : `${analysis.total_responses} respuestas Typeform importadas${lastImport ? ` · Última sincronización: ${new Date(lastImport).toLocaleString('es-ES')}` : ''}.`
         : 'Aún no se han importado respuestas de Typeform. Usa “Actualizar desde Typeform” para traerlas.';
     }
 
@@ -2163,8 +2504,18 @@
       }
     }
 
-    async function loadStatisticalEngineData(targetSurveyId) {
+    async function loadStatisticalEngineData(targetSurveyId, testPayload = null) {
       try {
+        if (testPayload) {
+          currentInsightsFilterMode = 'survey';
+          currentInsightsSurveyId = '';
+          const btnSurvey = document.getElementById('filter-mode-survey');
+          const btnQuarter = document.getElementById('filter-mode-quarter');
+          const btnYear = document.getElementById('filter-mode-year');
+          if (btnSurvey) btnSurvey.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs';
+          if (btnQuarter) btnQuarter.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50';
+          if (btnYear) btnYear.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition-all text-on-surface hover:bg-secondary-container/50';
+        }
         if (targetSurveyId) {
           currentInsightsFilterMode = 'survey';
           currentInsightsSurveyId = targetSurveyId;
@@ -2187,9 +2538,33 @@
           url += `filter_type=survey&filter_value=${encodeURIComponent(currentInsightsSurveyId || '')}`;
         }
 
-        const res = await fetch(url);
-        if (!res.ok) return;
+        const res = testPayload
+          ? await fetch('/api/stats/test-dataset', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(testPayload),
+            })
+          : await fetch(url);
+        if (!res.ok) {
+          if (testPayload) {
+            let errorMessage = '';
+            try {
+              const error = await res.json();
+              errorMessage = error.error || '';
+            } catch (parseError) {
+              console.warn('Test dataset endpoint returned a non-JSON error', parseError);
+            }
+            showToast(
+              res.status === 404
+                ? 'El servidor está usando una versión anterior. Reinicia Pulso y vuelve a probar.'
+                : errorMessage || 'No se pudo analizar el dataset de prueba.',
+              'error'
+            );
+          }
+          return;
+        }
         const data = await res.json();
+        setTestDatasetMode(Boolean(data.test_dataset?.active));
 
         cachedAvailableSurveys = data.encuestas_disponibles || [];
         cachedAvailableQuarters = data.cuatrimestres_disponibles || [];
@@ -2206,10 +2581,10 @@
         const meta = data.metadatos_encuesta || {};
         const syncTypeformButton = document.getElementById('btn-sync-typeform');
         if (syncTypeformButton) {
-          syncTypeformButton.classList.toggle(
-            'hidden',
-            currentInsightsFilterMode !== 'survey' || !meta.typeform_connected
-          );
+          const shouldShowSync = currentInsightsFilterMode === 'survey' && meta.typeform_connected;
+          syncTypeformButton.classList.toggle('invisible', !shouldShowSync);
+          syncTypeformButton.disabled = !shouldShowSync;
+          syncTypeformButton.setAttribute('aria-hidden', String(!shouldShowSync));
         }
         renderTypeformQuestionAnalysis(data);
         const quarterBadge = document.getElementById('insights-quarter-badge');
@@ -2223,14 +2598,18 @@
         if (kpiQuarter) kpiQuarter.textContent = meta.quarter || 'Q4 2026';
 
         const kpiStatus = document.getElementById('insights-kpi-status');
-        if (kpiStatus) kpiStatus.textContent = currentInsightsFilterMode === 'quarter' ? 'Cuatrimestre Consolidado' : currentInsightsFilterMode === 'year' ? 'Año Completo' : `${meta.status === 'published' ? 'Publicada' : meta.status === 'approved' ? 'Aprobada' : 'Borrador'} • ${meta.cohort || 'Todos'}`;
+        if (kpiStatus) kpiStatus.textContent = data.test_dataset?.active
+          ? `Dataset de prueba · ${data.test_dataset.responses} respuestas`
+          : currentInsightsFilterMode === 'quarter' ? 'Cuatrimestre Consolidado' : currentInsightsFilterMode === 'year' ? 'Año Completo' : `${meta.status === 'published' ? 'Publicada' : meta.status === 'approved' ? 'Aprobada' : 'Borrador'} • ${meta.cohort || 'Todos'}`;
 
         const kpiTotalResp = document.getElementById('insights-kpi-total-resp');
         if (kpiTotalResp) kpiTotalResp.textContent = kpis.total_respuestas !== undefined ? kpis.total_respuestas : (data.participacion_y_cobertura ? data.participacion_y_cobertura.total_respuestas : 0);
 
         const kpiRealResp = document.getElementById('insights-kpi-real-resp');
         if (kpiRealResp) {
-          kpiRealResp.textContent = meta.typeform_connected
+          kpiRealResp.textContent = data.test_dataset?.active
+            ? 'Muestra de prueba · no guardada'
+            : meta.typeform_connected
             ? `${data.respuestas_typeform_importadas || 0} respuestas Typeform`
             : `${data.respuestas_reales_capturadas || 0} respuestas locales`;
         }
@@ -2536,8 +2915,18 @@
           }
         }
 
+        if (data.test_dataset?.active) {
+          showToast(
+            `${data.test_dataset.title}: ${data.test_dataset.responses} respuestas analizadas temporalmente.`,
+            'success'
+          );
+        }
+
       } catch (e) {
         console.warn('Statistical engine fetch error', e);
+        if (testPayload) {
+          showToast(e.message || 'No se pudo analizar el dataset de prueba.', 'error');
+        }
       }
     }
 
@@ -2607,7 +2996,7 @@
         return;
       }
 
-      // Geometría SVG profesional estilo Minitab (orientación vertical, marco exterior, escala Likert 1-5)
+      // Boxplot SVG con escala Likert uniforme de 1 a 5.
       const svgW = 720;
       const svgH = 370;
       const plotX = 72;
@@ -2628,9 +3017,8 @@
       const gridLinesSvg = tickVals.map(tv => {
         const yPos = getY(tv);
         return `
-          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#ebebeb" stroke-width="1" />
-          <line x1="${plotX - 6}" y1="${yPos}" x2="${plotX}" y2="${yPos}" stroke="#555555" stroke-width="1.2" />
-          <text x="${plotX - 10}" y="${yPos + 4}" text-anchor="end" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#333333">${tv.toFixed(1)}</text>
+          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#eee8e6" stroke-width="1" />
+          <text x="${plotX - 10}" y="${yPos + 4}" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#716966">${tv.toFixed(1)}</text>
         `;
       }).join('');
 
@@ -2647,19 +3035,19 @@
 
         // Línea vertical tenue de cuadrícula y tick inferior
         columnsSvg += `
-          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f4f4f4" stroke-width="1" />
-          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#555555" stroke-width="1.2" />
-          <text x="${cx}" y="${plotY + plotH + 20}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#222222">${escapeHtml(name)}</text>
-          <text x="${cx}" y="${plotY + plotH + 34}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#666666">n=${c.n}</text>
+          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f5efed" stroke-width="1" />
+          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#d8cdca" stroke-width="1" />
+          <text x="${cx}" y="${plotY + plotH + 20}" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#34302f">${escapeHtml(name)}</text>
+          <text x="${cx}" y="${plotY + plotH + 34}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#827875">n=${c.n}</text>
         `;
 
         if (c.protegido_k_anonimato) {
-          // Representación de grupo protegido por k-anonimato dentro del marco Minitab
+          // Representación de grupo protegido por k-anonimato.
           columnsSvg += `
             <g class="cursor-help">
-              <rect x="${bx}" y="${plotY + 50}" width="${boxW}" height="120" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,4" rx="0" />
-              <text x="${cx}" y="${plotY + 104}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" fill="#64748b">k &lt; 5</text>
-              <text x="${cx}" y="${plotY + 120}" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9" fill="#94a3b8">Protegido</text>
+              <rect x="${bx}" y="${plotY + 50}" width="${boxW}" height="120" fill="#f7f3f1" stroke="#cfc4c1" stroke-width="1.2" stroke-dasharray="4,4" rx="8" />
+              <text x="${cx}" y="${plotY + 104}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#716966">k &lt; 5</text>
+              <text x="${cx}" y="${plotY + 120}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#948986">Protegido</text>
               <title>${escapeHtml(name)}: Oculto por k-anonimato (&lt; 5 respuestas: n=${c.n})</title>
             </g>
           `;
@@ -2678,27 +3066,26 @@
           const medY = getY(c.mediana);
           const boxH = Math.max(3, botY - topY);
 
-          // Bigotes con remate Minitab
+          // Bigotes y cuartiles del boxplot.
           columnsSvg += `
             <!-- Bigote Superior -->
-            <line x1="${cx}" y1="${topY}" x2="${cx}" y2="${highY}" stroke="#2b3e50" stroke-width="1.3" />
-            <line x1="${cx - 8}" y1="${highY}" x2="${cx + 8}" y2="${highY}" stroke="#2b3e50" stroke-width="1.3" />
+            <line x1="${cx}" y1="${topY}" x2="${cx}" y2="${highY}" stroke="#782126" stroke-width="1.5" />
+            <line x1="${cx - 8}" y1="${highY}" x2="${cx + 8}" y2="${highY}" stroke="#782126" stroke-width="1.5" />
             <!-- Bigote Inferior -->
-            <line x1="${cx}" y1="${botY}" x2="${cx}" y2="${lowY}" stroke="#2b3e50" stroke-width="1.3" />
-            <line x1="${cx - 8}" y1="${lowY}" x2="${cx + 8}" y2="${lowY}" stroke="#2b3e50" stroke-width="1.3" />
-            <!-- Caja IQR Minitab Steel-Blue (#729fcf) -->
-            <rect x="${bx}" y="${topY}" width="${boxW}" height="${boxH}" fill="#729fcf" stroke="#2b3e50" stroke-width="1.3" rx="0">
+            <line x1="${cx}" y1="${botY}" x2="${cx}" y2="${lowY}" stroke="#782126" stroke-width="1.5" />
+            <line x1="${cx - 8}" y1="${lowY}" x2="${cx + 8}" y2="${lowY}" stroke="#782126" stroke-width="1.5" />
+            <rect x="${bx}" y="${topY}" width="${boxW}" height="${boxH}" fill="#c4161c" fill-opacity="0.82" stroke="#a30f16" stroke-width="1.2" rx="7">
               <title>${escapeHtml(name)}: Mediana=${c.mediana}★ | Q1=${c.q1}★ | Q3=${c.q3}★ | IQR=${c.iqr} | n=${c.n}</title>
             </rect>
-            <!-- Línea de Mediana Minitab -->
-            <line x1="${bx}" y1="${medY}" x2="${bx + boxW}" y2="${medY}" stroke="#1e293b" stroke-width="2.2" />
+            <!-- Línea de mediana -->
+            <line x1="${bx}" y1="${medY}" x2="${bx + boxW}" y2="${medY}" stroke="#fff" stroke-width="2.5" />
           `;
 
           // Asteriscos de Outliers / Valores Anómalos
           (c.outliers || []).forEach(o => {
             const outY = getY(o);
             columnsSvg += `
-              <text x="${cx}" y="${outY + 6}" text-anchor="middle" font-family="'Segoe UI', Roboto, Arial, sans-serif" font-size="18" font-weight="bold" fill="#dc2626">*
+              <text x="${cx}" y="${outY + 6}" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" font-weight="bold" fill="#c4161c">*
                 <title>Valor anómalo (outlier): ${o}★</title>
               </text>
             `;
@@ -2721,17 +3108,10 @@
 
       container.innerHTML = `
         <div class="w-full flex flex-col items-center gap-3">
-          <!-- Gráfica Minitab Boxplot SVG -->
-          <div class="w-full overflow-x-auto flex justify-center bg-white p-3 rounded-xl border border-gray-300 shadow-xs">
-            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[720px] select-none" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-              <!-- Fondo del canvas -->
-              <rect width="100%" height="100%" fill="#ffffff" />
-              
-              <!-- Título superior estilo Minitab -->
-              <text x="${plotX + plotW / 2}" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#222222">Boxplot of Likert Score by Department</text>
-              
-              <!-- Marco rectangular de la gráfica (Border Minitab) -->
-              <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#595959" stroke-width="1.2" />
+          <!-- Boxplot SVG -->
+          <div class="w-full overflow-x-auto flex justify-center rounded-xl border border-surface-container bg-surface-container-lowest p-3 shadow-xs">
+            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[720px] select-none" style="font-family: Inter, sans-serif;">
+              <rect width="100%" height="100%" fill="#fff" />
               
               <!-- Rejilla y Ticks Y -->
               ${gridLinesSvg}
@@ -2740,17 +3120,17 @@
               ${columnsSvg}
               
               <!-- Título Eje Y (Rotado) -->
-              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#333333">Puntuación Likert</text>
+              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#716966">Puntuación Likert</text>
               
               <!-- Título Eje X -->
-              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 52}" text-anchor="middle" font-size="12" font-weight="600" fill="#333333">Colectivo / Departamento</text>
+              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 52}" text-anchor="middle" font-size="12" font-weight="600" fill="#716966">Colectivo / Departamento</text>
             </svg>
           </div>
 
-          <!-- Tabla de Estadísticos Descriptivos Minitab (Summary) -->
+          <!-- Tabla de estadísticos descriptivos -->
           <div class="w-full bg-surface-container-low/70 rounded-lg p-2.5 border border-surface-container overflow-x-auto">
             <div class="flex items-center justify-between mb-1.5 px-1">
-              <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Estadísticas Descriptivas (Minitab Summary): Puntuación Likert por Colectivo</span>
+              <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Estadísticas descriptivas: Puntuación Likert por Colectivo</span>
               <span class="text-[10px] text-tertiary">IQR = Rango Intercuartílico | σ = Desv. Estándar</span>
             </div>
             <table class="w-full text-[11px] text-left">
@@ -2793,7 +3173,7 @@
       const expValues = roles.map(r => Number(porRolData[r]?.porcentaje_esperado || 0));
       const threshold = 15.0; // Umbral de sesgo de no respuesta
 
-      // 1. Si Plotly está cargado en el navegador, renderizar con Plotly estilo Minitab
+      // 1. Si Plotly está cargado en el navegador, usar el gráfico interactivo.
       if (typeof Plotly !== 'undefined') {
         container.innerHTML = `
           <div id="plotly-participation-div" class="w-full h-[280px]"></div>
@@ -2802,7 +3182,8 @@
         const plotDiv = document.getElementById('plotly-participation-div');
         const alertsDiv = document.getElementById('participation-alerts-summary');
 
-        const barColors = obsValues.map(v => v >= threshold ? '#16a34a' : '#dc2626');
+        const observedColor = '#c4161c';
+        const quotaColor = '#d4af37';
 
         const traceObs = {
           x: roles,
@@ -2811,11 +3192,12 @@
           type: 'bar',
           text: obsValues.map(v => `${v}%`),
           textposition: 'outside',
-          textfont: { size: 11, color: barColors, weight: 'bold' },
+          textfont: { size: 11, color: observedColor, family: 'Inter, sans-serif' },
           marker: {
-            color: barColors,
-            line: { color: '#2b3e50', width: 1.3 }
-          }
+            color: observedColor,
+            line: { color: '#a30f16', width: 0.5 }
+          },
+          hovertemplate: '<b>%{x}</b><br>Observado: %{y:.1f}%<extra></extra>'
         };
 
         const traceExp = {
@@ -2825,40 +3207,36 @@
           type: 'bar',
           text: expValues.map(v => `${v}%`),
           textposition: 'outside',
-          textfont: { size: 10, color: '#64748b' },
+          textfont: { size: 10, color: '#8a6c12', family: 'Inter, sans-serif' },
           marker: {
-            color: '#cbd5e1',
-            line: { color: '#475569', width: 1.1 }
-          }
+            color: quotaColor,
+            line: { color: '#b18f20', width: 0.5 }
+          },
+          hovertemplate: '<b>%{x}</b><br>Cuota censal: %{y:.1f}%<extra></extra>'
         };
 
         const layout = {
-          title: {
-            text: 'Tasa de Participación vs Cuota Censal (Estilo Minitab)',
-            font: { family: "'Segoe UI', Roboto, sans-serif", size: 13, color: '#222222', weight: '600' },
-            x: 0.5,
-            xanchor: 'center'
-          },
           barmode: 'group',
-          plot_bgcolor: '#ffffff',
-          paper_bgcolor: '#ffffff',
-          margin: { l: 50, r: 25, t: 40, b: 50 },
+          bargap: 0.35,
+          bargroupgap: 0.12,
+          font: { family: 'Inter, sans-serif', color: '#34302f', size: 11 },
+          plot_bgcolor: 'rgba(255,255,255,0)',
+          paper_bgcolor: 'rgba(255,255,255,0)',
+          margin: { l: 48, r: 18, t: 18, b: 42 },
           height: 270,
           yaxis: {
-            title: { text: '% de Respuestas', font: { size: 11, color: '#333333' } },
+            title: { text: '% de respuestas', font: { size: 10, color: '#716966' } },
             range: [0, Math.max(...obsValues, ...expValues, 45) + 10],
-            gridcolor: '#ebebeb',
-            showline: true,
-            linecolor: '#595959',
-            linewidth: 1.2,
-            mirror: true
+            gridcolor: '#eee8e6',
+            zeroline: false,
+            showline: false,
+            ticksuffix: '%'
           },
           xaxis: {
-            title: { text: 'Colectivo / Departamento', font: { size: 11, color: '#333333' } },
-            showline: true,
-            linecolor: '#595959',
-            linewidth: 1.2,
-            mirror: true
+            tickfont: { size: 10, color: '#514947' },
+            showline: false,
+            zeroline: false,
+            automargin: true
           },
           shapes: [{
             type: 'line',
@@ -2866,7 +3244,7 @@
             x1: roles.length - 0.5,
             y0: threshold,
             y1: threshold,
-            line: { color: '#dc2626', width: 1.5, dash: 'dash' }
+            line: { color: '#c4161c', width: 1.5, dash: 'dot' }
           }],
           annotations: [{
             x: roles.length - 0.5,
@@ -2877,10 +3255,21 @@
             showarrow: false,
             xanchor: 'right',
             yanchor: 'bottom',
-            font: { size: 10, color: '#dc2626', weight: 'bold' },
-            bgcolor: 'rgba(255,255,255,0.9)'
+            font: { family: 'Inter, sans-serif', size: 9, color: '#a30f16' },
+            bgcolor: 'rgba(255,255,255,0.94)',
+            bordercolor: '#f0d7d7',
+            borderwidth: 1,
+            borderpad: 3
           }],
-          legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.22, font: { size: 10 } }
+          legend: {
+            orientation: 'h',
+            x: 0.5,
+            xanchor: 'center',
+            y: -0.24,
+            font: { family: 'Inter, sans-serif', size: 10, color: '#625a57' },
+            bgcolor: 'rgba(255,255,255,0)'
+          },
+          hoverlabel: { bgcolor: '#292423', font: { family: 'Inter, sans-serif', color: '#fff' } }
         };
 
         Plotly.react(plotDiv, [traceObs, traceExp], layout, { responsive: true, displayModeBar: false });
@@ -2897,7 +3286,7 @@
         return;
       }
 
-      // 2. Respaldo SVG Minitab puro (offline)
+      // 2. Respaldo SVG puro (offline).
       const svgW = 600;
       const svgH = 260;
       const plotX = 55;
@@ -2914,8 +3303,7 @@
       roles.forEach((r, idx) => {
         const obs = obsValues[idx];
         const exp = expValues[idx];
-        const ok = obs >= threshold;
-        const color = ok ? '#16a34a' : '#dc2626';
+        const color = '#c4161c';
         const cx = plotX + slotW * (idx + 0.5);
         const barW = Math.min(22, slotW * 0.35);
 
@@ -2924,35 +3312,31 @@
         const zeroY = getY(0);
 
         barsSvg += `
-          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f8f8f8" stroke-width="1" />
-          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#555555" stroke-width="1.2" />
-          <!-- Barra Observada (Verde/Roja con borde Minitab) -->
-          <rect x="${cx - barW - 1}" y="${obsTop}" width="${barW}" height="${zeroY - obsTop}" fill="${color}" stroke="#2b3e50" stroke-width="1.3" rx="0">
+          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f5efed" stroke-width="1" />
+          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#d8cdca" stroke-width="1" />
+          <rect x="${cx - barW - 1}" y="${obsTop}" width="${barW}" height="${zeroY - obsTop}" fill="${color}" rx="5">
             <title>${escapeHtml(r)} Observado: ${obs}%</title>
           </rect>
-          <text x="${cx - barW / 2 - 1}" y="${obsTop - 4}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="${color}">${obs}%</text>
-          <!-- Barra Censal (Gris claro) -->
-          <rect x="${cx + 1}" y="${expTop}" width="${barW}" height="${zeroY - expTop}" fill="#cbd5e1" stroke="#475569" stroke-width="1.1" rx="0">
+          <text x="${cx - barW / 2 - 1}" y="${obsTop - 4}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="bold" fill="${color}">${obs}%</text>
+          <rect x="${cx + 1}" y="${expTop}" width="${barW}" height="${zeroY - expTop}" fill="#d4af37" fill-opacity="0.85" rx="5">
             <title>${escapeHtml(r)} Cuota Censal: ${exp}%</title>
           </rect>
-          <text x="${cx + barW / 2 + 1}" y="${expTop - 4}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" fill="#64748b">${exp}%</text>
-          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#222222">${escapeHtml(r)}</text>
+          <text x="${cx + barW / 2 + 1}" y="${expTop - 4}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#8a6c12">${exp}%</text>
+          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#34302f">${escapeHtml(r)}</text>
         `;
       });
 
       container.innerHTML = `
         <div class="w-full flex flex-col items-center gap-2">
-          <div class="w-full flex justify-center bg-white p-2 rounded-xl border border-gray-300 shadow-xs">
+          <div class="w-full flex justify-center rounded-xl border border-surface-container bg-surface-container-lowest p-2 shadow-xs">
             <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[620px] select-none">
-              <rect width="100%" height="100%" fill="#ffffff" />
-              <text x="${plotX + plotW / 2}" y="20" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#222222">Tasa de Participación vs Cuota Censal (Estilo Minitab)</text>
-              <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#595959" stroke-width="1.2" />
-              <!-- Línea Umbral 15% -->
-              <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="4,4" />
-              <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#dc2626">Umbral Mínimo 15%</text>
+              <rect width="100%" height="100%" fill="#fff" />
+              <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#fff" />
+              <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#c4161c" stroke-width="1.5" stroke-dasharray="3,5" />
+              <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="Inter, sans-serif" font-size="10" font-weight="bold" fill="#a30f16">Umbral mínimo 15%</text>
               ${barsSvg}
-              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">% Participación</text>
-              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">Colectivo / Departamento</text>
+              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#716966">% Participación</text>
+              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#716966">Colectivo / Departamento</text>
             </svg>
           </div>
         </div>
@@ -2980,7 +3364,7 @@
         const is80 = t.regla_80_20 !== false && cumPct <= 80.0;
 
         return `
-          <div class="p-2 rounded-lg bg-surface-container space-y-1">
+          <div class="rounded-xl border border-surface-container bg-surface-container-lowest p-3 shadow-xs space-y-2">
             <div class="flex items-center justify-between text-xs">
               <div class="flex items-center gap-1.5">
                 <span class="w-4 h-4 rounded-full bg-surface-container-high text-tertiary text-[10px] font-bold flex items-center justify-center font-mono">${idx + 1}</span>
@@ -2993,8 +3377,8 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <div class="flex-1 bg-surface-container-high rounded-full h-2 overflow-hidden">
-                <div class="bg-primary h-full rounded-full" style="width: ${Math.min(100, t.porcentaje)}%;"></div>
+              <div class="flex-1 bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-primary to-[#e34b4f] transition-all duration-500" style="width: ${Math.min(100, t.porcentaje)}%;"></div>
               </div>
               <span class="text-[10px] text-tertiary tabular-nums font-mono w-14 text-right">Acum: ${cumPct}%</span>
             </div>
@@ -3030,10 +3414,10 @@
       const labels = timeSeriesData.map(pt => pt.periodo || 'Periodo');
       const values = timeSeriesData.map(pt => Number(pt.media || 0));
       const target = 3.5;
-      const barColors = values.map(v => v >= target ? '#16a34a' : '#dc2626');
+      const brandRed = '#c4161c';
       const textLabels = values.map(v => `${v.toFixed(2)}★`);
 
-      // 1. Si la librería Plotly está disponible en el navegador, graficar con Plotly estilo Minitab
+      // 1. Si Plotly está disponible, usar la serie temporal interactiva.
       if (typeof Plotly !== 'undefined') {
         container.innerHTML = '<div id="plotly-timeseries-div" class="w-full h-[270px]"></div>';
         const plotDiv = document.getElementById('plotly-timeseries-div');
@@ -3041,52 +3425,44 @@
         const trace = {
           x: labels,
           y: values,
-          type: 'bar',
+          type: 'scatter',
+          mode: 'lines+markers+text',
           text: textLabels,
-          textposition: 'outside',
+          textposition: 'top center',
           textfont: {
-            family: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-            size: 12,
-            color: barColors,
-            weight: 'bold'
+            family: 'Inter, sans-serif',
+            size: 11,
+            color: brandRed
           },
           marker: {
-            color: barColors,
-            line: {
-              color: '#2b3e50',
-              width: 1.3
-            }
+            color: '#fff',
+            size: 10,
+            line: { color: brandRed, width: 3 }
           },
-          hoverinfo: 'x+y'
+          line: { color: brandRed, width: 3, shape: 'spline', smoothing: 0.6 },
+          customdata: timeSeriesData.map(point => point.total_respuestas || 0),
+          hovertemplate: '<b>%{x}</b><br>Media: %{y:.2f}★<br>Respuestas: %{customdata}<extra></extra>'
         };
 
         const layout = {
-          title: {
-            text: 'Gráfica de Clima Laboral por Período (Estilo Minitab)',
-            font: { family: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", size: 13, color: '#222222', weight: '600' },
-            x: 0.5,
-            xanchor: 'center'
-          },
-          plot_bgcolor: '#ffffff',
-          paper_bgcolor: '#ffffff',
-          margin: { l: 55, r: 25, t: 38, b: 50 },
+          font: { family: 'Inter, sans-serif', color: '#34302f', size: 11 },
+          plot_bgcolor: 'rgba(255,255,255,0)',
+          paper_bgcolor: 'rgba(255,255,255,0)',
+          margin: { l: 48, r: 18, t: 24, b: 42 },
           height: 260,
           yaxis: {
-            title: { text: 'Puntuación Likert (1 a 5)', font: { size: 11, color: '#333333' } },
-            range: [0, 5.4],
-            tickvals: [0, 1, 2, 3, 4, 5],
-            gridcolor: '#ebebeb',
-            showline: true,
-            linecolor: '#595959',
-            linewidth: 1.2,
-            mirror: true
+            title: { text: 'Media (1–5)', font: { size: 10, color: '#716966' } },
+            range: [1, 5],
+            tickvals: [1, 2, 3, 4, 5],
+            gridcolor: '#eee8e6',
+            zeroline: false,
+            showline: false
           },
           xaxis: {
-            title: { text: 'Encuesta / Período', font: { size: 11, color: '#333333' } },
-            showline: true,
-            linecolor: '#595959',
-            linewidth: 1.2,
-            mirror: true
+            tickfont: { size: 10, color: '#514947' },
+            showline: false,
+            zeroline: false,
+            automargin: true
           },
           shapes: [{
             type: 'line',
@@ -3095,9 +3471,9 @@
             y0: target,
             y1: target,
             line: {
-              color: '#16a34a',
+              color: '#d4af37',
               width: 1.5,
-              dash: 'dash'
+              dash: 'dot'
             }
           }],
           annotations: [{
@@ -3105,20 +3481,24 @@
             y: target,
             xref: 'x',
             yref: 'y',
-            text: `Meta Damm ≥ ${target}★`,
+            text: `Objetivo ${target}★`,
             showarrow: false,
             xanchor: 'right',
             yanchor: 'bottom',
-            font: { size: 10, color: '#16a34a', weight: 'bold' },
-            bgcolor: 'rgba(255,255,255,0.9)'
-          }]
+            font: { family: 'Inter, sans-serif', size: 9, color: '#8a6c12' },
+            bgcolor: 'rgba(255,255,255,0.94)',
+            bordercolor: '#eee2b8',
+            borderwidth: 1,
+            borderpad: 3
+          }],
+          hoverlabel: { bgcolor: '#292423', font: { family: 'Inter, sans-serif', color: '#fff' } }
         };
 
         Plotly.react(plotDiv, [trace], layout, { responsive: true, displayModeBar: false });
         return;
       }
 
-      // 2. Respaldo SVG puro de alta precisión Minitab (offline / sin CDN)
+      // 2. Respaldo SVG (offline / sin CDN).
       const svgW = 600;
       const svgH = 260;
       const plotX = 55;
@@ -3133,9 +3513,8 @@
       const gridLinesSvg = tickVals.map(tv => {
         const yPos = getY(tv);
         return `
-          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#ebebeb" stroke-width="1" />
-          <line x1="${plotX - 5}" y1="${yPos}" x2="${plotX}" y2="${yPos}" stroke="#555555" stroke-width="1.2" />
-          <text x="${plotX - 8}" y="${yPos + 4}" text-anchor="end" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" fill="#333333">${tv}</text>
+          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#eee8e6" stroke-width="1" />
+          <text x="${plotX - 8}" y="${yPos + 4}" text-anchor="end" font-family="Inter, sans-serif" font-size="10" fill="#716966">${tv}</text>
         `;
       }).join('');
 
@@ -3145,8 +3524,7 @@
 
       labels.forEach((label, idx) => {
         const val = values[idx];
-        const ok = val >= target;
-        const color = ok ? '#16a34a' : '#dc2626';
+        const color = '#c4161c';
         const cx = plotX + slotW * (idx + 0.5);
         const barW = Math.min(52, slotW * 0.45);
         const bx = cx - barW / 2;
@@ -3154,30 +3532,27 @@
         const barH = getY(0) - topY;
 
         barsSvg += `
-          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f8f8f8" stroke-width="1" />
-          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#555555" stroke-width="1.2" />
-          <text x="${cx}" y="${topY - 6}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="${color}">${val.toFixed(2)}★</text>
-          <!-- Barra rectangular sin bordes redondeados (Minitab) -->
-          <rect x="${bx}" y="${topY}" width="${barW}" height="${barH}" fill="${color}" stroke="#2b3e50" stroke-width="1.3" rx="0">
+          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f5efed" stroke-width="1" />
+          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#d8cdca" stroke-width="1" />
+          <text x="${cx}" y="${topY - 6}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="${color}">${val.toFixed(2)}★</text>
+          <rect x="${bx}" y="${topY}" width="${barW}" height="${barH}" fill="${color}" rx="7">
             <title>${escapeHtml(label)}: ${val.toFixed(2)}★ (Meta: ${target}★)</title>
           </rect>
-          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#222222">${escapeHtml(label)}</text>
+          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#34302f">${escapeHtml(label)}</text>
         `;
       });
 
       container.innerHTML = `
-        <div class="w-full flex justify-center bg-white p-2 rounded-xl border border-gray-300 shadow-xs">
+        <div class="w-full flex justify-center rounded-xl border border-surface-container bg-surface-container-lowest p-2 shadow-xs">
           <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[620px] select-none">
-            <rect width="100%" height="100%" fill="#ffffff" />
-            <text x="${plotX + plotW / 2}" y="20" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#222222">Gráfica de Clima Laboral por Período (Estilo Minitab)</text>
-            <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#595959" stroke-width="1.2" />
+            <rect width="100%" height="100%" fill="#fff" />
+            <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#fff" />
             ${gridLinesSvg}
-            <!-- Línea de Meta Damm (3.5) -->
-            <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#16a34a" stroke-width="1.4" stroke-dasharray="4,4" />
-            <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#16a34a">Meta Damm ≥ ${target}★</text>
+            <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="3,5" />
+            <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="Inter, sans-serif" font-size="10" font-weight="bold" fill="#8a6c12">Objetivo ≥ ${target}★</text>
             ${barsSvg}
-            <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">Puntuación Likert</text>
-            <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#333333">Encuesta / Período</text>
+            <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#716966">Puntuación Likert</text>
+            <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#716966">Encuesta / Período</text>
           </svg>
         </div>
       `;
@@ -3210,15 +3585,20 @@
       }
 
       container.innerHTML = stackedData.map(item => `
-        <div class="space-y-1">
+        <div class="space-y-1.5 rounded-xl border border-surface-container bg-surface-container-lowest p-3 shadow-xs">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold text-on-surface">${escapeHtml(item.periodo)}</span>
-            <span class="text-[10px] text-tertiary">Sat: ${item.satisfecho_pct}% | Neu: ${item.neutral_pct}% | Insat: ${item.insatisfecho_pct}%</span>
+            <span class="text-[10px] font-medium text-tertiary">Distribución de respuestas</span>
           </div>
-          <div class="flex w-full h-3 rounded-full overflow-hidden shadow-2xs">
-            <div class="bg-status-critical transition-all" style="width: ${item.insatisfecho_pct}%;" title="Insatisfechos (1-2★): ${item.insatisfecho_pct}%"></div>
-            <div class="bg-amber-500 transition-all" style="width: ${item.neutral_pct}%;" title="Neutros (3★): ${item.neutral_pct}%"></div>
-            <div class="bg-status-positive transition-all" style="width: ${item.satisfecho_pct}%;" title="Satisfechos (4-5★): ${item.satisfecho_pct}%"></div>
+          <div class="flex h-3 w-full overflow-hidden rounded-full bg-surface-container shadow-inner">
+            <div class="transition-all duration-500" style="width: ${item.insatisfecho_pct}%; background:#c4161c;" title="Insatisfechos (1-2★): ${item.insatisfecho_pct}%"></div>
+            <div class="transition-all duration-500" style="width: ${item.neutral_pct}%; background:#d4af37;" title="Neutros (3★): ${item.neutral_pct}%"></div>
+            <div class="transition-all duration-500" style="width: ${item.satisfecho_pct}%; background:#557a46;" title="Satisfechos (4-5★): ${item.satisfecho_pct}%"></div>
+          </div>
+          <div class="flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-tertiary">
+            <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full" style="background:#557a46"></span>Satisfechos ${item.satisfecho_pct}%</span>
+            <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full" style="background:#d4af37"></span>Neutros ${item.neutral_pct}%</span>
+            <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full" style="background:#c4161c"></span>Insatisfechos ${item.insatisfecho_pct}%</span>
           </div>
         </div>
       `).join('');
@@ -3301,35 +3681,38 @@
                                  '<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-tertiary font-bold text-[10px]">Borrador</span>';
 
               const qrAction = (s.status === 'published' || s.status === 'approved')
-                ? `<button onclick="openQrModalById('${s.id}')" class="p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
+                ? `<button onclick="openQrModalById('${s.id}')" class="admin-icon-action shrink-0 p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver código QR"><span class="material-symbols-outlined text-base">qr_code_2</span></button>`
                 : '';
 
               const linkAction = s.status === 'published'
-                ? `<a href="${s.publish_url || '/respond/' + s.id}" target="_blank" class="p-1 text-tertiary hover:text-on-surface inline-flex items-center" title="Abrir enlace de respuesta"><span class="material-symbols-outlined text-base">open_in_new</span></a>`
+                ? `<a href="${s.publish_url || '/respond/' + s.id}" target="_blank" class="admin-icon-action shrink-0 p-1 text-tertiary hover:text-on-surface inline-flex items-center" title="Abrir enlace de respuesta"><span class="material-symbols-outlined text-base">open_in_new</span></a>`
                 : '';
 
               const approveAction = s.status === 'draft'
-                ? `<button onclick="approveSurveyAdmin('${s.id}')" class="px-2.5 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-bold text-[10px] hover:bg-secondary hover:text-on-secondary transition-all shadow-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span>Aprobar</button>`
+                ? `<button onclick="approveSurveyAdmin('${s.id}')" class="px-1.5 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-bold text-[10px] hover:bg-secondary hover:text-on-secondary transition-all shadow-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">check_circle</span><span class="admin-action-label">Aprobar</span></button>`
                 : '';
 
               const publishAction = s.status === 'approved'
-                ? `<button onclick="publishSurveyAdmin('${s.id}')" class="px-2.5 py-1 rounded-lg bg-primary text-on-primary font-bold text-[10px] hover:bg-primary-container transition-all shadow-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">send</span>Publicar</button>`
+                ? `<button onclick="publishSurveyAdmin('${s.id}')" class="px-1.5 py-1 rounded-lg bg-primary text-on-primary font-bold text-[10px] hover:bg-primary-container transition-all shadow-xs inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">send</span><span class="admin-action-label">Publicar</span></button>`
                 : '';
 
               tr.innerHTML = `
-                <td class="p-3 font-semibold">${escapeHtml(s.title)}</td>
-                <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-bold text-[10px]">${escapeHtml(s.quarter || 'Q4 2026')}</span></td>
-                <td class="p-3 text-tertiary">${escapeHtml(s.cohort)}</td>
-                <td class="p-3 text-center tabular-nums text-tertiary">${s.estimated_minutes} min</td>
-                <td class="p-3 text-center">${escapeHtml(s.channel)}</td>
-                <td class="p-3 text-center">${statusPill}</td>
-                <td class="p-3 text-right space-x-1">
-                  <button onclick="viewSurveyInsights('${s.id}')" class="p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver Estadísticas en Insights"><span class="material-symbols-outlined text-base">analytics</span></button>
+                <td class="p-3 font-semibold break-words [overflow-wrap:anywhere]">${escapeHtml(s.title)}</td>
+                <td class="p-3 text-center whitespace-nowrap"><span class="px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-bold text-[10px]">${escapeHtml(s.quarter || 'Q4 2026')}</span></td>
+                <td class="p-3 text-tertiary break-words">${escapeHtml(s.cohort)}</td>
+                <td class="p-3 text-center tabular-nums text-tertiary whitespace-nowrap">${s.estimated_minutes} min</td>
+                <td class="p-3 text-center break-words">${escapeHtml(s.channel)}</td>
+                <td class="p-3 text-center whitespace-nowrap">${statusPill}</td>
+                <td class="p-3">
+                  <div class="flex flex-nowrap items-center justify-end gap-1 whitespace-nowrap">
+                  <button onclick="viewSurveyInsights('${s.id}')" class="admin-icon-action shrink-0 p-1 text-primary hover:text-primary-container inline-flex items-center" title="Ver Estadísticas en Insights"><span class="material-symbols-outlined text-base">analytics</span></button>
+                  <button onclick="editSurveyInGenerator('${s.id}')" class="admin-icon-action shrink-0 p-1 text-secondary hover:text-primary inline-flex items-center" title="Editar en Generador Asistido"><span class="material-symbols-outlined text-base">edit_note</span></button>
                   ${qrAction}
                   ${linkAction}
                   ${approveAction}
                   ${publishAction}
-                  <button onclick="deleteSurveyAdmin('${s.id}', this)" class="p-1 text-status-critical hover:text-error inline-flex items-center" title="Eliminar encuesta y datos locales"><span class="material-symbols-outlined text-base">delete</span></button>
+                  <button onclick="deleteSurveyAdmin('${s.id}', this)" class="admin-icon-action shrink-0 p-1 text-status-critical hover:text-error inline-flex items-center" title="Eliminar encuesta y datos locales"><span class="material-symbols-outlined text-base">delete</span></button>
+                  </div>
                 </td>
               `;
               tbody.appendChild(tr);
@@ -3364,6 +3747,40 @@
       } catch (e) {
         console.warn('Error loading admin data', e);
       }
+    }
+
+    function editSurveyInGenerator(id) {
+      const survey = window.adminSurveysMap[id];
+      if (!survey) {
+        showToast('No se han podido cargar los datos de esta encuesta.', 'error');
+        return;
+      }
+
+      showPanel('generator');
+      editingSurvey = JSON.parse(JSON.stringify(survey));
+      genPromptHistory = Array.isArray(survey.generator_history)
+        ? [...survey.generator_history]
+        : [];
+      genQuestions = (survey.questions || []).map(question => ({
+        ...question,
+        title: question.title || question.text || '',
+        choices: Array.isArray(question.choices) ? question.choices : [],
+      }));
+      genIndex = 0;
+
+      const promptInput = document.getElementById('gen-ai-chat-input');
+      if (promptInput) promptInput.value = '';
+      renderGeneratorPromptHistory();
+      const synthesis = document.getElementById('gen-synthesis-text');
+      if (synthesis) {
+        synthesis.textContent = genPromptHistory.length
+          ? 'He recuperado el contexto de la conversación y las preguntas. Puedes seguir dando instrucciones al modelo.'
+          : 'He recuperado las preguntas. Las instrucciones anteriores no estaban guardadas para esta encuesta; puedes empezar a añadirlas ahora.';
+      }
+      updateGeneratorEditingBanner();
+      renderGenCard();
+      saveGeneratorState();
+      showToast('Encuesta y contexto cargados en el Generador Asistido.', 'success');
     }
 
     async function approveSurveyAdmin(id) {
@@ -3764,8 +4181,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             user_prompt: val,
+            prompt_history: genPromptHistory,
             current_questions: genQuestions,
-            cohort: 'Planta',
+            cohort: editingSurvey?.cohort || 'Planta',
             language: 'es'
           })
         });
@@ -3781,12 +4199,12 @@
             }
           }
 
-          const promptEl = document.getElementById('gen-user-prompt-text');
-          if (promptEl) {
-            promptEl.classList.remove('italic', 'text-tertiary');
-            promptEl.classList.add('text-on-surface');
-            promptEl.textContent = `“${val}”`;
+          genPromptHistory.push(val);
+          if (genPromptHistory.length > 50) genPromptHistory.shift();
+          if (editingSurvey) {
+            editingSurvey.generator_history = [...genPromptHistory];
           }
+          renderGeneratorPromptHistory();
 
           const synthEl = document.getElementById('gen-synthesis-text');
           if (synthEl) {
@@ -4097,12 +4515,20 @@
       if (titleInput) {
         const q1 = genQuestions[0]?.title || '';
         const cleanQ1 = q1.replace(/^[¿\s]+|[?.\s]+$/g, '');
-        titleInput.value = cleanQ1 ? `Pulso Operativo: ${cleanQ1}` : 'Pulso de Clima y Organización';
+        titleInput.value = editingSurvey?.title
+          || (cleanQ1 ? `Pulso Operativo: ${cleanQ1}` : 'Pulso de Clima y Organización');
       }
 
       const allCheckbox = document.getElementById('launch-dept-all');
-      if (allCheckbox) allCheckbox.checked = true;
-      document.querySelectorAll('.dept-checkbox').forEach(cb => { cb.checked = true; });
+      const cohortParts = editingSurvey?.cohort && editingSurvey.cohort !== 'Todos'
+        ? editingSurvey.cohort.split(',').map(value => value.trim())
+        : [];
+      const selectedDepartments = cohortParts.map(value => value === 'Oficinas' ? 'Oficina' : value);
+      const selectAllDepartments = !selectedDepartments.length || selectedDepartments.length === 4;
+      if (allCheckbox) allCheckbox.checked = selectAllDepartments;
+      document.querySelectorAll('.dept-checkbox').forEach(cb => {
+        cb.checked = selectAllDepartments || selectedDepartments.includes(cb.value);
+      });
 
       const summaryBox = document.getElementById('launch-modal-questions-summary');
       const countBadge = document.getElementById('launch-modal-qcount');
@@ -4171,27 +4597,56 @@
         }));
 
         const payload = {
-          objective: "Consulta de clima laboral y turnicidad adaptada para centros operativos",
+          objective: editingSurvey?.objective || "Consulta de clima laboral y turnicidad adaptada para centros operativos",
           cohort: cohort,
-          context: "Planta El Prat, centros logísticos y operaciones Estrella Damm",
-          max_duration: "2",
-          exclusions: "No solicitar datos de identificación personal",
-          language: "es",
-          channel: "Móvil-QR",
+          context: editingSurvey?.context || "Planta El Prat, centros logísticos y operaciones Estrella Damm",
+          max_duration: String(editingSurvey?.max_duration || "2"),
+          exclusions: editingSurvey?.exclusions || "No solicitar datos de identificación personal",
+          language: editingSurvey?.language || "es",
+          channel: editingSurvey?.channel || "Móvil-QR",
           title: title,
-          intro: "Tu voz es 100% anónima y esencial para ajustar los cuadros y condiciones de trabajo.",
-          questions: formattedQuestions
+          intro: editingSurvey?.intro || "Tu voz es 100% anónima y esencial para ajustar los cuadros y condiciones de trabajo.",
+          questions: formattedQuestions,
+          generator_history: genPromptHistory,
+          frequency_days: editingSurvey?.frequency_days || 7,
+          population: editingSurvey?.population,
+          followup_of: editingSurvey?.followup_of || ""
         };
 
-        const res = await fetch('/api/surveys', {
+        const isUpdatingDraft = editingSurvey?.status === 'draft';
+        const url = isUpdatingDraft
+          ? `/api/surveys/${encodeURIComponent(editingSurvey.id)}/edit`
+          : '/api/surveys';
+        const requestPayload = isUpdatingDraft
+          ? {
+              title: payload.title,
+              intro: payload.intro,
+              cohort: payload.cohort,
+              questions: payload.questions,
+              generator_history: payload.generator_history
+            }
+          : payload;
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(requestPayload)
         });
 
         if (res.ok) {
+          const savedSurvey = await res.json();
+          editingSurvey = savedSurvey;
+          genPromptHistory = Array.isArray(savedSurvey.generator_history)
+            ? savedSurvey.generator_history
+            : [...genPromptHistory];
+          updateGeneratorEditingBanner();
+          saveGeneratorState();
           closeLaunchDraftModal();
-          showToast(`¡Consulta "${title}" creada con éxito! Aparece en 'Historial y Acciones' pendiente de validación humana.`, 'success');
+          showToast(
+            isUpdatingDraft
+              ? `La encuesta "${title}" se ha actualizado y queda pendiente de validación de RR. HH.`
+              : `¡Consulta "${title}" guardada como nuevo borrador para validación de RR. HH.!`,
+            'success'
+          );
           showPanel('admin');
           loadAdminData();
         } else {

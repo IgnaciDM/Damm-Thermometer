@@ -365,6 +365,61 @@ class SurveyTests(unittest.TestCase):
             pub = app.publish_survey(draft["id"], "http://localhost:8000", force=True)
             self.assertEqual(pub["status"], "published")
 
+    def test_survey_preserves_generator_prompt_history_when_updated(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as directory, patch.object(
+            app, "DATABASE", Path(directory) / "test.sqlite3"
+        ), patch.dict(app.AI_CONFIG, {"api_key": ""}):
+            payload = self.survey_payload()
+            payload["title"] = "Pulso de turnos"
+            payload["questions"] = app.default_survey_questions(
+                "Entender cómo funcionan los turnos.", "Todos", "es"
+            )
+            payload["generator_history"] = [
+                "Crea una encuesta sobre turnos.",
+                "Añade una pregunta sobre descansos."
+            ]
+            survey = app.create_survey_draft(payload)
+
+            edited_questions = [dict(question) for question in survey["questions"]]
+            edited_questions[-1]["text"] = "¿Qué mejorarías de los descansos entre turnos?"
+            updated = app.update_survey(
+                survey["id"],
+                {
+                    "title": "Pulso actualizado",
+                    "intro": survey["intro"],
+                    "cohort": "Oficina",
+                    "questions": edited_questions,
+                    "generator_history": payload["generator_history"]
+                    + ["Reformula la última pregunta."],
+                },
+            )
+
+        self.assertEqual(
+            survey["generator_history"],
+            payload["generator_history"],
+        )
+        self.assertEqual(
+            updated["generator_history"],
+            payload["generator_history"] + ["Reformula la última pregunta."],
+        )
+        self.assertEqual(updated["cohort"], "Oficina")
+        self.assertEqual(updated["questions"][-1]["text"], edited_questions[-1]["text"])
+
+    def test_generator_rejects_invalid_prompt_history(self):
+        from backend import generator
+
+        with patch.dict(app.AI_CONFIG, {"api_key": ""}):
+            with self.assertRaises(app.RequestError):
+                generator.refine_survey_with_ai(
+                    {
+                        "user_prompt": "Cambia la pregunta 2.",
+                        "prompt_history": [" "],
+                    }
+                )
+
     def test_typeform_import_is_anonymous_and_idempotent(self):
         import tempfile
         from pathlib import Path
@@ -645,6 +700,100 @@ class GeneratorPanelTests(unittest.TestCase):
                 self.assertIn("estadisticas_por_rol", payload)
                 self.assertIn("alertas_de_sesgo", payload)
                 self.assertGreater(payload["participacion_y_cobertura"]["total_respuestas"], 0)
+
+    def test_test_dataset_scenarios_are_isolated_and_return_insights(self):
+        expected_counts = {
+            "balanced": 150,
+            "polarization": 150,
+            "underrepresented": 150,
+            "small_sample": 14,
+        }
+        for scenario, expected_count in expected_counts.items():
+            with self.subTest(scenario=scenario):
+                result = app.InsightsPanel.test_dataset({"scenario": scenario})
+                self.assertEqual(result["test_dataset"]["responses"], expected_count)
+                self.assertFalse(result["test_dataset"]["persisted"])
+                self.assertEqual(result["kpis_ejecutivos"]["total_respuestas"], expected_count)
+                self.assertEqual(result["respuestas_reales_capturadas"], 0)
+                self.assertIn("boxplot_por_colectivo", result)
+                self.assertEqual(result["metadatos_encuesta"]["status"], "test")
+                synthetic_survey = result["analisis_respuestas_typeform"]["surveys"][0]
+                self.assertEqual(synthetic_survey["total_responses"], expected_count)
+                self.assertTrue(synthetic_survey["synthetic"])
+                self.assertEqual(len(synthetic_survey["questions"]), 3)
+                self.assertEqual(
+                    [question["type"] for question in synthetic_survey["questions"]],
+                    ["rating", "multiple_choice", "open_text"],
+                )
+                self.assertEqual(
+                    result["test_dataset"]["survey"]["questions"],
+                    result["metadatos_encuesta"]["preguntas"],
+                )
+                self.assertFalse(result["test_dataset"]["persisted"])
+
+        polarized = app.InsightsPanel.test_dataset({"scenario": "polarization"})
+        self.assertTrue(polarized["alertas_de_sesgo"]["alerta_polarizacion_grupal"])
+
+        underrepresented = app.InsightsPanel.test_dataset({"scenario": "underrepresented"})
+        self.assertTrue(
+            underrepresented["alertas_de_sesgo"][
+                "alerta_representatividad_baja_participacion"
+            ]
+        )
+
+        small_sample = app.InsightsPanel.test_dataset({"scenario": "small_sample"})
+        self.assertTrue(
+            all(item["protegido_k_anonimato"] for item in small_sample["boxplot_por_colectivo"].values())
+        )
+
+    def test_test_dataset_accepts_csv_and_rejects_invalid_scores(self):
+        result = app.InsightsPanel.test_dataset(
+            {
+                "csv": (
+                    "colectivo;puntuación;dimension;fecha;turno;comentario;employee_id\n"
+                    "Fábrica;4;bienestar;2026-10-12;Mañana;"
+                    '"Me llamo Juan Pérez, correo juan@example.com";12345\n'
+                    "Oficinas;3;liderazgo;2026-10-13;Tarde\n"
+                ),
+                "title": "Carga propia",
+            }
+        )
+        self.assertEqual(result["test_dataset"]["source"], "csv")
+        self.assertEqual(result["test_dataset"]["title"], "Carga propia")
+        self.assertEqual(result["test_dataset"]["responses"], 2)
+        serialized = json.dumps(result, ensure_ascii=False)
+        self.assertNotIn("juan@example.com", serialized)
+        self.assertNotIn("12345", serialized)
+
+        with self.assertRaises(app.RequestError):
+            app.InsightsPanel.test_dataset(
+                {"csv": "cohort,score\nPlanta,6\n"}
+            )
+
+    def test_test_dataset_http_route_returns_synthetic_survey(self):
+        import threading
+        from http.server import ThreadingHTTPServer
+        from urllib.request import Request, urlopen
+
+        server = ThreadingHTTPServer(("127.0.0.1", 0), app.PulsoHandler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            request = Request(
+                f"http://127.0.0.1:{server.server_port}/api/stats/test-dataset",
+                data=json.dumps({"scenario": "balanced"}).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urlopen(request, timeout=5) as response:
+                result = json.loads(response.read().decode("utf-8"))
+            self.assertEqual(result["test_dataset"]["survey"]["status"], "test")
+            self.assertEqual(len(result["test_dataset"]["survey"]["questions"]), 3)
+            self.assertEqual(result["analisis_respuestas_typeform"]["total_responses"], 150)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
 
 
     def test_refine_survey_updates_specific_question(self):

@@ -184,9 +184,17 @@ def init_db(db: sqlite3.Connection) -> None:
             typeform_id TEXT NOT NULL DEFAULT '',
             frequency_days INTEGER NOT NULL DEFAULT 7,
             population_json TEXT NOT NULL DEFAULT '{}',
-            followup_of TEXT NOT NULL DEFAULT ''
+            followup_of TEXT NOT NULL DEFAULT '',
+            generator_history_json TEXT NOT NULL DEFAULT '[]'
         )"""
     )
+    survey_columns = {
+        row["name"] for row in db.execute("PRAGMA table_info(surveys)")
+    }
+    if "generator_history_json" not in survey_columns:
+        db.execute(
+            "ALTER TABLE surveys ADD COLUMN generator_history_json TEXT NOT NULL DEFAULT '[]'"
+        )
     db.execute(
         """CREATE TABLE IF NOT EXISTS actions (
             id INTEGER PRIMARY KEY,
@@ -281,6 +289,19 @@ def validate_response(payload: object) -> tuple[str, str, int]:
     if isinstance(score, bool) or not isinstance(score, int) or not 1 <= score <= 5:
         raise RequestError("La valoración debe estar entre 1 y 5.")
     return dimension, site, score
+
+
+def validate_generator_history(history: object) -> list[str]:
+    if history is None:
+        return []
+    if not isinstance(history, list) or len(history) > 50:
+        raise RequestError("El historial del generador no es válido.")
+    if any(
+        not isinstance(prompt, str) or not prompt.strip() or len(prompt.strip()) > 1000
+        for prompt in history
+    ):
+        raise RequestError("Cada instrucción del generador debe tener entre 1 y 1000 caracteres.")
+    return [prompt.strip() for prompt in history]
 
 
 def validate_questions(questions: object) -> list[dict]:
@@ -411,6 +432,7 @@ def _survey_dict(row: sqlite3.Row, include_private: bool = False) -> dict:
                 "published_at": row["published_at"],
                 "typeform_id": row["typeform_id"],
                 "population": json.loads(row["population_json"]),
+                "generator_history": json.loads(row["generator_history_json"]),
             }
         )
     if row["status"] == "published" or include_private:

@@ -28,6 +28,7 @@ from .common import (
     _survey_dict,
     connect,
     sanitize_comment,
+    validate_generator_history,
     validate_questions,
 )
 from .dashboard import get_dashboard
@@ -65,11 +66,29 @@ def update_survey(survey_id: str, payload: object) -> dict:
             raise RequestError("El título debe tener entre 1 y 160 caracteres.")
         if not isinstance(intro, str) or not intro.strip() or len(intro) > 500:
             raise RequestError("La introducción debe tener entre 1 y 500 caracteres.")
+        cohort = payload.get("cohort", row["cohort"])
+        valid_cohorts = set(COHORTS) | {"Todos", "Fábrica", "Oficinas"}
+        cohort_parts = [
+            value.strip() for value in cohort.split(",") if value.strip()
+        ] if isinstance(cohort, str) else []
+        if not cohort_parts or not all(value in valid_cohorts for value in cohort_parts):
+            raise RequestError("Selecciona un colectivo válido.")
         questions = validate_questions(payload.get("questions", json.loads(row["questions_json"])))
+        generator_history = validate_generator_history(
+            payload.get("generator_history", json.loads(row["generator_history_json"]))
+        )
         db.execute(
-            """UPDATE surveys SET title = ?, intro = ?, questions_json = ?,
-               updated_at = ? WHERE id = ?""",
-            (title.strip(), intro.strip(), json.dumps(questions, ensure_ascii=False), _now_iso(), survey_id),
+            """UPDATE surveys SET title = ?, intro = ?, cohort = ?, questions_json = ?,
+               generator_history_json = ?, updated_at = ? WHERE id = ?""",
+            (
+                title.strip(),
+                intro.strip(),
+                cohort.strip(),
+                json.dumps(questions, ensure_ascii=False),
+                json.dumps(generator_history, ensure_ascii=False),
+                _now_iso(),
+                survey_id,
+            ),
         )
         updated = db.execute("SELECT * FROM surveys WHERE id = ?", (survey_id,)).fetchone()
     return _survey_dict(updated, include_private=True)
