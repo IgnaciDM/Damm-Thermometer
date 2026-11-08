@@ -16,7 +16,7 @@
 ## 2. Recorrido de la Demo en Vivo (3 minutos)
 
 ```
-[Inicio: Dashboard] ──> [Generador Asistido] ──> [Escenario A: Planta] ──> [Escenario B: ¿Quién Falta?] ──> [Escenario C: Temas Emergentes]
+[Inicio: Dashboard] ──> [Generador Asistido] ──> [Insights: Escenarios A, B y C] ──> [Síntesis IA & Exportación PDF]
 ```
 
 ### Paso 1: Generador Asistido con IA (El Bucle Omnicanal)
@@ -75,6 +75,23 @@
    - Enseñar cómo comentarios tipo *"pregúntale a Marta de noche"* o *"la única mujer del turno"* son anonimizados a `[NOMBRE_INTERNO]` y `[ROL_SINGULAR]` con NER antes de guardar en SQLite y antes de enviarse al LLM.
    - Demostrar que $k$-anonimato ($k \ge 5$) cuenta **empleados únicos** (`submission_key`), nunca filas de preguntas.
    - Política de retención automática de 90 días conforme al protocolo Damm.
+
+---
+
+### Paso 5: Síntesis Estratégica con IA y Exportación a PDF (Dirección de Personas)
+1. **Generación de la Síntesis con IA**:
+   - En **Insights**, hacer clic en el botón rojo **"Generar Síntesis con IA"**.
+   - Se abre la ventana flotante (popup modal) con diseño ejecutivo y visual:
+     - **Ribbon Superior de KPIs Deterministas:** Muestra ($n$), Clima Global (con IC 95%), Diagnóstico de Polarización y Dispersión ($\sigma$).
+     - **Resumen Estadístico Breve:** Síntesis concisa para la dirección.
+     - **Diagnóstico de Alertas y Sesgos:** Infrarrepresentación crítica desglosada por colectivos (Logística, Comercial, Oficinas).
+     - **Plan de Acción Operativo de RRHH (Prioritario):** Tarjetas estructuradas con nivel de prioridad (*Inmediata*, *Alta*, *Seguimiento*) y pasos operativos concretos.
+     - **Propuesta de Microconsulta de Seguimiento:** Preguntas recomendadas con escala Likert 1-5.
+2. **Exportación a PDF**:
+   - Hacer clic en **"Exportar PDF"** (disponible en la cabecera y pie del modal, así como en la tarjeta guardada al cerrar).
+   - Genera automáticamente un documento PDF maquetado con la identidad corporativa de Estrella Damm, métricas consolidadas, alertas y plan de acción de People Analytics, listo para imprimir o enviar al comité de dirección.
+3. **Persistencia y Control**:
+   - Al cerrar el popup, la síntesis se mantiene en una tarjeta persistente al final del panel de Insights con 4 opciones rápidas: **Abrir Síntesis**, **Exportar PDF**, **Copiar** y **Eliminar**.
 
 ---
 
