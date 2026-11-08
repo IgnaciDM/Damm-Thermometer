@@ -270,11 +270,30 @@ class PulsoHandler(BaseHTTPRequestHandler):
             self.send_file("index.html", "text/html; charset=utf-8")
             return
 
+        # Servir dinámicamente cualquier archivo de la carpeta ui/assets/
+        if path.startswith("/assets/"):
+            rel_path = path.lstrip("/")
+            asset_file = UI_DIR / rel_path
+            if asset_file.is_file():
+                ext = asset_file.suffix.lower()
+                mime_types = {
+                    ".png": "image/png",
+                    ".jpg": "image/jpeg",
+                    ".jpeg": "image/jpeg",
+                    ".svg": "image/svg+xml",
+                    ".webp": "image/webp",
+                    ".ico": "image/x-icon",
+                }
+                content_type = mime_types.get(ext, "application/octet-stream")
+                self.send_file(rel_path, content_type)
+                return
+
         # Archivos estáticos de interfaz
         files = {
             "/": ("index.html", "text/html; charset=utf-8"),
             "/index.html": ("index.html", "text/html; charset=utf-8"),
             "/styles.css": ("styles.css", "text/css; charset=utf-8"),
+            "/assets/damm-thermometer-cover.jpg": ("assets/damm-thermometer-cover.jpg", "image/jpeg"),
             "/assets/codigo_qr.png": ("assets/codigo_qr.png", "image/png"),
             "/assets/chapa_damm.png": ("assets/chapa_damm.png", "image/png"),
             "/assets/palabra_damm.png": ("assets/palabra_damm.png", "image/png"),

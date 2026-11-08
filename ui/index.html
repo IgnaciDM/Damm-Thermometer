@@ -18,6 +18,9 @@
       main > :last-child { margin-bottom: 0 !important; }
     }
     ::-webkit-scrollbar { display: none; }
+    .hero-nav-transition { transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
+    #app-sidebar.hero-hidden { transform: translateX(-100%) !important; opacity: 0 !important; pointer-events: none !important; }
+    #main-header.hero-hidden { transform: translateY(-100%) !important; opacity: 0 !important; pointer-events: none !important; }
     .sidebar-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
     .content-transition { transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1), left 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
     .toast-animate { transition: transform 0.25s ease, opacity 0.25s ease; }
@@ -38,7 +41,18 @@
       user-select: none;
     }
     @media (max-width: 1100px) {
-      .dashboard-hero-bottle { display: none; }
+      .dashboard-hero-bottle {
+        right: 0.75rem;
+        bottom: -3rem;
+        height: 10rem;
+      }
+    }
+    @media (max-width: 640px) {
+      .dashboard-hero-bottle {
+        right: 0.5rem;
+        bottom: -2rem;
+        height: 8rem;
+      }
     }
     @media (max-width: 1100px) {
       .admin-history-table col:nth-child(1) { width: 50%; }
@@ -130,9 +144,9 @@
   <div id="toast-container" class="fixed top-20 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Retractile Sidebar -->
-  <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(30,22,17,0.04)] sidebar-transition overflow-hidden w-64 border-r border-surface-container/60" id="app-sidebar">
+  <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(30,22,17,0.04)] sidebar-transition hero-nav-transition hero-hidden overflow-hidden w-64 border-r border-surface-container/60" id="app-sidebar">
     <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
-      <div class="flex items-center gap-2 overflow-hidden" id="sidebar-brand-box">
+      <div class="flex items-center gap-2 overflow-hidden cursor-pointer" id="sidebar-brand-box" onclick="scrollToTopCover()" title="Volver a la portada Damm Thermometer">
         <img alt="Estrella Damm" class="w-7 h-7 rounded-md object-cover flex-shrink-0 shadow-xs" src="assets/estrella-damm-logo.png" onerror="this.src='assets/chapa_damm.png'">
         <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">PORTAL DAMM</span>
       </div>
@@ -178,12 +192,49 @@
     </div>
   </aside>
 
+  <!-- ===================================================================== -->
+  <!-- PORTADA DE ENTRADA / HERO COVER (PANTALLA COMPLETA 100VH)             -->
+  <!-- ===================================================================== -->
+  <section id="landing-hero" class="relative w-full h-screen min-h-[580px] overflow-hidden flex flex-col justify-between items-center select-none" style="background: #4b0206 url('/assets/damm-thermometer-cover.jpg') center center / cover no-repeat;">
+    
+    <!-- Imagen de portada que ocupa la pantalla completa -->
+    <div class="absolute inset-0 w-full h-full">
+      <img src="/assets/damm-thermometer-cover.jpg"
+           alt="Damm Thermometer"
+           class="w-full h-full object-cover object-center pointer-events-none" />
+      <!-- Sutil degradado para integrar los bordes en pantallas ultra-anchas -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/25 pointer-events-none"></div>
+    </div>
+
+    <!-- Barra superior sutil en la portada -->
+    <div class="relative z-10 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto">
+      <div class="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></span>
+        <span class="text-xs font-semibold text-white/90 tracking-wide uppercase">Estrella Damm 1876 • Clima Continuo &amp; People Analytics</span>
+      </div>
+      <button type="button" onclick="scrollToDashboard()" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white text-xs font-bold transition-all shadow-md active:scale-95">
+        <span>Entrar al Portal</span>
+        <span class="material-symbols-outlined text-sm">arrow_downward</span>
+      </button>
+    </div>
+
+    <!-- Indicador de desplazamiento hacia el Dashboard -->
+    <div class="relative z-10 pb-8 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105 group" onclick="scrollToDashboard()" title="Desplazar hacia abajo al Dashboard">
+      <span class="text-xs font-bold tracking-widest text-white/90 uppercase drop-shadow-md group-hover:text-white transition-colors">
+        Desliza para entrar al Dashboard
+      </span>
+      <div class="w-11 h-11 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shadow-xl animate-bounce group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+        <span class="material-symbols-outlined text-2xl">keyboard_arrow_down</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Main Content Wrapper -->
   <div class="content-transition pl-64" id="main-layout-wrapper">
     <!-- Topbar -->
-    <header class="fixed top-0 right-0 h-16 bg-surface/95 backdrop-blur-xl z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(30,22,17,0.04)] content-transition border-b border-surface-container-high/60 left-64" id="main-header">
+    <header class="fixed top-0 right-0 h-16 bg-surface/95 backdrop-blur-xl z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(30,22,17,0.04)] content-transition hero-nav-transition hero-hidden border-b border-surface-container-high/60 left-64" id="main-header">
       <div class="flex items-center gap-space-md">
-        <div class="-ml-2 flex items-center gap-2 pr-2">
+        <div class="-ml-2 flex items-center gap-2 pr-2 cursor-pointer" onclick="scrollToTopCover()" title="Volver a la portada Damm Thermometer">
           <img alt="Chapa Estrella Damm" class="w-10 h-10 object-contain rounded-full shadow-xs hover:rotate-12 transition-transform duration-300" src="assets/chapa_damm.png">
           <img alt="Damm" class="h-14 w-auto object-contain" src="assets/palabra_damm.png">
         </div>
@@ -222,7 +273,7 @@
       <!-- ===================================================================== -->
       <div id="panel-dashboard" class="panel-view space-y-space-lg">
         <!-- Hero Header -->
-        <div class="relative flex flex-wrap items-center justify-between gap-space-md overflow-hidden bg-surface-container-lowest p-space-lg xl:pr-44 rounded-xl shadow-xs border border-surface-container">
+        <div class="relative flex flex-wrap items-center justify-between gap-space-md overflow-hidden bg-surface-container-lowest p-space-lg pr-24 sm:pr-32 xl:pr-44 rounded-xl shadow-xs border border-surface-container">
           <img alt="Botella Estrella Damm" class="dashboard-hero-bottle" src="assets/botella-estrella-damm.png" onerror="this.src='assets/botella-estrella-damm1.png'">
           <div class="relative z-10">
             <div class="flex items-center gap-2 mb-1">
@@ -6690,6 +6741,45 @@
       }
     }
 
+    // Navigation & Hero Cover Scroll Handlers
+    function scrollToDashboard(instant = false) {
+      const target = document.getElementById('main-layout-wrapper');
+      if (target) {
+        target.scrollIntoView({ behavior: instant ? 'instant' : 'smooth' });
+      } else {
+        const heroH = document.getElementById('landing-hero')?.offsetHeight || window.innerHeight;
+        window.scrollTo({ top: heroH, behavior: instant ? 'instant' : 'smooth' });
+      }
+    }
+
+    function scrollToTopCover() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateHeroScrollState() {
+      const hero = document.getElementById('landing-hero');
+      const sidebar = document.getElementById('app-sidebar');
+      const header = document.getElementById('main-header');
+      if (!hero || !sidebar || !header) return;
+
+      const heroH = hero.offsetHeight || window.innerHeight;
+      const scrollPos = window.scrollY || document.documentElement.scrollTop;
+
+      // Si el usuario está en la portada de bienvenida (scroll menor al 60% de la altura del hero)
+      if (scrollPos < heroH * 0.6) {
+        sidebar.classList.add('hero-hidden');
+        header.classList.add('hero-hidden');
+      } else {
+        sidebar.classList.remove('hero-hidden');
+        header.classList.remove('hero-hidden');
+      }
+    }
+
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+    window.addEventListener('scroll', updateHeroScrollState, { passive: true });
+    window.addEventListener('resize', updateHeroScrollState, { passive: true });
+
     // Initial Routing
     document.addEventListener('DOMContentLoaded', () => {
       applySidebarState();
@@ -6707,6 +6797,14 @@
       // Check hash route
       const initialHash = window.location.hash ? window.location.hash.replace('#', '') : 'dashboard';
       showPanel(initialHash);
+
+      // Si entra a la web sin hash profundo, mostrar la imagen completa de portada al inicio
+      if (!window.location.hash || window.location.hash === '#' || window.location.hash === '#dashboard' || window.location.hash === '#cover') {
+        window.scrollTo(0, 0);
+      } else {
+        scrollToDashboard(true);
+      }
+      updateHeroScrollState();
       
       // Check if visiting respondent URL
       const respondentMatch = window.location.pathname.match(/^\/respond\/([a-zA-Z0-9_-]{8,64})$/);
