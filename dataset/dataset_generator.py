@@ -160,12 +160,15 @@ def generate_responses(rng: random.Random, today: date) -> list[dict]:
             for dim in dims:
                 day = start + timedelta(days=rng.randrange(span))
                 comment = ""
+                tema_real = ""
                 if rng.random() < p_comment:
                     if rng.random() < 0.10:
                         comment = rng.choice(COMMENTS["otros"])
+                        tema_real = "otros"
                     else:
                         topic = rng.choices(list(weights), weights=list(weights.values()))[0]
                         comment = rng.choice(COMMENTS[topic])
+                        tema_real = topic
                 channel = rng.choices(
                     CHANNELS,
                     weights=[65, 25, 10] if cohort in ("Planta", "Logística") else [35, 25, 40],
@@ -185,6 +188,7 @@ def generate_responses(rng: random.Random, today: date) -> list[dict]:
                     "center_type": "Centro amplio" if rng.random() < 0.95 else "",
                     "channel": channel,
                     "comment": comment,
+                    "tema_real": tema_real,
                     "survey_id": "",
                     "period": period,
                     "typeform_response_id": tf_id,
@@ -195,19 +199,19 @@ def generate_responses(rng: random.Random, today: date) -> list[dict]:
 
 # --------------------------------------------------------------------------- engine csv
 ENGINE_COMMENTS = [
-    "Falta agilidad en la reposición de repuestos en línea.",
-    "Buen ambiente entre compañeros de turno.",
-    "Los relevos de turno requieren mejor coordinación.",
-    "Herramientas informáticas lentas durante el cierre.",
-    "Más claridad en las instrucciones de cambio de formato.",
-    "El equipo agradece las pausas programadas.",
+    ("Falta agilidad en la reposición de repuestos en línea.", "herramientas"),
+    ("Buen ambiente entre compañeros de turno.", "reconocimiento"),
+    ("Los relevos de turno requieren mejor coordinación.", "turnos"),
+    ("Herramientas informáticas lentas durante el cierre.", "herramientas"),
+    ("Más claridad en las instrucciones de cambio de formato.", "comunicacion"),
+    ("El equipo agradece las pausas programadas.", "turnos"),
 ]
 # PII FICTICIA: el motor no debe filtrar estos textos en su payload
 PII_COMMENTS = [
-    "Escribidme a juan.perez@example.com para lo del turno.",
-    "Llamad al 600 123 456 si hay cambios de última hora.",
-    "Soy Marta López y llevo diez años en la línea 3.",
-    "Más detalle en https://intranet.example.com/turnos por favor.",
+    ("Escribidme a juan.perez@example.com para lo del turno.", "turnos"),
+    ("Llamad al 600 123 456 si hay cambios de última hora.", "comunicacion"),
+    ("Soy Marta López y llevo diez años en la línea 3.", "otros"),
+    ("Más detalle en https://intranet.example.com/turnos por favor.", "turnos"),
 ]
 
 
@@ -237,7 +241,7 @@ def generate_engine_rows(rng: random.Random) -> list[dict]:
                 q2 = max(1, min(5, round(rng.gauss(3.6, 0.7))))
                 q3 = max(1, min(5, round(rng.gauss(3.7, 0.6))))
             rows.append({"rol": rol, "turno": turno, "q1_bienestar": q1, "q2_liderazgo": q2,
-                         "q3_recursos": q3, "texto_abierto": ""})
+                         "q3_recursos": q3, "texto_abierto": "", "tema_real": ""})
     # Celda pequeña a proposito: Oficinas x Tarde con exactamente 3 filas (< k=5)
     oficinas = [r for r in rows if r["rol"] == "Oficinas"]
     for r in rng.sample(oficinas, 3):
@@ -246,10 +250,13 @@ def generate_engine_rows(rng: random.Random) -> list[dict]:
     for i, r in enumerate(rows):
         r["employee_id"] = hashlib.sha256(f"damm_test_{SEED}_{i}".encode()).hexdigest()[:16]
         if rng.random() < 0.30:
-            r["texto_abierto"] = rng.choice(ENGINE_COMMENTS)
-    for r, text in zip(rng.sample(rows, len(PII_COMMENTS)), PII_COMMENTS):
+            c_text, c_tema = rng.choice(ENGINE_COMMENTS)
+            r["texto_abierto"] = c_text
+            r["tema_real"] = c_tema
+    for r, (text, p_tema) in zip(rng.sample(rows, len(PII_COMMENTS)), PII_COMMENTS):
         r["texto_abierto"] = text
-    cols = ["employee_id", "rol", "turno", "q1_bienestar", "q2_liderazgo", "q3_recursos", "texto_abierto"]
+        r["tema_real"] = p_tema
+    cols = ["employee_id", "rol", "turno", "q1_bienestar", "q2_liderazgo", "q3_recursos", "texto_abierto", "tema_real"]
     return [{c: r[c] for c in cols} for r in rows]
 
 

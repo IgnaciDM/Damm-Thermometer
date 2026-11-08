@@ -13,6 +13,7 @@ from .common import (
     RETENTION_DAYS,
     SITES,
     connect,
+    enforce_data_retention_policy,
     validate_response,
 )
 from .insights import analyze_responses
@@ -111,8 +112,31 @@ def seed_demo_data(db: sqlite3.Connection) -> None:
     db.commit()
 
 
-def _visible_average(rows: list[sqlite3.Row]) -> float | None:
-    if len(rows) < MIN_GROUP_SIZE:
+def _distinct_respondent_count(rows: list[sqlite3.Row | dict]) -> int:
+    """
+    Cuenta personas/encuestados únicos y no filas de dimensiones.
+    Filas que comparten typeform_submission_key o typeform_response_id pertenecen a la misma persona.
+    """
+    keys = set()
+    no_key_count = 0
+    for r in rows:
+        key = None
+        if isinstance(r, dict):
+            key = r.get("typeform_submission_key") or r.get("typeform_response_id")
+        elif hasattr(r, "keys"):
+            if "typeform_submission_key" in r.keys():
+                key = r["typeform_submission_key"]
+            if not key and "typeform_response_id" in r.keys():
+                key = r["typeform_response_id"]
+        if key:
+            keys.add(key)
+        else:
+            no_key_count += 1
+    return len(keys) + no_key_count
+
+
+def _visible_average(rows: list[sqlite3.Row | dict]) -> float | None:
+    if _distinct_respondent_count(rows) < MIN_GROUP_SIZE:
         return None
     return round(sum(row["score"] for row in rows) / len(rows), 1)
 
@@ -123,7 +147,7 @@ def aggregate_responses(
     today = today or date.today()
     cutoff = today - timedelta(days=6)
     recent = [row for row in rows if date.fromisoformat(row["day"]) >= cutoff]
-    visible_rows = rows if len(rows) >= MIN_GROUP_SIZE else []
+    visible_rows = rows if _distinct_respondent_count(rows) >= MIN_GROUP_SIZE else []
     overall = _visible_average(visible_rows)
 
     dimension_stats = []
@@ -135,11 +159,12 @@ def aggregate_responses(
             if item["id"] == row["dimension"]
             and cutoff - timedelta(days=7) <= date.fromisoformat(row["day"]) < cutoff
         ]
+        subset_n = _distinct_respondent_count(subset)
         dimension_stats.append(
             {
                 **item,
                 "score": _visible_average(subset),
-                "responses": len(subset) if len(subset) >= MIN_GROUP_SIZE else None,
+                "responses": subset_n if subset_n >= MIN_GROUP_SIZE else None,
                 "trend": (
                     round(_visible_average(subset) - _visible_average(previous), 1)
                     if _visible_average(subset) is not None
@@ -166,14 +191,16 @@ def aggregate_responses(
         score = _visible_average(site_rows)
         if score is not None:
             location_stats.append(
-                {"label": site, "score": score, "responses": len(site_rows)}
+                {"label": site, "score": score, "responses": _distinct_respondent_count(site_rows)}
             )
 
     demo_count = sum(row["is_demo"] for row in rows)
+    recent_n = _distinct_respondent_count(recent)
+    total_n = _distinct_respondent_count(rows)
     return {
         "overall": overall,
-        "responses_7d": len(recent) if len(recent) >= MIN_GROUP_SIZE else None,
-        "total_responses": len(rows) if len(rows) >= MIN_GROUP_SIZE else None,
+        "responses_7d": recent_n if recent_n >= MIN_GROUP_SIZE else None,
+        "total_responses": total_n if total_n >= MIN_GROUP_SIZE else None,
         "dimensions": dimension_stats,
         "trend": trend,
         "locations": location_stats,
@@ -185,14 +212,7 @@ def aggregate_responses(
 def get_dashboard() -> dict:
     with connect() as db:
         seed_demo_data(db)
-        db.execute(
-            "DELETE FROM responses WHERE day < ?",
-            ((date.today() - timedelta(days=RETENTION_DAYS)).isoformat(),),
-        )
-        db.execute(
-            "DELETE FROM typeform_submissions WHERE substr(submitted_at, 1, 10) < ?",
-            ((date.today() - timedelta(days=RETENTION_DAYS)).isoformat(),),
-        )
+        retention_stats = enforce_data_retention_policy(db, RETENTION_DAYS)
         live_rows = db.execute(
             "SELECT * FROM responses WHERE is_demo = 0 ORDER BY day"
         ).fetchall()

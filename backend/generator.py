@@ -388,6 +388,8 @@ def generate_cohort_survey(
     is_factory = cohort_name in ["Fábrica", "Planta"]
     is_logistics_or_commercial = cohort_name in ["Logística", "Comercial"]
     is_office = cohort_name == "Oficinas"
+    low_prompt = user_prompt.lower()
+    clean_p = user_prompt.strip()
 
     if is_factory:
         recommended_channel = "QR en Vestuario"
@@ -414,100 +416,97 @@ def generate_cohort_survey(
             "- Canal recomendado obligatorio: 'Tarjeta en Microsoft Teams / Enlace Web'."
         )
 
-    # 2. Pools hiperpersonalizados según colectivo para garantizar variedad y evitar duplicados
-    low_prompt = user_prompt.lower()
-    clean_p = user_prompt.strip()
-
+    # 2. Pools de contingencia según colectivo con redacción profesional variada (sin plantillas con huecos)
     factory_pool = [
         {
-            "title": f"¿Cómo valoras la seguridad y el ritmo de trabajo en tu línea frente a: {clean_p[:35]}?",
+            "title": "¿El ritmo y las rotaciones en tu puesto de envasado te permiten trabajar con seguridad y sin fatiga excesiva?",
             "dimension": "condiciones",
             "type": "rating",
-            "choices": ["Muy seguro y adecuado", "Adecuado", "Excesivo", "Peligroso"],
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
             "title": "¿Los descansos y las pausas entre turnos son suficientes para recuperarte físicamente?",
             "dimension": "bienestar",
-            "type": "multiple_choice",
-            "choices": ["Totalmente suficientes", "Aceptables", "Insuficientes", "Muy insuficientes"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Cuentas con las herramientas de mantenimiento y EPIs necesarios para tu labor diaria?",
+            "title": "¿Cuentas con las herramientas de mantenimiento y EPIs necesarios para tu labor diaria en planta?",
             "dimension": "condiciones",
-            "type": "multiple_choice",
-            "choices": ["Siempre disponibles", "La mayoría de veces", "Raras veces", "Casi nunca"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
     ]
 
     logistics_pool = [
         {
-            "title": f"¿Cómo de ágil y segura ha sido tu operativa hoy respecto a: {clean_p[:35]}?",
+            "title": "¿La organización de muelles y preparación de pedidos te permite operar con agilidad y sin cuellos de botella?",
             "dimension": "condiciones",
             "type": "rating",
-            "choices": ["Muy ágil", "Normal", "Lenta con fricciones", "Muy complicada"],
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿La información sobre cambios en rutas y pedidos llegó con suficiente antelación a tu terminal?",
+            "title": "¿La información sobre cambios en rutas y entregas llega con suficiente antelación a tu dispositivo móvil?",
             "dimension": "liderazgo",
-            "type": "multiple_choice",
-            "choices": ["Siempre a tiempo", "Casi siempre", "A veces tarde", "Casi nunca"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Dispones de las condiciones adecuadas para completar las franjas de entrega sin sobrecarga?",
+            "title": "¿Dispones de las condiciones adecuadas para completar tus franjas de reparto sin sobrecarga física?",
             "dimension": "bienestar",
-            "type": "multiple_choice",
-            "choices": ["Completamente", "Suficiente", "Insuficiente"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
     ]
 
     commercial_pool = [
         {
-            "title": f"¿Cómo calificarías el apoyo de operaciones y distribución respecto a: {clean_p[:35]}?",
+            "title": "¿El apoyo del área operativa y la disponibilidad de stock responden con agilidad a los pedidos de tus clientes?",
             "dimension": "relaciones",
             "type": "rating",
-            "choices": ["Excelente apoyo", "Bueno", "Mejorable", "Deficiente"],
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿La información comercial y objetivos de campaña están claros para transmitir a clientes?",
+            "title": "¿Los objetivos comerciales y promociones están suficientemente claros y alineados con la demanda en hostelería?",
             "dimension": "cultura",
-            "type": "multiple_choice",
-            "choices": ["Muy claros", "Claros", "Poco claros", "Confusos"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Dispones de la agilidad necesaria en campo para resolver incidencias de producto en hostelería?",
+            "title": "¿Dispones de la agilidad necesaria en campo para resolver incidencias con clientes de forma autónoma?",
             "dimension": "condiciones",
-            "type": "multiple_choice",
-            "choices": ["Siempre", "Casi siempre", "Raras veces", "Casi nunca"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
     ]
 
     office_pool = [
         {
-            "title": f"¿En qué medida consideras que {clean_p[:35]} favorece tu conciliación y bienestar?",
+            "title": "¿Las medidas de flexibilidad horaria y teletrabajo favorecen adecuadamente tu bienestar y conciliación?",
             "dimension": "bienestar",
             "type": "rating",
-            "choices": ["Muy favorable", "Favorable", "Neutro", "Desfavorable"],
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Consideras que las decisiones adoptadas en tu área son comunicadas con claridad y transparencia?",
+            "title": "¿Consideras que las decisiones adoptadas en tu departamento se comunican con claridad y transparencia?",
             "dimension": "liderazgo",
             "type": "rating",
-            "choices": ["Totalmente de acuerdo", "De acuerdo", "En desacuerdo", "Totalmente en desacuerdo"],
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Tu responsable directo te facilita la flexibilidad y autonomía necesaria para alcanzar tus metas?",
+            "title": "¿Tu responsable inmediato te facilita la autonomía y el apoyo necesario para alcanzar tus objetivos trimestrales?",
             "dimension": "liderazgo",
-            "type": "multiple_choice",
-            "choices": ["Siempre", "Casi siempre", "A veces", "Raras veces"],
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Sientes que tus objetivos profesionales trimestrales siguen alineados con el ritmo actual del equipo?",
-            "dimension": "desarrollo",
-            "type": "multiple_choice",
-            "choices": ["Completamente alineados", "Alineados", "Poco claros", "Desalineados"],
+            "title": "¿Cuentas con las herramientas digitales y la coordinación interdepartamental para avanzar sin bloqueos?",
+            "dimension": "condiciones",
+            "type": "rating",
+            "choices": ["1", "2", "3", "4", "5"],
         },
         {
-            "title": "¿Qué propuesta o medida constructiva sugerirías a Dirección de Personas para optimizar este punto?",
+            "title": "¿Qué propuesta o iniciativa constructiva sugerirías a Dirección de Personas para optimizar este punto en tu equipo?",
             "dimension": "cultura",
             "type": "open_text",
             "choices": [],
@@ -530,23 +529,26 @@ def generate_cohort_survey(
     # 1. Intentar con LLM si hay API Key configurada
     if ai_config.get("api_key"):
         system_instruction = (
-            f"Eres el consultor senior de People & Culture de Estrella Damm especializado en {cohort_name}.\n"
+            f"Eres el consultor senior de People Analytics y Recursos Humanos de Estrella Damm especializado en {cohort_name}.\n"
             f"DEPARTAMENTO DESTINATARIO: '{cohort_name}'.\n"
             f"{specific_rules}\n\n"
-            "El usuario te da una instrucción en lenguaje natural.\n"
-            "Devuelve UN ÚNICO OBJETO JSON con este esquema exacto:\n"
+            "INSTRUCCIONES CRÍTICAS DE CREATIVIDAD Y REDACCIÓN:\n"
+            "1. Genera preguntas TOTALMENTE NUEVAS, ORIGINALES, VIVAS y contextualizadas para la necesidad que plantea RRHH.\n"
+            "2. PROHIBIDO terminantemente usar plantillas fijas con huecos como '¿Cómo valoras el desempeño respecto a: ____?'. Escribe preguntas naturales, variadas y profesionales adaptadas a la realidad de este puesto.\n"
+            "3. En Fábrica, Logística y Comercial: exactamente 3 preguntas cerradas (escala 1 a 5). Cero preguntas abiertas.\n"
+            "4. En Oficinas: exactamente 4 preguntas cerradas escala 1-5 y exactamente 1 pregunta reflexiva de texto abierto ('open_text').\n\n"
+            "Devuelve EXCLUSIVAMENTE un objeto JSON válido con este esquema:\n"
             "{\n"
             f'  "colectivo": "{cohort_name}",\n'
             f'  "canal_recomendado": "{recommended_channel}",\n'
             '  "titulo": "Título motivador y corto",\n'
-            '  "synthesis": "Breve frase explicando los cambios",\n'
-            '  "updated_indices": [0, 1],\n'
+            '  "synthesis": "Breve frase explicando la consulta generada",\n'
             '  "questions": [\n'
             "    {\n"
-            '      "title": "¿Texto claro de la pregunta?",\n'
+            '      "title": "¿Enunciado original y específico de la pregunta?",\n'
             '      "dimension": "bienestar" | "liderazgo" | "condiciones" | "desarrollo" | "cultura" | "relaciones",\n'
-            '      "type": "rating" | "multiple_choice" | "open_text",\n'
-            '      "choices": ["Opción 1", "Opción 2"]\n'
+            '      "type": "rating" | "open_text",\n'
+            '      "choices": ["1", "2", "3", "4", "5"]\n'
             "    }\n"
             "  ]\n"
             "}\n"
@@ -562,19 +564,23 @@ def generate_cohort_survey(
 
         request_body = {
             "model": ai_config.get("model", "ornith"),
-            "temperature": 0.3,
+            "temperature": 0.7,
             "max_tokens": 4096,
             "chat_template_kwargs": {"enable_thinking": False},
             "response_format": {"type": "json_object"},
             "messages": [
                 {"role": "system", "content": system_instruction},
-                {"role": "user", "content": json.dumps(user_content, ensure_ascii=False)},
+                {"role": "user", "content": f"Necesidad de RRHH: '{user_prompt}'. Colectivo destinatario: {cohort_name}. Genera una consulta viva, original y no genérica para este colectivo."},
             ],
         }
 
         try:
+            target_url = ai_config.get("base_url", "https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions").strip()
+            if not target_url.endswith("/chat/completions"):
+                target_url = f"{target_url.rstrip('/')}/chat/completions"
+
             req = Request(
-                ai_config["base_url"],
+                target_url,
                 data=json.dumps(request_body).encode("utf-8"),
                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {ai_config['api_key']}"},
                 method="POST",
@@ -583,54 +589,82 @@ def generate_cohort_survey(
                 data = json.loads(resp.read().decode("utf-8"))
             text = extract_ai_content(data)
             parsed = parse_ai_json(text)
-            if "questions" in parsed and isinstance(parsed["questions"], list) and len(parsed["questions"]) > 0:
-                raw_qs = parsed["questions"]
+
+            raw_qs = parsed.get("questions") or parsed.get("preguntas") or []
+            if isinstance(raw_qs, list) and len(raw_qs) > 0:
                 sanitized_qs = []
                 for q in raw_qs:
-                    q_type = q.get("type", "multiple_choice")
+                    q_text = (
+                        q.get("title")
+                        or q.get("enunciado")
+                        or q.get("texto")
+                        or q.get("pregunta")
+                        or ""
+                    ).strip()
+                    if not q_text:
+                        continue
+                    q_type = q.get("type") or q.get("tipo") or "rating"
+                    if q_type in ["escala_1_5", "rating_1_5", "escala"]:
+                        q_type = "rating"
+                    elif q_type in ["texto_abierto", "open", "texto"]:
+                        q_type = "open_text"
+                    elif q_type not in ["rating", "multiple_choice", "open_text"]:
+                        q_type = "rating"
+
                     if not is_office and q_type == "open_text":
-                        q_type = "multiple_choice"
+                        q_type = "rating"
+
+                    raw_choices = q.get("choices") or q.get("opciones") or []
+                    if q_type == "rating":
+                        choices = ["1", "2", "3", "4", "5"]
+                    elif q_type == "open_text":
+                        choices = []
+                    else:
+                        choices = raw_choices if isinstance(raw_choices, list) and len(raw_choices) >= 2 else ["1", "2", "3", "4", "5"]
+
                     sanitized_qs.append({
-                        "title": q.get("title") or q.get("enunciado") or "¿Pregunta de consulta?",
+                        "title": q_text,
                         "dimension": q.get("dimension") or "bienestar",
                         "type": q_type,
-                        "choices": q.get("choices") if isinstance(q.get("choices"), list) and len(q.get("choices")) > 0 else (
-                            ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"] if q_type != "open_text" else []
-                        )
+                        "choices": choices,
                     })
 
                 if is_office:
                     # Estricto Oficinas: exactamente 4 cerradas + 1 abierta (total 5)
-                    closed_qs = [q for q in sanitized_qs if q["type"] != "open_text"][:4]
-                    existing_titles = {q["title"].strip().lower() for q in closed_qs}
-                    for cand in cohort_pool:
-                        if len(closed_qs) >= 4:
-                            break
-                        if cand["type"] != "open_text" and cand["title"].strip().lower() not in existing_titles:
-                            closed_qs.append(cand)
-                            existing_titles.add(cand["title"].strip().lower())
+                    closed_qs = [q for q in sanitized_qs if q["type"] != "open_text"]
                     open_qs = [q for q in sanitized_qs if q["type"] == "open_text"]
                     if not open_qs:
-                        open_qs = [cohort_pool[-1]]
+                        open_qs = [{
+                            "title": f"¿Qué propuesta constructiva sugerirías a Dirección de Personas sobre este punto?",
+                            "dimension": "cultura",
+                            "type": "open_text",
+                            "choices": []
+                        }]
+                    # Completar hasta 4 cerradas si vinieron menos
+                    idx_fill = 0
+                    while len(closed_qs) < 4 and idx_fill < len(cohort_pool):
+                        cand = cohort_pool[idx_fill]
+                        if cand["type"] != "open_text" and not any(cand["title"] == x["title"] for x in closed_qs):
+                            closed_qs.append(cand)
+                        idx_fill += 1
                     final_qs = closed_qs[:4] + [open_qs[0]]
                 else:
                     # Estricto Fábrica/Logística/Comercial: exactamente 3 preguntas cerradas
-                    closed_qs = [q for q in sanitized_qs if q["type"] != "open_text"][:3]
-                    existing_titles = {q["title"].strip().lower() for q in closed_qs}
-                    for cand in cohort_pool:
-                        if len(closed_qs) >= 3:
-                            break
-                        if cand["title"].strip().lower() not in existing_titles:
+                    closed_qs = [q for q in sanitized_qs if q["type"] != "open_text"]
+                    idx_fill = 0
+                    while len(closed_qs) < 3 and idx_fill < len(cohort_pool):
+                        cand = cohort_pool[idx_fill]
+                        if not any(cand["title"] == x["title"] for x in closed_qs):
                             closed_qs.append(cand)
-                            existing_titles.add(cand["title"].strip().lower())
+                        idx_fill += 1
                     final_qs = closed_qs[:3]
 
                 return {
-                    "source": "gemini",
+                    "source": "uab_ornith",
                     "colectivo": cohort_name,
-                    "titulo": parsed.get("titulo", f"Pulso {cohort_name}: {user_prompt[:35]}"),
-                    "canal_recomendado": parsed.get("canal_recomendado", recommended_channel),
-                    "synthesis": parsed.get("synthesis", f"Preguntas actualizadas para {cohort_name}."),
+                    "titulo": parsed.get("titulo") or parsed.get("titulo_encuesta") or f"Pulso {cohort_name}: {user_prompt[:35]}",
+                    "canal_recomendado": parsed.get("canal_recomendado") or recommended_channel,
+                    "synthesis": parsed.get("synthesis") or f"Microconsulta generada con IA para {cohort_name}.",
                     "questions": final_qs,
                     "updated_indices": list(range(len(final_qs))),
                 }

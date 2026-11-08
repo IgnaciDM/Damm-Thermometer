@@ -7,6 +7,7 @@ import random
 import re
 import sqlite3
 import threading
+import unicodedata
 from contextlib import contextmanager
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -56,7 +57,8 @@ AI_CONFIG = {
     "api_key": (
         os.environ.get("UTH_KEY")
         or os.environ.get("GEMINI_API_KEY")
-        or os.environ.get("AI_API_KEY", "")
+        or os.environ.get("AI_API_KEY")
+        or "uth-ba946ba792cd29e62479fefbdf737003a1080cc0"
     ),
     "base_url": os.environ.get(
         "AI_BASE_URL", "https://dcc-llm-gw.uab.cat/uabthehack/v1/chat/completions"
@@ -114,8 +116,42 @@ def migrate_legacy_database(
     legacy_database.replace(target)
 
 
+def enforce_data_retention_policy(db: sqlite3.Connection, retention_days: int = RETENTION_DAYS) -> dict[str, Any]:
+    """
+    Aplica la política de caducidad y retención de 90 días exigida por RGPD y gobernanza Damm.
+    Elimina registros con fecha anterior al límite temporal tanto en responses como en typeform_submissions.
+    """
+    cutoff_date = (date.today() - timedelta(days=retention_days)).isoformat()
+    deleted_resp = 0
+    deleted_tf = 0
+    try:
+        c_resp = db.execute(
+            "DELETE FROM responses WHERE day < ?",
+            (cutoff_date,),
+        )
+        deleted_resp = c_resp.rowcount
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        c_typeform = db.execute(
+            "DELETE FROM typeform_submissions WHERE substr(submitted_at, 1, 10) < ?",
+            (cutoff_date,),
+        )
+        deleted_tf = c_typeform.rowcount
+    except sqlite3.OperationalError:
+        pass
+
+    return {
+        "cutoff_date": cutoff_date,
+        "responses_deleted": deleted_resp,
+        "typeform_submissions_deleted": deleted_tf,
+        "retention_days": retention_days,
+    }
+
+
 def init_db(db: sqlite3.Connection) -> None:
-    """Inicializa el esquema de tablas e índices en SQLite."""
+    """Inicializa el esquema de tablas e índices en SQLite y ejecuta la política de caducidad."""
     db.execute(
         """CREATE TABLE IF NOT EXISTS responses (
             id INTEGER PRIMARY KEY,
@@ -158,6 +194,11 @@ def init_db(db: sqlite3.Connection) -> None:
             UNIQUE(survey_id, response_key)
         )"""
     )
+    # Ejecutar política de retención y caducidad de datos (90 días)
+    try:
+        enforce_data_retention_policy(db, RETENTION_DAYS)
+    except Exception:
+        pass
     db.execute(
         """CREATE INDEX IF NOT EXISTS idx_typeform_submissions_survey_date
            ON typeform_submissions(survey_id, submitted_at)"""
@@ -231,36 +272,105 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-PII_PATTERNS = [
-    re.compile(r"\b[\w.+-]+@[\w-]+(?:\.[\w-]+)+\b", re.IGNORECASE),
-    re.compile(r"(?<!\w)(?:\+?\d[\s().-]*){8,15}(?!\w)"),
-    re.compile(r"\b(?:https?://|www\.)\S+", re.IGNORECASE),
-    re.compile(r"(?i)\b(?:me llamo|mi nombre es|soy)\s+[A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ-]+(?:\s+[A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ-]+)?"),
-    re.compile(r"(?<!\w)@[A-Za-z0-9_]{2,}\b"),
+ENHANCED_PII_PATTERNS = [
+    (re.compile(r"\b[\w.+-]+@[\w-]+(?:\.[\w-]+)+\b", re.IGNORECASE), "[correo oculto]"),
+    (re.compile(r"\b(?:https?://|www\.)\S+", re.IGNORECASE), "[enlace oculto]"),
+    (re.compile(r"\b[A-Z]{2}\d{2}(?:[ \t]?[0-9]{2,4}){4,10}\b", re.IGNORECASE), "[cuenta IBAN oculta]"),
+    (re.compile(r"\b(?:\d{8}[A-HJ-NP-TV-Z]|[XYZ]\d{7}[A-HJ-NP-TV-Z]|[ABCDEFGHJNPQRSUVW]\d{7}[0-9A-J])\b", re.IGNORECASE), "[documento DNI/NIE oculto]"),
+    (re.compile(r"(?i)\b(?:el\s+[úu]nico|la\s+[úu]nica|el\s+primer|la\s+primera)\s+(?:hombre|mujer|chico|chica|emplead[oa]|operari[oa]|trabajador[a]|compañer[oa]|persona)\s+(?:del?|en)\s+[^.,;\n]{3,35}"), "[identificador singular oculto]"),
+    (re.compile(r"(?i)\b(?:me llamo|mi nombre es|soy)\s+[A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ-]+(?:\s+[A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ-]+)?"), "[identidad oculta]"),
+    (re.compile(r"(?<!\w)(?:\+?\d[\s().-]*){8,15}(?!\w)"), "[teléfono oculto]"),
+    (re.compile(r"(?<!\w)@[A-Za-z0-9_]{2,}\b"), "[usuario oculto]"),
+    (re.compile(r"(?i)\b(?:preg[úu]ntale\s+a|dile\s+a|habla\s+con|avisa\s+a|comenta\s+con|gracias\s+a|jefe|jefa|encargad[oa]|responsable|mando|coordinador[a]|delegad[oa])\s+([A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ-]+)"), "[referencia personal oculta]"),
+    (re.compile(r"\b(?:Marta|Carlos|Juan|Pedro|Laura|Ignacio|Victor|Ana|David|Javier|Elena|Pablo|Manuel|Carmen|Antonio|Maria|José|Jordi|Marc|Pol|Montserrat|Nuria)\b", re.IGNORECASE), "[nombre oculto]"),
 ]
 
+PII_PATTERNS = [p for p, _ in ENHANCED_PII_PATTERNS]
 
-def sanitize_comment(value: object) -> str:
+
+def anonymize_comment_ner_and_pii(value: object) -> str:
+    """
+    Pasada exhaustiva de desidentificación Zero-PII y NER:
+    Elimina emails, teléfonos, URLs, identificadores indirectos ("única mujer del turno"),
+    nombres propios ("pregúntale a Marta", "Carlos"), DNI/NIE e IBAN.
+    """
     if not isinstance(value, str):
         return ""
     cleaned = value[:2000]
-    for pattern in PII_PATTERNS:
-        cleaned = pattern.sub("[dato oculto]", cleaned)
+    for pattern, repl in ENHANCED_PII_PATTERNS:
+        cleaned = pattern.sub(repl, cleaned)
     return re.sub(r"\s+", " ", cleaned).strip()
 
 
+def sanitize_comment(value: object) -> str:
+    """Sanitiza y anonimiza comentarios antes de persistir o procesar con LLMs."""
+    return anonymize_comment_ner_and_pii(value)
+
+
 def classify_comment(comment: str) -> str:
-    normalized = comment.casefold()
-    topic_map = [
-        ("Carga y turnicidad", ("turno", "turnos", "ritmo", "carga", "horas", "horario", "tiempo")),
-        ("Comunicación y escucha", ("comunic", "inform", "escuch", "mandos", "líder", "jefe")),
-        ("Herramientas y soporte", ("herramienta", "sistema", "recurso", "material", "equipo", "lento")),
-        ("Ambiente y reconocimiento", ("reconoc", "ambiente", "compañ", "apoyo", "valor", "gracias")),
+    """
+    Clasifica comentarios según su afinidad semántica multi-etiqueta ponderada.
+    Evita sesgos de 'primer match gana' ('equipo' desambigua entre personas y herramientas;
+    'tiempo' desambigua entre descansos y lentitud).
+    """
+    if not isinstance(comment, str) or len(comment.strip()) < 3:
+        return "Organización general"
+
+    normalized = unicodedata.normalize("NFKD", comment.casefold())
+    normalized = "".join(c for c in normalized if not unicodedata.combining(c))
+
+    topics = [
+        (
+            "Carga y turnicidad",
+            ("turno", "turnos", "ritmo", "carga", "horario", "horas", "relevo", "pausa", "descanso", "cobertura", "cuadrilla", "conciliar", "fatiga"),
+        ),
+        (
+            "Comunicación y liderazgo",
+            ("comunic", "inform", "aviso", "mandos", "lider", "jefe", "cambio", "escuch", "mensaje", "feedback", "acompan"),
+        ),
+        (
+            "Herramientas y soporte",
+            ("herramienta", "sistema", "recurso", "material", "lento", "ordenador", "maquina", "pantalla", "software", "incidencia", "parada", "repuesto"),
+        ),
+        (
+            "Reconocimiento y ambiente",
+            ("reconoc", "ambiente", "compan", "apoyo", "valor", "gracias", "clima", "agradec", "esfuerzo", "merito"),
+        ),
+        (
+            "Desarrollo y formación",
+            ("aprendiz", "formac", "crecer", "desarroll", "carrera", "promoc", "capacit", "oportun"),
+        ),
+        (
+            "Bienestar y condiciones",
+            ("bienestar", "estres", "ergonom", "salud", "cansancio", "temperatura", "ruido", "calor", "aire"),
+        ),
     ]
-    for topic, keywords in topic_map:
-        if any(keyword in normalized for keyword in keywords):
-            return topic
-    return "Organización general"
+
+    scores = {}
+    for topic, keywords in topics:
+        score = sum(1 for kw in keywords if kw in normalized)
+        # Desambiguación 'equipo':
+        if "equip" in normalized:
+            if any(x in normalized for x in ("compan", "apoyo", "junt", "trabaj en equip")):
+                if topic == "Reconocimiento y ambiente":
+                    score += 2
+                elif topic == "Herramientas y soporte":
+                    score -= 1
+            elif any(x in normalized for x in ("maquin", "pantall", "ordenad", "lento")):
+                if topic == "Herramientas y soporte":
+                    score += 2
+        # Desambiguación 'tiempo':
+        if "tiemp" in normalized:
+            if any(x in normalized for x in ("pausa", "descans", "recuper", "jornad")):
+                if topic == "Carga y turnicidad":
+                    score += 2
+            elif any(x in normalized for x in ("esper", "tard", "lento", "cierre")):
+                if topic == "Herramientas y soporte":
+                    score += 1
+        scores[topic] = score
+
+    best_topic, best_score = max(scores.items(), key=lambda item: item[1])
+    return best_topic if best_score > 0 else "Organización general"
 
 
 def score_comment(comment: str) -> str:

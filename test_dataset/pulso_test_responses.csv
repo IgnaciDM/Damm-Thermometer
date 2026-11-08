@@ -1,645 +1,645 @@
-﻿day,dimension,site,score,is_demo,cohort,center_type,channel,comment,survey_id,period,typeform_response_id
-2026-10-10,bienestar,Comercial,4,1,Comercial,Centro amplio,Teams,Vendría bien recibir feedback más a menudo.,,anterior,
-2026-10-10,condiciones,Comercial,4,1,Comercial,,Teams,,,anterior,
-2026-10-10,condiciones,Comercial,2,1,Comercial,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-10,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-10,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,,anterior,tf_fad9d5199a05
-2026-10-10,condiciones,Logística,2,1,Logística,Centro amplio,Teams,Una pausa a tiempo ayuda a recuperar energía.,,anterior,
-2026-10-10,cultura,Logística,4,1,Logística,Centro amplio,Correo,,,anterior,
-2026-10-10,desarrollo,Logística,3,1,Logística,Centro amplio,Teams,,,anterior,tf_a5c5bc8eaeeb
-2026-10-10,liderazgo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-10,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,anterior,
-2026-10-10,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,En los días de más carga es difícil parar un momento.,,anterior,tf_a18097c61512
-2026-10-10,condiciones,Oficina,3,1,Oficina,,Correo,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-10,cultura,Oficina,5,1,Oficina,,Correo,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,anterior,
-2026-10-10,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-10,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,,anterior,
-2026-10-10,condiciones,Fábrica,2,1,Planta,,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-10,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_132a7f347512
-2026-10-10,cultura,Fábrica,2,1,Planta,Centro amplio,Teams,Faltan recursos para cubrir las incidencias en el día a día.,,anterior,
-2026-10-10,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Gracias por preguntar.,,anterior,
-2026-10-10,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_6ce190fa60e1
-2026-10-10,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-10,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-11,bienestar,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,anterior,tf_d7bf1f02431a
-2026-10-11,condiciones,Comercial,2,1,Comercial,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-11,cultura,Comercial,3,1,Comercial,Centro amplio,Correo,,,anterior,
-2026-10-11,liderazgo,Comercial,2,1,Comercial,Centro amplio,Teams,A veces la valoración de los pequeños logros pasa desapercibida.,,anterior,
-2026-10-11,relaciones,Comercial,4,1,Comercial,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-11,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_dc0d05989b72
-2026-10-11,cultura,Logística,3,1,Logística,Centro amplio,Correo,,,anterior,
-2026-10-11,liderazgo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-11,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,,anterior,
-2026-10-11,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,tf_bff6fa8fac7e
-2026-10-11,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,Echo en falta más acompañamiento en los momentos difíciles.,,anterior,tf_cd5a51f7fcfa
-2026-10-11,cultura,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-11,cultura,Oficina,5,1,Oficina,Centro amplio,Teams,A veces la valoración de los pequeños logros pasa desapercibida.,,anterior,
-2026-10-11,liderazgo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,anterior,
-2026-10-11,liderazgo,Oficina,3,1,Oficina,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-11,liderazgo,Oficina,5,1,Oficina,Centro amplio,Teams,El liderazgo cercano marca la diferencia en el equipo.,,anterior,
-2026-10-11,cultura,Fábrica,4,1,Planta,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,,anterior,
-2026-10-11,desarrollo,Fábrica,3,1,Planta,Centro amplio,Correo,,,anterior,tf_dd16e1de8965
-2026-10-11,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-11,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_2f9a83cbde5b
-2026-10-11,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,condiciones,Comercial,2,1,Comercial,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,desarrollo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,bienestar,Logística,2,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-12,bienestar,Logística,5,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-12,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_7eb2333a2c28
-2026-10-12,condiciones,Logística,3,1,Logística,Centro amplio,Teams,Veo poco margen para crecer dentro de la empresa.,,anterior,
-2026-10-12,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,anterior,tf_4c9fe4a6e879
-2026-10-12,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,relaciones,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,relaciones,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_c7d392c461ad
-2026-10-12,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,anterior,
-2026-10-12,condiciones,Oficina,4,1,Oficina,Centro amplio,Teams,Faltan recursos para cubrir las incidencias en el día a día.,,anterior,
-2026-10-12,liderazgo,Oficina,4,1,Oficina,Centro amplio,Correo,Todo bien por ahora.,,anterior,
-2026-10-12,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,El sistema va lento y cuesta resolver incidencias rápido.,,anterior,
-2026-10-12,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,tf_c8e353e0334a
-2026-10-12,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,anterior,
-2026-10-12,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-12,cultura,Fábrica,5,1,Planta,Centro amplio,Correo,,,anterior,
-2026-10-12,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,,anterior,
-2026-10-12,cultura,Fábrica,5,1,Planta,Centro amplio,Correo,,,anterior,tf_ac8bfa0b58cf
-2026-10-12,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,,anterior,
-2026-10-12,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,,anterior,
-2026-10-12,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-12,desarrollo,Fábrica,3,1,Planta,,Móvil-QR,,,anterior,
-2026-10-12,liderazgo,Fábrica,3,1,Planta,Centro amplio,Teams,,,anterior,tf_bdbf4c574740
-2026-10-12,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-13,bienestar,Comercial,3,1,Comercial,Centro amplio,Correo,,,anterior,
-2026-10-13,cultura,Comercial,2,1,Comercial,Centro amplio,Correo,El desarrollo profesional debería tener más visibilidad.,,anterior,
-2026-10-13,cultura,Comercial,4,1,Comercial,Centro amplio,Correo,,,anterior,
-2026-10-13,desarrollo,Comercial,3,1,Comercial,Centro amplio,Correo,,,anterior,
-2026-10-13,liderazgo,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,El equipo se esfuerza y falta más reconocimiento.,,anterior,
-2026-10-13,condiciones,Logística,5,1,Logística,,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,,anterior,
-2026-10-13,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,tf_c01bc0daaedc
-2026-10-13,desarrollo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-13,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-13,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-13,bienestar,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-13,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-13,desarrollo,Oficina,5,1,Oficina,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,,anterior,tf_ddbdc1d61a17
-2026-10-13,liderazgo,Oficina,3,1,Oficina,Centro amplio,Teams,,,anterior,tf_44dd65d4698e
-2026-10-13,bienestar,Fábrica,3,1,Planta,,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-13,condiciones,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,anterior,tf_10612d556d63
-2026-10-13,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El liderazgo cercano marca la diferencia en el equipo.,,anterior,
-2026-10-13,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-13,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-13,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,,anterior,
-2026-10-13,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,anterior,
-2026-10-13,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,,anterior,
-2026-10-13,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-14,relaciones,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,El equipo se esfuerza y falta más reconocimiento.,,anterior,
-2026-10-14,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,anterior,
-2026-10-14,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-14,liderazgo,Logística,3,1,Logística,,Móvil-QR,,,anterior,
-2026-10-14,bienestar,Oficina,5,1,Oficina,Centro amplio,Teams,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-14,cultura,Oficina,5,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-14,desarrollo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-14,liderazgo,Oficina,5,1,Oficina,Centro amplio,Correo,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-14,liderazgo,Oficina,5,1,Oficina,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,,anterior,
-2026-10-14,relaciones,Oficina,3,1,Oficina,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,,anterior,tf_165fc241fc9f
-2026-10-14,bienestar,Fábrica,2,1,Planta,,Móvil-QR,,,anterior,
-2026-10-14,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,anterior,
-2026-10-14,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_3a5281eb5179
-2026-10-14,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,anterior,
-2026-10-14,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Me gusta poder responder rápido.,,anterior,
-2026-10-14,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,anterior,tf_912c602f9f67
-2026-10-14,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-14,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-14,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,En algunos turnos cuesta encontrar tiempo para el descanso.,,anterior,
-2026-10-14,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-14,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,anterior,
-2026-10-14,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,Agradezco cuando los responsables escuchan al equipo.,,anterior,
-2026-10-15,liderazgo,Comercial,4,1,Comercial,Centro amplio,Teams,,,anterior,
-2026-10-15,relaciones,Comercial,3,1,Comercial,Centro amplio,Teams,,,anterior,
-2026-10-15,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,anterior,
-2026-10-15,condiciones,Logística,1,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_058d41fbdaa1
-2026-10-15,cultura,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-15,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-15,relaciones,Logística,3,1,Logística,Centro amplio,Teams,Veo poco margen para crecer dentro de la empresa.,,anterior,tf_651b71839177
-2026-10-15,relaciones,Manager,4,1,Manager,Centro amplio,Correo,,,anterior,
-2026-10-15,desarrollo,Oficina,3,1,Oficina,Centro amplio,Correo,,,anterior,tf_878b9724fcfd
-2026-10-15,liderazgo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,tf_e20340d21a78
-2026-10-15,relaciones,Oficina,3,1,Oficina,Centro amplio,Teams,,,anterior,tf_26ef05a592a1
-2026-10-15,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-15,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_51bdc6f41ef1
-2026-10-15,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,,anterior,
-2026-10-15,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-15,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,anterior,tf_7c1652d98287
-2026-10-15,desarrollo,Fábrica,4,1,Planta,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,,anterior,
-2026-10-15,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_45a36dcfb9fd
-2026-10-15,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-15,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_e6939b06156d
-2026-10-15,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,,anterior,
-2026-10-15,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-15,relaciones,Fábrica,3,1,Planta,,Móvil-QR,,,anterior,
-2026-10-15,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,anterior,
-2026-10-15,relaciones,Fábrica,3,1,Planta,,Móvil-QR,,,anterior,
-2026-10-16,bienestar,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-16,desarrollo,Logística,1,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-16,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_0dd14ca9ee59
-2026-10-16,desarrollo,Logística,5,1,Logística,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,anterior,tf_164ec41a0155
-2026-10-16,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-16,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_46a781f723e9
-2026-10-16,liderazgo,Manager,3,1,Manager,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,,anterior,
-2026-10-16,liderazgo,Manager,3,1,Manager,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-16,condiciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-16,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-16,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-16,condiciones,Fábrica,4,1,Planta,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,,anterior,
-2026-10-16,condiciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-16,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_693db01792ce
-2026-10-16,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,
-2026-10-16,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-16,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,A veces la valoración de los pequeños logros pasa desapercibida.,,anterior,tf_229c2b4117e8
-2026-10-17,cultura,Comercial,4,1,Comercial,Centro amplio,Teams,,,anterior,tf_d299d34028e5
-2026-10-17,desarrollo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,,anterior,
-2026-10-17,liderazgo,Comercial,3,1,Comercial,Centro amplio,Teams,Un horario más previsible ayudaría mucho a conciliar.,,anterior,
-2026-10-17,relaciones,Comercial,2,1,Comercial,Centro amplio,Correo,,,anterior,
-2026-10-17,condiciones,Logística,4,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-17,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-17,desarrollo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_c020d4be073c
-2026-10-17,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-17,bienestar,Manager,3,1,Manager,Centro amplio,Correo,,,anterior,tf_700b3b3d80fd
-2026-10-17,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,,,anterior,
-2026-10-17,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,Me gusta poder responder rápido.,,anterior,tf_760bbefaf06f
-2026-10-17,relaciones,Oficina,3,1,Oficina,Centro amplio,Correo,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,anterior,tf_cda3cf7d7f40
-2026-10-17,bienestar,Fábrica,3,1,Planta,,Teams,,,anterior,
-2026-10-17,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_4f4a387ae176
-2026-10-17,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,
-2026-10-17,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-17,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-17,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-17,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-17,liderazgo,Fábrica,3,1,Planta,Centro amplio,Correo,,,anterior,tf_5119455c4aed
-2026-10-17,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-17,liderazgo,Fábrica,3,1,Planta,Centro amplio,Teams,,,anterior,tf_f977d02c8c4e
-2026-10-17,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-17,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-17,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,cultura,Comercial,4,1,Comercial,Centro amplio,Teams,,,anterior,
-2026-10-18,cultura,Comercial,4,1,Comercial,Centro amplio,Correo,,,anterior,
-2026-10-18,bienestar,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,anterior,tf_54e12740db18
-2026-10-18,condiciones,Logística,2,1,Logística,Centro amplio,Teams,,,anterior,tf_953266843039
-2026-10-18,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_dfab6dcd7000
-2026-10-18,cultura,Logística,2,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,anterior,tf_bb336bc102f5
-2026-10-18,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-18,relaciones,Logística,3,1,Logística,Centro amplio,Teams,Todo bien por ahora.,,anterior,
-2026-10-18,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,desarrollo,Manager,3,1,Manager,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,bienestar,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Me gusta poder responder rápido.,,anterior,
-2026-10-18,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-18,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-18,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,,,anterior,tf_ecba770ab16d
-2026-10-18,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,condiciones,Fábrica,4,1,Planta,Centro amplio,Teams,Faltan avisos con antelación cuando hay cambios en la planificación.,,anterior,
-2026-10-18,condiciones,Fábrica,3,1,Planta,Centro amplio,Correo,,,anterior,
-2026-10-18,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-18,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-18,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,,,anterior,tf_16c7d21ad3e1
-2026-10-18,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-19,bienestar,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,anterior,tf_40fb7ba9e7cc
-2026-10-19,bienestar,Comercial,4,1,Comercial,Centro amplio,Correo,Vendría bien recibir feedback más a menudo.,,anterior,
-2026-10-19,desarrollo,Comercial,3,1,Comercial,,Teams,El aprendizaje práctico da más confianza.,,anterior,tf_868e2eda21e3
-2026-10-19,liderazgo,Comercial,4,1,Comercial,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,,anterior,tf_cbcc61e9cfdd
-2026-10-19,condiciones,Logística,3,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-19,cultura,Logística,4,1,Logística,Centro amplio,Teams,Una pausa a tiempo ayuda a recuperar energía.,,anterior,tf_11b60e721741
-2026-10-19,cultura,Manager,3,1,Manager,Centro amplio,Teams,,,anterior,
-2026-10-19,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-19,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-19,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-19,cultura,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-19,desarrollo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,anterior,tf_b3d176ff378c
-2026-10-19,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-19,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,,anterior,tf_eb59b607d9e2
-2026-10-19,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_d426ad0689ba
-2026-10-19,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-19,cultura,Fábrica,4,1,Planta,Centro amplio,Teams,Agradezco cuando los responsables escuchan al equipo.,,anterior,tf_04244505b100
-2026-10-19,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,
-2026-10-19,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,,anterior,
-2026-10-19,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,
-2026-10-19,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-19,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,anterior,tf_bf01763f7f69
-2026-10-19,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,,,anterior,
-2026-10-19,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,,,anterior,tf_06b4af31defe
-2026-10-20,relaciones,Comercial,5,1,Comercial,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,anterior,tf_585d334be55c
-2026-10-20,relaciones,Comercial,4,1,Comercial,,Móvil-QR,Nos falta material en la línea para trabajar sin paradas.,,anterior,
-2026-10-20,condiciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,anterior,tf_e2c0ac00c395
-2026-10-20,condiciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-20,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-20,desarrollo,Manager,4,1,Manager,Centro amplio,Móvil-QR,,,anterior,tf_a86efc9ff92a
-2026-10-20,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,anterior,tf_5fd4ba0e1aff
-2026-10-20,cultura,Oficina,2,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-20,desarrollo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-20,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-20,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Gracias por preguntar.,,anterior,
-2026-10-20,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,,anterior,
-2026-10-20,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,tf_6a72800540c2
-2026-10-20,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos falta material en la línea para trabajar sin paradas.,,anterior,
-2026-10-20,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-20,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_7ec03e5452d2
-2026-10-20,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El desarrollo profesional debería tener más visibilidad.,,anterior,
-2026-10-20,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,,anterior,tf_51b77541136e
-2026-10-20,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-20,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_25bea693850c
-2026-10-21,bienestar,Comercial,2,1,Comercial,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-21,desarrollo,Comercial,2,1,Comercial,Centro amplio,Móvil-QR,,,anterior,tf_53414a51b63a
-2026-10-21,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-21,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-21,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_bce3d55d8497
-2026-10-21,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,,anterior,
-2026-10-21,bienestar,Manager,4,1,Manager,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,
-2026-10-21,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,Agradezco cuando los responsables escuchan al equipo.,,anterior,
-2026-10-21,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-21,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-21,bienestar,Fábrica,3,1,Planta,Centro amplio,Correo,,,anterior,
-2026-10-21,bienestar,Fábrica,3,1,Planta,Centro amplio,Correo,,,anterior,
-2026-10-21,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-21,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_9a2b50528fab
-2026-10-21,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,,,anterior,tf_5312042807f9
-2026-10-21,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-21,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,anterior,
-2026-10-21,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-21,desarrollo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,anterior,
-2026-10-21,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,anterior,tf_4e4f12132ec3
-2026-10-21,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-21,liderazgo,Fábrica,3,1,Planta,Centro amplio,Correo,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,tf_0fabe7111d6d
-2026-10-21,liderazgo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-21,relaciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_dfaeaaf83f97
-2026-10-22,desarrollo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,anterior,
-2026-10-22,bienestar,Logística,2,1,Logística,Centro amplio,Correo,,,anterior,
-2026-10-22,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,,,anterior,tf_720c5fc83aaa
-2026-10-22,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,anterior,
-2026-10-22,cultura,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,anterior,
-2026-10-22,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,En los días de más carga es difícil parar un momento.,,anterior,
-2026-10-22,liderazgo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-22,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,,anterior,
-2026-10-22,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,tf_1548c36cda00
-2026-10-22,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-22,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,,anterior,tf_1b23bdb62ee0
-2026-10-22,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_8fcf09b06b5a
-2026-10-22,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_eff6babaf3cd
-2026-10-22,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,anterior,
-2026-10-22,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,A veces la valoración de los pequeños logros pasa desapercibida.,,anterior,
-2026-10-22,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,,anterior,
-2026-10-23,condiciones,Comercial,4,1,Comercial,Centro amplio,Correo,Sin comentarios por esta vez.,,anterior,tf_a6ded40d480c
-2026-10-23,liderazgo,Comercial,4,1,Comercial,Centro amplio,Correo,,,anterior,tf_7687044fcddd
-2026-10-23,bienestar,Logística,4,1,Logística,Centro amplio,Teams,,,anterior,tf_6048393e5e2b
-2026-10-23,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,anterior,tf_d2e5ace3e359
-2026-10-23,cultura,Logística,5,1,Logística,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,anterior,tf_e3fe80910023
-2026-10-23,cultura,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-23,cultura,Logística,5,1,Logística,Centro amplio,Teams,,,anterior,
-2026-10-23,desarrollo,Logística,2,1,Logística,Centro amplio,Correo,Gracias por preguntar.,,anterior,
-2026-10-23,liderazgo,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,anterior,
-2026-10-23,condiciones,Manager,4,1,Manager,Centro amplio,Correo,Veo poco margen para crecer dentro de la empresa.,,anterior,
-2026-10-23,condiciones,Oficina,5,1,Oficina,Centro amplio,Teams,Me gusta poder responder rápido.,,anterior,
-2026-10-23,condiciones,Oficina,3,1,Oficina,Centro amplio,Teams,,,anterior,
-2026-10-23,desarrollo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,anterior,
-2026-10-23,desarrollo,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,anterior,
-2026-10-23,bienestar,Fábrica,3,1,Planta,,Móvil-QR,A veces la valoración de los pequeños logros pasa desapercibida.,,anterior,tf_0f18b4dcefde
-2026-10-23,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,anterior,tf_1c989aa02d26
-2026-10-23,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-23,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,anterior,tf_020249324a38
-2026-10-23,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-23,cultura,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,anterior,
-2026-10-23,desarrollo,Fábrica,5,1,Planta,Centro amplio,Teams,Me gusta poder responder rápido.,,anterior,
-2026-10-23,liderazgo,Fábrica,5,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-23,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,Me gustaría tener más oportunidades de formación en el puesto.,,anterior,tf_b53f49934d8a
-2026-10-23,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,anterior,
-2026-10-23,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,anterior,tf_0e4aeaac3e2d
-2026-10-23,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,anterior,
-2026-10-24,relaciones,Comercial,4,1,Comercial,Centro amplio,Correo,Todo bien por ahora.,,actual,tf_a41689ae8a4c
-2026-10-24,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,tf_0ef0ef5e8904
-2026-10-24,desarrollo,Logística,4,1,Logística,Centro amplio,Teams,,,actual,
-2026-10-24,desarrollo,Logística,3,1,Logística,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,actual,
-2026-10-24,desarrollo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,tf_65b7beb10996
-2026-10-24,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,Gracias por preguntar.,,actual,
-2026-10-24,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,desarrollo,Oficina,5,1,Oficina,Centro amplio,Teams,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-10-24,desarrollo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,actual,tf_8c43cf565c46
-2026-10-24,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,
-2026-10-24,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_f3b1c035b1ee
-2026-10-24,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-10-24,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,,actual,
-2026-10-24,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-24,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,,actual,
-2026-10-24,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-10-25,desarrollo,Logística,3,1,Logística,Centro amplio,Correo,,,actual,
-2026-10-25,desarrollo,Logística,2,1,Logística,Centro amplio,Correo,,,actual,tf_940e2d97f733
-2026-10-25,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,actual,tf_fb990e51f8a4
-2026-10-25,relaciones,Logística,3,1,Logística,Centro amplio,Teams,Vendría bien recibir feedback más a menudo.,,actual,
-2026-10-25,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,
-2026-10-25,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-25,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-25,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,,actual,
-2026-10-25,cultura,Oficina,3,1,Oficina,Centro amplio,Correo,El sistema va lento y cuesta resolver incidencias rápido.,,actual,
-2026-10-25,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-10-25,liderazgo,Oficina,4,1,Oficina,,Móvil-QR,,,actual,
-2026-10-25,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,,actual,
-2026-10-25,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,actual,
-2026-10-25,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-10-25,condiciones,Fábrica,2,1,Planta,Centro amplio,Correo,,,actual,
-2026-10-25,cultura,Fábrica,4,1,Planta,Centro amplio,Correo,,,actual,
-2026-10-25,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,actual,tf_f6a2f37e3d15
-2026-10-25,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,tf_77a5c7a9729a
-2026-10-25,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,Agradezco cuando los responsables escuchan al equipo.,,actual,tf_adcf4ef77202
-2026-10-25,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,
-2026-10-25,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,actual,
-2026-10-25,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_4aa653e788d5
-2026-10-25,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-25,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,,actual,
-2026-10-25,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-26,liderazgo,Comercial,5,1,Comercial,Centro amplio,Teams,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-10-26,bienestar,Logística,3,1,Logística,Centro amplio,Teams,,,actual,
-2026-10-26,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-26,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-26,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,Todo bien por ahora.,,actual,
-2026-10-26,bienestar,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-10-26,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,Faltan recursos para cubrir las incidencias en el día a día.,,actual,tf_3278e0c72940
-2026-10-26,desarrollo,Oficina,3,1,Oficina,Centro amplio,Correo,Sin comentarios por esta vez.,,actual,
-2026-10-26,desarrollo,Oficina,3,1,Oficina,Centro amplio,Teams,,,actual,
-2026-10-26,liderazgo,Oficina,3,1,Oficina,Centro amplio,Correo,,,actual,tf_ac8b868a05d5
-2026-10-26,liderazgo,Oficina,4,1,Oficina,Centro amplio,Correo,,,actual,
-2026-10-26,liderazgo,Oficina,4,1,Oficina,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,,actual,
-2026-10-26,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,actual,
-2026-10-26,relaciones,Oficina,3,1,Oficina,Centro amplio,Teams,,,actual,
-2026-10-26,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,
-2026-10-26,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-26,cultura,Fábrica,3,1,Planta,Centro amplio,Correo,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-10-26,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,tf_529f68c61c21
-2026-10-26,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-26,liderazgo,Fábrica,5,1,Planta,Centro amplio,Teams,Faltan avisos con antelación cuando hay cambios en la planificación.,,actual,
-2026-10-26,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,,actual,tf_86ff4a0b0692
-2026-10-27,bienestar,Logística,4,1,Logística,Centro amplio,Correo,,,actual,
-2026-10-27,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,,actual,
-2026-10-27,condiciones,Logística,3,1,Logística,Centro amplio,Correo,,,actual,
-2026-10-27,cultura,Logística,2,1,Logística,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,,actual,tf_355d22820950
-2026-10-27,liderazgo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,liderazgo,Logística,3,1,Logística,,Teams,,,actual,
-2026-10-27,bienestar,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,,actual,
-2026-10-27,condiciones,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,,,actual,tf_23ecfde54b02
-2026-10-27,condiciones,Oficina,5,1,Oficina,Centro amplio,Correo,,,actual,
-2026-10-27,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-10-27,liderazgo,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,,actual,
-2026-10-27,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,
-2026-10-27,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,Veo poco margen para crecer dentro de la empresa.,,actual,
-2026-10-27,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_018923349175
-2026-10-27,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-27,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_b0d0540f423a
-2026-10-27,desarrollo,Fábrica,5,1,Planta,Centro amplio,Teams,,,actual,tf_2fc850a7728d
-2026-10-27,desarrollo,Fábrica,3,1,Planta,Centro amplio,Correo,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-10-27,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_7d23925103da
-2026-10-27,liderazgo,Fábrica,5,1,Planta,Centro amplio,Correo,,,actual,
-2026-10-27,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-28,bienestar,Comercial,4,1,Comercial,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-10-28,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-28,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-10-28,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,tf_4400824e2bc9
-2026-10-28,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,actual,
-2026-10-28,liderazgo,Logística,4,1,Logística,Centro amplio,Correo,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-10-28,bienestar,Oficina,5,1,Oficina,,Teams,,,actual,
-2026-10-28,bienestar,Oficina,5,1,Oficina,Centro amplio,Teams,,,actual,
-2026-10-28,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,,,actual,tf_9fce4420d2f4
-2026-10-28,desarrollo,Oficina,4,1,Oficina,Centro amplio,Teams,Agradezco cuando los responsables escuchan al equipo.,,actual,
-2026-10-28,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-28,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-28,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,actual,
-2026-10-28,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-10-28,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_7a44bdc21afc
-2026-10-28,cultura,Fábrica,5,1,Planta,Centro amplio,Teams,,,actual,tf_369593feb2f4
-2026-10-28,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-10-28,liderazgo,Fábrica,1,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,actual,
-2026-10-28,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_f2e3034f0516
-2026-10-28,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,,,actual,
-2026-10-28,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-10-28,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,,,actual,tf_e7af63e1a589
-2026-10-29,relaciones,Comercial,3,1,Comercial,Centro amplio,Teams,,,actual,
-2026-10-29,bienestar,Logística,3,1,Logística,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,,actual,
-2026-10-29,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-29,cultura,Logística,4,1,Logística,Centro amplio,Teams,,,actual,
-2026-10-29,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,,actual,
-2026-10-29,desarrollo,Logística,1,1,Logística,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-10-29,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,,,actual,tf_e6f645466aaa
-2026-10-29,bienestar,Manager,3,1,Manager,Centro amplio,Móvil-QR,,,actual,
-2026-10-29,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,actual,
-2026-10-29,condiciones,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-10-29,cultura,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,,actual,
-2026-10-29,cultura,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,tf_422f63ec4b75
-2026-10-29,desarrollo,Oficina,5,1,Oficina,Centro amplio,Teams,,,actual,
-2026-10-29,bienestar,Fábrica,5,1,Planta,Centro amplio,Teams,,,actual,tf_ee706f50ee53
-2026-10-29,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-29,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,,,actual,
-2026-10-29,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-10-29,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_3823b41bb8f5
-2026-10-29,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-10-29,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-29,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-29,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,tf_3bad3293b4c0
-2026-10-29,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_f5ce162c0f5c
-2026-10-29,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,,,actual,tf_f41ecddf04ea
-2026-10-30,bienestar,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,actual,
-2026-10-30,liderazgo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,tf_bb2163e81790
-2026-10-30,bienestar,Logística,3,1,Logística,Centro amplio,Correo,Me gusta poder responder rápido.,,actual,tf_bffc96ebadb3
-2026-10-30,bienestar,Logística,1,1,Logística,Centro amplio,Teams,,,actual,
-2026-10-30,bienestar,Logística,2,1,Logística,,Correo,,,actual,
-2026-10-30,cultura,Logística,4,1,Logística,Centro amplio,Correo,,,actual,
-2026-10-30,desarrollo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-10-30,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,actual,
-2026-10-30,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,,,actual,
-2026-10-30,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,La planificación de turnos deja poco margen para organizarse.,,actual,tf_11b3fe33a702
-2026-10-30,condiciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,actual,
-2026-10-30,cultura,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,actual,
-2026-10-30,cultura,Oficina,4,1,Oficina,Centro amplio,Correo,,,actual,
-2026-10-30,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-10-30,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-30,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-30,desarrollo,Fábrica,3,1,Planta,Centro amplio,Correo,La planificación de turnos deja poco margen para organizarse.,,actual,tf_1c03e5718d45
-2026-10-30,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-30,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-10-30,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,actual,
-2026-10-31,condiciones,Comercial,2,1,Comercial,Centro amplio,Correo,,,actual,
-2026-10-31,bienestar,Logística,2,1,Logística,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,,actual,
-2026-10-31,condiciones,Logística,2,1,Logística,Centro amplio,Teams,,,actual,
-2026-10-31,condiciones,Logística,2,1,Logística,Centro amplio,Correo,Los avisos de cambios llegan tarde o por varios canales.,,actual,tf_ce706e501ffb
-2026-10-31,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,tf_aaadb225c288
-2026-10-31,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,,actual,
-2026-10-31,relaciones,Logística,5,1,Logística,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,
-2026-10-31,desarrollo,Manager,5,1,Manager,Centro amplio,Teams,,,actual,
-2026-10-31,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,Faltan recursos para cubrir las incidencias en el día a día.,,actual,
-2026-10-31,condiciones,Oficina,5,1,Oficina,Centro amplio,Teams,,,actual,
-2026-10-31,liderazgo,Oficina,4,1,Oficina,Centro amplio,Teams,,,actual,
-2026-10-31,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-10-31,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_44f065e083b5
-2026-10-31,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,actual,
-2026-10-31,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos falta material en la línea para trabajar sin paradas.,,actual,
-2026-11-01,desarrollo,Comercial,3,1,Comercial,Centro amplio,Correo,,,actual,
-2026-11-01,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,desarrollo,Oficina,3,1,Oficina,Centro amplio,Correo,,,actual,
-2026-11-01,liderazgo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,bienestar,Fábrica,3,1,Planta,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,actual,
-2026-11-01,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,condiciones,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-11-01,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-01,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-01,desarrollo,Fábrica,4,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-01,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,
-2026-11-01,liderazgo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Todo bien por ahora.,,actual,tf_0f095a6b4f9e
-2026-11-01,relaciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-02,desarrollo,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,,,actual,
-2026-11-02,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,
-2026-11-02,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-02,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-02,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-02,relaciones,Logística,5,1,Logística,,Correo,,,actual,
-2026-11-02,relaciones,Logística,4,1,Logística,Centro amplio,Teams,Veo poco margen para crecer dentro de la empresa.,,actual,
-2026-11-02,liderazgo,Manager,5,1,Manager,Centro amplio,Teams,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,tf_21a70b50b77a
-2026-11-02,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,Me gusta poder responder rápido.,,actual,
-2026-11-02,relaciones,Oficina,3,1,Oficina,,Correo,,,actual,
-2026-11-02,relaciones,Oficina,3,1,Oficina,Centro amplio,Correo,,,actual,tf_c52592900cd1
-2026-11-02,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",,actual,
-2026-11-02,condiciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_77d338b22960
-2026-11-02,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_f6c33c960a9d
-2026-11-02,desarrollo,Fábrica,3,1,Planta,,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-11-02,desarrollo,Fábrica,4,1,Planta,,Móvil-QR,En los días de más carga es difícil parar un momento.,,actual,tf_a292d804a3fa
-2026-11-02,desarrollo,Fábrica,4,1,Planta,Centro amplio,Teams,La planificación de turnos deja poco margen para organizarse.,,actual,
-2026-11-02,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-11-02,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,
-2026-11-02,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,tf_ca1c73a85fb2
-2026-11-02,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-02,relaciones,Fábrica,3,1,Planta,Centro amplio,Teams,Sin comentarios por esta vez.,,actual,
-2026-11-03,cultura,Logística,4,1,Logística,Centro amplio,Teams,Echo en falta más acompañamiento en los momentos difíciles.,,actual,
-2026-11-03,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,tf_e0c51932a86a
-2026-11-03,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,actual,tf_050eadf3d8fa
-2026-11-03,condiciones,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,actual,
-2026-11-03,condiciones,Oficina,5,1,Oficina,Centro amplio,Correo,,,actual,
-2026-11-03,liderazgo,Oficina,3,1,Oficina,Centro amplio,Correo,Agradezco cuando los responsables escuchan al equipo.,,actual,
-2026-11-03,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-03,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-03,cultura,Fábrica,4,1,Planta,Centro amplio,Correo,,,actual,
-2026-11-03,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-03,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,,actual,
-2026-11-03,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,,actual,tf_55b1997a3892
-2026-11-03,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-03,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-03,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,,actual,
-2026-11-03,liderazgo,Fábrica,1,1,Planta,Centro amplio,Teams,La planificación de turnos deja poco margen para organizarse.,,actual,
-2026-11-03,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-03,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-03,relaciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-11-04,condiciones,Comercial,3,1,Comercial,Centro amplio,Correo,Echo en falta más acompañamiento en los momentos difíciles.,,actual,
-2026-11-04,condiciones,Logística,2,1,Logística,Centro amplio,Teams,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-11-04,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-11-04,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-04,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,,actual,
-2026-11-04,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,,,actual,
-2026-11-04,liderazgo,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,,,actual,
-2026-11-04,liderazgo,Oficina,3,1,Oficina,Centro amplio,Teams,Faltan recursos para cubrir las incidencias en el día a día.,,actual,
-2026-11-04,relaciones,Oficina,5,1,Oficina,Centro amplio,Teams,,,actual,tf_237b9687bc07
-2026-11-04,bienestar,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,tf_908d810e4473
-2026-11-04,condiciones,Fábrica,3,1,Planta,Centro amplio,Correo,,,actual,
-2026-11-04,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_8a9da5fd4ab7
-2026-11-04,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-11-04,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-04,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-04,liderazgo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,actual,
-2026-11-05,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,,actual,tf_e179d3ee3d6c
-2026-11-05,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,,actual,
-2026-11-05,condiciones,Logística,3,1,Logística,,Teams,,,actual,
-2026-11-05,condiciones,Logística,2,1,Logística,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,,actual,
-2026-11-05,desarrollo,Logística,1,1,Logística,Centro amplio,Teams,,,actual,
-2026-11-05,liderazgo,Logística,2,1,Logística,Centro amplio,Teams,,,actual,
-2026-11-05,desarrollo,Oficina,3,1,Oficina,Centro amplio,Teams,,,actual,
-2026-11-05,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,
-2026-11-05,bienestar,Fábrica,1,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-05,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-05,condiciones,Fábrica,3,1,Planta,Centro amplio,Correo,La planificación de turnos deja poco margen para organizarse.,,actual,tf_7f41a1e398b5
-2026-11-05,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,,actual,
-2026-11-05,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-05,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-05,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-05,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-05,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_fd39d3cce61f
-2026-11-05,liderazgo,Fábrica,4,1,Planta,Centro amplio,Correo,,,actual,
-2026-11-05,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,,actual,
-2026-11-05,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,,,actual,tf_fc78b4aa67ba
-2026-11-05,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_aee9c12c5c06
-2026-11-06,cultura,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,actual,tf_a60b5e803e94
-2026-11-06,bienestar,Logística,4,1,Logística,Centro amplio,Teams,Me gusta poder responder rápido.,,actual,
-2026-11-06,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-11-06,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-11-06,condiciones,Oficina,4,1,Oficina,,Correo,,,actual,tf_bfec51c613bc
-2026-11-06,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,Me gustaría tener más oportunidades de formación en el puesto.,,actual,
-2026-11-06,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Vendría bien recibir feedback más a menudo.,,actual,
-2026-11-06,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,Faltan avisos con antelación cuando hay cambios en la planificación.,,actual,tf_715ee569a11b
-2026-11-06,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,tf_3f2ac1cf1a0d
-2026-11-06,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-06,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-06,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-06,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_a43c9d6840a2
-2026-11-06,cultura,Fábrica,2,1,Planta,,Móvil-QR,,,actual,
-2026-11-06,cultura,Fábrica,3,1,Planta,,Móvil-QR,,,actual,
-2026-11-06,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-06,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-06,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,tf_070973daaf3e
-2026-11-06,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,,actual,
-2026-11-06,desarrollo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-06,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Todo bien por ahora.,,actual,
-2026-11-06,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,
-2026-11-06,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_8bde9a9c288c
-2026-11-06,liderazgo,Fábrica,5,1,Planta,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-11-06,relaciones,Fábrica,5,1,Planta,Centro amplio,Correo,,,actual,
-2026-11-06,relaciones,Fábrica,5,1,Planta,,Móvil-QR,,,actual,
-2026-11-06,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,Nos falta material en la línea para trabajar sin paradas.,,actual,
-2026-11-06,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-07,cultura,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,,actual,
-2026-11-07,bienestar,Logística,4,1,Logística,Centro amplio,Correo,El equipo se esfuerza y falta más reconocimiento.,,actual,tf_9bc58c5c2e78
-2026-11-07,bienestar,Logística,3,1,Logística,Centro amplio,Correo,En algunos turnos cuesta encontrar tiempo para el descanso.,,actual,
-2026-11-07,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-07,desarrollo,Logística,2,1,Logística,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-11-07,desarrollo,Logística,4,1,Logística,,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,tf_108e37c80e0f
-2026-11-07,liderazgo,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,actual,
-2026-11-07,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,,actual,
-2026-11-07,relaciones,Logística,3,1,Logística,Centro amplio,Teams,,,actual,
-2026-11-07,bienestar,Oficina,2,1,Oficina,Centro amplio,Correo,,,actual,
-2026-11-07,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Los avisos de cambios llegan tarde o por varios canales.,,actual,
-2026-11-07,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,actual,tf_b3ae42f8e2e1
-2026-11-07,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,,actual,
-2026-11-07,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-07,bienestar,Fábrica,2,1,Planta,Centro amplio,Correo,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,
-2026-11-07,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,Una pausa a tiempo ayuda a recuperar energía.,,actual,
-2026-11-07,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,,actual,tf_354621c9cee7
-2026-11-07,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,,actual,tf_aad3f3d0b21c
-2026-11-07,bienestar,Fábrica,2,1,Planta,Centro amplio,Correo,,,actual,
-2026-11-07,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-07,desarrollo,Fábrica,2,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-07,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-07,liderazgo,Fábrica,1,1,Planta,Centro amplio,Teams,,,actual,
-2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,,actual,
-2026-11-07,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,actual,
-2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,,actual,
-2026-11-07,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,actual,tf_7bd997417c56
+﻿day,dimension,site,score,is_demo,cohort,center_type,channel,comment,tema_real,survey_id,period,typeform_response_id
+2026-10-11,bienestar,Comercial,4,1,Comercial,Centro amplio,Teams,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,
+2026-10-11,condiciones,Comercial,4,1,Comercial,,Teams,,,,anterior,
+2026-10-11,condiciones,Comercial,2,1,Comercial,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-11,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-11,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,tf_fad9d5199a05
+2026-10-11,condiciones,Logística,2,1,Logística,Centro amplio,Teams,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,
+2026-10-11,cultura,Logística,4,1,Logística,Centro amplio,Correo,,,,anterior,
+2026-10-11,desarrollo,Logística,3,1,Logística,Centro amplio,Teams,,,,anterior,tf_a5c5bc8eaeeb
+2026-10-11,liderazgo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-11,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,
+2026-10-11,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,En los días de más carga es difícil parar un momento.,bienestar,,anterior,tf_a18097c61512
+2026-10-11,condiciones,Oficina,3,1,Oficina,,Correo,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-11,cultura,Oficina,5,1,Oficina,,Correo,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,anterior,
+2026-10-11,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-11,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,
+2026-10-11,condiciones,Fábrica,2,1,Planta,,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-11,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_132a7f347512
+2026-10-11,cultura,Fábrica,2,1,Planta,Centro amplio,Teams,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,anterior,
+2026-10-11,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Gracias por preguntar.,otros,,anterior,
+2026-10-11,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_6ce190fa60e1
+2026-10-11,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-11,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-12,bienestar,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,,anterior,tf_d7bf1f02431a
+2026-10-12,condiciones,Comercial,2,1,Comercial,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-12,cultura,Comercial,3,1,Comercial,Centro amplio,Correo,,,,anterior,
+2026-10-12,liderazgo,Comercial,2,1,Comercial,Centro amplio,Teams,A veces la valoración de los pequeños logros pasa desapercibida.,reconocimiento,,anterior,
+2026-10-12,relaciones,Comercial,4,1,Comercial,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-12,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_dc0d05989b72
+2026-10-12,cultura,Logística,3,1,Logística,Centro amplio,Correo,,,,anterior,
+2026-10-12,liderazgo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-12,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,otros,,anterior,
+2026-10-12,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,tf_bff6fa8fac7e
+2026-10-12,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,anterior,tf_cd5a51f7fcfa
+2026-10-12,cultura,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-12,cultura,Oficina,5,1,Oficina,Centro amplio,Teams,A veces la valoración de los pequeños logros pasa desapercibida.,reconocimiento,,anterior,
+2026-10-12,liderazgo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,anterior,
+2026-10-12,liderazgo,Oficina,3,1,Oficina,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-12,liderazgo,Oficina,5,1,Oficina,Centro amplio,Teams,El liderazgo cercano marca la diferencia en el equipo.,liderazgo,,anterior,
+2026-10-12,cultura,Fábrica,4,1,Planta,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,bienestar,,anterior,
+2026-10-12,desarrollo,Fábrica,3,1,Planta,Centro amplio,Correo,,,,anterior,tf_dd16e1de8965
+2026-10-12,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-12,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_2f9a83cbde5b
+2026-10-12,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,condiciones,Comercial,2,1,Comercial,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,desarrollo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,bienestar,Logística,2,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-13,bienestar,Logística,5,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-13,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_7eb2333a2c28
+2026-10-13,condiciones,Logística,3,1,Logística,Centro amplio,Teams,Veo poco margen para crecer dentro de la empresa.,desarrollo,,anterior,
+2026-10-13,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,anterior,tf_4c9fe4a6e879
+2026-10-13,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,relaciones,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,relaciones,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_c7d392c461ad
+2026-10-13,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,anterior,
+2026-10-13,condiciones,Oficina,4,1,Oficina,Centro amplio,Teams,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,anterior,
+2026-10-13,liderazgo,Oficina,4,1,Oficina,Centro amplio,Correo,Todo bien por ahora.,otros,,anterior,
+2026-10-13,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,anterior,
+2026-10-13,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,tf_c8e353e0334a
+2026-10-13,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,anterior,
+2026-10-13,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-13,cultura,Fábrica,5,1,Planta,Centro amplio,Correo,,,,anterior,
+2026-10-13,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,anterior,
+2026-10-13,cultura,Fábrica,5,1,Planta,Centro amplio,Correo,,,,anterior,tf_ac8bfa0b58cf
+2026-10-13,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,anterior,
+2026-10-13,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,otros,,anterior,
+2026-10-13,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-13,desarrollo,Fábrica,3,1,Planta,,Móvil-QR,,,,anterior,
+2026-10-13,liderazgo,Fábrica,3,1,Planta,Centro amplio,Teams,,,,anterior,tf_bdbf4c574740
+2026-10-13,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-14,bienestar,Comercial,3,1,Comercial,Centro amplio,Correo,,,,anterior,
+2026-10-14,cultura,Comercial,2,1,Comercial,Centro amplio,Correo,El desarrollo profesional debería tener más visibilidad.,desarrollo,,anterior,
+2026-10-14,cultura,Comercial,4,1,Comercial,Centro amplio,Correo,,,,anterior,
+2026-10-14,desarrollo,Comercial,3,1,Comercial,Centro amplio,Correo,,,,anterior,
+2026-10-14,liderazgo,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,
+2026-10-14,condiciones,Logística,5,1,Logística,,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,
+2026-10-14,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,tf_c01bc0daaedc
+2026-10-14,desarrollo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-14,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-14,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-14,bienestar,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-14,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-14,desarrollo,Oficina,5,1,Oficina,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,herramientas,,anterior,tf_ddbdc1d61a17
+2026-10-14,liderazgo,Oficina,3,1,Oficina,Centro amplio,Teams,,,,anterior,tf_44dd65d4698e
+2026-10-14,bienestar,Fábrica,3,1,Planta,,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-14,condiciones,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,tf_10612d556d63
+2026-10-14,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El liderazgo cercano marca la diferencia en el equipo.,liderazgo,,anterior,
+2026-10-14,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-14,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-14,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,
+2026-10-14,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,anterior,
+2026-10-14,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,anterior,
+2026-10-14,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-15,relaciones,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,
+2026-10-15,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,
+2026-10-15,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-15,liderazgo,Logística,3,1,Logística,,Móvil-QR,,,,anterior,
+2026-10-15,bienestar,Oficina,5,1,Oficina,Centro amplio,Teams,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-15,cultura,Oficina,5,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-15,desarrollo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-15,liderazgo,Oficina,5,1,Oficina,Centro amplio,Correo,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-15,liderazgo,Oficina,5,1,Oficina,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,herramientas,,anterior,
+2026-10-15,relaciones,Oficina,3,1,Oficina,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,tf_165fc241fc9f
+2026-10-15,bienestar,Fábrica,2,1,Planta,,Móvil-QR,,,,anterior,
+2026-10-15,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,
+2026-10-15,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_3a5281eb5179
+2026-10-15,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,
+2026-10-15,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Me gusta poder responder rápido.,otros,,anterior,
+2026-10-15,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,,anterior,tf_912c602f9f67
+2026-10-15,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-15,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-15,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,anterior,
+2026-10-15,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-15,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,
+2026-10-15,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,
+2026-10-16,liderazgo,Comercial,4,1,Comercial,Centro amplio,Teams,,,,anterior,
+2026-10-16,relaciones,Comercial,3,1,Comercial,Centro amplio,Teams,,,,anterior,
+2026-10-16,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,anterior,
+2026-10-16,condiciones,Logística,1,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_058d41fbdaa1
+2026-10-16,cultura,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-16,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-16,relaciones,Logística,3,1,Logística,Centro amplio,Teams,Veo poco margen para crecer dentro de la empresa.,desarrollo,,anterior,tf_651b71839177
+2026-10-16,relaciones,Manager,4,1,Manager,Centro amplio,Correo,,,,anterior,
+2026-10-16,desarrollo,Oficina,3,1,Oficina,Centro amplio,Correo,,,,anterior,tf_878b9724fcfd
+2026-10-16,liderazgo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,tf_e20340d21a78
+2026-10-16,relaciones,Oficina,3,1,Oficina,Centro amplio,Teams,,,,anterior,tf_26ef05a592a1
+2026-10-16,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-16,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_51bdc6f41ef1
+2026-10-16,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,desarrollo,,anterior,
+2026-10-16,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-16,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,tf_7c1652d98287
+2026-10-16,desarrollo,Fábrica,4,1,Planta,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,bienestar,,anterior,
+2026-10-16,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_45a36dcfb9fd
+2026-10-16,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-16,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_e6939b06156d
+2026-10-16,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,
+2026-10-16,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-16,relaciones,Fábrica,3,1,Planta,,Móvil-QR,,,,anterior,
+2026-10-16,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,
+2026-10-16,relaciones,Fábrica,3,1,Planta,,Móvil-QR,,,,anterior,
+2026-10-17,bienestar,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-17,desarrollo,Logística,1,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-17,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_0dd14ca9ee59
+2026-10-17,desarrollo,Logística,5,1,Logística,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,tf_164ec41a0155
+2026-10-17,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-17,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_46a781f723e9
+2026-10-17,liderazgo,Manager,3,1,Manager,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,herramientas,,anterior,
+2026-10-17,liderazgo,Manager,3,1,Manager,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-17,condiciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-17,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-17,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-17,condiciones,Fábrica,4,1,Planta,Centro amplio,Correo,Nos falta material en la línea para trabajar sin paradas.,herramientas,,anterior,
+2026-10-17,condiciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-17,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_693db01792ce
+2026-10-17,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,
+2026-10-17,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-17,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,A veces la valoración de los pequeños logros pasa desapercibida.,reconocimiento,,anterior,tf_229c2b4117e8
+2026-10-18,cultura,Comercial,4,1,Comercial,Centro amplio,Teams,,,,anterior,tf_d299d34028e5
+2026-10-18,desarrollo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,anterior,
+2026-10-18,liderazgo,Comercial,3,1,Comercial,Centro amplio,Teams,Un horario más previsible ayudaría mucho a conciliar.,turnos,,anterior,
+2026-10-18,relaciones,Comercial,2,1,Comercial,Centro amplio,Correo,,,,anterior,
+2026-10-18,condiciones,Logística,4,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-18,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-18,desarrollo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_c020d4be073c
+2026-10-18,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-18,bienestar,Manager,3,1,Manager,Centro amplio,Correo,,,,anterior,tf_700b3b3d80fd
+2026-10-18,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,,,,anterior,
+2026-10-18,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,Me gusta poder responder rápido.,otros,,anterior,tf_760bbefaf06f
+2026-10-18,relaciones,Oficina,3,1,Oficina,Centro amplio,Correo,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,anterior,tf_cda3cf7d7f40
+2026-10-18,bienestar,Fábrica,3,1,Planta,,Teams,,,,anterior,
+2026-10-18,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_4f4a387ae176
+2026-10-18,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,
+2026-10-18,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-18,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-18,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-18,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-18,liderazgo,Fábrica,3,1,Planta,Centro amplio,Correo,,,,anterior,tf_5119455c4aed
+2026-10-18,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-18,liderazgo,Fábrica,3,1,Planta,Centro amplio,Teams,,,,anterior,tf_f977d02c8c4e
+2026-10-18,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-18,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-18,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,cultura,Comercial,4,1,Comercial,Centro amplio,Teams,,,,anterior,
+2026-10-19,cultura,Comercial,4,1,Comercial,Centro amplio,Correo,,,,anterior,
+2026-10-19,bienestar,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,anterior,tf_54e12740db18
+2026-10-19,condiciones,Logística,2,1,Logística,Centro amplio,Teams,,,,anterior,tf_953266843039
+2026-10-19,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_dfab6dcd7000
+2026-10-19,cultura,Logística,2,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,anterior,tf_bb336bc102f5
+2026-10-19,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-19,relaciones,Logística,3,1,Logística,Centro amplio,Teams,Todo bien por ahora.,otros,,anterior,
+2026-10-19,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,desarrollo,Manager,3,1,Manager,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,bienestar,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Me gusta poder responder rápido.,otros,,anterior,
+2026-10-19,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-19,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-19,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,,,,anterior,tf_ecba770ab16d
+2026-10-19,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,condiciones,Fábrica,4,1,Planta,Centro amplio,Teams,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,anterior,
+2026-10-19,condiciones,Fábrica,3,1,Planta,Centro amplio,Correo,,,,anterior,
+2026-10-19,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-19,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-19,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,,,,anterior,tf_16c7d21ad3e1
+2026-10-19,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-20,bienestar,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,,anterior,tf_40fb7ba9e7cc
+2026-10-20,bienestar,Comercial,4,1,Comercial,Centro amplio,Correo,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,
+2026-10-20,desarrollo,Comercial,3,1,Comercial,,Teams,El aprendizaje práctico da más confianza.,desarrollo,,anterior,tf_868e2eda21e3
+2026-10-20,liderazgo,Comercial,4,1,Comercial,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,tf_cbcc61e9cfdd
+2026-10-20,condiciones,Logística,3,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-20,cultura,Logística,4,1,Logística,Centro amplio,Teams,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,anterior,tf_11b60e721741
+2026-10-20,cultura,Manager,3,1,Manager,Centro amplio,Teams,,,,anterior,
+2026-10-20,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-20,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-20,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-20,cultura,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-20,desarrollo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,tf_b3d176ff378c
+2026-10-20,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-20,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,tf_eb59b607d9e2
+2026-10-20,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_d426ad0689ba
+2026-10-20,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-20,cultura,Fábrica,4,1,Planta,Centro amplio,Teams,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,tf_04244505b100
+2026-10-20,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,
+2026-10-20,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,otros,,anterior,
+2026-10-20,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,
+2026-10-20,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-20,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,anterior,tf_bf01763f7f69
+2026-10-20,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,,,,anterior,
+2026-10-20,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,,,,anterior,tf_06b4af31defe
+2026-10-21,relaciones,Comercial,5,1,Comercial,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,anterior,tf_585d334be55c
+2026-10-21,relaciones,Comercial,4,1,Comercial,,Móvil-QR,Nos falta material en la línea para trabajar sin paradas.,herramientas,,anterior,
+2026-10-21,condiciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,tf_e2c0ac00c395
+2026-10-21,condiciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-21,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-21,desarrollo,Manager,4,1,Manager,Centro amplio,Móvil-QR,,,,anterior,tf_a86efc9ff92a
+2026-10-21,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,,anterior,tf_5fd4ba0e1aff
+2026-10-21,cultura,Oficina,2,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-21,desarrollo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-21,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-21,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Gracias por preguntar.,otros,,anterior,
+2026-10-21,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,otros,,anterior,
+2026-10-21,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,tf_6a72800540c2
+2026-10-21,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos falta material en la línea para trabajar sin paradas.,herramientas,,anterior,
+2026-10-21,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-21,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_7ec03e5452d2
+2026-10-21,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El desarrollo profesional debería tener más visibilidad.,desarrollo,,anterior,
+2026-10-21,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,anterior,tf_51b77541136e
+2026-10-21,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-21,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_25bea693850c
+2026-10-22,bienestar,Comercial,2,1,Comercial,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-22,desarrollo,Comercial,2,1,Comercial,Centro amplio,Móvil-QR,,,,anterior,tf_53414a51b63a
+2026-10-22,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-22,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-22,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_bce3d55d8497
+2026-10-22,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,desarrollo,,anterior,
+2026-10-22,bienestar,Manager,4,1,Manager,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,
+2026-10-22,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,anterior,
+2026-10-22,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-22,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-22,bienestar,Fábrica,3,1,Planta,Centro amplio,Correo,,,,anterior,
+2026-10-22,bienestar,Fábrica,3,1,Planta,Centro amplio,Correo,,,,anterior,
+2026-10-22,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-22,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_9a2b50528fab
+2026-10-22,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,,,,anterior,tf_5312042807f9
+2026-10-22,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-22,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,anterior,
+2026-10-22,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-22,desarrollo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,anterior,
+2026-10-22,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,anterior,tf_4e4f12132ec3
+2026-10-22,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-22,liderazgo,Fábrica,3,1,Planta,Centro amplio,Correo,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,tf_0fabe7111d6d
+2026-10-22,liderazgo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-22,relaciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_dfaeaaf83f97
+2026-10-23,desarrollo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-23,bienestar,Logística,2,1,Logística,Centro amplio,Correo,,,,anterior,
+2026-10-23,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,,,,anterior,tf_720c5fc83aaa
+2026-10-23,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,,anterior,
+2026-10-23,cultura,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,anterior,
+2026-10-23,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,En los días de más carga es difícil parar un momento.,bienestar,,anterior,
+2026-10-23,liderazgo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-23,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,anterior,
+2026-10-23,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,tf_1548c36cda00
+2026-10-23,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-23,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,anterior,tf_1b23bdb62ee0
+2026-10-23,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_8fcf09b06b5a
+2026-10-23,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_eff6babaf3cd
+2026-10-23,liderazgo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,anterior,
+2026-10-23,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,A veces la valoración de los pequeños logros pasa desapercibida.,reconocimiento,,anterior,
+2026-10-23,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,anterior,
+2026-10-24,condiciones,Comercial,4,1,Comercial,Centro amplio,Correo,Sin comentarios por esta vez.,otros,,anterior,tf_a6ded40d480c
+2026-10-24,liderazgo,Comercial,4,1,Comercial,Centro amplio,Correo,,,,anterior,tf_7687044fcddd
+2026-10-24,bienestar,Logística,4,1,Logística,Centro amplio,Teams,,,,anterior,tf_6048393e5e2b
+2026-10-24,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,anterior,tf_d2e5ace3e359
+2026-10-24,cultura,Logística,5,1,Logística,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,anterior,tf_e3fe80910023
+2026-10-24,cultura,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-24,cultura,Logística,5,1,Logística,Centro amplio,Teams,,,,anterior,
+2026-10-24,desarrollo,Logística,2,1,Logística,Centro amplio,Correo,Gracias por preguntar.,otros,,anterior,
+2026-10-24,liderazgo,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-24,condiciones,Manager,4,1,Manager,Centro amplio,Correo,Veo poco margen para crecer dentro de la empresa.,desarrollo,,anterior,
+2026-10-24,condiciones,Oficina,5,1,Oficina,Centro amplio,Teams,Me gusta poder responder rápido.,otros,,anterior,
+2026-10-24,condiciones,Oficina,3,1,Oficina,Centro amplio,Teams,,,,anterior,
+2026-10-24,desarrollo,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-24,desarrollo,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,anterior,
+2026-10-24,bienestar,Fábrica,3,1,Planta,,Móvil-QR,A veces la valoración de los pequeños logros pasa desapercibida.,reconocimiento,,anterior,tf_0f18b4dcefde
+2026-10-24,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,anterior,tf_1c989aa02d26
+2026-10-24,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-24,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,,anterior,tf_020249324a38
+2026-10-24,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-24,cultura,Fábrica,4,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,anterior,
+2026-10-24,desarrollo,Fábrica,5,1,Planta,Centro amplio,Teams,Me gusta poder responder rápido.,otros,,anterior,
+2026-10-24,liderazgo,Fábrica,5,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-24,liderazgo,Fábrica,4,1,Planta,Centro amplio,Teams,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,anterior,tf_b53f49934d8a
+2026-10-24,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,anterior,
+2026-10-24,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,anterior,tf_0e4aeaac3e2d
+2026-10-24,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,,anterior,
+2026-10-25,relaciones,Comercial,4,1,Comercial,Centro amplio,Correo,Todo bien por ahora.,otros,,actual,tf_a41689ae8a4c
+2026-10-25,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,tf_0ef0ef5e8904
+2026-10-25,desarrollo,Logística,4,1,Logística,Centro amplio,Teams,,,,actual,
+2026-10-25,desarrollo,Logística,3,1,Logística,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,actual,
+2026-10-25,desarrollo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,tf_65b7beb10996
+2026-10-25,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,Gracias por preguntar.,otros,,actual,
+2026-10-25,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,desarrollo,Oficina,5,1,Oficina,Centro amplio,Teams,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-10-25,desarrollo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,actual,tf_8c43cf565c46
+2026-10-25,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,
+2026-10-25,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_f3b1c035b1ee
+2026-10-25,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-10-25,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,actual,
+2026-10-25,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-25,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,turnos,,actual,
+2026-10-25,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-10-26,desarrollo,Logística,3,1,Logística,Centro amplio,Correo,,,,actual,
+2026-10-26,desarrollo,Logística,2,1,Logística,Centro amplio,Correo,,,,actual,tf_940e2d97f733
+2026-10-26,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,actual,tf_fb990e51f8a4
+2026-10-26,relaciones,Logística,3,1,Logística,Centro amplio,Teams,Vendría bien recibir feedback más a menudo.,liderazgo,,actual,
+2026-10-26,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,
+2026-10-26,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-26,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-26,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,actual,
+2026-10-26,cultura,Oficina,3,1,Oficina,Centro amplio,Correo,El sistema va lento y cuesta resolver incidencias rápido.,herramientas,,actual,
+2026-10-26,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-10-26,liderazgo,Oficina,4,1,Oficina,,Móvil-QR,,,,actual,
+2026-10-26,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,actual,
+2026-10-26,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,actual,
+2026-10-26,bienestar,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-10-26,condiciones,Fábrica,2,1,Planta,Centro amplio,Correo,,,,actual,
+2026-10-26,cultura,Fábrica,4,1,Planta,Centro amplio,Correo,,,,actual,
+2026-10-26,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,tf_f6a2f37e3d15
+2026-10-26,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,tf_77a5c7a9729a
+2026-10-26,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,actual,tf_adcf4ef77202
+2026-10-26,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,
+2026-10-26,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,actual,
+2026-10-26,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_4aa653e788d5
+2026-10-26,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-26,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,desarrollo,,actual,
+2026-10-26,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-27,liderazgo,Comercial,5,1,Comercial,Centro amplio,Teams,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-10-27,bienestar,Logística,3,1,Logística,Centro amplio,Teams,,,,actual,
+2026-10-27,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-27,bienestar,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-27,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,Todo bien por ahora.,otros,,actual,
+2026-10-27,bienestar,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-10-27,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,tf_3278e0c72940
+2026-10-27,desarrollo,Oficina,3,1,Oficina,Centro amplio,Correo,Sin comentarios por esta vez.,otros,,actual,
+2026-10-27,desarrollo,Oficina,3,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-10-27,liderazgo,Oficina,3,1,Oficina,Centro amplio,Correo,,,,actual,tf_ac8b868a05d5
+2026-10-27,liderazgo,Oficina,4,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-10-27,liderazgo,Oficina,4,1,Oficina,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,bienestar,,actual,
+2026-10-27,relaciones,Oficina,4,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-10-27,relaciones,Oficina,3,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-10-27,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,
+2026-10-27,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-27,cultura,Fábrica,3,1,Planta,Centro amplio,Correo,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-10-27,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,tf_529f68c61c21
+2026-10-27,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-27,liderazgo,Fábrica,5,1,Planta,Centro amplio,Teams,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,actual,
+2026-10-27,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,actual,tf_86ff4a0b0692
+2026-10-28,bienestar,Logística,4,1,Logística,Centro amplio,Correo,,,,actual,
+2026-10-28,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,
+2026-10-28,condiciones,Logística,3,1,Logística,Centro amplio,Correo,,,,actual,
+2026-10-28,cultura,Logística,2,1,Logística,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,tf_355d22820950
+2026-10-28,liderazgo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,liderazgo,Logística,3,1,Logística,,Teams,,,,actual,
+2026-10-28,bienestar,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,actual,
+2026-10-28,condiciones,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,,,,actual,tf_23ecfde54b02
+2026-10-28,condiciones,Oficina,5,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-10-28,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-10-28,liderazgo,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Un agradecimiento por el trabajo bien hecho marca la diferencia.,reconocimiento,,actual,
+2026-10-28,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,
+2026-10-28,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,Veo poco margen para crecer dentro de la empresa.,desarrollo,,actual,
+2026-10-28,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_018923349175
+2026-10-28,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-28,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_b0d0540f423a
+2026-10-28,desarrollo,Fábrica,5,1,Planta,Centro amplio,Teams,,,,actual,tf_2fc850a7728d
+2026-10-28,desarrollo,Fábrica,3,1,Planta,Centro amplio,Correo,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-10-28,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_7d23925103da
+2026-10-28,liderazgo,Fábrica,5,1,Planta,Centro amplio,Correo,,,,actual,
+2026-10-28,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-29,bienestar,Comercial,4,1,Comercial,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-10-29,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-29,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-10-29,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,tf_4400824e2bc9
+2026-10-29,desarrollo,Logística,2,1,Logística,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,actual,
+2026-10-29,liderazgo,Logística,4,1,Logística,Centro amplio,Correo,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-10-29,bienestar,Oficina,5,1,Oficina,,Teams,,,,actual,
+2026-10-29,bienestar,Oficina,5,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-10-29,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,,,,actual,tf_9fce4420d2f4
+2026-10-29,desarrollo,Oficina,4,1,Oficina,Centro amplio,Teams,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,actual,
+2026-10-29,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-29,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-29,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,actual,
+2026-10-29,bienestar,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-10-29,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_7a44bdc21afc
+2026-10-29,cultura,Fábrica,5,1,Planta,Centro amplio,Teams,,,,actual,tf_369593feb2f4
+2026-10-29,cultura,Fábrica,3,1,Planta,Centro amplio,Teams,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-10-29,liderazgo,Fábrica,1,1,Planta,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,actual,
+2026-10-29,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_f2e3034f0516
+2026-10-29,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,,,,actual,
+2026-10-29,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-10-29,relaciones,Fábrica,4,1,Planta,Centro amplio,Correo,,,,actual,tf_e7af63e1a589
+2026-10-30,relaciones,Comercial,3,1,Comercial,Centro amplio,Teams,,,,actual,
+2026-10-30,bienestar,Logística,3,1,Logística,Centro amplio,Teams,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,actual,
+2026-10-30,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-30,cultura,Logística,4,1,Logística,Centro amplio,Teams,,,,actual,
+2026-10-30,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,actual,
+2026-10-30,desarrollo,Logística,1,1,Logística,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-10-30,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,,,,actual,tf_e6f645466aaa
+2026-10-30,bienestar,Manager,3,1,Manager,Centro amplio,Móvil-QR,,,,actual,
+2026-10-30,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-10-30,condiciones,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-10-30,cultura,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,
+2026-10-30,cultura,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,tf_422f63ec4b75
+2026-10-30,desarrollo,Oficina,5,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-10-30,bienestar,Fábrica,5,1,Planta,Centro amplio,Teams,,,,actual,tf_ee706f50ee53
+2026-10-30,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-30,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,,,,actual,
+2026-10-30,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-10-30,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_3823b41bb8f5
+2026-10-30,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-10-30,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-30,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-30,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,tf_3bad3293b4c0
+2026-10-30,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_f5ce162c0f5c
+2026-10-30,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,,,,actual,tf_f41ecddf04ea
+2026-10-31,bienestar,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,actual,
+2026-10-31,liderazgo,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,tf_bb2163e81790
+2026-10-31,bienestar,Logística,3,1,Logística,Centro amplio,Correo,Me gusta poder responder rápido.,otros,,actual,tf_bffc96ebadb3
+2026-10-31,bienestar,Logística,1,1,Logística,Centro amplio,Teams,,,,actual,
+2026-10-31,bienestar,Logística,2,1,Logística,,Correo,,,,actual,
+2026-10-31,cultura,Logística,4,1,Logística,Centro amplio,Correo,,,,actual,
+2026-10-31,desarrollo,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-10-31,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,actual,
+2026-10-31,liderazgo,Logística,4,1,Logística,Centro amplio,Teams,,,,actual,
+2026-10-31,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,tf_11b3fe33a702
+2026-10-31,condiciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,actual,
+2026-10-31,cultura,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,actual,
+2026-10-31,cultura,Oficina,4,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-10-31,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-10-31,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-31,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-31,desarrollo,Fábrica,3,1,Planta,Centro amplio,Correo,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,tf_1c03e5718d45
+2026-10-31,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-31,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-10-31,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-01,condiciones,Comercial,2,1,Comercial,Centro amplio,Correo,,,,actual,
+2026-11-01,bienestar,Logística,2,1,Logística,Centro amplio,Teams,En los días de más carga es difícil parar un momento.,bienestar,,actual,
+2026-11-01,condiciones,Logística,2,1,Logística,Centro amplio,Teams,,,,actual,
+2026-11-01,condiciones,Logística,2,1,Logística,Centro amplio,Correo,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,tf_ce706e501ffb
+2026-11-01,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,tf_aaadb225c288
+2026-11-01,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,Vendría bien recibir feedback más a menudo.,liderazgo,,actual,
+2026-11-01,relaciones,Logística,5,1,Logística,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,
+2026-11-01,desarrollo,Manager,5,1,Manager,Centro amplio,Teams,,,,actual,
+2026-11-01,bienestar,Oficina,4,1,Oficina,Centro amplio,Correo,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,
+2026-11-01,condiciones,Oficina,5,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-11-01,liderazgo,Oficina,4,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-11-01,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-11-01,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_44f065e083b5
+2026-11-01,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,actual,
+2026-11-01,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Nos falta material en la línea para trabajar sin paradas.,herramientas,,actual,
+2026-11-02,desarrollo,Comercial,3,1,Comercial,Centro amplio,Correo,,,,actual,
+2026-11-02,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,desarrollo,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,desarrollo,Oficina,3,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-11-02,liderazgo,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,bienestar,Fábrica,3,1,Planta,Centro amplio,Correo,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,actual,
+2026-11-02,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,condiciones,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-11-02,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-02,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-02,desarrollo,Fábrica,4,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-02,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,
+2026-11-02,liderazgo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Todo bien por ahora.,otros,,actual,tf_0f095a6b4f9e
+2026-11-02,relaciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-03,desarrollo,Comercial,3,1,Comercial,Centro amplio,Móvil-QR,,,,actual,
+2026-11-03,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,
+2026-11-03,cultura,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-03,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-03,liderazgo,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-03,relaciones,Logística,5,1,Logística,,Correo,,,,actual,
+2026-11-03,relaciones,Logística,4,1,Logística,Centro amplio,Teams,Veo poco margen para crecer dentro de la empresa.,desarrollo,,actual,
+2026-11-03,liderazgo,Manager,5,1,Manager,Centro amplio,Teams,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,tf_21a70b50b77a
+2026-11-03,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,Me gusta poder responder rápido.,otros,,actual,
+2026-11-03,relaciones,Oficina,3,1,Oficina,,Correo,,,,actual,
+2026-11-03,relaciones,Oficina,3,1,Oficina,Centro amplio,Correo,,,,actual,tf_c52592900cd1
+2026-11-03,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,"Las herramientas nuevas funcionan, pero faltan instrucciones más sencillas.",herramientas,,actual,
+2026-11-03,condiciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_77d338b22960
+2026-11-03,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_f6c33c960a9d
+2026-11-03,desarrollo,Fábrica,3,1,Planta,,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-11-03,desarrollo,Fábrica,4,1,Planta,,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,actual,tf_a292d804a3fa
+2026-11-03,desarrollo,Fábrica,4,1,Planta,Centro amplio,Teams,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,
+2026-11-03,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-11-03,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,
+2026-11-03,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,tf_ca1c73a85fb2
+2026-11-03,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-03,relaciones,Fábrica,3,1,Planta,Centro amplio,Teams,Sin comentarios por esta vez.,otros,,actual,
+2026-11-04,cultura,Logística,4,1,Logística,Centro amplio,Teams,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,actual,
+2026-11-04,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,tf_e0c51932a86a
+2026-11-04,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,,,,actual,tf_050eadf3d8fa
+2026-11-04,condiciones,Oficina,5,1,Oficina,Centro amplio,Móvil-QR,,,,actual,
+2026-11-04,condiciones,Oficina,5,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-11-04,liderazgo,Oficina,3,1,Oficina,Centro amplio,Correo,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,actual,
+2026-11-04,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-04,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-04,cultura,Fábrica,4,1,Planta,Centro amplio,Correo,,,,actual,
+2026-11-04,cultura,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-04,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,turnos,,actual,
+2026-11-04,cultura,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,En los días de más carga es difícil parar un momento.,bienestar,,actual,tf_55b1997a3892
+2026-11-04,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-04,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-04,liderazgo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,El aprendizaje práctico da más confianza.,desarrollo,,actual,
+2026-11-04,liderazgo,Fábrica,1,1,Planta,Centro amplio,Teams,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,
+2026-11-04,relaciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-04,relaciones,Fábrica,4,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-04,relaciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-11-05,condiciones,Comercial,3,1,Comercial,Centro amplio,Correo,Echo en falta más acompañamiento en los momentos difíciles.,liderazgo,,actual,
+2026-11-05,condiciones,Logística,2,1,Logística,Centro amplio,Teams,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-11-05,cultura,Logística,3,1,Logística,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-11-05,relaciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-05,relaciones,Logística,4,1,Logística,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,turnos,,actual,
+2026-11-05,bienestar,Oficina,5,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-11-05,liderazgo,Oficina,3,1,Oficina,Centro amplio,Móvil-QR,,,,actual,
+2026-11-05,liderazgo,Oficina,3,1,Oficina,Centro amplio,Teams,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,
+2026-11-05,relaciones,Oficina,5,1,Oficina,Centro amplio,Teams,,,,actual,tf_237b9687bc07
+2026-11-05,bienestar,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,tf_908d810e4473
+2026-11-05,condiciones,Fábrica,3,1,Planta,Centro amplio,Correo,,,,actual,
+2026-11-05,condiciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_8a9da5fd4ab7
+2026-11-05,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-11-05,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-05,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-05,liderazgo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,actual,
+2026-11-06,bienestar,Logística,3,1,Logística,Centro amplio,Móvil-QR,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,actual,tf_e179d3ee3d6c
+2026-11-06,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,actual,
+2026-11-06,condiciones,Logística,3,1,Logística,,Teams,,,,actual,
+2026-11-06,condiciones,Logística,2,1,Logística,Centro amplio,Correo,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,actual,
+2026-11-06,desarrollo,Logística,1,1,Logística,Centro amplio,Teams,,,,actual,
+2026-11-06,liderazgo,Logística,2,1,Logística,Centro amplio,Teams,,,,actual,
+2026-11-06,desarrollo,Oficina,3,1,Oficina,Centro amplio,Teams,,,,actual,
+2026-11-06,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,
+2026-11-06,bienestar,Fábrica,1,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-06,condiciones,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-06,condiciones,Fábrica,3,1,Planta,Centro amplio,Correo,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,tf_7f41a1e398b5
+2026-11-06,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Un horario más previsible ayudaría mucho a conciliar.,turnos,,actual,
+2026-11-06,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-06,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-06,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-06,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-06,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_fd39d3cce61f
+2026-11-06,liderazgo,Fábrica,4,1,Planta,Centro amplio,Correo,,,,actual,
+2026-11-06,relaciones,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Faltan recursos para cubrir las incidencias en el día a día.,herramientas,,actual,
+2026-11-06,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,,,,actual,tf_fc78b4aa67ba
+2026-11-06,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_aee9c12c5c06
+2026-11-07,cultura,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,,,,actual,tf_a60b5e803e94
+2026-11-07,bienestar,Logística,4,1,Logística,Centro amplio,Teams,Me gusta poder responder rápido.,otros,,actual,
+2026-11-07,condiciones,Logística,3,1,Logística,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-11-07,relaciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-11-07,condiciones,Oficina,4,1,Oficina,,Correo,,,,actual,tf_bfec51c613bc
+2026-11-07,condiciones,Oficina,4,1,Oficina,Centro amplio,Correo,Me gustaría tener más oportunidades de formación en el puesto.,desarrollo,,actual,
+2026-11-07,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Vendría bien recibir feedback más a menudo.,liderazgo,,actual,
+2026-11-07,desarrollo,Oficina,4,1,Oficina,Centro amplio,Correo,Faltan avisos con antelación cuando hay cambios en la planificación.,comunicacion,,actual,tf_715ee569a11b
+2026-11-07,condiciones,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,tf_3f2ac1cf1a0d
+2026-11-07,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-07,condiciones,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-07,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-07,cultura,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_a43c9d6840a2
+2026-11-07,cultura,Fábrica,2,1,Planta,,Móvil-QR,,,,actual,
+2026-11-07,cultura,Fábrica,3,1,Planta,,Móvil-QR,,,,actual,
+2026-11-07,desarrollo,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-07,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-07,desarrollo,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,tf_070973daaf3e
+2026-11-07,desarrollo,Fábrica,4,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,otros,,actual,
+2026-11-07,desarrollo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Todo bien por ahora.,otros,,actual,
+2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,
+2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_8bde9a9c288c
+2026-11-07,liderazgo,Fábrica,5,1,Planta,Centro amplio,Correo,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-11-07,relaciones,Fábrica,5,1,Planta,Centro amplio,Correo,,,,actual,
+2026-11-07,relaciones,Fábrica,5,1,Planta,,Móvil-QR,,,,actual,
+2026-11-07,relaciones,Fábrica,5,1,Planta,Centro amplio,Teams,Nos falta material en la línea para trabajar sin paradas.,herramientas,,actual,
+2026-11-07,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-08,cultura,Comercial,4,1,Comercial,Centro amplio,Móvil-QR,A veces la información sobre los cambios se pierde entre mensajes.,comunicacion,,actual,
+2026-11-08,bienestar,Logística,4,1,Logística,Centro amplio,Correo,El equipo se esfuerza y falta más reconocimiento.,reconocimiento,,actual,tf_9bc58c5c2e78
+2026-11-08,bienestar,Logística,3,1,Logística,Centro amplio,Correo,En algunos turnos cuesta encontrar tiempo para el descanso.,turnos,,actual,
+2026-11-08,condiciones,Logística,2,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-08,desarrollo,Logística,2,1,Logística,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-11-08,desarrollo,Logística,4,1,Logística,,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,tf_108e37c80e0f
+2026-11-08,liderazgo,Logística,5,1,Logística,Centro amplio,Móvil-QR,,,,actual,
+2026-11-08,liderazgo,Logística,4,1,Logística,Centro amplio,Móvil-QR,La planificación de turnos deja poco margen para organizarse.,turnos,,actual,
+2026-11-08,relaciones,Logística,3,1,Logística,Centro amplio,Teams,,,,actual,
+2026-11-08,bienestar,Oficina,2,1,Oficina,Centro amplio,Correo,,,,actual,
+2026-11-08,cultura,Oficina,4,1,Oficina,Centro amplio,Teams,Los avisos de cambios llegan tarde o por varios canales.,comunicacion,,actual,
+2026-11-08,relaciones,Oficina,4,1,Oficina,Centro amplio,Móvil-QR,,,,actual,tf_b3ae42f8e2e1
+2026-11-08,bienestar,Fábrica,2,1,Planta,Centro amplio,Móvil-QR,El ambiente del equipo contribuye mucho al bienestar.,bienestar,,actual,
+2026-11-08,bienestar,Fábrica,3,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-08,bienestar,Fábrica,2,1,Planta,Centro amplio,Correo,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,
+2026-11-08,bienestar,Fábrica,4,1,Planta,Centro amplio,Teams,Una pausa a tiempo ayuda a recuperar energía.,bienestar,,actual,
+2026-11-08,bienestar,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,Agradezco cuando los responsables escuchan al equipo.,liderazgo,,actual,tf_354621c9cee7
+2026-11-08,bienestar,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,La cobertura en el turno de noche es justa cuando hay bajas.,turnos,,actual,tf_aad3f3d0b21c
+2026-11-08,bienestar,Fábrica,2,1,Planta,Centro amplio,Correo,,,,actual,
+2026-11-08,condiciones,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-08,desarrollo,Fábrica,2,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-08,desarrollo,Fábrica,3,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-08,liderazgo,Fábrica,1,1,Planta,Centro amplio,Teams,,,,actual,
+2026-11-08,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-08,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Nos iría bien tener la comunicación clara antes de empezar.,comunicacion,,actual,
+2026-11-08,liderazgo,Fábrica,1,1,Planta,Centro amplio,Móvil-QR,,,,actual,
+2026-11-08,liderazgo,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,Sin comentarios por esta vez.,otros,,actual,
+2026-11-08,relaciones,Fábrica,5,1,Planta,Centro amplio,Móvil-QR,,,,actual,tf_7bd997417c56

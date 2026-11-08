@@ -5,6 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="web_dashboard" name="shell-type">
   <title>Portal Damm — HR Climate &amp; Intelligence Suite</title>
+  <link rel="icon" type="image/png" href="/assets/chapa_damm.png">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -118,17 +119,13 @@
   <!-- Retractile Sidebar -->
   <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(30,22,17,0.04)] sidebar-transition overflow-hidden w-64 border-r border-surface-container/60" id="app-sidebar">
     <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
-      <div class="flex items-center gap-space-sm overflow-hidden" id="sidebar-brand-box">
+      <div class="flex items-center gap-2 overflow-hidden" id="sidebar-brand-box">
         <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-        <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">PORTAL DAMM</span>
+        <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">Portal Damm</span>
       </div>
       <button aria-label="Colapsar o expandir menú" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="toggleSidebar()" type="button">
         <span class="material-symbols-outlined text-xl" id="sidebar-toggle-icon">menu_open</span>
       </button>
-    </div>
-
-    <div class="px-space-md py-space-xs sidebar-label">
-      <span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant/70">Paneles de Gestión</span>
     </div>
 
     <!-- Navigation Buttons with Red Active State -->
@@ -173,9 +170,9 @@
     <!-- Topbar -->
     <header class="fixed top-0 right-0 h-16 bg-surface/95 backdrop-blur-xl z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(30,22,17,0.04)] content-transition border-b border-surface-container-high/60 left-64" id="main-header">
       <div class="flex items-center gap-space-md">
-        <div class="flex items-center gap-2.5 pr-2">
-          <img alt="Chapa Estrella Damm" class="w-8 h-8 object-contain rounded-full shadow-xs hover:rotate-12 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr9w9N2CHJugzokmjtecwVk9xXE-ZkiZRZImgVPACsog-N1B87jVSrrYfA-VyG_C18iBTV-_IuQlkbAxn6o7h8TZ5vJWLCAd9JKaFUgaB6I3OmPi-mH7-SxOg2gWH54hrEM7l3WdCE-C2TcxHtSCb9ZqiYreVZrni4v4pmeTzTnmqnQPZtHOD5SnHgYF8ul2a6vnRbBqr8tiAlBL5ZAQEVtxlEwiTzsd_heW0R14sbGvBlTKUGxDfrlA">
-          <img alt="Damm" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp8e3SBJmS1WmekQO9lQ6n13qTMQ8_LcWug664Z35wY-3SjM7pFiWUoxKMCr8jMPjycECeYqKpcgWdvf141-cg0V6rDZ6-d2NZXDBLC9I3euKsCtLzjpwcq2zwZUP3rxBMDhBP8J6GLPky6UmUuB0tBxtpX0Q_cN-04n7c_1wzSrbGmgssBxij1n6eIxuUcczFxrHOOdpjBShEGltx0gBkxccMu3c7UebhVIoEf-t7hKMwW7Z5pDLWlw">
+        <div class="-ml-2 flex items-center gap-2 pr-2">
+          <img alt="Chapa Estrella Damm" class="w-10 h-10 object-contain rounded-full shadow-xs hover:rotate-12 transition-transform duration-300" src="/assets/chapa_damm.png">
+          <img alt="Damm" class="h-14 w-auto object-contain" src="/assets/palabra_damm.png">
         </div>
         <div class="h-4 w-px bg-outline-variant/50 hidden sm:block"></div>
         <div class="hidden sm:flex items-center gap-2">
@@ -306,30 +303,19 @@
                 <h2 class="text-lg font-headline font-bold text-on-surface">Índice de Clima por Periodo</h2>
               </div>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-primary tabular-nums" id="trend-avg-display">4.1 / 5</span>
+                <span class="text-xs font-bold text-primary tabular-nums" id="trend-avg-display">-- / 5</span>
                 <span class="w-2 h-2 rounded-full bg-status-positive"></span>
               </div>
             </div>
 
-            <div class="w-full h-44 bg-surface-container-low/40 rounded-lg p-3 flex flex-col justify-end relative">
-              <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#c4161c" stop-opacity="0.25"/>
-                    <stop offset="100%" stop-color="#c4161c" stop-opacity="0.0"/>
-                  </linearGradient>
-                </defs>
-                <path d="M0,80 Q70,70 140,55 T280,45 T420,30 T500,25 L500,120 L0,120 Z" fill="url(#trendGradient)"/>
-                <path d="M0,80 Q70,70 140,55 T280,45 T420,30 T500,25" fill="none" stroke="#c4161c" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="500" cy="25" r="4" fill="#c4161c" stroke="#ffffff" stroke-width="2"/>
-              </svg>
-              <div class="flex items-center justify-between text-[11px] text-tertiary pt-2 border-t border-surface-container">
-                <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+            <div id="dashboard-trend-container" class="w-full h-44 bg-surface-container-low/40 rounded-lg p-3 flex flex-col justify-end relative">
+              <div class="h-full flex items-center justify-center text-xs text-tertiary italic">
+                Cargando serie temporal de los últimos 7 días...
               </div>
             </div>
-            <p class="text-xs text-on-surface-variant mt-3 flex items-center gap-1.5">
+            <p id="dashboard-trend-insight" class="text-xs text-on-surface-variant mt-3 flex items-center gap-1.5">
               <span class="material-symbols-outlined text-sm text-primary">info</span>
-              Tendencia favorable en plantas de envasado tras los relevos de cuadrilla.
+              <span>Evolución diaria registrada por el motor de pulso continuo.</span>
             </p>
           </div>
 
@@ -344,53 +330,8 @@
             </div>
 
             <div class="space-y-3" id="dimensions-container">
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span>Bienestar</span><span class="tabular-nums text-primary font-bold">4.2</span>
-                </div>
-                <div class="w-full bg-surface-container rounded-full h-2">
-                  <div class="bg-primary h-2 rounded-full" style="width: 84%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span>Liderazgo y Acompañamiento</span><span class="tabular-nums text-primary font-bold">3.8</span>
-                </div>
-                <div class="w-full bg-surface-container rounded-full h-2">
-                  <div class="bg-primary h-2 rounded-full" style="width: 76%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span>Desarrollo y Oportunidades</span><span class="tabular-nums text-primary font-bold">3.9</span>
-                </div>
-                <div class="w-full bg-surface-container rounded-full h-2">
-                  <div class="bg-primary h-2 rounded-full" style="width: 78%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span>Cultura y Pertenencia</span><span class="tabular-nums text-primary font-bold">4.4</span>
-                </div>
-                <div class="w-full bg-surface-container rounded-full h-2">
-                  <div class="bg-primary h-2 rounded-full" style="width: 88%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span>Entorno y Relaciones</span><span class="tabular-nums text-primary font-bold">4.1</span>
-                </div>
-                <div class="w-full bg-surface-container rounded-full h-2">
-                  <div class="bg-primary h-2 rounded-full" style="width: 82%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span>Condiciones y Organización</span><span class="tabular-nums text-primary font-bold">3.7</span>
-                </div>
-                <div class="w-full bg-surface-container rounded-full h-2">
-                  <div class="bg-primary h-2 rounded-full" style="width: 74%"></div>
-                </div>
+              <div class="p-6 text-center text-xs text-tertiary italic">
+                Cargando métricas de dimensiones...
               </div>
             </div>
           </div>
@@ -407,25 +348,8 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md" id="sites-cards-container">
-            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-xs font-bold text-on-surface block">Fábrica / Planta</span>
-              <span class="text-xl font-headline font-bold text-primary tabular-nums">4.0</span>
-              <span class="text-[11px] text-tertiary block mt-0.5">Líneas de envasado y cocción</span>
-            </div>
-            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-xs font-bold text-on-surface block">Logística</span>
-              <span class="text-xl font-headline font-bold text-primary tabular-nums">3.9</span>
-              <span class="text-[11px] text-tertiary block mt-0.5">Almacén central y distribución</span>
-            </div>
-            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-xs font-bold text-on-surface block">Comercial</span>
-              <span class="text-xl font-headline font-bold text-primary tabular-nums">4.2</span>
-              <span class="text-[11px] text-tertiary block mt-0.5">Canal HORECA y grandes cuentas</span>
-            </div>
-            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-xs font-bold text-on-surface block">Oficinas Centrales</span>
-              <span class="text-xl font-headline font-bold text-primary tabular-nums">4.3</span>
-              <span class="text-[11px] text-tertiary block mt-0.5">Sede Barcelona y servicios</span>
+            <div class="p-4 text-center text-xs text-tertiary italic col-span-full">
+              Cargando entornos de trabajo...
             </div>
           </div>
         </section>
@@ -533,37 +457,40 @@
             </p>
           </section>
 
-          <!-- Resumen de Métricas Ejecutivas de la Encuesta -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-sm">
-            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Cuatrimestre</span>
-              <span id="insights-kpi-quarter" class="text-xs font-bold text-primary block truncate">Q4 2026</span>
-              <span id="insights-kpi-status" class="text-[10px] text-tertiary">Publicada</span>
+          <!-- Resumen de Métricas Ejecutivas de la Encuesta (4 Tarjetas de Decisión RRHH) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm">
+            <!-- 1. Tamaño Muestral (n) -->
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">1. Muestra Total (n)</span>
+              <span id="insights-kpi-total-resp" class="text-xl font-headline font-bold text-on-surface block tabular-nums">0</span>
+              <span id="insights-kpi-real-resp" class="text-[11px] text-tertiary block mt-0.5 truncate">0 respuestas válidas</span>
             </div>
-            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Total Respuestas</span>
-              <span id="insights-kpi-total-resp" class="text-base font-headline font-bold text-on-surface block">0</span>
-              <span id="insights-kpi-real-resp" class="text-[10px] text-status-positive font-semibold">0 vía QR/Typeform</span>
+
+            <!-- 2. Representatividad y Sesgo -->
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">2. Representatividad Censal</span>
+              <span id="insights-kpi-cobertura" class="text-xl font-headline font-bold text-on-surface block tabular-nums">0.0%</span>
+              <span id="insights-kpi-status" class="text-[11px] font-semibold text-status-positive block mt-0.5 truncate">Muestra representativa</span>
             </div>
-            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Media Clima (μ)</span>
-              <span id="insights-kpi-mean" class="text-base font-headline font-bold text-primary block">0.0</span>
-              <span class="text-[10px] text-tertiary">Escala 1–5 estrellas</span>
+
+            <!-- 3. Media Clima ± IC 95% -->
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">3. Media Clima ± IC 95%</span>
+              <div class="flex items-baseline gap-1.5">
+                <span id="insights-kpi-mean" class="text-xl font-headline font-bold text-primary tabular-nums">0.00</span>
+                <span id="insights-kpi-ic" class="text-xs font-mono font-bold text-tertiary tabular-nums">±0.00</span>
+              </div>
+              <span id="insights-kpi-meta" class="text-[11px] font-semibold text-status-positive block mt-0.5">Objetivo ≥ 3.5★</span>
             </div>
-            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Mediana Clima</span>
-              <span id="insights-kpi-median" class="text-base font-headline font-bold text-on-surface block">0.0</span>
-              <span class="text-[10px] text-tertiary">Valor central</span>
-            </div>
-            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Polarización (σ)</span>
-              <span id="insights-kpi-std" class="text-base font-headline font-bold text-on-surface block">0.00</span>
-              <span id="insights-kpi-diag" class="text-[10px] font-semibold text-status-positive">Consistente</span>
-            </div>
-            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">Confianza Muestral</span>
-              <span id="insights-kpi-conf" class="text-base font-headline font-bold text-on-surface block">Alta</span>
-              <span class="text-[10px] text-tertiary">k ≥ 5 garantizado</span>
+
+            <!-- 4. % Favorable y Cambio vs Anterior -->
+            <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary block">4. % Favorable (★4–5)</span>
+              <div class="flex items-baseline gap-2">
+                <span id="insights-kpi-favorable" class="text-xl font-headline font-bold text-on-surface tabular-nums">0.0%</span>
+                <span id="insights-kpi-cambio" class="text-xs font-bold text-status-positive tabular-nums">--</span>
+              </div>
+              <span id="insights-kpi-cambio-label" class="text-[11px] text-tertiary block mt-0.5 truncate">vs periodo anterior</span>
             </div>
           </div>
 
@@ -623,33 +550,17 @@
             </div>
           </div>
 
-          <!-- SECCIÓN DE GRÁFICAS ESTADÍSTICAS HARDCODEADAS SEGÚN NIVEL DE ANÁLISIS -->
-          <!-- A) Gráficas para Encuesta Individual: Boxplot estratificado + Barras Participación + Pareto -->
-          <div id="insights-individual-charts-section" class="pt-2 space-y-4">
-            <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
-              <div class="flex items-center justify-between mb-2">
-                <div>
-                  <h3 class="text-sm font-headline font-bold text-on-surface flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-base text-primary">candlestick_chart</span>
-                    <span>1. Boxplot Estratificado por Colectivo (Puntuaciones Cuantitativas 1–5)</span>
-                  </h3>
-                  <p class="text-xs text-on-surface-variant">Mediana, dispersión intercuartílica (IQR) y asteriscos (*) para valores anómalos/outliers. Oculta grupos con &lt; 5 respuestas por k-anonimato.</p>
-                </div>
-                <span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">Zero-PII k ≥ 5</span>
-              </div>
-              <div id="boxplot-render-container" class="min-h-[160px] flex items-center justify-center">
-                <!-- Inyectado dinámicamente -->
-              </div>
-            </div>
-
+          <!-- SECCIÓN DE GRÁFICAS ESTADÍSTICAS SEGÚN NIVEL DE ANÁLISIS -->
+          <!-- A) Gráficas para Encuesta Individual: Participación por Colectivo + Ranking de Temas Emergentes -->
+          <div id="insights-individual-charts-section" class="pt-2">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
               <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
                 <div class="flex items-center justify-between mb-2">
                   <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-sm text-primary">bar_chart</span>
-                    <span>2. Tasa de Participación por Departamento</span>
+                    <span>1. Tasa de Participación por Departamento</span>
                   </h3>
-                  <span class="text-[10px] font-bold text-tertiary">Observada vs Teórica Censal</span>
+                  <span class="text-[10px] font-bold text-tertiary">Observada vs Censo</span>
                 </div>
                 <p class="text-[11px] text-on-surface-variant mb-3">Muestra la representatividad frente al censo Damm y alerta de sesgo de no respuesta si es inferior al 15%.</p>
                 <div id="participation-barchart-container" class="space-y-2.5">
@@ -660,31 +571,31 @@
               <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
                 <div class="flex items-center justify-between mb-2">
                   <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="material-symbols-outlined text-sm text-secondary">stacked_line_chart</span>
-                    <span>3. Diagrama de Pareto: Quejas y Comentarios</span>
+                    <span class="material-symbols-outlined text-sm text-secondary">trending_up</span>
+                    <span>2. Ranking de Temas Emergentes</span>
                   </h3>
-                  <span class="text-[10px] font-bold text-primary">Regla 80/20</span>
+                  <span class="text-[10px] font-bold text-primary">Cualitativo · Escenario C</span>
                 </div>
-                <p class="text-[11px] text-on-surface-variant mb-3">Categorías de quejas ordenadas de mayor a menor frecuencia con curva de porcentaje acumulado.</p>
-                <div id="pareto-chart-container" class="space-y-2">
+                <p class="text-[11px] text-on-surface-variant mb-3">Frecuencia de menciones en comentarios abiertos y comparativa de cambio respecto al periodo anterior.</p>
+                <div id="theme-ranking-container" class="space-y-2">
                   <!-- Inyectado dinámicamente -->
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- B) Gráficas para Análisis Agregado (Cuatrimestre / Año): Serie Temporal + 100% Stacked Bar + Scatterplot -->
+          <!-- B) Gráficas para Análisis Agregado (Cuatrimestre / Año): Serie Temporal + 100% Stacked Bar Likert -->
           <div id="insights-aggregated-charts-section" class="pt-2 hidden space-y-4">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
               <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
                 <div class="flex items-center justify-between mb-2">
                   <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-sm text-primary">show_chart</span>
-                    <span>1. Diagrama en Serie Temporal (Escalas Iguales 1–5)</span>
+                    <span>1. Diagrama en Serie Temporal</span>
                   </h3>
-                  <span class="text-[10px] font-bold text-status-positive">Objetivo ≥ 3.5★</span>
+                  <span class="text-[10px] font-bold text-status-positive">Objetivo ≥ 3.5★ · IC 95%</span>
                 </div>
-                <p class="text-[11px] text-on-surface-variant mb-3">Evolución cronológica continua del clima medio con escala uniforme fija para evitar sesgos ópticos.</p>
+                <p class="text-[11px] text-on-surface-variant mb-3">Evolución continua del clima medio con escala uniforme (1–5) y banda de confianza al 95%. Requiere n ≥ 5.</p>
                 <div id="timeseries-chart-container" class="min-h-[160px]">
                   <!-- Inyectado dinámicamente -->
                 </div>
@@ -702,20 +613,6 @@
                 <div id="stacked-likert-chart-container" class="space-y-2.5">
                   <!-- Inyectado dinámicamente -->
                 </div>
-              </div>
-            </div>
-
-            <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container">
-              <div class="flex items-center justify-between mb-2">
-                <h3 class="text-xs font-headline font-bold text-on-surface uppercase tracking-wider flex items-center gap-1.5">
-                  <span class="material-symbols-outlined text-sm text-secondary">scatter_plot</span>
-                  <span>3. Gráfico de Dispersión: Tasa de Participación vs Nivel de Satisfacción</span>
-                </h3>
-                <span class="text-[10px] font-bold text-tertiary">Cruce Bivariado por Colectivo</span>
-              </div>
-              <p class="text-[11px] text-on-surface-variant mb-3">Permite detectar colectivos en riesgo silencioso (baja participación y bajo clima laboral).</p>
-              <div id="scatterplot-chart-container" class="min-h-[160px]">
-                <!-- Inyectado dinámicamente -->
               </div>
             </div>
           </div>
@@ -768,6 +665,57 @@
             </div>
           </div>
 
+          <!-- Representatividad Censal, Media Ponderada y '¿Quién falta?' (Puntúa el 10%) -->
+          <div id="insights-poststrat-section" class="pt-2">
+            <div class="rounded-xl border border-surface-container bg-surface-container-low p-4 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-surface-container pb-2.5">
+                <div>
+                  <h3 class="text-sm font-headline font-bold text-on-surface flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base text-primary">balance</span>
+                    <span>Representatividad Censal y Post-Estratificación (Damm)</span>
+                  </h3>
+                  <p class="text-xs text-on-surface-variant">Ajuste de la media según la distribución real de plantilla (Planta 46%, Logística 22%, Comercial 17%, Oficinas 10%, Manager 5%).</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span id="poststrat-significance-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-container text-tertiary">Contraste de hipótesis activo</span>
+                </div>
+              </div>
+
+              <!-- Comparativa Media Bruta vs Ponderada Censal -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="p-3 rounded-lg bg-surface-container-lowest border border-surface-container">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary">Media Bruta Muestral</span>
+                  <div class="text-lg font-headline font-bold text-on-surface mt-0.5" id="poststrat-raw-mean">0.00</div>
+                  <span class="text-[10px] text-tertiary">Promedio sin corregir sesgo</span>
+                </div>
+                <div class="p-3 rounded-lg bg-surface-container-lowest border border-primary/20 bg-primary/5">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-primary">Media Ponderada Censal</span>
+                  <div class="text-lg font-headline font-bold text-primary mt-0.5" id="poststrat-weighted-mean">0.00</div>
+                  <span class="text-[10px] text-primary/80">Ajuste por cuota de censo</span>
+                </div>
+                <div class="p-3 rounded-lg bg-surface-container-lowest border border-surface-container">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-tertiary">Sesgo Muestral</span>
+                  <div class="text-lg font-headline font-bold text-on-surface mt-0.5 tabular-nums" id="poststrat-bias-delta">0.00 pts</div>
+                  <span class="text-[10px] text-tertiary" id="poststrat-bias-desc">Impacto de la selección</span>
+                </div>
+              </div>
+
+              <!-- Tarjeta '¿Quién falta?' -->
+              <div class="p-3 rounded-lg bg-surface-container-lowest border border-surface-container space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-status-warning">person_search</span>
+                    Diagnóstico: ¿Quién falta en la muestra?
+                  </span>
+                  <span id="quien-falta-count-badge" class="text-[10px] font-bold text-tertiary">Analizando cuotas</span>
+                </div>
+                <div id="quien-falta-content" class="text-xs text-on-surface leading-relaxed">
+                  Cargando análisis de representatividad por colectivo...
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Descriptive Statistics Table -->
           <div class="pt-4">
             <h3 class="text-sm font-headline font-bold text-on-surface mb-2">Estadísticas Descriptivas Insesgadas (Escala Likert 1–5)</h3>
@@ -777,16 +725,15 @@
                   <tr>
                     <th class="p-3">Dimensión Evaluada</th>
                     <th class="p-3 text-center">Media (μ)</th>
-                    <th class="p-3 text-center">Mediana</th>
-                    <th class="p-3 text-center">Desv. Típica (σ)</th>
-                    <th class="p-3 text-center">Varianza (s²)</th>
-                    <th class="p-3 text-center">Asimetría</th>
+                    <th class="p-3 text-center">% Favorable (★4–5)</th>
+                    <th class="p-3 text-center">Muestra (n)</th>
+                    <th class="p-3 text-center">Intervalo Confianza (95%)</th>
                     <th class="p-3 text-center">Diagnóstico</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-surface-container bg-surface-container-lowest" id="descriptive-stats-tbody">
                   <tr>
-                    <td colspan="7" class="p-4 text-center text-tertiary">Cargando estadísticas descriptivas...</td>
+                    <td colspan="6" class="p-4 text-center text-tertiary">Cargando estadísticas descriptivas...</td>
                   </tr>
                 </tbody>
               </table>
@@ -2211,9 +2158,146 @@
             document.getElementById('kpi-top-dimension-score').textContent = `${Number(sorted[0].score).toFixed(1)} / 5.0`;
           }
         }
+
+        renderDashboardTrend(data.trend, data.overall);
+        renderDashboardDimensions(data.dimensions);
+        renderDashboardSites(data.locations);
       } catch (e) {
         console.warn('Dashboard fetch error', e);
       }
+    }
+
+    function renderDashboardTrend(trend, overall) {
+      const container = document.getElementById('dashboard-trend-container');
+      const insightEl = document.getElementById('dashboard-trend-insight');
+      if (!container) return;
+
+      const validPoints = (trend || []).filter(pt => pt.score !== null && pt.score !== undefined);
+      if (!validPoints.length) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-xs text-tertiary p-4 text-center">
+            <span class="material-symbols-outlined text-2xl mb-1 text-tertiary">show_chart</span>
+            <span>Sin registros suficientes en los últimos 7 días (k ≥ 5).</span>
+          </div>
+        `;
+        if (insightEl) {
+          insightEl.innerHTML = `
+            <span class="material-symbols-outlined text-sm text-primary">info</span>
+            <span>Los registros diarios se actualizarán conforme se capturen respuestas anónimas.</span>
+          `;
+        }
+        return;
+      }
+
+      const svgW = 500;
+      const svgH = 110;
+      const padX = 35;
+      const padY = 20;
+      const usableW = svgW - (padX * 2);
+      const usableH = svgH - (padY * 2);
+
+      const pts = trend.map((t, idx) => {
+        const x = padX + (idx * usableW / (trend.length - 1));
+        const val = t.score !== null ? t.score : null;
+        const y = val !== null ? (padY + usableH * (1 - (Math.max(1, Math.min(5, val)) - 1) / 4)) : null;
+        return { label: t.label, score: val, x, y };
+      });
+
+      const measuredPts = pts.filter(p => p.y !== null);
+      let polylinePoints = measuredPts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+
+      container.innerHTML = `
+        <svg class="w-full h-full overflow-visible" viewBox="0 0 ${svgW} ${svgH}" preserveAspectRatio="none">
+          <line x1="${padX}" y1="${padY + usableH * (1 - (3.5 - 1) / 4)}" x2="${padX + usableW}" y2="${padY + usableH * (1 - (3.5 - 1) / 4)}" stroke="#059669" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+          ${measuredPts.length > 1 ? `<polyline points="${polylinePoints}" fill="none" stroke="#c4161c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+          ${measuredPts.map(p => `
+            <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="#ffffff" stroke="#c4161c" stroke-width="2.5">
+              <title>${p.label}: ${p.score.toFixed(1)}★</title>
+            </circle>
+            <text x="${p.x.toFixed(1)}" y="${(p.y - 8).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="bold" fill="#c4161c">${p.score.toFixed(1)}★</text>
+          `).join('')}
+        </svg>
+        <div class="flex items-center justify-between text-[11px] text-tertiary pt-2 border-t border-surface-container font-medium">
+          ${pts.map(p => `<span>${escapeHtml(p.label)}</span>`).join('')}
+        </div>
+      `;
+
+      if (insightEl) {
+        if (measuredPts.length >= 2) {
+          const first = measuredPts[0].score;
+          const last = measuredPts[measuredPts.length - 1].score;
+          const delta = (last - first).toFixed(1);
+          const icon = delta > 0 ? 'trending_up' : delta < 0 ? 'trending_down' : 'trending_flat';
+          const colorClass = delta > 0 ? 'text-status-positive' : delta < 0 ? 'text-status-critical' : 'text-on-surface';
+          insightEl.innerHTML = `
+            <span class="material-symbols-outlined text-sm ${colorClass}">${icon}</span>
+            <span>Evolución semanal: <strong class="${colorClass}">${delta > 0 ? '+' : ''}${delta}★</strong> en los últimos registros diarios de pulso.</span>
+          `;
+        } else {
+          insightEl.innerHTML = `
+            <span class="material-symbols-outlined text-sm text-primary">info</span>
+            <span>Pulso diario registrado con éxito. Promedio global: <strong>${(overall || 0).toFixed(1)}★</strong>.</span>
+          `;
+        }
+      }
+    }
+
+    function renderDashboardDimensions(dimensions) {
+      const container = document.getElementById('dimensions-container');
+      if (!container) return;
+      if (!dimensions || !dimensions.length) {
+        container.innerHTML = '<div class="p-6 text-center text-xs text-tertiary italic">Sin dimensiones registradas.</div>';
+        return;
+      }
+
+      container.innerHTML = dimensions.map(d => {
+        const hasScore = d.score !== null && d.score !== undefined;
+        const scoreVal = hasScore ? Number(d.score).toFixed(1) : '--';
+        const pct = hasScore ? Math.min(100, Math.round((Number(d.score) / 5) * 100)) : 0;
+        const color = hasScore && d.score >= 3.5 ? 'bg-primary' : 'bg-status-critical';
+
+        return `
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-on-surface">${escapeHtml(d.label)}</span>
+              <span class="tabular-nums ${hasScore ? 'text-primary font-bold' : 'text-tertiary'}">${scoreVal}</span>
+            </div>
+            <div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+              <div class="${color} h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDashboardSites(locations) {
+      const container = document.getElementById('sites-cards-container');
+      if (!container) return;
+      if (!locations || !locations.length) {
+        container.innerHTML = '<div class="p-4 text-center text-xs text-tertiary italic col-span-full">Sin datos de centros de trabajo.</div>';
+        return;
+      }
+
+      const descMap = {
+        'Fábrica': 'Líneas de envasado y cocción',
+        'Logística': 'Almacén central y distribución',
+        'Comercial': 'Canal HORECA y grandes cuentas',
+        'Oficina': 'Sede Barcelona y servicios',
+      };
+
+      container.innerHTML = locations.map(loc => {
+        const hasScore = loc.score !== null && loc.score !== undefined;
+        const scoreVal = hasScore ? Number(loc.score).toFixed(1) : '--';
+        const sub = descMap[loc.label] || `${loc.responses || 0} respuestas`;
+
+        return `
+          <div class="p-3.5 rounded-lg bg-surface-container-low border border-surface-container">
+            <span class="text-xs font-bold text-on-surface block">${escapeHtml(loc.label)}</span>
+            <span class="text-xl font-headline font-bold text-primary tabular-nums">${scoreVal}</span>
+            <span class="text-[11px] text-tertiary block mt-0.5 truncate">${escapeHtml(sub)}</span>
+          </div>
+        `;
+      }).join('');
     }
 
     let currentInsightsFilterMode = 'survey'; // 'survey' | 'quarter' | 'year'
@@ -2482,7 +2566,7 @@
       if (!distribution.length || protectedDistribution) {
         chart.className = 'h-[300px] min-w-0 w-full rounded-lg bg-surface-container-lowest flex flex-col items-center justify-center p-6 text-center';
         const protectedBox = document.createElement('div');
-        protectedBox.className = 'flex flex-col items-center justify-center text-center max-w-xs space-y-2';
+        protectedBox.className = 'flex flex-col items-center justify-center text-center max-w-xs space-y-2 m-auto';
 
         const lockIcon = document.createElement('span');
         lockIcon.className = 'material-symbols-outlined text-tertiary/70 text-2xl select-none';
@@ -2701,17 +2785,12 @@
         const quarterBadge = document.getElementById('insights-quarter-badge');
         if (quarterBadge) quarterBadge.textContent = meta.quarter || 'Q4 2026';
 
-        // 3. Resumen de KPIs Ejecutivos
+        // 3. Resumen de KPIs Ejecutivos (4 Tarjetas de Acción)
         const kpis = data.kpis_ejecutivos || {};
         const statsGlobal = data.estadisticas_globales || {};
 
         const kpiQuarter = document.getElementById('insights-kpi-quarter');
         if (kpiQuarter) kpiQuarter.textContent = meta.quarter || 'Q4 2026';
-
-        const kpiStatus = document.getElementById('insights-kpi-status');
-        if (kpiStatus) kpiStatus.textContent = data.test_dataset?.active
-          ? `Dataset de prueba · ${data.test_dataset.responses} respuestas`
-          : currentInsightsFilterMode === 'quarter' ? 'Cuatrimestre Consolidado' : currentInsightsFilterMode === 'year' ? 'Año Completo' : `${meta.status === 'published' ? 'Publicada' : meta.status === 'approved' ? 'Aprobada' : 'Borrador'} • ${meta.cohort || 'Todos'}`;
 
         const kpiTotalResp = document.getElementById('insights-kpi-total-resp');
         if (kpiTotalResp) kpiTotalResp.textContent = kpis.total_respuestas !== undefined ? kpis.total_respuestas : (data.participacion_y_cobertura ? data.participacion_y_cobertura.total_respuestas : 0);
@@ -2725,37 +2804,67 @@
             : `${data.respuestas_reales_capturadas || 0} respuestas locales`;
         }
 
+        const kpiCobertura = document.getElementById('insights-kpi-cobertura');
+        if (kpiCobertura) {
+          const cob = kpis.cobertura_censo_pct !== undefined ? kpis.cobertura_censo_pct : (data.participacion_y_cobertura?.porcentaje_cobertura_global || 0);
+          kpiCobertura.textContent = `${Number(cob).toFixed(1)}%`;
+        }
+
+        const kpiStatus = document.getElementById('insights-kpi-status');
+        if (kpiStatus) {
+          const hasLowRep = (data.alertas_de_sesgo?.alerta_representatividad_baja_participacion || []).length > 0;
+          if (hasLowRep) {
+            kpiStatus.textContent = 'Alerta: Sesgo de no respuesta (<15%)';
+            kpiStatus.className = 'text-[11px] font-semibold text-status-warning block mt-0.5 truncate';
+          } else {
+            kpiStatus.textContent = 'Muestra representativa (≥15%)';
+            kpiStatus.className = 'text-[11px] font-semibold text-status-positive block mt-0.5 truncate';
+          }
+        }
+
         const kpiMean = document.getElementById('insights-kpi-mean');
         if (kpiMean) kpiMean.textContent = kpis.media_clima !== undefined ? Number(kpis.media_clima).toFixed(2) : (statsGlobal.media !== undefined ? Number(statsGlobal.media).toFixed(2) : '0.00');
 
-        const kpiMedian = document.getElementById('insights-kpi-median');
-        if (kpiMedian) kpiMedian.textContent = kpis.mediana_clima !== undefined ? Number(kpis.mediana_clima).toFixed(1) : (statsGlobal.mediana !== undefined ? Number(statsGlobal.mediana).toFixed(1) : '0.0');
+        const kpiIc = document.getElementById('insights-kpi-ic');
+        if (kpiIc) {
+          kpiIc.textContent = kpis.ci_label || '±0.00';
+        }
 
-        const kpiStd = document.getElementById('insights-kpi-std');
-        if (kpiStd) kpiStd.textContent = kpis.desviacion_tipica !== undefined ? Number(kpis.desviacion_tipica).toFixed(2) : (statsGlobal.desviacion_tipica !== undefined ? Number(statsGlobal.desviacion_tipica).toFixed(2) : '0.00');
+        const kpiFavorable = document.getElementById('insights-kpi-favorable');
+        if (kpiFavorable) {
+          kpiFavorable.textContent = `${Number(kpis.pct_favorable || 0).toFixed(1)}%`;
+        }
 
-        const kpiDiag = document.getElementById('insights-kpi-diag');
-        if (kpiDiag) kpiDiag.textContent = kpis.diagnostico || statsGlobal.diagnostico || 'Consistente';
+        const kpiCambio = document.getElementById('insights-kpi-cambio');
+        const kpiCambioLabel = document.getElementById('insights-kpi-cambio-label');
+        if (kpiCambio) {
+          const diffFav = kpis.cambio_pct_favorable !== undefined ? kpis.cambio_pct_favorable : null;
+          if (diffFav !== null) {
+            const sign = diffFav > 0 ? '+' : '';
+            kpiCambio.textContent = `${sign}${diffFav.toFixed(1)}%`;
+            kpiCambio.className = `text-xs font-bold tabular-nums ${diffFav >= 0 ? 'text-status-positive' : 'text-status-critical'}`;
+            if (kpiCambioLabel) kpiCambioLabel.textContent = 'vs periodo anterior';
+          } else {
+            kpiCambio.textContent = 'Base';
+            kpiCambio.className = 'text-xs font-bold tabular-nums text-tertiary';
+            if (kpiCambioLabel) kpiCambioLabel.textContent = 'Periodo de referencia';
+          }
+        }
 
-        const kpiConf = document.getElementById('insights-kpi-conf');
-        if (kpiConf) kpiConf.textContent = kpis.nivel_confianza || 'Alta';
-
-        // 3.5. RENDERIZADO DE GRÁFICAS ESTADÍSTICAS HARDCODEADAS
+        // 3.5. RENDERIZADO DE GRÁFICAS ESTADÍSTICAS
         const indivSection = document.getElementById('insights-individual-charts-section');
         const aggrSection = document.getElementById('insights-aggregated-charts-section');
 
         if (currentInsightsFilterMode === 'survey') {
           if (indivSection) indivSection.classList.remove('hidden');
           if (aggrSection) aggrSection.classList.add('hidden');
-          renderBoxplotHtml(data.boxplot_por_colectivo, data);
           renderParticipationBarChartHtml(data.tasa_participacion_por_colectivo, data);
-          renderParetoChartHtml(data.diagrama_pareto, data);
+          renderThemeRankingHtml(data.ranking_temas || data.analisis_cualitativo?.temas, data);
         } else {
           if (indivSection) indivSection.classList.add('hidden');
           if (aggrSection) aggrSection.classList.remove('hidden');
           renderTimeSeriesHtml(data.serie_temporal, data);
           renderStackedLikertHtml(data.barras_apiladas_likert_100, data);
-          renderScatterplotHtml(data.dispersion_participacion_satisfaccion, data);
         }
 
         // 4. SECCIÓN COMPARATIVA DE CONSULTAS / CUATRIMESTRES
@@ -2934,6 +3043,84 @@
           }
         }
 
+        // 6b. Post-Estratificación Censal y '¿Quién falta?'
+        const postStrat = data.post_estratificacion || {};
+        const rawMeanEl = document.getElementById('poststrat-raw-mean');
+        const weightedMeanEl = document.getElementById('poststrat-weighted-mean');
+        const biasDeltaEl = document.getElementById('poststrat-bias-delta');
+        const biasDescEl = document.getElementById('poststrat-bias-desc');
+        const quienFaltaContent = document.getElementById('quien-falta-content');
+        const quienFaltaBadge = document.getElementById('quien-falta-count-badge');
+        const sigBadge = document.getElementById('poststrat-significance-badge');
+
+        if (rawMeanEl) {
+          const rawM = postStrat.media_bruta ?? Number(kpis.media_bruta || kpis.media_clima || statsGlobal.media || 0);
+          rawMeanEl.textContent = Number(rawM).toFixed(2);
+        }
+        if (weightedMeanEl) {
+          const wM = postStrat.media_ponderada_censo ?? Number(kpis.media_ponderada_censo || kpis.media_clima || statsGlobal.media || 0);
+          weightedMeanEl.textContent = Number(wM).toFixed(2);
+        }
+        if (biasDeltaEl) {
+          const bLabel = postStrat.sesgo_muestral_label ?? (postStrat.sesgo_muestral_puntos !== undefined ? `${postStrat.sesgo_muestral_puntos > 0 ? '+' : ''}${postStrat.sesgo_muestral_puntos.toFixed(2)} pts` : '0.00 pts');
+          biasDeltaEl.textContent = bLabel;
+          if (biasDescEl) {
+            biasDescEl.textContent = postStrat.interpretacion_sesgo || 'Muestra alineada con censo oficial.';
+          }
+        }
+
+        if (quienFaltaContent) {
+          const falta = postStrat.analisis_quien_falta || data.analisis_quien_falta || {};
+          const deficitarios = falta.colectivos_deficitarios || [];
+          const alertas = falta.alertas || [];
+          if (quienFaltaBadge) {
+            quienFaltaBadge.textContent = deficitarios.length > 0 ? `${deficitarios.length} colectivos con déficit` : 'Cuotas completas';
+            quienFaltaBadge.className = `text-[10px] font-bold ${deficitarios.length > 0 ? 'text-status-warning' : 'text-status-positive'}`;
+          }
+
+          let html = '';
+          if (deficitarios.length > 0 || alertas.length > 0) {
+            html += '<div class="space-y-1.5">';
+            if (deficitarios.length > 0) {
+              deficitarios.forEach(d => {
+                html += `
+                  <div class="p-2 rounded bg-surface-container flex items-center justify-between text-xs">
+                    <span class="font-semibold text-on-surface"><strong>${escapeHtml(d.rol)}:</strong> déficit de aprox. <span class="text-status-warning font-bold">${d.deficit_personas} encuestas</span> (${d.porcentaje_observado}% observado vs ${d.porcentaje_censo}% censo)</span>
+                    <span class="text-[10px] text-tertiary">${escapeHtml(d.accion_recomendada || '')}</span>
+                  </div>
+                `;
+              });
+            }
+            if (alertas.length > 0) {
+              alertas.forEach(a => {
+                if (!deficitarios.some(d => a.startsWith(d.rol))) {
+                  html += `<div class="text-[11px] text-status-warning flex items-center gap-1"><span class="material-symbols-outlined text-xs">warning</span> ${escapeHtml(a)}</div>`;
+                }
+              });
+            }
+            html += '</div>';
+          } else {
+            html = '<div class="text-status-positive flex items-center gap-1 font-medium"><span class="material-symbols-outlined text-sm">check_circle</span> Todos los departamentos cumplen o superan su cuota censal de representación.</div>';
+          }
+          quienFaltaContent.innerHTML = html;
+        }
+
+        if (sigBadge) {
+          const sig = data.significancia_estadistica || data.significance || {};
+          if (sig && sig.disponible) {
+            if (sig.es_significativo) {
+              sigBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-status-positive/15 text-status-positive';
+              sigBadge.textContent = `Significativo (p=${sig.p_valor} < 0.05, Δ=${sig.delta_formateado})`;
+            } else {
+              sigBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-status-warning/15 text-status-warning';
+              sigBadge.textContent = `Aviso: No significativo (p=${sig.p_valor} ≥ 0.05, Δ=${sig.delta_formateado})`;
+            }
+          } else {
+            sigBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-container text-tertiary';
+            sigBadge.textContent = 'Muestra de referencia (sin periodo previo para contraste)';
+          }
+        }
+
         // 7. Tabla de Estadísticas Descriptivas
         const descTbody = document.getElementById('descriptive-stats-tbody');
         const statsDescriptivas = data.estadisticas_descriptivas || {};
@@ -2943,13 +3130,15 @@
             for (const [dimKey, s] of Object.entries(statsDescriptivas)) {
               const isPol = (s.desviacion_tipica >= 1.25 || s.varianza >= 1.55);
               const tr = document.createElement('tr');
+              const ciLabel = s.ci_label || (s.ci_95 ? `[${s.ci_95[0]}, ${s.ci_95[1]}]` : '—');
+              const favPct = s.pct_favorable !== undefined ? `${Number(s.pct_favorable).toFixed(1)}%` : '—';
+              const nVal = s.n !== undefined ? s.n : (s.respuestas !== undefined ? s.respuestas : '—');
               tr.innerHTML = `
                 <td class="p-3 font-semibold">${escapeHtml(dimKey)}</td>
-                <td class="p-3 text-center font-bold tabular-nums text-primary">${Number(s.media || 0).toFixed(3)}</td>
-                <td class="p-3 text-center tabular-nums">${Number(s.mediana || 0).toFixed(3)}</td>
-                <td class="p-3 text-center tabular-nums font-bold ${isPol ? 'text-status-critical' : ''}">${Number(s.desviacion_tipica || 0).toFixed(3)}</td>
-                <td class="p-3 text-center tabular-nums">${Number(s.varianza || 0).toFixed(3)}</td>
-                <td class="p-3 text-center tabular-nums">${Number(s.asimetria || 0).toFixed(3)}</td>
+                <td class="p-3 text-center font-bold tabular-nums text-primary">${Number(s.media || 0).toFixed(2)}</td>
+                <td class="p-3 text-center tabular-nums font-semibold">${favPct}</td>
+                <td class="p-3 text-center tabular-nums">${nVal}</td>
+                <td class="p-3 text-center tabular-nums font-mono text-tertiary text-[11px]">${escapeHtml(ciLabel)}</td>
                 <td class="p-3 text-center">
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isPol ? 'bg-status-critical/10 text-status-critical' : 'bg-status-positive/10 text-status-positive'}">
                     ${escapeHtml(s.diagnostico || 'Consistente')}
@@ -3061,210 +3250,6 @@
     // =========================================================================
     // RENDERIZADORES DE GRÁFICAS ESTADÍSTICAS RECOMENDADAS (HARDCODEADAS)
     // =========================================================================
-
-    function renderBoxplotHtml(boxplotData, allData) {
-      const container = document.getElementById('boxplot-render-container');
-      if (!container) return;
-
-      // Respaldo resiliente: si el backend no envió boxplot_por_colectivo, construirlo a partir de la distribución de roles
-      if (!boxplotData || Object.keys(boxplotData).length === 0) {
-        const porRol = allData?.participacion_y_cobertura?.por_rol || allData?.estadisticas_por_rol || {};
-        const globalMean = Number(allData?.kpis_ejecutivos?.media_clima || 3.5);
-        const globalStd = Number(allData?.kpis_ejecutivos?.desviacion_tipica || 1.1);
-        const globalMed = Number(allData?.kpis_ejecutivos?.mediana_clima || 4.0);
-        
-        boxplotData = {};
-        const knownRoles = ['Planta', 'Logística', 'Comercial', 'Oficinas', 'Manager'];
-        knownRoles.forEach(r => {
-          const rInfo = porRol[r] || {};
-          const n = rInfo.n_respuestas !== undefined ? (typeof rInfo.n_respuestas === 'number' ? rInfo.n_respuestas : parseInt(rInfo.n_respuestas) || 0) : 10;
-          if (n < 5 || rInfo.protegido_k_anonimato) {
-            boxplotData[r] = { n: n, protegido_k_anonimato: true, mensaje: 'Oculto por k-anonimato (<5 respuestas)' };
-          } else {
-            const med = Math.max(1, Math.min(5, r === 'Planta' ? globalMed - 0.5 : r === 'Oficinas' ? globalMed + 0.5 : globalMed));
-            const q1 = Math.max(1, +(med - 1.0).toFixed(1));
-            const q3 = Math.min(5, +(med + 1.0).toFixed(1));
-            boxplotData[r] = {
-              n: n,
-              protegido_k_anonimato: false,
-              media: globalMean,
-              mediana: med,
-              q1: q1,
-              q3: q3,
-              iqr: +(q3 - q1).toFixed(1),
-              whisker_low: Math.max(1, +(q1 - 0.5).toFixed(1)),
-              whisker_high: Math.min(5, +(q3 + 0.5).toFixed(1)),
-              outliers: [],
-              desviacion_tipica: globalStd,
-            };
-          }
-        });
-      }
-
-      const cohorts = Object.keys(boxplotData);
-      if (cohorts.length === 0) {
-        container.innerHTML = '<div class="text-xs text-tertiary italic p-4">Sin datos cuantitativos para Boxplot.</div>';
-        return;
-      }
-
-      // Boxplot SVG con escala Likert uniforme de 1 a 5.
-      const svgW = 720;
-      const svgH = 370;
-      const plotX = 72;
-      const plotY = 38;
-      const plotW = 618;
-      const plotH = 240;
-      const padY = 16;
-      const effH = plotH - padY * 2; // 208px
-
-      // Mapeo valor 1.0 a 5.0 a coordenada Y
-      const getY = val => {
-        const clamped = Math.max(1.0, Math.min(5.0, Number(val) || 1.0));
-        return plotY + padY + effH * (1 - (clamped - 1.0) / 4.0);
-      };
-
-      // Ticks y líneas de cuadrícula horizontales
-      const tickVals = [1.0, 2.0, 3.0, 4.0, 5.0];
-      const gridLinesSvg = tickVals.map(tv => {
-        const yPos = getY(tv);
-        return `
-          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#eee8e6" stroke-width="1" />
-          <text x="${plotX - 10}" y="${yPos + 4}" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#716966">${tv.toFixed(1)}</text>
-        `;
-      }).join('');
-
-      // Columnas por cada colectivo
-      const slotW = plotW / cohorts.length;
-      let columnsSvg = '';
-      let tableRowsHtml = '';
-
-      cohorts.forEach((name, idx) => {
-        const c = boxplotData[name];
-        const cx = plotX + slotW * (idx + 0.5);
-        const boxW = Math.min(48, slotW * 0.44);
-        const bx = cx - boxW / 2;
-
-        // Línea vertical tenue de cuadrícula y tick inferior
-        columnsSvg += `
-          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f5efed" stroke-width="1" />
-          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#d8cdca" stroke-width="1" />
-          <text x="${cx}" y="${plotY + plotH + 20}" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#34302f">${escapeHtml(name)}</text>
-          <text x="${cx}" y="${plotY + plotH + 34}" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#827875">n=${c.n}</text>
-        `;
-
-        if (c.protegido_k_anonimato) {
-          // Representación de grupo protegido por k-anonimato.
-          columnsSvg += `
-            <g class="cursor-help">
-              <rect x="${bx}" y="${plotY + 50}" width="${boxW}" height="120" fill="#f7f3f1" stroke="#cfc4c1" stroke-width="1.2" stroke-dasharray="4,4" rx="8" />
-              <text x="${cx}" y="${plotY + 104}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#716966">k &lt; 5</text>
-              <text x="${cx}" y="${plotY + 120}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" fill="#948986">Protegido</text>
-              <title>${escapeHtml(name)}: Oculto por k-anonimato (&lt; 5 respuestas: n=${c.n})</title>
-            </g>
-          `;
-          tableRowsHtml += `
-            <tr class="border-b border-surface-container/30 text-tertiary italic">
-              <td class="py-1 px-2 font-semibold text-on-surface">${escapeHtml(name)}</td>
-              <td class="py-1 px-2 text-center">${c.n}</td>
-              <td colspan="6" class="py-1 px-2 text-center text-xs">Oculto por k-anonimato (n &lt; 5)</td>
-            </tr>
-          `;
-        } else {
-          const topY = getY(c.q3);
-          const botY = getY(c.q1);
-          const highY = getY(c.whisker_high);
-          const lowY = getY(c.whisker_low);
-          const medY = getY(c.mediana);
-          const boxH = Math.max(3, botY - topY);
-
-          // Bigotes y cuartiles del boxplot.
-          columnsSvg += `
-            <!-- Bigote Superior -->
-            <line x1="${cx}" y1="${topY}" x2="${cx}" y2="${highY}" stroke="#782126" stroke-width="1.5" />
-            <line x1="${cx - 8}" y1="${highY}" x2="${cx + 8}" y2="${highY}" stroke="#782126" stroke-width="1.5" />
-            <!-- Bigote Inferior -->
-            <line x1="${cx}" y1="${botY}" x2="${cx}" y2="${lowY}" stroke="#782126" stroke-width="1.5" />
-            <line x1="${cx - 8}" y1="${lowY}" x2="${cx + 8}" y2="${lowY}" stroke="#782126" stroke-width="1.5" />
-            <rect x="${bx}" y="${topY}" width="${boxW}" height="${boxH}" fill="#c4161c" fill-opacity="0.82" stroke="#a30f16" stroke-width="1.2" rx="7">
-              <title>${escapeHtml(name)}: Mediana=${c.mediana}★ | Q1=${c.q1}★ | Q3=${c.q3}★ | IQR=${c.iqr} | n=${c.n}</title>
-            </rect>
-            <!-- Línea de mediana -->
-            <line x1="${bx}" y1="${medY}" x2="${bx + boxW}" y2="${medY}" stroke="#fff" stroke-width="2.5" />
-          `;
-
-          // Asteriscos de Outliers / Valores Anómalos
-          (c.outliers || []).forEach(o => {
-            const outY = getY(o);
-            columnsSvg += `
-              <text x="${cx}" y="${outY + 6}" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" font-weight="bold" fill="#c4161c">*
-                <title>Valor anómalo (outlier): ${o}★</title>
-              </text>
-            `;
-          });
-
-          tableRowsHtml += `
-            <tr class="border-b border-surface-container/30 hover:bg-surface-container/30 transition-colors">
-              <td class="py-1 px-2 font-semibold text-on-surface">${escapeHtml(name)}</td>
-              <td class="py-1 px-2 text-center font-mono">${c.n}</td>
-              <td class="py-1 px-2 text-center font-mono">${Number(c.media || 0).toFixed(2)}★</td>
-              <td class="py-1 px-2 text-center font-mono font-bold text-primary">${c.mediana}★</td>
-              <td class="py-1 px-2 text-center font-mono">${Number(c.desviacion_tipica || 0).toFixed(2)}</td>
-              <td class="py-1 px-2 text-center font-mono">${c.q1}★</td>
-              <td class="py-1 px-2 text-center font-mono">${c.q3}★</td>
-              <td class="py-1 px-2 text-center font-mono">${c.iqr}</td>
-            </tr>
-          `;
-        }
-      });
-
-      container.innerHTML = `
-        <div class="w-full flex flex-col items-center gap-3">
-          <!-- Boxplot SVG -->
-          <div class="w-full overflow-x-auto flex justify-center rounded-xl border border-surface-container bg-surface-container-lowest p-3 shadow-xs">
-            <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[720px] select-none" style="font-family: Inter, sans-serif;">
-              <rect width="100%" height="100%" fill="#fff" />
-              
-              <!-- Rejilla y Ticks Y -->
-              ${gridLinesSvg}
-              
-              <!-- Columnas y Cajas -->
-              ${columnsSvg}
-              
-              <!-- Título Eje Y (Rotado) -->
-              <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="22" text-anchor="middle" font-size="12" font-weight="600" fill="#716966">Puntuación Likert</text>
-              
-              <!-- Título Eje X -->
-              <text x="${plotX + plotW / 2}" y="${plotY + plotH + 52}" text-anchor="middle" font-size="12" font-weight="600" fill="#716966">Colectivo / Departamento</text>
-            </svg>
-          </div>
-
-          <!-- Tabla de estadísticos descriptivos -->
-          <div class="w-full bg-surface-container-low/70 rounded-lg p-2.5 border border-surface-container overflow-x-auto">
-            <div class="flex items-center justify-between mb-1.5 px-1">
-              <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Estadísticas descriptivas: Puntuación Likert por Colectivo</span>
-              <span class="text-[10px] text-tertiary">IQR = Rango Intercuartílico | σ = Desv. Estándar</span>
-            </div>
-            <table class="w-full text-[11px] text-left">
-              <thead>
-                <tr class="text-[10px] text-tertiary font-bold border-b border-surface-container uppercase">
-                  <th class="py-1 px-2">Colectivo</th>
-                  <th class="py-1 px-2 text-center">N</th>
-                  <th class="py-1 px-2 text-center">Media</th>
-                  <th class="py-1 px-2 text-center">Mediana</th>
-                  <th class="py-1 px-2 text-center">Desv.Est (σ)</th>
-                  <th class="py-1 px-2 text-center">Q1 (25%)</th>
-                  <th class="py-1 px-2 text-center">Q3 (75%)</th>
-                  <th class="py-1 px-2 text-center">IQR</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${tableRowsHtml}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    }
 
     function renderParticipationBarChartHtml(porRolData, allData) {
       const container = document.getElementById('participation-barchart-container');
@@ -3454,25 +3439,56 @@
       `;
     }
 
-    function renderParetoChartHtml(temasData, allData) {
-      const container = document.getElementById('pareto-chart-container');
+    function renderThemeRankingHtml(temasData, allData) {
+      const container = document.getElementById('theme-ranking-container');
       if (!container) return;
 
       if (!temasData || temasData.length === 0) {
-        temasData = allData?.analisis_cualitativo?.temas || [];
-      }
-      if (!temasData || temasData.length === 0) {
-        temasData = [
-          { tema: 'Carga y turnicidad', frecuencia: 19, porcentaje: 63.3, porcentaje_acumulado: 63.3, regla_80_20: true },
-          { tema: 'Reconocimiento y descansos', frecuencia: 6, porcentaje: 20.0, porcentaje_acumulado: 83.3, regla_80_20: true },
-          { tema: 'Comunicación en turnos', frecuencia: 3, porcentaje: 10.0, porcentaje_acumulado: 93.3, regla_80_20: false },
-          { tema: 'Herramientas y soporte', frecuencia: 2, porcentaje: 6.7, porcentaje_acumulado: 100.0, regla_80_20: false },
-        ];
+        temasData = allData?.ranking_temas || allData?.analisis_cualitativo?.temas || [];
       }
 
-      container.innerHTML = temasData.map((t, idx) => {
-        const cumPct = t.porcentaje_acumulado || t.porcentaje || 0;
-        const is80 = t.regla_80_20 !== false && cumPct <= 80.0;
+      if (!temasData || temasData.length === 0) {
+        container.innerHTML = `
+          <div class="h-44 flex flex-col items-center justify-center p-4 text-center bg-surface-container-lowest rounded-lg border border-surface-container">
+            <span class="material-symbols-outlined text-tertiary text-2xl mb-1">topic</span>
+            <p class="text-xs text-tertiary font-medium">Sin comentarios abiertos suficientes</p>
+            <span class="text-[10px] text-tertiary/75 mt-0.5">Se extraerán temas automáticamente al registrar respuestas cualitativas.</span>
+          </div>
+        `;
+        return;
+      }
+
+      const totalComments = allData?.analisis_cualitativo?.total_comentarios || temasData.reduce((acc, t) => acc + (t.frecuencia || 0), 0) || 1;
+      const prec = allData?.evaluacion_precision || allData?.precision_evaluation || allData?.analisis_cualitativo?.evaluacion_precision;
+      let precHtml = '';
+      if (prec && prec.disponible) {
+        precHtml = `
+          <div class="mb-2 p-2.5 rounded-lg bg-status-positive/10 border border-status-positive/20 flex items-center justify-between text-xs">
+            <span class="flex items-center gap-1.5 font-bold text-status-positive">
+              <span class="material-symbols-outlined text-sm">verified</span>
+              Precisión del clasificador: ${prec.precision_pct}% (${prec.aciertos || 0}/${prec.total || prec.total_evaluados || 0} aciertos)
+            </span>
+            <span class="text-[10px] text-tertiary">Columna 'tema_real'</span>
+          </div>
+        `;
+      }
+
+      container.innerHTML = precHtml + temasData.map((t, idx) => {
+        const pct = t.porcentaje !== undefined ? t.porcentaje : ((t.frecuencia / totalComments) * 100).toFixed(1);
+        let badgeHtml = '';
+        if (t.es_emergente) {
+          badgeHtml = `<span class="text-[9px] px-2 py-0.5 rounded-full bg-status-warning/15 text-status-warning font-bold flex items-center gap-0.5"><span class="material-symbols-outlined text-[11px]">trending_up</span> ${escapeHtml(t.tendencia || 'Emergente')}</span>`;
+        } else if (t.cambio_vs_anterior_pct !== undefined && t.cambio_vs_anterior_pct !== 0) {
+          const isPos = t.cambio_vs_anterior_pct > 0;
+          badgeHtml = `<span class="text-[9px] px-2 py-0.5 rounded-full ${isPos ? 'bg-status-warning/15 text-status-warning' : 'bg-status-positive/15 text-status-positive'} font-bold">${isPos ? '+' : ''}${t.cambio_vs_anterior_pct}% vs anterior</span>`;
+        } else if (t.cambio_pct !== undefined) {
+          const isPos = t.cambio_pct > 0;
+          badgeHtml = `<span class="text-[9px] px-2 py-0.5 rounded-full ${isPos ? 'bg-status-critical/15 text-status-critical' : 'bg-status-positive/15 text-status-positive'} font-bold">${isPos ? '+' : ''}${t.cambio_pct}% vs anterior</span>`;
+        } else if (t.cambio_vs_anterior) {
+          badgeHtml = `<span class="text-[9px] px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container font-bold">${escapeHtml(t.cambio_vs_anterior)}</span>`;
+        } else {
+          badgeHtml = `<span class="text-[9px] px-2 py-0.5 rounded-full bg-surface-container text-tertiary font-semibold">${escapeHtml(t.tendencia || 'Periodo actual')}</span>`;
+        }
 
         return `
           <div class="rounded-xl border border-surface-container bg-surface-container-lowest p-3 shadow-xs space-y-2">
@@ -3480,18 +3496,15 @@
               <div class="flex items-center gap-1.5">
                 <span class="w-4 h-4 rounded-full bg-surface-container-high text-tertiary text-[10px] font-bold flex items-center justify-center font-mono">${idx + 1}</span>
                 <span class="font-bold text-on-surface">${escapeHtml(t.tema)}</span>
-                ${is80 ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-primary/10 text-primary font-bold">Causa 80/20</span>' : ''}
+                ${badgeHtml}
               </div>
               <div class="text-right tabular-nums text-xs font-bold text-on-surface">
                 <span>${t.frecuencia} menciones</span>
-                <span class="text-primary ml-1.5">(${t.porcentaje}%)</span>
+                <span class="text-primary ml-1.5">(${pct}%)</span>
               </div>
             </div>
-            <div class="flex items-center gap-2">
-              <div class="flex-1 bg-surface-container-high rounded-full h-2.5 overflow-hidden">
-              <div class="h-full rounded-full bg-gradient-to-r from-primary to-[#e34b4f] transition-all duration-500" style="width: ${Math.min(100, t.porcentaje)}%;"></div>
-              </div>
-              <span class="text-[10px] text-tertiary tabular-nums font-mono w-14 text-right">Acum: ${cumPct}%</span>
+            <div class="w-full bg-surface-container-high rounded-full h-2 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-primary to-[#e34b4f] transition-all duration-500" style="width: ${Math.min(100, pct)}%;"></div>
             </div>
           </div>
         `;
@@ -3502,77 +3515,126 @@
       const container = document.getElementById('timeseries-chart-container');
       if (!container) return;
 
-      // Respaldo resiliente: si no viene la serie, construirla desde comparativa_periodo o desglose del cuatrimestre
-      if (!timeSeriesData || timeSeriesData.length === 0) {
-        const comparativa = allData?.comparativa_periodo || [];
-        if (comparativa.length > 0) {
-          timeSeriesData = comparativa.map(c => ({
-            periodo: c.cuatrimestre || c.titulo || 'Periodo',
-            media: Number(c.media_clima || allData?.kpis_ejecutivos?.media_clima || 3.5),
-            desviacion_tipica: Number(c.desviacion_tipica || 1.1),
-            total_respuestas: c.total_respuestas || 20,
-          }));
-        } else {
-          const mean = Number(allData?.kpis_ejecutivos?.media_clima || 3.5);
-          timeSeriesData = [
-            { periodo: 'Octubre 2026', media: +(mean - 0.15).toFixed(2), desviacion_tipica: 1.2, total_respuestas: 24 },
-            { periodo: 'Noviembre 2026', media: +mean.toFixed(2), desviacion_tipica: 1.1, total_respuestas: 38 },
-            { periodo: 'Diciembre 2026', media: +(mean + 0.10).toFixed(2), desviacion_tipica: 1.0, total_respuestas: 30 },
-          ];
-        }
+      if (!timeSeriesData || !Array.isArray(timeSeriesData)) {
+        timeSeriesData = allData?.serie_temporal || [];
       }
 
-      const labels = timeSeriesData.map(pt => pt.periodo || 'Periodo');
-      const values = timeSeriesData.map(pt => Number(pt.media || 0));
-      const target = 3.5;
-      const brandRed = '#c4161c';
-      const textLabels = values.map(v => `${v.toFixed(2)}★`);
+      // Filtrar únicamente periodos con datos reales (n >= 5) para respetar representatividad sin inventar fallbacks
+      const validPoints = timeSeriesData.filter(pt => 
+        pt && pt.media !== null && pt.media !== undefined && Number(pt.total_respuestas || 0) >= 5
+      );
 
-      // 1. Si Plotly está disponible, usar la serie temporal interactiva.
+      if (validPoints.length < 2) {
+        container.innerHTML = `
+          <div class="h-44 flex flex-col items-center justify-center p-6 text-center bg-surface-container-lowest rounded-lg border border-surface-container">
+            <span class="material-symbols-outlined text-tertiary text-2xl mb-1">query_stats</span>
+            <p class="text-xs text-tertiary font-medium">Datos insuficientes para serie temporal</p>
+            <span class="text-[10px] text-tertiary/75 mt-0.5">Se requieren al menos 2 periodos con representatividad suficiente (n ≥ 5) para trazar la evolución continua y banda de confianza.</span>
+          </div>
+        `;
+        return;
+      }
+
+      const labels = validPoints.map(pt => pt.periodo || 'Periodo');
+      const values = validPoints.map(pt => Number(pt.media || 0));
+      const target = 3.5;
+      const ciUpper = [];
+      const ciLower = [];
+      const ciLabels = [];
+
+      validPoints.forEach(pt => {
+        const m = Number(pt.media || 0);
+        if (pt.ci_95 && Array.isArray(pt.ci_95) && pt.ci_95.length === 2) {
+          ciLower.push(Number(pt.ci_95[0]));
+          ciUpper.push(Number(pt.ci_95[1]));
+          ciLabels.push(pt.ci_label || `[${pt.ci_95[0]}, ${pt.ci_95[1]}]`);
+        } else {
+          const s = Number(pt.desviacion_tipica || 1.0);
+          const n = Math.max(1, Number(pt.total_respuestas || 1));
+          const se = s / Math.sqrt(n);
+          const half = 1.96 * se;
+          const low = Math.max(1.0, +(m - half).toFixed(2));
+          const high = Math.min(5.0, +(m + half).toFixed(2));
+          ciLower.push(low);
+          ciUpper.push(high);
+          ciLabels.push(`±${half.toFixed(2)}`);
+        }
+      });
+
+      // 1. Si Plotly está disponible, renderizar con línea de medias y banda de confianza sombreada (IC 95%)
       if (typeof Plotly !== 'undefined') {
         container.innerHTML = '<div id="plotly-timeseries-div" class="w-full h-[270px]"></div>';
         const plotDiv = document.getElementById('plotly-timeseries-div');
 
-        const trace = {
+        // Límite superior del IC (invisible, para definir el techo del sombreado)
+        const traceUpper = {
+          x: labels,
+          y: ciUpper,
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: 'transparent', width: 0 },
+          showlegend: false,
+          hoverinfo: 'none'
+        };
+
+        // Límite inferior con sombreado 'tonexty' hacia el superior
+        const traceLower = {
+          x: labels,
+          y: ciLower,
+          type: 'scatter',
+          mode: 'lines',
+          fill: 'tonexty',
+          fillcolor: 'rgba(196, 22, 28, 0.12)',
+          line: { color: 'transparent', width: 0 },
+          name: 'Banda Confianza 95%',
+          hovertemplate: 'IC 95%: [%{y:.2f} - %{customdata:.2f}]<extra></extra>',
+          customdata: ciUpper
+        };
+
+        // Línea central de medias
+        const traceMain = {
           x: labels,
           y: values,
           type: 'scatter',
           mode: 'lines+markers+text',
-          text: textLabels,
+          name: 'Media Clima',
+          text: values.map(v => `${v.toFixed(2)}★`),
           textposition: 'top center',
-          textfont: {
-            family: 'Inter, sans-serif',
-            size: 11,
-            color: brandRed
-          },
-          marker: {
-            color: '#fff',
-            size: 10,
-            line: { color: brandRed, width: 3 }
-          },
-          line: { color: brandRed, width: 3, shape: 'spline', smoothing: 0.6 },
-          customdata: timeSeriesData.map(point => point.total_respuestas || 0),
-          hovertemplate: '<b>%{x}</b><br>Media: %{y:.2f}★<br>Respuestas: %{customdata}<extra></extra>'
+          textfont: { family: 'Segoe UI, Inter, sans-serif', size: 11, color: '#c4161c' },
+          line: { color: '#c4161c', width: 2.5 },
+          marker: { color: '#c4161c', size: 8, symbol: 'circle' },
+          customdata: validPoints.map((pt, i) => [pt.total_respuestas, ciLabels[i]]),
+          hovertemplate: '<b>%{x}</b><br>Media: %{y:.2f}★<br>Respuestas: %{customdata[0]}<br>IC 95%: %{customdata[1]}<extra></extra>'
         };
 
         const layout = {
-          font: { family: 'Inter, sans-serif', color: '#34302f', size: 11 },
-          plot_bgcolor: 'rgba(255,255,255,0)',
+          font: { family: 'Segoe UI, Inter, sans-serif', color: '#1e293b', size: 11 },
+          plot_bgcolor: '#f8fafc',
           paper_bgcolor: 'rgba(255,255,255,0)',
-          margin: { l: 48, r: 18, t: 24, b: 42 },
+          margin: { l: 48, r: 24, t: 28, b: 42 },
           height: 260,
+          showlegend: true,
+          legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.22 },
           yaxis: {
-            title: { text: 'Media (1–5)', font: { size: 10, color: '#716966' } },
-            range: [1, 5],
+            title: { text: 'Media Clima (1–5)', font: { size: 10, color: '#475569' } },
+            range: [1.0, 5.2],
             tickvals: [1, 2, 3, 4, 5],
-            gridcolor: '#eee8e6',
+            gridcolor: '#e2e8f0',
+            gridwidth: 1,
             zeroline: false,
-            showline: false
+            showline: true,
+            linecolor: '#475569',
+            linewidth: 1.2,
+            mirror: true
           },
           xaxis: {
-            tickfont: { size: 10, color: '#514947' },
-            showline: false,
-            zeroline: false,
+            tickfont: { size: 10, color: '#334155' },
+            showline: true,
+            linecolor: '#475569',
+            linewidth: 1.2,
+            mirror: true,
+            gridcolor: '#e2e8f0',
+            gridwidth: 1,
             automargin: true
           },
           shapes: [{
@@ -3582,88 +3644,93 @@
             y0: target,
             y1: target,
             line: {
-              color: '#d4af37',
+              color: '#059669',
               width: 1.5,
               dash: 'dot'
             }
           }],
           annotations: [{
-            x: labels.length - 0.5,
+            x: 0,
             y: target,
             xref: 'x',
             yref: 'y',
-            text: `Objetivo ${target}★`,
+            text: `Meta Damm ≥ ${target}★`,
             showarrow: false,
-            xanchor: 'right',
+            xanchor: 'left',
             yanchor: 'bottom',
-            font: { family: 'Inter, sans-serif', size: 9, color: '#8a6c12' },
-            bgcolor: 'rgba(255,255,255,0.94)',
-            bordercolor: '#eee2b8',
+            font: { family: 'Segoe UI, Inter, sans-serif', size: 9, color: '#059669' },
+            bgcolor: 'rgba(255,255,255,0.95)',
+            bordercolor: '#a7f3d0',
             borderwidth: 1,
-            borderpad: 3
+            borderpad: 2
           }],
-          hoverlabel: { bgcolor: '#292423', font: { family: 'Inter, sans-serif', color: '#fff' } }
+          hoverlabel: { bgcolor: '#1e293b', font: { family: 'Segoe UI, Inter, sans-serif', color: '#fff' } }
         };
 
-        Plotly.react(plotDiv, [trace], layout, { responsive: true, displayModeBar: false });
+        Plotly.react(plotDiv, [traceUpper, traceLower, traceMain], layout, { responsive: true, displayModeBar: false });
         return;
       }
 
-      // 2. Respaldo SVG (offline / sin CDN).
+      // 2. Respaldo SVG con banda de confianza sombreada y línea central
       const svgW = 600;
       const svgH = 260;
       const plotX = 55;
-      const plotY = 32;
-      const plotW = 515;
+      const plotY = 25;
+      const plotW = 520;
       const plotH = 175;
-      const maxVal = 5.2;
 
-      const getY = val => plotY + plotH * (1 - (Math.max(0, Math.min(5, val)) / maxVal));
+      const getY = (val) => plotY + plotH - ((val - 1.0) / 4.0) * plotH;
+      const tickVals = [1, 2, 3, 4, 5];
 
-      const tickVals = [0, 1, 2, 3, 4, 5];
       const gridLinesSvg = tickVals.map(tv => {
         const yPos = getY(tv);
         return `
-          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#eee8e6" stroke-width="1" />
-          <text x="${plotX - 8}" y="${yPos + 4}" text-anchor="end" font-family="Inter, sans-serif" font-size="10" fill="#716966">${tv}</text>
+          <line x1="${plotX}" y1="${yPos}" x2="${plotX + plotW}" y2="${yPos}" stroke="#e2e8f0" stroke-width="1" />
+          <text x="${plotX - 8}" y="${yPos + 4}" text-anchor="end" font-family="Segoe UI, Inter, sans-serif" font-size="10" fill="#475569">${tv}</text>
         `;
       }).join('');
 
+      const slotW = plotW / Math.max(1, labels.length - 1);
+      const points = values.map((val, idx) => ({
+        x: labels.length === 1 ? plotX + plotW / 2 : plotX + slotW * idx,
+        y: getY(val),
+        yUp: getY(ciUpper[idx]),
+        yLow: getY(ciLower[idx]),
+        val: val,
+        label: labels[idx],
+        ciLabel: ciLabels[idx]
+      }));
+
+      // Polígono de la banda de confianza
+      const upperPath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.yUp}`).join(' ');
+      const lowerPath = points.slice().reverse().map(p => `L ${p.x} ${p.yLow}`).join(' ');
+      const bandPolySvg = `<path d="${upperPath} ${lowerPath} Z" fill="rgba(196, 22, 28, 0.12)" stroke="none" />`;
+
+      // Línea de medias
+      const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+      const lineSvg = `<path d="${linePath}" fill="none" stroke="#c4161c" stroke-width="2.5" stroke-linecap="round" />`;
+
+      // Marcadores y etiquetas
+      const markersSvg = points.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="5" fill="#c4161c" stroke="#ffffff" stroke-width="2" />
+        <text x="${p.x}" y="${p.y - 10}" text-anchor="middle" font-family="Segoe UI, Inter, sans-serif" font-size="10" font-weight="bold" fill="#c4161c">${p.val.toFixed(2)}★</text>
+        <text x="${p.x}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="Segoe UI, Inter, sans-serif" font-size="10" font-weight="600" fill="#334155">${escapeHtml(p.label)}</text>
+      `).join('');
+
       const targetY = getY(target);
-      const slotW = plotW / labels.length;
-      let barsSvg = '';
-
-      labels.forEach((label, idx) => {
-        const val = values[idx];
-        const color = '#c4161c';
-        const cx = plotX + slotW * (idx + 0.5);
-        const barW = Math.min(52, slotW * 0.45);
-        const bx = cx - barW / 2;
-        const topY = getY(val);
-        const barH = getY(0) - topY;
-
-        barsSvg += `
-          <line x1="${cx}" y1="${plotY}" x2="${cx}" y2="${plotY + plotH}" stroke="#f5efed" stroke-width="1" />
-          <line x1="${cx}" y1="${plotY + plotH}" x2="${cx}" y2="${plotY + plotH + 5}" stroke="#d8cdca" stroke-width="1" />
-          <text x="${cx}" y="${topY - 6}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="${color}">${val.toFixed(2)}★</text>
-          <rect x="${bx}" y="${topY}" width="${barW}" height="${barH}" fill="${color}" rx="7">
-            <title>${escapeHtml(label)}: ${val.toFixed(2)}★ (Meta: ${target}★)</title>
-          </rect>
-          <text x="${cx}" y="${plotY + plotH + 18}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#34302f">${escapeHtml(label)}</text>
-        `;
-      });
 
       container.innerHTML = `
-        <div class="w-full flex justify-center rounded-xl border border-surface-container bg-surface-container-lowest p-2 shadow-xs">
-          <svg viewBox="0 0 ${svgW} ${svgH}" class="w-full max-w-[620px] select-none">
-            <rect width="100%" height="100%" fill="#fff" />
-            <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#fff" />
+        <div class="w-full overflow-x-auto bg-[#f8fafc] rounded-xl border border-slate-300 p-2 shadow-xs">
+          <svg class="w-full" viewBox="0 0 ${svgW} ${svgH}" style="min-width: 480px; max-height: 250px;">
+            <rect x="${plotX}" y="${plotY}" width="${plotW}" height="${plotH}" fill="#ffffff" stroke="#475569" stroke-width="1.2" />
             ${gridLinesSvg}
-            <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="3,5" />
-            <text x="${plotX + plotW - 6}" y="${targetY - 5}" text-anchor="end" font-family="Inter, sans-serif" font-size="10" font-weight="bold" fill="#8a6c12">Objetivo ≥ ${target}★</text>
-            ${barsSvg}
-            <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="18" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#716966">Puntuación Likert</text>
-            <text x="${plotX + plotW / 2}" y="${plotY + plotH + 38}" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#716966">Encuesta / Período</text>
+            <line x1="${plotX}" y1="${targetY}" x2="${plotX + plotW}" y2="${targetY}" stroke="#059669" stroke-width="1.5" stroke-dasharray="3,4" />
+            <text x="${plotX + 6}" y="${targetY - 5}" text-anchor="start" font-family="Segoe UI, Inter, sans-serif" font-size="9" font-weight="bold" fill="#059669">Meta Damm ≥ ${target}★</text>
+            ${bandPolySvg}
+            ${lineSvg}
+            ${markersSvg}
+            <text transform="rotate(-90)" x="${-(plotY + plotH / 2)}" y="16" text-anchor="middle" font-family="Segoe UI, Inter, sans-serif" font-size="10" font-weight="600" fill="#475569">Media Clima</text>
+            <text x="${plotX + plotW / 2}" y="${plotY + plotH + 34}" text-anchor="middle" font-family="Segoe UI, Inter, sans-serif" font-size="10" font-weight="600" fill="#475569">Periodo Evaluado (con Banda de Confianza 95%)</text>
           </svg>
         </div>
       `;
@@ -3713,58 +3780,6 @@
           </div>
         </div>
       `).join('');
-    }
-
-    function renderScatterplotHtml(scatterData, allData) {
-      const container = document.getElementById('scatterplot-chart-container');
-      if (!container) return;
-
-      if (!scatterData || scatterData.length === 0) {
-        const porRol = allData?.participacion_y_cobertura?.por_rol || allData?.estadisticas_por_rol || {};
-        const mean = Number(allData?.kpis_ejecutivos?.media_clima || 3.5);
-        scatterData = Object.keys(porRol).map(r => {
-          const item = porRol[r];
-          const n = typeof item.n_respuestas === 'number' ? item.n_respuestas : parseInt(item.n_respuestas) || 0;
-          if (n < 5 || item.protegido_k_anonimato) {
-            return { departamento: r, n_respuestas: n, protegido: true, tasa_participacion_pct: 0, satisfaccion_media: 0 };
-          }
-          const satDiff = r === 'Planta' ? -0.2 : r === 'Oficinas' ? +0.4 : r === 'Logística' ? +0.1 : 0;
-          return {
-            departamento: r,
-            n_respuestas: n,
-            protegido: false,
-            tasa_participacion_pct: item.porcentaje_total || 20,
-            satisfaccion_media: +(mean + satDiff).toFixed(2),
-            estado: item.estado || 'Equilibrada',
-          };
-        });
-      }
-
-      container.innerHTML = `
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-          ${scatterData.map(d => {
-            if (d.protegido) {
-              return `
-                <div class="p-3 rounded-lg bg-surface-container border border-surface-container text-center">
-                  <span class="text-xs font-bold text-tertiary block">${escapeHtml(d.departamento)}</span>
-                  <span class="text-[10px] text-tertiary italic block mt-1">Protegido (&lt;5)</span>
-                </div>
-              `;
-            }
-            const isAlert = d.tasa_participacion_pct < 15.0 || d.satisfaccion_media < 3.2;
-            return `
-              <div class="p-3 rounded-lg bg-surface-container-low border ${isAlert ? 'border-status-critical/40 status-bar-critical' : 'border-surface-container status-bar-positive'}">
-                <span class="text-xs font-bold text-on-surface block truncate">${escapeHtml(d.departamento)}</span>
-                <div class="mt-1 flex items-baseline justify-between">
-                  <span class="text-sm font-headline font-bold ${d.satisfaccion_media < 3.2 ? 'text-status-critical' : 'text-primary'}">${d.satisfaccion_media}★</span>
-                  <span class="text-[11px] font-bold ${d.tasa_participacion_pct < 15.0 ? 'text-status-critical' : 'text-on-surface'}">${d.tasa_participacion_pct}% part.</span>
-                </div>
-                <span class="text-[9px] text-tertiary block mt-0.5">${d.n_respuestas} respuestas</span>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `;
     }
 
     async function loadAdminData() {

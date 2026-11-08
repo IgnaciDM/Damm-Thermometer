@@ -72,6 +72,8 @@ source .venv/bin/activate
 
 Abre **[http://127.0.0.1:8000](http://127.0.0.1:8000)**. El servidor sirve la interfaz y la API; no hace falta compilar un frontend. Sin credenciales puedes explorar el modo de demostración.
 
+> 🎬 **Guion de Demostración & Pitch:** Consulta [DEMO_SCRIPT.md](DEMO_SCRIPT.md) para el recorrido de 3 minutos, los 3 escenarios oficiales del jurado (Polarización en Planta, Representatividad censal y Temas emergentes) y las pautas del vídeo de respaldo.
+
 ## 🔌 Integraciones opcionales
 
 Para configurar servicios externos, copia `.env.example` a `.env` y añade tus propias credenciales. También puedes configurar las conexiones desde la sección **Configuración** de la aplicación.

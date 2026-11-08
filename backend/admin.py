@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import re
+import uuid
 from datetime import date, datetime, timedelta, timezone
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
@@ -471,10 +472,11 @@ def save_survey_response(payload: object) -> dict:
         score = 3
     turno = payload.get("turno", "")
     center_type = turno if turno in ("Mañana", "Tarde", "Noche") else ""
+    submission_key = f"sub_{uuid.uuid4().hex[:16]}"
     with connect() as db:
         db.execute(
             """INSERT INTO responses (day, dimension, site, score, cohort, channel,
-               comment, survey_id, period, center_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'actual', ?)""",
+               comment, survey_id, period, center_type, typeform_submission_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'actual', ?, ?)""",
             (
                 date.today().isoformat(),
                 survey["questions"][0]["dimension"],
@@ -485,13 +487,14 @@ def save_survey_response(payload: object) -> dict:
                 comment,
                 survey_id,
                 center_type,
+                submission_key,
             ),
         )
         for q, a in zip(survey["questions"][1:], answers[1:]):
             if q.get("type") == "rating" and isinstance(a, int) and not isinstance(a, bool) and 1 <= a <= 5:
                 db.execute(
                     """INSERT INTO responses (day, dimension, site, score, cohort, channel,
-                       comment, survey_id, period, center_type) VALUES (?, ?, ?, ?, ?, ?, '', ?, 'actual', ?)""",
+                       comment, survey_id, period, center_type, typeform_submission_key) VALUES (?, ?, ?, ?, ?, ?, '', ?, 'actual', ?, ?)""",
                     (
                         date.today().isoformat(),
                         q.get("dimension", "bienestar"),
@@ -501,6 +504,7 @@ def save_survey_response(payload: object) -> dict:
                         survey["channel"],
                         survey_id,
                         center_type,
+                        submission_key,
                     ),
                 )
     return {"received": True, "message": "Gracias por compartir tu pulso."}
