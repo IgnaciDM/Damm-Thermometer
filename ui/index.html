@@ -197,11 +197,12 @@
   <!-- ===================================================================== -->
   <!-- PORTADA DE ENTRADA / HERO COVER (PANTALLA COMPLETA 100VH)             -->
   <!-- ===================================================================== -->
-  <section id="landing-hero" class="relative w-full h-screen min-h-[580px] overflow-hidden flex flex-col justify-between items-center select-none" style="background: #4b0206 url('/assets/damm-thermometer-cover.jpg') center center / cover no-repeat;">
+  <section id="landing-hero" class="relative w-full h-screen min-h-[580px] overflow-hidden flex flex-col justify-between items-center select-none" style="background: #4b0206 url('assets/damm-thermometer-cover.jpg') center center / cover no-repeat;">
     
     <!-- Imagen de portada que ocupa la pantalla completa -->
     <div class="absolute inset-0 w-full h-full">
-      <img src="/assets/damm-thermometer-cover.jpg"
+      <img src="assets/damm-thermometer-cover.jpg"
+           onerror="this.src='/assets/damm-thermometer-cover.jpg'"
            alt="Damm Thermometer"
            class="w-full h-full object-cover object-center pointer-events-none" />
       <!-- Sutil degradado para integrar los bordes en pantallas ultra-anchas -->
@@ -2118,6 +2119,39 @@
 
       // Persist in hash
       window.location.hash = name;
+
+      // =========================================================================
+      // GESTIÓN DE LA PORTADA DAMM THERMOMETER (Única y exclusivamente en Dashboard)
+      // =========================================================================
+      window.__activePanelName = name;
+      const hero = document.getElementById('landing-hero');
+      const sidebar = document.getElementById('app-sidebar');
+      const header = document.getElementById('main-header');
+
+      if (name === 'dashboard') {
+        // En Dashboard: el hero está activo por si el usuario desea hacer scroll inverso hacia la portada
+        if (hero) hero.classList.remove('hidden');
+
+        // Si venimos de otra pestaña (ej: de Insights a Dashboard), nos situamos directamente
+        // en el contenido del dashboard con la web fija y navegación visible
+        if (window.__lastActivePanel && window.__lastActivePanel !== 'dashboard') {
+          const heroH = hero ? (hero.offsetHeight || window.innerHeight) : 0;
+          window.scrollTo({ top: heroH, behavior: 'instant' });
+          if (sidebar) sidebar.classList.remove('hero-hidden');
+          if (header) header.classList.remove('hero-hidden');
+        } else {
+          updateHeroScrollState();
+        }
+      } else {
+        // En cualquier otra pestaña (insights, generator, admin, settings):
+        // La portada SE OCULTA COMPLETAMENTE: la web se fija y no se puede volver a la portada ("se fija la web que hemos diseñado")
+        if (hero) hero.classList.add('hidden');
+        if (sidebar) sidebar.classList.remove('hero-hidden');
+        if (header) header.classList.remove('hero-hidden');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      window.__lastActivePanel = name;
 
       // Lazy loaders
       if (name === 'insights') loadStatisticalEngineData();
@@ -5768,49 +5802,93 @@
     }
 
     function exportLlmSynthesisToPdf() {
-      if (!currentLlmSynthesisRawMarkdown) {
-        showToast('No hay síntesis generada para exportar a PDF.', 'warning');
+      const htmlContent = buildPdfReportHtml();
+      if (!htmlContent || htmlContent.length < 50) {
+        showToast('No hay datos suficientes para exportar a PDF.', 'warning');
         return;
       }
 
-      const htmlContent = buildPdfReportHtml();
+      showToast('Generando informe PDF con resumen y estudio estadístico...', 'info');
 
       // Si html2pdf (CDN) está cargado en el navegador, genera descarga directa del archivo PDF
       if (typeof html2pdf !== 'undefined') {
-        showToast('Generando archivo PDF con el informe...', 'info');
+        const frame = document.createElement('iframe');
+        frame.id = 'pdf-render-frame';
+        frame.style.position = 'fixed';
+        frame.style.top = '0';
+        frame.style.left = '0';
+        frame.style.width = '794px';
+        frame.style.height = '1123px';
+        frame.style.border = 'none';
+        frame.style.background = '#ffffff';
+        frame.style.zIndex = '999999';
+        document.body.appendChild(frame);
 
-        const container = document.createElement('div');
-        container.innerHTML = htmlContent;
-        container.style.position = 'fixed';
-        container.style.left = '-9999px';
-        container.style.top = '0';
-        container.style.width = '794px'; // Ancho estándar A4 a 96dpi
-        container.style.backgroundColor = '#ffffff';
-        document.body.appendChild(container);
+        const fdoc = frame.contentWindow.document;
+        fdoc.open();
+        fdoc.write(`
+          <!DOCTYPE html>
+          <html lang="es">
+          <head>
+            <meta charset="utf-8">
+            <title>Informe Síntesis RRHH - Estrella Damm</title>
+            <style>
+              @page { size: A4 portrait; margin: 8mm 10mm; }
+              * { box-sizing: border-box; }
+              body { 
+                margin: 0; 
+                padding: 0; 
+                width: 794px; 
+                background: #ffffff; 
+                color: #111827; 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+              }
+            </style>
+          </head>
+          <body>
+            <div id="pdf-root" style="width: 794px; background: #ffffff; padding: 10px 14px;">
+              ${htmlContent}
+            </div>
+          </body>
+          </html>
+        `);
+        fdoc.close();
 
         const opt = {
           margin:       [8, 10, 8, 10],
           filename:     `Informe_Sintesis_RRHH_Damm_${new Date().toISOString().slice(0, 10)}.pdf`,
           image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas:  { scale: 2, useCORS: true, logging: false },
-          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          html2canvas:  { 
+            scale: 2, 
+            useCORS: true, 
+            logging: false,
+            windowWidth: 794
+          },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak:    { mode: ['css', 'legacy'] }
         };
 
-        html2pdf().set(opt).from(container).save().then(() => {
-          if (document.body.contains(container)) document.body.removeChild(container);
-          showToast('¡Informe PDF descargado con éxito!', 'success');
-        }).catch(err => {
-          console.warn('html2pdf encontró un problema, usando visor de impresión nativo:', err);
-          if (document.body.contains(container)) document.body.removeChild(container);
-          printViaIframe(htmlContent);
-        });
+        setTimeout(() => {
+          const rootEl = fdoc.getElementById('pdf-root') || fdoc.body;
+          html2pdf().set(opt).from(rootEl).save().then(() => {
+            if (document.body.contains(frame)) document.body.removeChild(frame);
+            showToast('¡Informe PDF descargado con éxito!', 'success');
+          }).catch(err => {
+            console.warn('html2pdf en frame falló, usando printViaIframe:', err);
+            if (document.body.contains(frame)) document.body.removeChild(frame);
+            printViaIframe(htmlContent);
+          });
+        }, 300);
       } else {
-        // Fallback robusto sin librerías: abrir impresión nativa para Guardar como PDF
+        // Fallback directo a impresión nativa vectorizada para Guardar como PDF
         printViaIframe(htmlContent);
       }
     }
 
     function printViaIframe(htmlContent) {
+      if (!htmlContent) htmlContent = buildPdfReportHtml();
       showToast('Abriendo ventana para Guardar como PDF...', 'info');
       const frame = document.createElement('iframe');
       frame.style.position = 'fixed';
@@ -5830,16 +5908,26 @@
           <meta charset="utf-8">
           <title>Informe Síntesis RRHH - Estrella Damm</title>
           <style>
-            @page { size: A4 portrait; margin: 10mm 12mm; }
+            @page { size: A4 portrait; margin: 8mm 10mm; }
             * { box-sizing: border-box; }
-            body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #111827; background: #ffffff; }
+            body { 
+              margin: 0; 
+              padding: 0; 
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+              color: #111827; 
+              background: #ffffff; 
+              -webkit-print-color-adjust: exact; 
+              print-color-adjust: exact; 
+            }
             @media print {
               body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             }
           </style>
         </head>
         <body>
-          ${htmlContent}
+          <div style="width: 100%; max-width: 800px; margin: 0 auto; padding: 10px;">
+            ${htmlContent}
+          </div>
         </body>
         </html>
       `);
@@ -5855,6 +5943,8 @@
         }, 2000);
       }, 400);
     }
+
+
 
     function buildPdfReportHtml() {
       const data = currentLlmSynthesisData || {};
@@ -6745,16 +6835,18 @@
 
     // Navigation & Hero Cover Scroll Handlers
     function scrollToDashboard(instant = false) {
-      const target = document.getElementById('main-layout-wrapper');
-      if (target) {
-        target.scrollIntoView({ behavior: instant ? 'instant' : 'smooth' });
-      } else {
-        const heroH = document.getElementById('landing-hero')?.offsetHeight || window.innerHeight;
-        window.scrollTo({ top: heroH, behavior: instant ? 'instant' : 'smooth' });
-      }
+      const hero = document.getElementById('landing-hero');
+      const heroH = hero ? (hero.offsetHeight || window.innerHeight) : 0;
+      window.scrollTo({ top: heroH, behavior: instant ? 'instant' : 'smooth' });
     }
 
     function scrollToTopCover() {
+      // Si no estamos en el dashboard, cambiamos al dashboard primero
+      if (window.__activePanelName !== 'dashboard') {
+        showPanel('dashboard');
+      }
+      const hero = document.getElementById('landing-hero');
+      if (hero) hero.classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -6762,12 +6854,24 @@
       const hero = document.getElementById('landing-hero');
       const sidebar = document.getElementById('app-sidebar');
       const header = document.getElementById('main-header');
-      if (!hero || !sidebar || !header) return;
+      if (!sidebar || !header) return;
 
+      const currentActive = window.__activePanelName || (window.location.hash ? window.location.hash.replace('#', '') : 'dashboard');
+
+      // Si NO estamos en el dashboard: la portada no existe y el menú SIEMPRE es visible y fijo
+      if (currentActive !== 'dashboard') {
+        if (hero) hero.classList.add('hidden');
+        sidebar.classList.remove('hero-hidden');
+        header.classList.remove('hero-hidden');
+        return;
+      }
+
+      // Si estamos en el dashboard: comprobar la posición de scroll
+      if (!hero || hero.classList.contains('hidden')) return;
       const heroH = hero.offsetHeight || window.innerHeight;
       const scrollPos = window.scrollY || document.documentElement.scrollTop;
 
-      // Si el usuario está en la portada de bienvenida (scroll menor al 60% de la altura del hero)
+      // Si el usuario hace scroll hacia arriba en el Dashboard hasta entrar en la portada
       if (scrollPos < heroH * 0.6) {
         sidebar.classList.add('hero-hidden');
         header.classList.add('hero-hidden');
@@ -6803,10 +6907,10 @@
       // Si entra a la web sin hash profundo, mostrar la imagen completa de portada al inicio
       if (!window.location.hash || window.location.hash === '#' || window.location.hash === '#dashboard' || window.location.hash === '#cover') {
         window.scrollTo(0, 0);
+        updateHeroScrollState();
       } else {
-        scrollToDashboard(true);
+        window.scrollTo({ top: 0, behavior: 'instant' });
       }
-      updateHeroScrollState();
       
       // Check if visiting respondent URL
       const respondentMatch = window.location.pathname.match(/^\/respond\/([a-zA-Z0-9_-]{8,64})$/);
