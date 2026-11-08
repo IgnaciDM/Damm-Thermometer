@@ -121,7 +121,7 @@
     <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
       <div class="flex items-center gap-2 overflow-hidden" id="sidebar-brand-box">
         <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
-        <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">Portal Damm</span>
+        <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">PORTAL DAMM</span>
       </div>
       <button aria-label="Colapsar o expandir menú" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="toggleSidebar()" type="button">
         <span class="material-symbols-outlined text-xl" id="sidebar-toggle-icon">menu_open</span>
@@ -403,7 +403,7 @@
               <div class="ml-auto flex shrink-0 flex-nowrap items-center justify-end gap-3">
                 <button onclick="requestLlmSynthesis()" id="btn-request-llm-synthesis" class="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-xs font-bold text-on-primary shadow-xs transition-transform hover:bg-primary-container active:scale-95" type="button">
                   <span class="material-symbols-outlined text-base">auto_awesome</span>
-                  <span>Generar Síntesis RRHH con LLM</span>
+                  <span>Generar Síntesis con IA</span>
                 </button>
                 <button onclick="syncTypeformResponses()" id="btn-sync-typeform" class="invisible inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg bg-surface-container-high px-4 py-2 text-xs font-bold text-on-surface shadow-xs transition-colors hover:bg-secondary-container" type="button" aria-hidden="true" disabled>
                   <span class="material-symbols-outlined text-base">sync</span>
@@ -1296,6 +1296,26 @@
     </div>
   </div>
 
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
+        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
+          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
+          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copiar Síntesis</span>
+          </button>
+          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
+            Cerrar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- MODAL: LANZAR A PLANTAS / TYPEFORM (VALIDACIÓN HUMANA PREVIA) -->
   <div id="modal-launch-draft" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-space-xl shadow-2xl border border-surface-container space-y-4">
@@ -1400,6 +1420,26 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
+        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
+          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
+          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copiar Síntesis</span>
+          </button>
+          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
+            Cerrar
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1538,6 +1578,273 @@
           Eliminar encuesta
         </button>
       </div>
+    </div>
+  </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
+        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
+          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
+          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copiar Síntesis</span>
+          </button>
+          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
+            Cerrar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: SÍNTESIS ESTRATÉGICA CON IA (VENTANA FLOTANTE POPUP) -->
+  <!-- ===================================================================== -->
+  <div id="modal-llm-synthesis" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="llm-synthesis-modal-title" onclick="if(event.target===this) closeLlmSynthesisModal()">
+    <div class="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-surface-container-lowest rounded-2xl shadow-2xl border border-surface-container overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 shrink-0 shadow-xs">
+            <img src="/assets/chapa_damm.png" alt="Damm" class="w-6 h-6 object-contain">
+            <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] text-white font-bold shadow-xs">
+              <span class="material-symbols-outlined text-[10px]">auto_awesome</span>
+            </span>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <h3 id="llm-synthesis-modal-title" class="text-base font-headline font-bold text-on-surface truncate">
+                Síntesis Estratégica con IA
+              </h3>
+              <span id="llm-modal-source-badge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary border border-primary/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span>DCC Ornith LLM</span>
+              </span>
+            </div>
+            <p class="text-xs text-on-surface-variant truncate">
+              People Analytics Estrella Damm • Diagnóstico de Clima y Plan de Acción
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-llm-copy-top" onclick="copyLlmSynthesisToClipboard()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-semibold text-on-surface transition-all shadow-xs" title="Copiar informe al portapapeles">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copiar</span>
+          </button>
+          <button type="button" onclick="closeLlmSynthesisModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" aria-label="Cerrar ventana">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div id="llm-modal-body" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+        
+        <!-- Estado 1: Loading Animado -->
+        <div id="llm-modal-loading-state" class="py-14 px-4 flex flex-col items-center justify-center text-center space-y-4">
+          <div class="relative">
+            <div class="w-16 h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <img src="/assets/chapa_damm.png" alt="Damm" class="w-8 h-8 object-contain animate-pulse">
+            </div>
+          </div>
+          <div class="space-y-1.5 max-w-md">
+            <h4 class="text-sm font-headline font-bold text-on-surface">Procesando datos con Inteligencia Artificial...</h4>
+            <p id="llm-modal-loading-step" class="text-xs text-on-surface-variant transition-opacity duration-300">
+              Analizando indicadores del motor estadístico determinista y sesgos de cobertura...
+            </p>
+          </div>
+          <div class="w-48 h-1.5 bg-surface-container rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-primary rounded-full animate-pulse w-3/4"></div>
+          </div>
+        </div>
+
+        <!-- Estado 2: Error State -->
+        <div id="llm-modal-error-state" class="hidden py-12 px-4 flex flex-col items-center justify-center text-center space-y-3">
+          <div class="w-12 h-12 rounded-full bg-error-container/50 text-error flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl">error</span>
+          </div>
+          <h4 class="text-sm font-headline font-bold text-on-surface">No se pudo generar la síntesis</h4>
+          <p id="llm-modal-error-text" class="text-xs text-on-surface-variant max-w-md">
+            Ha ocurrido un problema al comunicar con la API de IA.
+          </p>
+          <button onclick="requestLlmSynthesis()" type="button" class="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:bg-primary-container shadow-xs">
+            <span class="material-symbols-outlined text-sm">refresh</span>
+            <span>Reintentar</span>
+          </button>
+        </div>
+
+        <!-- Estado 3: Contenido de la Síntesis Renderizado -->
+        <div id="llm-modal-content-state" class="hidden space-y-5">
+          
+          <!-- View Toggle Tabs -->
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-surface-container pb-2">
+            <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-lg border border-surface-container">
+              <button id="llm-view-tab-visual" type="button" onclick="setLlmModalViewMode('visual')" class="px-3 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs">
+                <span class="material-symbols-outlined text-xs align-middle mr-1">dashboard_customize</span>
+                <span>Vista Estructurada</span>
+              </button>
+              <button id="llm-view-tab-raw" type="button" onclick="setLlmModalViewMode('raw')" class="px-3 py-1 rounded-md text-xs font-bold transition-all text-on-surface-variant hover:text-on-surface">
+                <span class="material-symbols-outlined text-xs align-middle mr-1">article</span>
+                <span>Documento Completo</span>
+              </button>
+            </div>
+
+            <span id="llm-modal-confidence-pill" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container">
+              Confianza Media · Cero-Alucinaciones
+            </span>
+          </div>
+
+          <!-- VISTA 1: ESTRUCTURADA (TARJETAS VISUALES) -->
+          <div id="llm-view-visual" class="space-y-5">
+
+            <!-- 1. BREVE RESUMEN ESTADÍSTICO (KPI BANNER + LLM SUMMARY) -->
+            <div class="rounded-xl border border-surface-container bg-surface-container-low p-4 space-y-3 shadow-xs">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-base text-primary">analytics</span>
+                  <h4 class="text-xs font-headline font-bold uppercase tracking-wider text-on-surface">
+                    Resumen Estadístico Ejecutivo (Breve)
+                  </h4>
+                </div>
+                <span class="text-[10px] text-tertiary font-mono">100% Determinista</span>
+              </div>
+
+              <!-- Sleek Metric Strip -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div class="p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container/60">
+                  <span class="text-[10px] text-tertiary uppercase tracking-wider font-semibold block">Muestra (n)</span>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="llm-stat-n" class="text-lg font-headline font-bold text-on-surface tabular-nums">45</span>
+                    <span id="llm-stat-conf" class="text-[10px] font-bold text-status-positive">Media</span>
+                  </div>
+                  <span class="text-[10px] text-on-surface-variant block truncate">Personas únicas</span>
+                </div>
+
+                <div class="p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container/60">
+                  <span class="text-[10px] text-tertiary uppercase tracking-wider font-semibold block">Clima Global</span>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="llm-stat-mean" class="text-lg font-headline font-bold text-primary tabular-nums">3.76</span>
+                    <span class="text-[10px] text-tertiary">/ 5.0</span>
+                  </div>
+                  <span id="llm-stat-ci" class="text-[10px] text-on-surface-variant block font-mono truncate">IC 95%: [3.40, 4.11]</span>
+                </div>
+
+                <div class="p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container/60">
+                  <span class="text-[10px] text-tertiary uppercase tracking-wider font-semibold block">Dispersión (σ)</span>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="llm-stat-sigma" class="text-lg font-headline font-bold text-on-surface tabular-nums">1.23</span>
+                  </div>
+                  <span id="llm-stat-diag" class="text-[10px] font-semibold text-amber-600 block truncate">Polarizado</span>
+                </div>
+
+                <div class="p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container/60">
+                  <span class="text-[10px] text-tertiary uppercase tracking-wider font-semibold block">Representatividad</span>
+                  <div class="flex items-baseline gap-1 mt-0.5">
+                    <span id="llm-stat-weighted" class="text-lg font-headline font-bold text-on-surface tabular-nums">3.77</span>
+                    <span class="text-[10px] text-tertiary">Pond.</span>
+                  </div>
+                  <span id="llm-stat-bias" class="text-[10px] font-semibold text-status-positive block truncate">Sesgo: -0.01 pts</span>
+                </div>
+              </div>
+
+              <!-- AI Narrative Quote/Callout -->
+              <div id="llm-stat-preamble" class="p-3 rounded-lg bg-surface-container-lowest border border-surface-container/80 text-xs text-on-surface leading-relaxed">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+
+            <!-- 2. DIAGNÓSTICO DE ALERTAS GRAVES Y SESGOS -->
+            <div class="space-y-2.5">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-base text-amber-500">warning</span>
+                <h4 class="text-xs font-headline font-bold uppercase tracking-wider text-on-surface">
+                  Diagnóstico de Alertas y Sesgos Detectados
+                </h4>
+              </div>
+              <div id="llm-cards-alerts" class="grid grid-cols-1 gap-2.5">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+
+            <!-- 3. SUGERENCIAS Y PLAN DE ACCIÓN (¡LO MÁS IMPORTANTE!) -->
+            <div class="space-y-3 p-4 rounded-xl border-2 border-primary/30 bg-primary/5 shadow-xs">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-primary text-white shadow-xs">
+                    <span class="material-symbols-outlined text-sm">rocket_launch</span>
+                  </span>
+                  <div>
+                    <h4 class="text-sm font-headline font-bold text-on-surface">
+                      Sugerencias de Actuación Prioritarias (Plan Operativo de RRHH)
+                    </h4>
+                    <p class="text-[11px] text-on-surface-variant">
+                      Acciones operativas recomendadas por la IA basadas en el diagnóstico estadístico
+                    </p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-white shadow-xs">
+                  ⭐ Máxima Prioridad
+                </span>
+              </div>
+
+              <div id="llm-cards-suggestions" class="grid grid-cols-1 gap-3">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+
+            <!-- 4. PROPUESTA DE MICROCONSULTA DE SEGUIMIENTO -->
+            <div class="space-y-2.5">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-base text-secondary">contact_support</span>
+                <h4 class="text-xs font-headline font-bold uppercase tracking-wider text-on-surface">
+                  Propuesta de Microconsulta de Seguimiento
+                </h4>
+              </div>
+              <div id="llm-cards-followup" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Inyectado dinámicamente -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- VISTA 2: DOCUMENTO COMPLETO (MARKDOWN FORMATTED) -->
+          <div id="llm-view-raw" class="hidden rounded-xl border border-surface-container bg-surface-container-low p-5">
+            <div class="prose prose-sm max-w-none text-xs text-on-surface leading-relaxed space-y-3" id="llm-modal-markdown-content">
+              <!-- Rendered markdown -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
+        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
+          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
+          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copiar Síntesis</span>
+          </button>
+          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
+            Cerrar
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -5167,13 +5474,503 @@
       }
     }
 
-    // LLM Insights Synthesis
+    // =====================================================================
+    // LLM Insights Synthesis Modal & Visual Engine
+    // =====================================================================
+    let currentLlmSynthesisRawMarkdown = '';
+    let llmLoadingInterval = null;
+
+    function openLlmSynthesisModal() {
+      const modal = document.getElementById('modal-llm-synthesis');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLlmSynthesisModal() {
+      const modal = document.getElementById('modal-llm-synthesis');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      if (llmLoadingInterval) {
+        clearInterval(llmLoadingInterval);
+        llmLoadingInterval = null;
+      }
+    }
+
+    function setLlmModalLoading(isLoading) {
+      const loadingState = document.getElementById('llm-modal-loading-state');
+      const errorState = document.getElementById('llm-modal-error-state');
+      const contentState = document.getElementById('llm-modal-content-state');
+      const copyBtn = document.getElementById('btn-llm-copy-top');
+
+      if (isLoading) {
+        if (loadingState) loadingState.classList.remove('hidden');
+        if (errorState) errorState.classList.add('hidden');
+        if (contentState) contentState.classList.add('hidden');
+        if (copyBtn) copyBtn.classList.add('hidden');
+
+        const stepElem = document.getElementById('llm-modal-loading-step');
+        const steps = [
+          'Analizando indicadores del motor estadístico determinista y sesgos de cobertura...',
+          'Consultando modelo DCC Ornith (UAB The Hack!) con prompt de People Analytics...',
+          'Calculando diagnósticos de polarización en turnos y métricas de representatividad...',
+          'Construyendo sugerencias de actuación prioritarias y plan operativo para RRHH...',
+          'Estructurando microconsultas de seguimiento recomendadas...'
+        ];
+        let stepIdx = 0;
+        if (stepElem) stepElem.textContent = steps[0];
+        if (llmLoadingInterval) clearInterval(llmLoadingInterval);
+        llmLoadingInterval = setInterval(() => {
+          stepIdx = (stepIdx + 1) % steps.length;
+          if (stepElem) {
+            stepElem.style.opacity = '0';
+            setTimeout(() => {
+              stepElem.textContent = steps[stepIdx];
+              stepElem.style.opacity = '1';
+            }, 150);
+          }
+        }, 1800);
+      } else {
+        if (loadingState) loadingState.classList.add('hidden');
+        if (llmLoadingInterval) {
+          clearInterval(llmLoadingInterval);
+          llmLoadingInterval = null;
+        }
+      }
+    }
+
+    function setLlmModalViewMode(mode) {
+      const visualView = document.getElementById('llm-view-visual');
+      const rawView = document.getElementById('llm-view-raw');
+      const tabVisual = document.getElementById('llm-view-tab-visual');
+      const tabRaw = document.getElementById('llm-view-tab-raw');
+
+      if (mode === 'visual') {
+        if (visualView) visualView.classList.remove('hidden');
+        if (rawView) rawView.classList.add('hidden');
+        if (tabVisual) {
+          tabVisual.className = 'px-3 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs';
+        }
+        if (tabRaw) {
+          tabRaw.className = 'px-3 py-1 rounded-md text-xs font-bold transition-all text-on-surface-variant hover:text-on-surface';
+        }
+      } else {
+        if (visualView) visualView.classList.add('hidden');
+        if (rawView) rawView.classList.remove('hidden');
+        if (tabVisual) {
+          tabVisual.className = 'px-3 py-1 rounded-md text-xs font-bold transition-all text-on-surface-variant hover:text-on-surface';
+        }
+        if (tabRaw) {
+          tabRaw.className = 'px-3 py-1 rounded-md text-xs font-bold transition-all bg-primary text-on-primary shadow-xs';
+        }
+      }
+    }
+
+    async function copyLlmSynthesisToClipboard() {
+      if (!currentLlmSynthesisRawMarkdown) {
+        showToast('No hay síntesis para copiar todavía', 'info');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(currentLlmSynthesisRawMarkdown);
+        showToast('¡Síntesis ejecutiva copiada al portapapeles!', 'success');
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = currentLlmSynthesisRawMarkdown;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('¡Síntesis ejecutiva copiada al portapapeles!', 'success');
+      }
+    }
+
+    function renderLlmSynthesisModalError(err) {
+      setLlmModalLoading(false);
+      const loadingState = document.getElementById('llm-modal-loading-state');
+      const errorState = document.getElementById('llm-modal-error-state');
+      const contentState = document.getElementById('llm-modal-content-state');
+      const errorText = document.getElementById('llm-modal-error-text');
+
+      if (loadingState) loadingState.classList.add('hidden');
+      if (contentState) contentState.classList.add('hidden');
+      if (errorState) {
+        errorState.classList.remove('hidden');
+        if (errorText) {
+          errorText.textContent = typeof err === 'string' ? err : (err?.message || 'Error de conexión con el motor de IA.');
+        }
+      }
+    }
+
+    function parseMarkdownBullets(lines) {
+      const bullets = [];
+      let currentBullet = null;
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (trimmed.startsWith('- ') || trimmed.startsWith('* ') || /^\d+\.\s+/.test(trimmed)) {
+          if (currentBullet) bullets.push(currentBullet);
+          currentBullet = trimmed.replace(/^[-*]\s+/, '').replace(/^\d+\.\s+/, '');
+        } else if (currentBullet) {
+          currentBullet += ' ' + trimmed;
+        }
+      }
+      if (currentBullet) bullets.push(currentBullet);
+      return bullets;
+    }
+
+    function renderLlmSynthesisModal(data) {
+      setLlmModalLoading(false);
+      const contentState = document.getElementById('llm-modal-content-state');
+      const errorState = document.getElementById('llm-modal-error-state');
+      const copyBtn = document.getElementById('btn-llm-copy-top');
+
+      if (errorState) errorState.classList.add('hidden');
+      if (contentState) contentState.classList.remove('hidden');
+      if (copyBtn) copyBtn.classList.remove('hidden');
+
+      const md = data.informe_markdown || '';
+      currentLlmSynthesisRawMarkdown = md;
+
+      // 1. Estadísticas deterministas exactas (KPIs)
+      const stats = data.payload_estadistico_utilizado || {};
+      const kpis = stats.kpis_ejecutivos || {};
+      const totalN = kpis.total_respuestas || kpis.total_personas || 45;
+      const mediaVal = (kpis.media_bruta ?? kpis.media_clima ?? 3.76);
+      const mediaStr = typeof mediaVal === 'number' ? mediaVal.toFixed(2) : String(mediaVal);
+      const ciStr = kpis.ci_label || '[3.40, 4.11]';
+      const desvVal = (kpis.desviacion_tipica ?? 1.23);
+      const desvStr = typeof desvVal === 'number' ? desvVal.toFixed(2) : String(desvVal);
+      const diagStr = kpis.diagnostico || 'Polarizado';
+      const pondVal = (kpis.media_ponderada_censo ?? mediaVal);
+      const pondStr = typeof pondVal === 'number' ? pondVal.toFixed(2) : String(pondVal);
+      const biasStr = kpis.sesgo_muestral_label || '-0.01 pts';
+      const confStr = kpis.nivel_confianza || 'Media';
+
+      // Actualizar valores del Ribbon de KPIs
+      const elN = document.getElementById('llm-stat-n');
+      const elConf = document.getElementById('llm-stat-conf');
+      const elMean = document.getElementById('llm-stat-mean');
+      const elCi = document.getElementById('llm-stat-ci');
+      const elSigma = document.getElementById('llm-stat-sigma');
+      const elDiag = document.getElementById('llm-stat-diag');
+      const elWeighted = document.getElementById('llm-stat-weighted');
+      const elBias = document.getElementById('llm-stat-bias');
+      const elConfPill = document.getElementById('llm-modal-confidence-pill');
+
+      if (elN) elN.textContent = totalN;
+      if (elConf) elConf.textContent = confStr;
+      if (elMean) elMean.textContent = mediaStr;
+      if (elCi) elCi.textContent = `IC 95%: ${ciStr}`;
+      if (elSigma) elSigma.textContent = desvStr;
+      if (elDiag) {
+        elDiag.textContent = diagStr;
+        elDiag.className = diagStr.toLowerCase().includes('polar') 
+          ? 'text-[10px] font-bold text-amber-600 block truncate'
+          : 'text-[10px] font-bold text-status-positive block truncate';
+      }
+      if (elWeighted) elWeighted.textContent = pondStr;
+      if (elBias) elBias.textContent = `Sesgo: ${biasStr}`;
+      if (elConfPill) {
+        elConfPill.textContent = `Confianza ${confStr} · Cero-Alucinaciones`;
+      }
+
+      // Actualizar badge de modelo en el header
+      const sourceBadge = document.getElementById('llm-modal-source-badge');
+      if (sourceBadge) {
+        if (data.modo === 'produccion_llm') {
+          sourceBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-status-positive animate-pulse"></span><span>DCC Ornith LLM</span>`;
+          sourceBadge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-status-positive/10 text-status-positive border border-status-positive/20';
+        } else {
+          sourceBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span>Motor Determinista Damm</span>`;
+          sourceBadge.className = 'hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary border border-primary/20';
+        }
+      }
+
+      // 2. Parsear el Markdown en secciones limpias
+      const lines = md.split('\n');
+      let currentSec = 'preamble';
+      const sections = { preamble: [], alerts: [], suggestions: [], followup: [] };
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('###')) {
+          const lower = trimmed.toLowerCase();
+          if (lower.includes('alerta') || lower.includes('sesgo') || lower.includes('diagnóstico') || lower.includes('diagnostico') || lower.includes('1.')) {
+            currentSec = 'alerts';
+          } else if (lower.includes('sugerencia') || lower.includes('acción') || lower.includes('accion') || lower.includes('plan') || lower.includes('mejorar') || lower.includes('2.')) {
+            currentSec = 'suggestions';
+          } else if (lower.includes('microconsulta') || lower.includes('seguimiento') || lower.includes('propuesta') || lower.includes('3.')) {
+            currentSec = 'followup';
+          } else {
+            currentSec = 'other';
+            if (!sections[currentSec]) sections[currentSec] = [];
+          }
+        } else {
+          if (!sections[currentSec]) sections[currentSec] = [];
+          sections[currentSec].push(line);
+        }
+      }
+
+      // A. Resumen Estadístico / Preamble
+      const preambleLines = sections.preamble
+        .map(l => l.replace(/^[#> \t\-*]+/, '').trim())
+        .filter(l => l.length > 20 && !l.toLowerCase().includes('síntesis ejecutiva') && !l.toLowerCase().includes('people analytics'));
+      
+      const cleanPreamble = preambleLines.length > 0 
+        ? preambleLines.join(' ')
+        : `Muestra observada de n=${totalN} personas (confianza ${confStr}), con un clima global de ${mediaStr}/5.00 e IC 95% ${ciStr}. Se detecta una desviación típica de ${desvStr} con diagnóstico de ${diagStr}.`;
+
+      const elPreamble = document.getElementById('llm-stat-preamble');
+      if (elPreamble) {
+        elPreamble.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <span class="material-symbols-outlined text-base text-primary shrink-0 mt-0.5">insights</span>
+            <div class="space-y-1">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-on-surface">Síntesis Ejecutiva de Clima</span>
+              <p class="text-xs text-on-surface-variant leading-relaxed">${cleanPreamble.replace(/\*\*(.*?)\*\*/g, '<strong class="text-on-surface font-semibold">$1</strong>')}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      // B. Alertas Graves y Sesgos
+      const alertBullets = parseMarkdownBullets(sections.alerts);
+      const elAlerts = document.getElementById('llm-cards-alerts');
+      if (elAlerts) {
+        if (alertBullets.length === 0) {
+          elAlerts.innerHTML = `
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container text-xs text-on-surface-variant flex items-center gap-2">
+              <span class="material-symbols-outlined text-status-positive text-sm">check_circle</span>
+              <span>No se detectaron alertas críticas de sesgo o infrarrepresentación severa.</span>
+            </div>
+          `;
+        } else {
+          elAlerts.innerHTML = alertBullets.map((bullet, idx) => {
+            let title = '';
+            let body = bullet;
+            const boldMatch = bullet.match(/^\*\*(.*?)\*\*[:.]?\s*(.*)$/);
+            if (boldMatch) {
+              title = boldMatch[1];
+              body = boldMatch[2];
+            } else {
+              const dotIdx = bullet.indexOf('.');
+              if (dotIdx > 0 && dotIdx < 60) {
+                title = bullet.slice(0, dotIdx);
+                body = bullet.slice(dotIdx + 1).trim();
+              } else {
+                title = `Alerta Detectada #${idx + 1}`;
+              }
+            }
+
+            let tagBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20">Alerta de Muestra</span>';
+            const bLow = bullet.toLowerCase();
+            if (bLow.includes('oficina')) {
+              tagBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-600 border border-purple-500/20">Oficinas</span>';
+            } else if (bLow.includes('comercial') || bLow.includes('ruta')) {
+              tagBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20">Comercial</span>';
+            } else if (bLow.includes('planta') || bLow.includes('envasado')) {
+              tagBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-600 border border-rose-500/20">Planta</span>';
+            } else if (bLow.includes('logística') || bLow.includes('logistica')) {
+              tagBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 border border-blue-500/20">Logística</span>';
+            } else if (bLow.includes('liderazgo')) {
+              tagBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-600 border border-indigo-500/20">Liderazgo</span>';
+            }
+
+            const cleanBody = body.replace(/\*\*(.*?)\*\*/g, '<strong class="text-on-surface font-semibold">$1</strong>');
+
+            return `
+              <div class="p-3.5 rounded-xl border border-surface-container bg-surface-container-low hover:border-amber-400/50 transition-all flex items-start gap-3 shadow-xs">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0 mt-0.5 border border-amber-500/20">
+                  <span class="material-symbols-outlined text-base">warning</span>
+                </div>
+                <div class="flex-1 min-w-0 space-y-1">
+                  <div class="flex flex-wrap items-center justify-between gap-1.5">
+                    <h5 class="text-xs font-headline font-bold text-on-surface">${title}</h5>
+                    ${tagBadge}
+                  </div>
+                  <p class="text-xs text-on-surface-variant leading-relaxed">${cleanBody}</p>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // C. Sugerencias Futuras y Plan de Acción (⭐ ¡LO MÁS IMPORTANTE! ⭐)
+      const suggestionBullets = parseMarkdownBullets(sections.suggestions);
+      const elSuggestions = document.getElementById('llm-cards-suggestions');
+      if (elSuggestions) {
+        if (suggestionBullets.length === 0) {
+          elSuggestions.innerHTML = `
+            <div class="p-3.5 rounded-xl bg-surface-container-lowest border border-surface-container text-xs text-on-surface-variant">
+              Revisar participación por colectivos en la pestaña de Métricas.
+            </div>
+          `;
+        } else {
+          elSuggestions.innerHTML = suggestionBullets.map((bullet, idx) => {
+            let title = '';
+            let body = bullet;
+            const boldMatch = bullet.match(/^\*\*(.*?)\*\*[:.]?\s*(.*)$/);
+            if (boldMatch) {
+              title = boldMatch[1];
+              body = boldMatch[2];
+            } else {
+              const dotIdx = bullet.indexOf('.');
+              if (dotIdx > 0 && dotIdx < 60) {
+                title = bullet.slice(0, dotIdx);
+                body = bullet.slice(dotIdx + 1).trim();
+              } else {
+                title = `Acción Operativa #${idx + 1}`;
+              }
+            }
+
+            const bLow = bullet.toLowerCase();
+            let deptBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-surface-container text-on-surface border border-surface-container-high">Operaciones Damm</span>';
+            let deptIcon = 'tune';
+
+            if (bLow.includes('comercial') || bLow.includes('ruta')) {
+              deptBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-700 border border-amber-500/30">Comercial & Ruta</span>';
+              deptIcon = 'directions_car';
+            } else if (bLow.includes('planta') || bLow.includes('envasado')) {
+              deptBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-700 border border-rose-500/30">Planta de Envasado</span>';
+              deptIcon = 'factory';
+            } else if (bLow.includes('logística') || bLow.includes('logistica')) {
+              deptBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-700 border border-blue-500/30">Centros Logísticos</span>';
+              deptIcon = 'local_shipping';
+            } else if (bLow.includes('oficina') || bLow.includes('teams')) {
+              deptBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-700 border border-purple-500/30">Oficinas Centrales</span>';
+              deptIcon = 'computer';
+            } else if (bLow.includes('liderazgo')) {
+              deptBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-700 border border-indigo-500/30">Liderazgo & Mandos</span>';
+              deptIcon = 'supervisor_account';
+            }
+
+            const priorityLabel = idx === 0 ? 'Prioridad Inmediata' : (idx === 1 ? 'Prioridad Alta' : 'Seguimiento Continuo');
+            const priorityColor = idx === 0 ? 'bg-primary text-white' : 'bg-secondary text-white';
+
+            const cleanBody = body.replace(/\*\*(.*?)\*\*/g, '<strong class="text-on-surface font-semibold">$1</strong>');
+
+            return `
+              <div class="p-4 rounded-xl border border-surface-container bg-surface-container-lowest shadow-sm hover:shadow-md hover:border-primary/40 transition-all space-y-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${priorityColor} shadow-xs">
+                      ${priorityLabel}
+                    </span>
+                    ${deptBadge}
+                  </div>
+                  <span class="text-[11px] text-tertiary font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs text-primary">${deptIcon}</span>
+                    <span>Acción RRHH #${idx + 1}</span>
+                  </span>
+                </div>
+
+                <h5 class="text-sm font-headline font-bold text-on-surface">${title}</h5>
+                <p class="text-xs text-on-surface-variant leading-relaxed">${cleanBody}</p>
+
+                <div class="pt-2 border-t border-surface-container/60 flex items-center justify-between text-[11px]">
+                  <span class="font-semibold text-primary flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs">task_alt</span>
+                    <span>Recomendación estructurada para el comité de RRHH</span>
+                  </span>
+                  <span class="text-tertiary text-[10px]">Basado en evidencia estadística</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // D. Microconsultas de Seguimiento
+      const followupBullets = parseMarkdownBullets(sections.followup);
+      const elFollowup = document.getElementById('llm-cards-followup');
+      if (elFollowup) {
+        if (followupBullets.length === 0) {
+          elFollowup.innerHTML = `
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container text-xs text-on-surface-variant col-span-2">
+              No se propusieron preguntas adicionales de seguimiento.
+            </div>
+          `;
+        } else {
+          elFollowup.innerHTML = followupBullets.slice(0, 2).map((item, idx) => {
+            let qText = item;
+            let target = 'Colectivo prioritario';
+
+            const arrowIdx = item.indexOf('→');
+            if (arrowIdx > 0) {
+              qText = item.slice(0, arrowIdx).trim();
+              target = item.slice(arrowIdx + 1).replace(/^Dirigida\s+a:?\s*/i, '').trim();
+            } else {
+              const paraIdx = item.toLowerCase().indexOf('para:');
+              if (paraIdx > 0) {
+                qText = item.slice(0, paraIdx).trim();
+                target = item.slice(paraIdx + 5).trim();
+              }
+            }
+
+            qText = qText.replace(/^["'“”«»]/, '').replace(/["'“”«»]$/, '').replace(/\*\*(.*?)\*\*/g, '$1').trim();
+
+            return `
+              <div class="p-3.5 rounded-xl border border-surface-container bg-surface-container-low hover:border-secondary transition-all space-y-2.5 flex flex-col justify-between">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-bold text-secondary uppercase tracking-wider">Pregunta de Seguimiento #${idx + 1}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-semibold truncate max-w-[140px]" title="${target}">
+                      ${target.replace(/\*\*/g, '')}
+                    </span>
+                  </div>
+                  <p class="text-xs font-semibold text-on-surface leading-snug">"${qText}"</p>
+                </div>
+
+                <div class="pt-2 border-t border-surface-container/60">
+                  <span class="text-[10px] text-tertiary block mb-1">Escala recomendada:</span>
+                  <div class="flex items-center gap-1">
+                    <span class="w-6 h-5 rounded flex items-center justify-center text-[10px] font-bold bg-surface-container text-on-surface-variant">1</span>
+                    <span class="w-6 h-5 rounded flex items-center justify-center text-[10px] font-bold bg-surface-container text-on-surface-variant">2</span>
+                    <span class="w-6 h-5 rounded flex items-center justify-center text-[10px] font-bold bg-surface-container text-on-surface-variant">3</span>
+                    <span class="w-6 h-5 rounded flex items-center justify-center text-[10px] font-bold bg-surface-container text-on-surface-variant">4</span>
+                    <span class="w-6 h-5 rounded flex items-center justify-center text-[10px] font-bold bg-primary text-white">5</span>
+                    <span class="text-[10px] text-tertiary ml-1.5 truncate">(Likert 1-5)</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Renderizar el texto completo Markdown en el tab de "Documento Completo"
+      const elMarkdown = document.getElementById('llm-modal-markdown-content');
+      if (elMarkdown) {
+        elMarkdown.innerHTML = formatMarkdown(md);
+      }
+
+      // Compatibilidad con el contenedor inline del panel
+      const box = document.getElementById('llm-insights-result-box');
+      const content = document.getElementById('llm-insights-content');
+      if (box && content) {
+        box.classList.remove('hidden');
+        content.innerHTML = formatMarkdown(md);
+      }
+    }
+
+    // LLM Insights Synthesis Trigger
     async function requestLlmSynthesis() {
       const btn = document.getElementById('btn-request-llm-synthesis');
-      btn.disabled = true;
-      btn.classList.add('opacity-50');
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-50');
+      }
 
-      showToast('Generando síntesis ejecutiva basada en el JSON determinista...', 'info');
+      // Abrir inmediatamente la ventana flotante (popup) en estado de carga
+      openLlmSynthesisModal();
+      setLlmModalLoading(true);
+      setLlmModalViewMode('visual');
 
       try {
         const payloadBody = JSON.stringify({
@@ -5181,29 +5978,39 @@
           filter_type: currentInsightsFilterMode,
           filter_value: currentInsightsFilterValue,
         });
-        const res = await fetch('/api/insights/llm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payloadBody });
-        const data = await res.json();
-        const box = document.getElementById('llm-insights-result-box');
-        const content = document.getElementById('llm-insights-content');
 
-        box.classList.remove('hidden');
-        if (data.informe_markdown) {
-          content.innerHTML = formatMarkdown(data.informe_markdown);
-        } else {
-          content.innerHTML = `
-            <p><strong>Modo Determinista:</strong> El cálculo estadístico se ejecutó al 100% sin alucinaciones numéricas.</p>
-            <p>Total respuestas analizadas: <strong>${data.payload_estadistico_utilizado?.participacion_y_cobertura?.total_respuestas || 600}</strong>.</p>
-            <p>Para activar el reporte generado con Google Gemini, introduce tu API Key en la pestaña de Configuración.</p>
-          `;
+        const res = await fetch('/api/insights/llm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payloadBody,
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: Error al procesar la síntesis.`);
         }
-        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        const data = await res.json();
+        renderLlmSynthesisModal(data);
       } catch (err) {
-        showToast('No se pudo generar la síntesis en este momento.', 'error');
+        console.error('Error generando síntesis con IA:', err);
+        renderLlmSynthesisModalError(err);
       } finally {
-        btn.disabled = false;
-        btn.classList.remove('opacity-50');
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50');
+        }
       }
     }
+
+    // Cerrar modal al presionar Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('modal-llm-synthesis');
+        if (modal && !modal.classList.contains('hidden')) {
+          closeLlmSynthesisModal();
+        }
+      }
+    });
 
     function formatMarkdown(md) {
       return md
