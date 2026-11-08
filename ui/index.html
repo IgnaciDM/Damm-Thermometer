@@ -135,12 +135,12 @@
     <nav class="flex-1 px-space-sm space-y-1.5 mt-1" id="sidebar-nav">
       <button id="nav-btn-dashboard" onclick="showPanel('dashboard')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-bold bg-primary text-on-primary shadow-xs transition-all text-left">
         <span class="material-symbols-outlined text-xl flex-shrink-0">analytics</span>
-        <span class="sidebar-label whitespace-nowrap">Dashboard Clima</span>
+        <span class="sidebar-label whitespace-nowrap">Dashboard</span>
       </button>
 
       <button id="nav-btn-insights" onclick="showPanel('insights')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left">
         <span class="material-symbols-outlined text-xl flex-shrink-0">query_stats</span>
-        <span class="sidebar-label whitespace-nowrap">Insights &amp; Motor</span>
+        <span class="sidebar-label whitespace-nowrap">Insights</span>
       </button>
 
       <button id="nav-btn-generator" onclick="showPanel('generator')" class="nav-item w-full flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all text-left">
@@ -181,7 +181,7 @@
         <div class="hidden sm:flex items-center gap-2">
           <span class="text-xs font-medium text-on-surface-variant">Organización</span>
           <span class="material-symbols-outlined text-sm text-on-surface-variant">chevron_right</span>
-          <span class="text-sm font-headline font-semibold text-on-surface" id="topbar-active-section-title">Dashboard Clima</span>
+          <span class="text-sm font-headline font-semibold text-on-surface" id="topbar-active-section-title">Dashboard</span>
         </div>
       </div>
 
@@ -881,10 +881,46 @@
             <span class="text-xs font-medium text-on-surface-variant">HR Intelligence Suite • Campaña Q4</span>
           </div>
           <div class="flex items-center gap-3">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-low shadow-xs">
-              <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
-              <span class="text-xs font-semibold text-tertiary">UAB DCC Ornith 35B MoE</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-surface-container-highest text-tertiary font-mono">262k ctx</span>
+            <!-- Desplegable para editar departamentos tras el primer prompt -->
+            <div id="generator-cohort-dropdown-wrapper" class="relative hidden">
+              <button id="generator-cohort-dropdown-btn" type="button" onclick="toggleGeneratorCohortDropdown()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-surface-container text-xs font-semibold text-on-surface shadow-xs transition-all">
+                <span class="material-symbols-outlined text-sm text-primary">corporate_fare</span>
+                <span class="text-tertiary">Colectivo:</span>
+                <span id="generator-cohort-btn-label" class="font-bold text-primary max-w-[150px] truncate">Todos</span>
+                <span class="material-symbols-outlined text-xs text-tertiary">arrow_drop_down</span>
+              </button>
+
+              <!-- Dropdown Menu Flotante -->
+              <div id="generator-cohort-dropdown-menu" class="hidden absolute right-0 mt-1.5 w-60 bg-surface-container-lowest rounded-xl shadow-xl border border-surface-container p-3 z-40 space-y-2">
+                <div class="flex items-center justify-between pb-1.5 border-b border-surface-container/60">
+                  <span class="text-[11px] font-bold text-tertiary uppercase tracking-wider">Editar Colectivos</span>
+                  <button type="button" onclick="toggleGeneratorCohortDropdown(false)" class="text-tertiary hover:text-on-surface text-xs p-0.5" title="Cerrar">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                  </button>
+                </div>
+                <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-surface-container text-xs font-bold text-on-surface">
+                  <input type="checkbox" id="header-dept-all" checked onchange="toggleHeaderGeneratorAllDepts(this.checked)" class="accent-primary w-3.5 h-3.5 rounded">
+                  <span>Todos los departamentos</span>
+                </label>
+                <div class="space-y-1 pt-1 border-t border-surface-container/50">
+                  <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-surface-container text-xs text-on-surface font-medium">
+                    <input type="checkbox" value="Planta" class="header-gen-dept-cb accent-primary w-3.5 h-3.5 rounded" checked onchange="onHeaderGeneratorDeptChange()">
+                    <span>🏭 Fábrica / Planta</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-surface-container text-xs text-on-surface font-medium">
+                    <input type="checkbox" value="Logística" class="header-gen-dept-cb accent-primary w-3.5 h-3.5 rounded" checked onchange="onHeaderGeneratorDeptChange()">
+                    <span>🚛 Logística</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-surface-container text-xs text-on-surface font-medium">
+                    <input type="checkbox" value="Comercial" class="header-gen-dept-cb accent-primary w-3.5 h-3.5 rounded" checked onchange="onHeaderGeneratorDeptChange()">
+                    <span>💼 Comercial</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-surface-container text-xs text-on-surface font-medium">
+                    <input type="checkbox" value="Oficina" class="header-gen-dept-cb accent-primary w-3.5 h-3.5 rounded" checked onchange="onHeaderGeneratorDeptChange()">
+                    <span>🏢 Oficinas</span>
+                  </label>
+                </div>
+              </div>
             </div>
             <button id="generator-teams-btn" onclick="openTeamsModalFromGenerator()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface text-xs font-bold hover:bg-[#464EB8] hover:text-white transition-all shadow-xs active:scale-95" type="button" title="Generar tarjeta interactiva para Microsoft Teams (M365)">
               <span class="material-symbols-outlined text-sm text-[#464EB8]">send_to_mobile</span>
@@ -978,6 +1014,17 @@
                   <span class="material-symbols-outlined text-sm">edit_note</span>
                   <span>Editar encuesta</span>
                 </button>
+              </div>
+
+              <!-- Selector de Pestañas por Colectivo (Omnicanal) -->
+              <div id="gen-cohort-tabs-container" class="px-3 py-2 bg-surface-container-low border-b border-surface-container hidden flex items-center justify-between gap-2 overflow-x-auto">
+                <div class="flex items-center gap-1.5" id="gen-cohort-tab-buttons">
+                  <!-- Se rellena dinámicamente con los colectivos seleccionados -->
+                </div>
+                <div id="gen-active-channel-badge" class="shrink-0 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs" id="gen-active-channel-icon">devices</span>
+                  <span id="gen-active-channel-text">Canal: QR en Vestuario</span>
+                </div>
               </div>
 
               <div class="flex-1 p-space-lg flex flex-col justify-between relative">
@@ -1240,6 +1287,68 @@
     </div>
   </div>
 
+  <!-- MODAL: SELECCIÓN DE DEPARTAMENTO PREVIO A GENERAR -->
+  <div id="modal-select-generator-cohort" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest max-w-md w-full rounded-2xl p-6 shadow-2xl border border-surface-container space-y-4">
+      <div class="flex items-center justify-between border-b border-surface-container pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shadow-xs">
+            <span class="material-symbols-outlined text-base">groups</span>
+          </div>
+          <div>
+            <h3 class="text-sm font-headline font-bold text-on-surface">Público Objetivo de la Consulta</h3>
+            <span class="text-[11px] text-tertiary">Selecciona a quién va dirigida esta microconsulta</span>
+          </div>
+        </div>
+        <button onclick="closeGeneratorCohortModal()" class="text-tertiary hover:text-on-surface p-1 rounded-lg transition-colors" type="button">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <p class="text-xs text-on-surface-variant leading-relaxed">
+          Google Gemini adaptará el vocabulario, contexto y tono de las preguntas según los colectivos seleccionados:
+        </p>
+
+        <div class="p-3 bg-surface-container-low rounded-xl border border-surface-container space-y-2.5">
+          <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+            <input type="checkbox" id="modal-dept-all" checked onchange="toggleModalGeneratorAllDepts(this.checked)" class="accent-primary w-4 h-4 rounded">
+            <span class="text-xs font-bold text-on-surface">Todos los departamentos</span>
+          </label>
+
+          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-surface-container/60">
+            <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+              <input type="checkbox" value="Planta" class="modal-gen-dept-cb accent-primary w-4 h-4 rounded" checked onchange="onModalGeneratorDeptChange()">
+              <span class="text-xs text-on-surface font-medium flex items-center gap-1.5">🏭 Fábrica / Planta</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+              <input type="checkbox" value="Logística" class="modal-gen-dept-cb accent-primary w-4 h-4 rounded" checked onchange="onModalGeneratorDeptChange()">
+              <span class="text-xs text-on-surface font-medium flex items-center gap-1.5">🚛 Logística</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+              <input type="checkbox" value="Comercial" class="modal-gen-dept-cb accent-primary w-4 h-4 rounded" checked onchange="onModalGeneratorDeptChange()">
+              <span class="text-xs text-on-surface font-medium flex items-center gap-1.5">💼 Comercial</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+              <input type="checkbox" value="Oficina" class="modal-gen-dept-cb accent-primary w-4 h-4 rounded" checked onchange="onModalGeneratorDeptChange()">
+              <span class="text-xs text-on-surface font-medium flex items-center gap-1.5">🏢 Oficinas</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-surface-container">
+        <button type="button" onclick="closeGeneratorCohortModal()" class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-xs font-semibold text-on-surface transition-all">
+          Cancelar
+        </button>
+        <button type="button" onclick="confirmGeneratorCohortAndSubmit()" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs hover:bg-primary-container transition-all shadow-sm active:scale-95">
+          <span class="material-symbols-outlined text-sm">check</span>
+          Confirmar y Generar
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: LANZAR A PLANTAS / TYPEFORM (VALIDACIÓN HUMANA PREVIA) -->
   <div id="modal-launch-draft" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-space-xl shadow-2xl border border-surface-container space-y-4">
@@ -1265,45 +1374,12 @@
           <span class="text-[10px] text-tertiary mt-1 block">Este título identificará la encuesta en el Historial y en el informe de dirección.</span>
         </div>
 
-        <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="text-xs font-bold text-on-surface">Departamentos Destinatarios</label>
-            <label class="inline-flex items-center gap-1.5 text-[11px] text-primary font-bold cursor-pointer">
-              <input type="checkbox" id="launch-dept-all" checked onchange="toggleAllDepartments(this.checked)" class="rounded text-primary focus:ring-primary h-3.5 w-3.5">
-              <span>Seleccionar todos</span>
-            </label>
+        <div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low border border-surface-container">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-primary">corporate_fare</span>
+            <span class="text-xs text-on-surface-variant font-medium">Departamentos destinatarios asignados:</span>
           </div>
-          <p class="text-[11px] text-tertiary mb-2">Selecciona a qué sectores se destinará esta consulta (puedes marcar uno o varios):</p>
-          <div class="grid grid-cols-2 gap-2">
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
-              <input type="checkbox" name="launch-dept" value="Planta" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
-              <div class="text-xs">
-                <span class="font-bold text-on-surface block">🏭 Fábrica / Planta</span>
-                <span class="text-[10px] text-tertiary">El Prat y líneas</span>
-              </div>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
-              <input type="checkbox" name="launch-dept" value="Logística" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
-              <div class="text-xs">
-                <span class="font-bold text-on-surface block">🚛 Logística</span>
-                <span class="text-[10px] text-tertiary">Almacén y rutas</span>
-              </div>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
-              <input type="checkbox" name="launch-dept" value="Comercial" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
-              <div class="text-xs">
-                <span class="font-bold text-on-surface block">💼 Comercial</span>
-                <span class="text-[10px] text-tertiary">Horeca y retail</span>
-              </div>
-            </label>
-            <label class="flex items-center gap-2 p-2.5 rounded-lg border border-surface-container bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
-              <input type="checkbox" name="launch-dept" value="Oficina" checked class="dept-checkbox rounded text-primary focus:ring-primary h-4 w-4" onchange="onDepartmentChange()">
-              <div class="text-xs">
-                <span class="font-bold text-on-surface block">🏢 Oficinas</span>
-                <span class="text-[10px] text-tertiary">Servicios corporativos</span>
-              </div>
-            </label>
-          </div>
+          <span id="launch-modal-dept-badge" class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-bold">Todos</span>
         </div>
 
         <!-- Preguntas Resumen -->
@@ -1526,6 +1602,10 @@
     let genIndex = 0;
     let genPromptHistory = [];
     let editingSurvey = null;
+    let currentSurveyCohort = null;
+    let pendingGeneratorPrompt = '';
+    let surveysByCohort = {};
+    let activeCohortTab = null;
     let launchDraftSubmitting = false;
     let pendingDeleteSurveyId = null;
     let deleteSurveySubmitting = false;
@@ -1557,7 +1637,10 @@
         questions: genQuestions,
         index: genIndex,
         promptHistory: genPromptHistory,
-        editingSurvey
+        editingSurvey,
+        cohort: currentSurveyCohort,
+        surveysByCohort,
+        activeCohortTab
       };
       try {
         localStorage.setItem('damm_generator_state', JSON.stringify(state));
@@ -1569,6 +1652,17 @@
         const raw = localStorage.getItem('damm_generator_state');
         if (!raw) return;
         const state = JSON.parse(raw);
+        if (state.cohort !== undefined) {
+          currentSurveyCohort = state.cohort;
+        } else if (state.editingSurvey && state.editingSurvey.cohort) {
+          currentSurveyCohort = state.editingSurvey.cohort;
+        }
+        if (state.surveysByCohort && typeof state.surveysByCohort === 'object') {
+          surveysByCohort = state.surveysByCohort;
+        }
+        if (state.activeCohortTab) {
+          activeCohortTab = state.activeCohortTab;
+        }
         if (state.inputValue !== undefined) {
           const promptInput = document.getElementById('gen-ai-chat-input');
           if (promptInput && !promptInput.value) {
@@ -1600,6 +1694,7 @@
           editingSurvey = state.editingSurvey;
           updateGeneratorEditingBanner();
         }
+        updateGeneratorCohortDropdownUI();
       } catch (e) {}
     }
 
@@ -1640,6 +1735,10 @@
 
     function startNewGenerator() {
       editingSurvey = null;
+      currentSurveyCohort = null;
+      pendingGeneratorPrompt = '';
+      surveysByCohort = {};
+      activeCohortTab = null;
       genPromptHistory = [];
       genQuestions = [];
       genIndex = 0;
@@ -1651,6 +1750,8 @@
         synth.textContent = 'El modelo generará o actualizará preguntas según lo que le indiques en lenguaje natural.';
       }
       updateGeneratorEditingBanner();
+      updateGeneratorCohortDropdownUI();
+      renderCohortTabs();
       showPanel('generator');
       renderGenCard();
       saveGeneratorState();
@@ -1691,14 +1792,14 @@
 
       // Update Topbar Title
       const titles = {
-        dashboard: 'Dashboard Clima',
-        insights: 'Insights & Motor Estadístico',
+        dashboard: 'Dashboard',
+        insights: 'Insights',
         generator: 'Generador Asistido & Typeform Studio',
         admin: 'Historial y Acciones de RRHH',
         settings: 'Configuración de Conexiones'
       };
       const crumb = document.getElementById('topbar-active-section-title');
-      if (crumb) crumb.textContent = titles[name] || 'Dashboard Clima';
+      if (crumb) crumb.textContent = titles[name] || 'Dashboard';
 
       // Persist in hash
       window.location.hash = name;
@@ -2379,10 +2480,20 @@
         || distribution.some(item => item.count === null && item.percentage === null);
 
       if (!distribution.length || protectedDistribution) {
+        chart.className = 'h-[300px] min-w-0 w-full rounded-lg bg-surface-container-lowest flex flex-col items-center justify-center p-6 text-center';
+        const protectedBox = document.createElement('div');
+        protectedBox.className = 'flex flex-col items-center justify-center text-center max-w-xs space-y-2';
+
+        const lockIcon = document.createElement('span');
+        lockIcon.className = 'material-symbols-outlined text-tertiary/70 text-2xl select-none';
+        lockIcon.textContent = 'shield_lock';
+
         const protectedMessage = document.createElement('p');
-        protectedMessage.className = 'max-w-xs px-6 text-center text-xs text-tertiary';
+        protectedMessage.className = 'text-center text-xs text-tertiary leading-relaxed font-medium';
         protectedMessage.textContent = 'La distribución está protegida porque el grupo no alcanza el mínimo de respuestas necesario para mostrar un gráfico.';
-        chart.appendChild(protectedMessage);
+
+        protectedBox.append(lockIcon, protectedMessage);
+        chart.appendChild(protectedBox);
       } else if (typeof Plotly !== 'undefined') {
         const chartId = `typeform-pie-${typeformQuestionIndex}`;
         chart.id = chartId;
@@ -3758,6 +3869,7 @@
 
       showPanel('generator');
       editingSurvey = JSON.parse(JSON.stringify(survey));
+      currentSurveyCohort = survey.cohort || 'Todos';
       genPromptHistory = Array.isArray(survey.generator_history)
         ? [...survey.generator_history]
         : [];
@@ -3778,6 +3890,7 @@
           : 'He recuperado las preguntas. Las instrucciones anteriores no estaban guardadas para esta encuesta; puedes empezar a añadirlas ahora.';
       }
       updateGeneratorEditingBanner();
+      updateGeneratorCohortDropdownUI();
       renderGenCard();
       saveGeneratorState();
       showToast('Encuesta y contexto cargados en el Generador Asistido.', 'success');
@@ -3936,7 +4049,7 @@
         return;
       }
 
-      const letters = ['A', 'B', 'C', 'D'];
+      const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
       const choices = q.type === 'rating'
         ? ['1', '2', '3', '4', '5']
         : q.type === 'yes_no'
@@ -3957,7 +4070,7 @@
           <div class="flex items-center gap-2">
             <span class="w-5 h-5 rounded font-mono font-bold text-[10px] flex items-center justify-center ${
               isSel ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface'
-            }">${letters[idx] || idx + 1}</span>
+            }">${letters[idx] || String.fromCharCode(65 + idx)}</span>
             <span>${escapeHtml(c)}</span>
           </div>
           <span class="material-symbols-outlined text-xs ${isSel ? 'text-primary' : 'text-transparent'}">check_circle</span>
@@ -4167,13 +4280,327 @@
       }
     }
 
-    async function handleGeneratorPrompt(e) {
-      e.preventDefault();
-      const input = document.getElementById('gen-ai-chat-input');
-      if (!input || !input.value.trim()) return;
-      const val = input.value.trim();
+    function openGeneratorCohortModal() {
+      const modal = document.getElementById('modal-select-generator-cohort');
+      if (!modal) return;
+      syncModalGeneratorCohort(currentSurveyCohort || 'Todos');
+      modal.classList.remove('hidden');
+    }
 
-      showToast('Google Gemini está analizando tu petición...', 'info');
+    function closeGeneratorCohortModal() {
+      const modal = document.getElementById('modal-select-generator-cohort');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function getCohortFromModal() {
+      const allCb = document.getElementById('modal-dept-all');
+      const checkboxes = Array.from(document.querySelectorAll('.modal-gen-dept-cb:checked'));
+      if (allCb?.checked || checkboxes.length === 0 || checkboxes.length === 4) {
+        return 'Todos';
+      }
+      return checkboxes.map(cb => cb.value).join(', ');
+    }
+
+    function toggleModalGeneratorAllDepts(checked) {
+      document.querySelectorAll('.modal-gen-dept-cb').forEach(cb => { cb.checked = checked; });
+    }
+
+    function onModalGeneratorDeptChange() {
+      const allCb = document.getElementById('modal-dept-all');
+      const checkboxes = Array.from(document.querySelectorAll('.modal-gen-dept-cb'));
+      const allChecked = checkboxes.every(cb => cb.checked);
+      if (allCb) allCb.checked = allChecked;
+    }
+
+    function syncModalGeneratorCohort(cohortStr) {
+      const allCb = document.getElementById('modal-dept-all');
+      if (!cohortStr || cohortStr === 'Todos') {
+        if (allCb) allCb.checked = true;
+        document.querySelectorAll('.modal-gen-dept-cb').forEach(cb => { cb.checked = true; });
+        return;
+      }
+      const parts = cohortStr.toLowerCase().split(',').map(s => s.trim());
+      if (allCb) allCb.checked = false;
+      document.querySelectorAll('.modal-gen-dept-cb').forEach(cb => {
+        const val = cb.value.toLowerCase();
+        const matchesPlanta = (val === 'planta' || val === 'fábrica' || val === 'fabrica') &&
+          parts.some(p => p.includes('plant') || p.includes('fabri') || p.includes('fábri'));
+        const matchesOficina = (val === 'oficina' || val === 'oficinas') &&
+          parts.some(p => p.includes('oficin'));
+        const matchesLogistica = val.includes('logist') && parts.some(p => p.includes('logist'));
+        const matchesComercial = val.includes('comerc') && parts.some(p => p.includes('comerc'));
+        cb.checked = matchesPlanta || matchesOficina || matchesLogistica || matchesComercial;
+      });
+      const allChecked = Array.from(document.querySelectorAll('.modal-gen-dept-cb')).every(cb => cb.checked);
+      if (allCb) allCb.checked = allChecked;
+    }
+
+    function confirmGeneratorCohortAndSubmit() {
+      currentSurveyCohort = getCohortFromModal();
+      if (editingSurvey) {
+        editingSurvey.cohort = currentSurveyCohort;
+      }
+      const badge = document.getElementById('launch-modal-dept-badge');
+      if (badge) badge.textContent = currentSurveyCohort;
+      closeGeneratorCohortModal();
+      updateGeneratorCohortDropdownUI();
+      saveGeneratorState();
+
+      const promptToRun = pendingGeneratorPrompt || document.getElementById('gen-ai-chat-input')?.value?.trim();
+      pendingGeneratorPrompt = '';
+      if (promptToRun) {
+        executeGeneratorPrompt(promptToRun, currentSurveyCohort);
+      }
+    }
+
+    function updateGeneratorCohortDropdownUI() {
+      const wrapper = document.getElementById('generator-cohort-dropdown-wrapper');
+      const label = document.getElementById('generator-cohort-btn-label');
+      const badge = document.getElementById('launch-modal-dept-badge');
+      if (!wrapper) return;
+
+      if (!currentSurveyCohort) {
+        wrapper.classList.add('hidden');
+        const menu = document.getElementById('generator-cohort-dropdown-menu');
+        if (menu) menu.classList.add('hidden');
+        return;
+      }
+
+      wrapper.classList.remove('hidden');
+      if (label) label.textContent = currentSurveyCohort;
+      if (badge) badge.textContent = currentSurveyCohort;
+      syncHeaderGeneratorCohort(currentSurveyCohort);
+    }
+
+    function toggleGeneratorCohortDropdown(forceState) {
+      const menu = document.getElementById('generator-cohort-dropdown-menu');
+      if (!menu) return;
+      if (typeof forceState === 'boolean') {
+        menu.classList.toggle('hidden', !forceState);
+      } else {
+        menu.classList.toggle('hidden');
+      }
+    }
+
+    function getCohortFromHeaderDropdown() {
+      const allCb = document.getElementById('header-dept-all');
+      const checkboxes = Array.from(document.querySelectorAll('.header-gen-dept-cb:checked'));
+      if (allCb?.checked || checkboxes.length === 0 || checkboxes.length === 4) {
+        return 'Todos';
+      }
+      return checkboxes.map(cb => cb.value).join(', ');
+    }
+
+    function toggleHeaderGeneratorAllDepts(checked) {
+      document.querySelectorAll('.header-gen-dept-cb').forEach(cb => { cb.checked = checked; });
+      applyHeaderCohortChange();
+    }
+
+    function onHeaderGeneratorDeptChange() {
+      const allCb = document.getElementById('header-dept-all');
+      const checkboxes = Array.from(document.querySelectorAll('.header-gen-dept-cb'));
+      const allChecked = checkboxes.every(cb => cb.checked);
+      if (allCb) allCb.checked = allChecked;
+      applyHeaderCohortChange();
+    }
+
+    function getSelectedCohortList() {
+      const allHeader = document.getElementById('header-dept-all');
+      const headerBoxes = Array.from(document.querySelectorAll('.header-gen-dept-cb:checked')).map(cb => cb.value);
+      const allModal = document.getElementById('modal-dept-all');
+      const modalBoxes = Array.from(document.querySelectorAll('.modal-gen-dept-cb:checked')).map(cb => cb.value);
+      
+      let isAll = false;
+      let rawList = [];
+
+      const headerWrapper = document.getElementById('generator-cohort-dropdown-wrapper');
+      if (headerWrapper && !headerWrapper.classList.contains('hidden') && headerBoxes.length > 0) {
+        isAll = !!allHeader?.checked || headerBoxes.length === 4;
+        rawList = headerBoxes;
+      } else if (modalBoxes.length > 0) {
+        isAll = !!allModal?.checked || modalBoxes.length === 4;
+        rawList = modalBoxes;
+      } else if (currentSurveyCohort) {
+        if (currentSurveyCohort.toLowerCase() === 'todos') isAll = true;
+        else rawList = currentSurveyCohort.split(',').map(s => s.trim());
+      }
+
+      if (isAll || rawList.length === 0 || rawList.length === 4) {
+        return ["Fábrica", "Logística", "Comercial", "Oficinas"];
+      }
+
+      return rawList.map(c => {
+        const l = c.toLowerCase();
+        if (l.includes('planta') || l.includes('fabrica') || l.includes('fábrica')) return 'Fábrica';
+        if (l.includes('logist')) return 'Logística';
+        if (l.includes('comercial')) return 'Comercial';
+        if (l.includes('oficina')) return 'Oficinas';
+        return c;
+      });
+    }
+
+    function applyHeaderCohortChange() {
+      const selectedList = getSelectedCohortList();
+      currentSurveyCohort = selectedList.length === 4 ? 'Todos' : selectedList.join(', ');
+      if (editingSurvey) {
+        editingSurvey.cohort = currentSurveyCohort;
+      }
+      const label = document.getElementById('generator-cohort-btn-label');
+      if (label) label.textContent = currentSurveyCohort;
+      const badge = document.getElementById('launch-modal-dept-badge');
+      if (badge) badge.textContent = currentSurveyCohort;
+      syncModalGeneratorCohort(currentSurveyCohort);
+
+      // Prune / sincronizar encuestas activas según los grupos actualmente seleccionados
+      const existingKeys = Object.keys(surveysByCohort);
+      for (const k of existingKeys) {
+        if (!selectedList.includes(k)) {
+          delete surveysByCohort[k];
+        }
+      }
+      const remainingKeys = Object.keys(surveysByCohort);
+      if (remainingKeys.length > 0) {
+        if (!activeCohortTab || !remainingKeys.includes(activeCohortTab)) {
+          activeCohortTab = remainingKeys[0];
+        }
+        if (surveysByCohort[activeCohortTab]) {
+          genQuestions = surveysByCohort[activeCohortTab].questions || [];
+        }
+      }
+      renderCohortTabs();
+      renderGenCard();
+      saveGeneratorState();
+      showToast(`Colectivos: ${currentSurveyCohort}. Pulsa en "Generar / Actualizar" para adaptar las preguntas.`, 'info');
+    }
+
+    function renderCohortTabs() {
+      const container = document.getElementById('gen-cohort-tabs-container');
+      const btnBox = document.getElementById('gen-cohort-tab-buttons');
+      const channelBadge = document.getElementById('gen-active-channel-badge');
+      const channelText = document.getElementById('gen-active-channel-text');
+      const channelIcon = document.getElementById('gen-active-channel-icon');
+      if (!container || !btnBox) return;
+
+      const keys = Object.keys(surveysByCohort);
+      if (keys.length <= 1) {
+        container.classList.add('hidden');
+        container.classList.remove('flex');
+        return;
+      }
+
+      container.classList.remove('hidden');
+      container.classList.add('flex');
+      btnBox.innerHTML = '';
+
+      if (!activeCohortTab || !keys.includes(activeCohortTab)) {
+        activeCohortTab = keys[0];
+      }
+
+      keys.forEach(k => {
+        const isActive = k === activeCohortTab;
+        const sData = surveysByCohort[k];
+        const count = sData?.questions?.length || 0;
+        const icon = (k === 'Fábrica' || k === 'Planta') ? 'factory'
+                   : k === 'Logística' ? 'local_shipping'
+                   : k === 'Comercial' ? 'storefront'
+                   : 'business';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => selectCohortTab(k);
+        btn.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+          isActive
+            ? 'bg-primary text-on-primary shadow-xs'
+            : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+        }`;
+        btn.innerHTML = `
+          <span class="material-symbols-outlined text-xs">${icon}</span>
+          <span>${escapeHtml(k)}</span>
+          <span class="text-[10px] opacity-80 font-mono">(${count})</span>
+        `;
+        btnBox.appendChild(btn);
+      });
+
+      // Actualizar el canal recomendado del tab activo
+      if (channelBadge && channelText && activeCohortTab && surveysByCohort[activeCohortTab]) {
+        const canal = surveysByCohort[activeCohortTab].canal_recomendado || 'Portal Web';
+        channelText.textContent = canal;
+        if (channelIcon) {
+          channelIcon.textContent = canal.includes('QR') ? 'qr_code_2'
+                                  : (canal.includes('SMS') || canal.includes('WhatsApp')) ? 'sms'
+                                  : 'send_to_mobile';
+        }
+      }
+    }
+
+    function selectCohortTab(cohortKey) {
+      if (!surveysByCohort[cohortKey]) return;
+      activeCohortTab = cohortKey;
+      genQuestions = surveysByCohort[cohortKey].questions || [];
+      genIndex = 0;
+      renderCohortTabs();
+      renderGenCard();
+      saveGeneratorState();
+    }
+
+    function syncHeaderGeneratorCohort(cohortStr) {
+      const allCb = document.getElementById('header-dept-all');
+      if (!cohortStr || cohortStr === 'Todos') {
+        if (allCb) allCb.checked = true;
+        document.querySelectorAll('.header-gen-dept-cb').forEach(cb => { cb.checked = true; });
+        return;
+      }
+      const parts = cohortStr.toLowerCase().split(',').map(s => s.trim());
+      if (allCb) allCb.checked = false;
+      document.querySelectorAll('.header-gen-dept-cb').forEach(cb => {
+        const val = cb.value.toLowerCase();
+        const matchesPlanta = (val === 'planta' || val === 'fábrica' || val === 'fabrica') &&
+          parts.some(p => p.includes('plant') || p.includes('fabri') || p.includes('fábri'));
+        const matchesOficina = (val === 'oficina' || val === 'oficinas') &&
+          parts.some(p => p.includes('oficin'));
+        const matchesLogistica = val.includes('logist') && parts.some(p => p.includes('logist'));
+        const matchesComercial = val.includes('comerc') && parts.some(p => p.includes('comerc'));
+        cb.checked = matchesPlanta || matchesOficina || matchesLogistica || matchesComercial;
+      });
+      const allChecked = Array.from(document.querySelectorAll('.header-gen-dept-cb')).every(cb => cb.checked);
+      if (allCb) allCb.checked = allChecked;
+    }
+
+    document.addEventListener('click', (e) => {
+      const wrapper = document.getElementById('generator-cohort-dropdown-wrapper');
+      const menu = document.getElementById('generator-cohort-dropdown-menu');
+      if (wrapper && menu && !wrapper.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    function getSelectedGeneratorCohort() {
+      return currentSurveyCohort || editingSurvey?.cohort || 'Todos';
+    }
+
+    async function handleGeneratorPrompt(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('gen-ai-chat-input');
+      const val = input?.value?.trim() || genPromptHistory[genPromptHistory.length - 1] || '';
+      if (!val) {
+        showToast('Escribe una instrucción o tema para la consulta.', 'info');
+        return;
+      }
+
+      // La primera vez que se clica a generar, sale el popup de seleccionar departamentos
+      if (!currentSurveyCohort) {
+        pendingGeneratorPrompt = val;
+        openGeneratorCohortModal();
+        return;
+      }
+
+      await executeGeneratorPrompt(val, currentSurveyCohort);
+    }
+
+    async function executeGeneratorPrompt(val, cohort) {
+      const selectedCohorts = getSelectedCohortList();
+      const cohortDisplay = selectedCohorts.length === 4 ? 'Todos' : selectedCohorts.join(', ');
+      showToast(`Google Gemini adaptando preguntas para ${cohortDisplay}...`, 'info');
 
       try {
         const res = await fetch('/api/generator/refine', {
@@ -4183,24 +4610,47 @@
             user_prompt: val,
             prompt_history: genPromptHistory,
             current_questions: genQuestions,
-            cohort: editingSurvey?.cohort || 'Planta',
+            cohort: cohortDisplay,
+            cohorts: selectedCohorts,
+            surveys_by_cohort: surveysByCohort,
             language: 'es'
           })
         });
 
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data.questions) && data.questions.length > 0) {
-            genQuestions = data.questions;
-            if (Array.isArray(data.updated_indices) && data.updated_indices.length > 0) {
-              genIndex = Math.min(data.updated_indices[0], genQuestions.length - 1);
-            } else {
-              genIndex = 0;
-            }
+          currentSurveyCohort = cohortDisplay;
+          if (editingSurvey) {
+            editingSurvey.cohort = cohortDisplay;
           }
 
-          genPromptHistory.push(val);
-          if (genPromptHistory.length > 50) genPromptHistory.shift();
+          if (data.surveys_by_cohort && typeof data.surveys_by_cohort === 'object' && Object.keys(data.surveys_by_cohort).length > 0) {
+            surveysByCohort = data.surveys_by_cohort;
+            const cohortKeys = Object.keys(surveysByCohort);
+            if (!activeCohortTab || !cohortKeys.includes(activeCohortTab)) {
+              activeCohortTab = cohortKeys[0];
+            }
+            if (surveysByCohort[activeCohortTab]) {
+              genQuestions = surveysByCohort[activeCohortTab].questions || [];
+            }
+          } else if (Array.isArray(data.questions) && data.questions.length > 0) {
+            genQuestions = data.questions;
+            surveysByCohort = {
+              [cohortDisplay]: {
+                colectivo: cohortDisplay,
+                titulo: `Pulso: ${val.slice(0, 30)}`,
+                canal_recomendado: 'Portal Web',
+                questions: genQuestions
+              }
+            };
+            activeCohortTab = cohortDisplay;
+          }
+
+          genIndex = 0;
+          if (!genPromptHistory.includes(val)) {
+            genPromptHistory.push(val);
+            if (genPromptHistory.length > 50) genPromptHistory.shift();
+          }
           if (editingSurvey) {
             editingSurvey.generator_history = [...genPromptHistory];
           }
@@ -4211,9 +4661,10 @@
             synthEl.innerHTML = data.synthesis || `He adaptado la consulta según tu instrucción: <em>"${escapeHtml(val)}"</em>.`;
           }
 
+          renderCohortTabs();
           renderGenCard();
           saveGeneratorState();
-          showToast(data.source === 'gemini' ? 'Google Gemini ha generado / actualizado las preguntas.' : 'Preguntas actualizadas.', 'success');
+          showToast(data.source === 'gemini' ? 'Google Gemini ha generado las preguntas adaptadas.' : 'Preguntas omnicanal actualizadas con éxito.', 'success');
         } else {
           showToast('No se pudo procesar la solicitud con el motor.', 'error');
         }
@@ -4482,11 +4933,15 @@
       }
 
       genQuestions = JSON.parse(JSON.stringify(editingQuestions));
+      if (activeCohortTab && surveysByCohort[activeCohortTab]) {
+        surveysByCohort[activeCohortTab].questions = JSON.parse(JSON.stringify(genQuestions));
+      }
       genIndex = 0;
       saveGeneratorState();
+      renderCohortTabs();
       renderGenCard();
       closeQuestionEditorModal();
-      showToast(`¡Encuesta actualizada con éxito! (${genQuestions.length} preguntas)`, 'success');
+      showToast(`¡Encuesta ${activeCohortTab ? 'de ' + activeCohortTab : ''} actualizada! (${genQuestions.length} preguntas)`, 'success');
     }
 
     // Abre el creador / editor manual de Typeform
@@ -4519,27 +4974,42 @@
           || (cleanQ1 ? `Pulso Operativo: ${cleanQ1}` : 'Pulso de Clima y Organización');
       }
 
-      const allCheckbox = document.getElementById('launch-dept-all');
-      const cohortParts = editingSurvey?.cohort && editingSurvey.cohort !== 'Todos'
-        ? editingSurvey.cohort.split(',').map(value => value.trim())
-        : [];
-      const selectedDepartments = cohortParts.map(value => value === 'Oficinas' ? 'Oficina' : value);
-      const selectAllDepartments = !selectedDepartments.length || selectedDepartments.length === 4;
-      if (allCheckbox) allCheckbox.checked = selectAllDepartments;
-      document.querySelectorAll('.dept-checkbox').forEach(cb => {
-        cb.checked = selectAllDepartments || selectedDepartments.includes(cb.value);
-      });
+      const cohort = getSelectedGeneratorCohort();
+      const deptBadge = document.getElementById('launch-modal-dept-badge');
+      if (deptBadge) deptBadge.textContent = cohort;
 
+      const cohortKeys = Object.keys(surveysByCohort);
       const summaryBox = document.getElementById('launch-modal-questions-summary');
       const countBadge = document.getElementById('launch-modal-qcount');
-      if (countBadge) countBadge.textContent = `${genQuestions.length} preguntas`;
-      if (summaryBox) {
-        summaryBox.innerHTML = genQuestions.map((q, idx) => `
-          <div class="flex items-start gap-1.5 py-1 border-b border-surface-container/50 last:border-0">
-            <span class="font-bold text-primary font-mono text-[10px] shrink-0">${idx + 1}.</span>
-            <span class="text-xs text-on-surface line-clamp-1">${escapeHtml(q.title || '')}</span>
-          </div>
-        `).join('');
+
+      if (cohortKeys.length > 1) {
+        if (countBadge) countBadge.textContent = `${cohortKeys.length} encuestas omnicanal`;
+        if (summaryBox) {
+          summaryBox.innerHTML = cohortKeys.map(k => {
+            const s = surveysByCohort[k];
+            const qCount = s?.questions ? s.questions.length : 0;
+            const canal = s?.canal_recomendado || 'Portal Web';
+            return `
+              <div class="py-1.5 border-b border-surface-container/50 last:border-0 flex items-center justify-between">
+                <div>
+                  <strong class="text-xs text-primary">${escapeHtml(k)}</strong>
+                  <span class="text-[11px] text-tertiary ml-1">(${qCount} preguntas)</span>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-semibold font-mono">${escapeHtml(canal)}</span>
+              </div>
+            `;
+          }).join('');
+        }
+      } else {
+        if (countBadge) countBadge.textContent = `${genQuestions.length} preguntas`;
+        if (summaryBox) {
+          summaryBox.innerHTML = genQuestions.map((q, idx) => `
+            <div class="flex items-start gap-1.5 py-1 border-b border-surface-container/50 last:border-0">
+              <span class="font-bold text-primary font-mono text-[10px] shrink-0">${idx + 1}.</span>
+              <span class="text-xs text-on-surface line-clamp-1">${escapeHtml(q.title || '')}</span>
+            </div>
+          `).join('');
+        }
       }
 
       modal.classList.remove('hidden');
@@ -4548,17 +5018,6 @@
     function closeLaunchDraftModal() {
       const modal = document.getElementById('modal-launch-draft');
       if (modal) modal.classList.add('hidden');
-    }
-
-    function toggleAllDepartments(checked) {
-      document.querySelectorAll('.dept-checkbox').forEach(cb => { cb.checked = checked; });
-    }
-
-    function onDepartmentChange() {
-      const allCb = document.getElementById('launch-dept-all');
-      const checkboxes = Array.from(document.querySelectorAll('.dept-checkbox'));
-      const allChecked = checkboxes.every(cb => cb.checked);
-      if (allCb) allCb.checked = allChecked;
     }
 
     async function submitLaunchDraft(e) {
@@ -4575,13 +5034,7 @@
 
       try {
         const title = document.getElementById('launch-draft-title').value.trim() || 'Pulso de Clima Laboral';
-        const allChecked = document.getElementById('launch-dept-all')?.checked;
-        const checkedBoxes = Array.from(document.querySelectorAll('.dept-checkbox:checked')).map(cb => cb.value);
-
-        let cohort = "Todos";
-        if (!allChecked) {
-          cohort = checkedBoxes.length > 0 ? (checkedBoxes.length === 4 ? "Todos" : checkedBoxes.join(", ")) : "Planta";
-        }
+        const cohort = getSelectedGeneratorCohort();
 
         const formattedQuestions = genQuestions.map((q, idx) => ({
           id: `q_${idx + 1}`,
@@ -4614,6 +5067,44 @@
         };
 
         const isUpdatingDraft = editingSurvey?.status === 'draft';
+        const cohortKeys = Object.keys(surveysByCohort);
+
+        if (cohortKeys.length > 1 && !isUpdatingDraft) {
+          for (const cKey of cohortKeys) {
+            const sData = surveysByCohort[cKey];
+            const cQuestions = (sData?.questions || []).map((q, idx) => ({
+              id: `q_${idx + 1}`,
+              text: q.title || `Pregunta ${idx + 1}`,
+              type: q.type || "multiple_choice",
+              dimension: q.dimension || "bienestar",
+              required: true,
+              choices: (q.type || "multiple_choice") === "multiple_choice"
+                ? (Array.isArray(q.choices) && q.choices.length
+                  ? q.choices
+                  : ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"])
+                : [],
+            }));
+            await fetch('/api/surveys', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ...payload,
+                title: `${title} (${cKey})`,
+                cohort: cKey,
+                channel: sData?.canal_recomendado || (cKey === 'Fábrica' || cKey === 'Planta' ? 'Móvil-QR' : 'Teams/Web'),
+                questions: cQuestions,
+                generator_history: genPromptHistory
+              })
+            });
+          }
+          closeLaunchDraftModal();
+          showToast(`¡Se han registrado ${cohortKeys.length} microconsultas independientes para ${cohortKeys.join(', ')}!`, 'success');
+          startNewGenerator();
+          showPanel('admin');
+          loadAdminData();
+          return;
+        }
+
         const url = isUpdatingDraft
           ? `/api/surveys/${encodeURIComponent(editingSurvey.id)}/edit`
           : '/api/surveys';
@@ -4634,12 +5125,6 @@
 
         if (res.ok) {
           const savedSurvey = await res.json();
-          editingSurvey = savedSurvey;
-          genPromptHistory = Array.isArray(savedSurvey.generator_history)
-            ? savedSurvey.generator_history
-            : [...genPromptHistory];
-          updateGeneratorEditingBanner();
-          saveGeneratorState();
           closeLaunchDraftModal();
           showToast(
             isUpdatingDraft
@@ -4647,6 +5132,8 @@
               : `¡Consulta "${title}" guardada como nuevo borrador para validación de RR. HH.!`,
             'success'
           );
+          // Reinicia automáticamente para una nueva encuesta limpia
+          startNewGenerator();
           showPanel('admin');
           loadAdminData();
         } else {
@@ -4783,6 +5270,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       applySidebarState();
       restoreGeneratorState();
+      updateGeneratorCohortDropdownUI();
+      renderCohortTabs();
       loadPanelSettings();
 
       const chatInput = document.getElementById('gen-ai-chat-input');

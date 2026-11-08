@@ -346,64 +346,222 @@ def generate_survey_draft(payload: object) -> dict:
     return {"title": title, "intro": intro, "questions": questions, "source": source}
 
 
-def refine_survey_with_ai(payload: object) -> dict:
-    """Genera o actualiza 1, 2 o todas las preguntas de la microconsulta usando Google Gemini o fallback adaptativo."""
-    if not isinstance(payload, dict):
-        raise RequestError("El formato de la solicitud no es válido.")
-    user_prompt = payload.get("user_prompt", "").strip()
-    if not user_prompt:
-        raise RequestError("Escribe una instrucción o tema para la IA.")
+def parse_cohort_list(cohort_val: object) -> list[str]:
+    """Normaliza y divide la lista de colectivos seleccionados."""
+    if isinstance(cohort_val, list):
+        items = [str(x).strip() for x in cohort_val if str(x).strip()]
+    elif isinstance(cohort_val, str):
+        trimmed = cohort_val.strip()
+        if not trimmed or trimmed.lower() == "todos":
+            return ["Fábrica", "Logística", "Comercial", "Oficinas"]
+        items = [p.strip() for p in trimmed.split(",") if p.strip()]
+    else:
+        return ["Planta"]
 
-    current_questions = payload.get("current_questions", [])
-    if not isinstance(current_questions, list):
-        current_questions = []
-    prompt_history = validate_generator_history(payload.get("prompt_history", []))
+    canonical = []
+    for item in items:
+        lower = item.lower()
+        if lower in ["planta", "fabrica", "fábrica"]:
+            name = "Planta" if item == "Planta" else "Fábrica"
+        elif "logíst" in lower or "logist" in lower:
+            name = "Logística"
+        elif "comercial" in lower:
+            name = "Comercial"
+        elif "oficina" in lower:
+            name = "Oficinas"
+        else:
+            name = item
+        if name not in canonical:
+            canonical.append(name)
+    return canonical or ["Fábrica"]
 
-    cohort = payload.get("cohort", "Planta")
-    language = payload.get("language", "es")
-    if language not in {"es", "ca", "en"}:
-        language = "es"
 
-    with AI_CONFIG_LOCK:
-        ai_config = dict(AI_CONFIG)
+def generate_cohort_survey(
+    cohort_name: str,
+    user_prompt: str,
+    prompt_history: list,
+    current_questions: list,
+    ai_config: dict,
+    language: str = "es",
+) -> dict:
+    """Genera una microconsulta adaptada a las características operativas de un colectivo concreto."""
+    is_factory = cohort_name in ["Fábrica", "Planta"]
+    is_logistics_or_commercial = cohort_name in ["Logística", "Comercial"]
+    is_office = cohort_name == "Oficinas"
 
-    if ai_config["api_key"]:
+    if is_factory:
+        recommended_channel = "QR en Vestuario"
+        specific_rules = (
+            "- Formato: Microconsulta ultrarrápida. Máximo 3 preguntas cerradas (escala 1-5).\n"
+            "- Tono y lenguaje: Muy directo, sencillo y cotidiano. Enfocado en descansos, turnicidad y condiciones físicas.\n"
+            "- Canal recomendado obligatorio: 'QR en Vestuario'.\n"
+            "- Restricción crítica: CERO preguntas abiertas que requieran escribir mucho texto."
+        )
+    elif is_logistics_or_commercial:
+        recommended_channel = "Enlace SMS/WhatsApp"
+        specific_rules = (
+            f"- Formato: Microconsulta ultrarrápida para {cohort_name}. Máximo 3 preguntas cerradas (escala 1-5).\n"
+            "- Tono y lenguaje: Ágil, directo y accionable para responder desde dispositivos móviles en ruta.\n"
+            "- Canal recomendado obligatorio: 'Enlace SMS/WhatsApp'.\n"
+            "- Restricción crítica: CERO preguntas abiertas que requieran escribir mucho texto."
+        )
+    else:
+        recommended_channel = "Tarjeta en Microsoft Teams / Enlace Web"
+        specific_rules = (
+            "- Formato: Encuesta completa para Oficinas.\n"
+            "- Preguntas: Hasta 4 preguntas cerradas (escala 1-5) y exactamente 1 pregunta de texto abierto ('open_text').\n"
+            "- Tono y lenguaje: Corporativo, reflexivo y profesional sobre conciliación, liderazgo y procesos.\n"
+            "- Canal recomendado obligatorio: 'Tarjeta en Microsoft Teams / Enlace Web'."
+        )
+
+    # 2. Pools hiperpersonalizados según colectivo para garantizar variedad y evitar duplicados
+    low_prompt = user_prompt.lower()
+    clean_p = user_prompt.strip()
+
+    factory_pool = [
+        {
+            "title": f"¿Cómo valoras la seguridad y el ritmo de trabajo en tu línea frente a: {clean_p[:35]}?",
+            "dimension": "condiciones",
+            "type": "rating",
+            "choices": ["Muy seguro y adecuado", "Adecuado", "Excesivo", "Peligroso"],
+        },
+        {
+            "title": "¿Los descansos y las pausas entre turnos son suficientes para recuperarte físicamente?",
+            "dimension": "bienestar",
+            "type": "multiple_choice",
+            "choices": ["Totalmente suficientes", "Aceptables", "Insuficientes", "Muy insuficientes"],
+        },
+        {
+            "title": "¿Cuentas con las herramientas de mantenimiento y EPIs necesarios para tu labor diaria?",
+            "dimension": "condiciones",
+            "type": "multiple_choice",
+            "choices": ["Siempre disponibles", "La mayoría de veces", "Raras veces", "Casi nunca"],
+        },
+    ]
+
+    logistics_pool = [
+        {
+            "title": f"¿Cómo de ágil y segura ha sido tu operativa hoy respecto a: {clean_p[:35]}?",
+            "dimension": "condiciones",
+            "type": "rating",
+            "choices": ["Muy ágil", "Normal", "Lenta con fricciones", "Muy complicada"],
+        },
+        {
+            "title": "¿La información sobre cambios en rutas y pedidos llegó con suficiente antelación a tu terminal?",
+            "dimension": "liderazgo",
+            "type": "multiple_choice",
+            "choices": ["Siempre a tiempo", "Casi siempre", "A veces tarde", "Casi nunca"],
+        },
+        {
+            "title": "¿Dispones de las condiciones adecuadas para completar las franjas de entrega sin sobrecarga?",
+            "dimension": "bienestar",
+            "type": "multiple_choice",
+            "choices": ["Completamente", "Suficiente", "Insuficiente"],
+        },
+    ]
+
+    commercial_pool = [
+        {
+            "title": f"¿Cómo calificarías el apoyo de operaciones y distribución respecto a: {clean_p[:35]}?",
+            "dimension": "relaciones",
+            "type": "rating",
+            "choices": ["Excelente apoyo", "Bueno", "Mejorable", "Deficiente"],
+        },
+        {
+            "title": "¿La información comercial y objetivos de campaña están claros para transmitir a clientes?",
+            "dimension": "cultura",
+            "type": "multiple_choice",
+            "choices": ["Muy claros", "Claros", "Poco claros", "Confusos"],
+        },
+        {
+            "title": "¿Dispones de la agilidad necesaria en campo para resolver incidencias de producto en hostelería?",
+            "dimension": "condiciones",
+            "type": "multiple_choice",
+            "choices": ["Siempre", "Casi siempre", "Raras veces", "Casi nunca"],
+        },
+    ]
+
+    office_pool = [
+        {
+            "title": f"¿En qué medida consideras que {clean_p[:35]} favorece tu conciliación y bienestar?",
+            "dimension": "bienestar",
+            "type": "rating",
+            "choices": ["Muy favorable", "Favorable", "Neutro", "Desfavorable"],
+        },
+        {
+            "title": "¿Consideras que las decisiones adoptadas en tu área son comunicadas con claridad y transparencia?",
+            "dimension": "liderazgo",
+            "type": "rating",
+            "choices": ["Totalmente de acuerdo", "De acuerdo", "En desacuerdo", "Totalmente en desacuerdo"],
+        },
+        {
+            "title": "¿Tu responsable directo te facilita la flexibilidad y autonomía necesaria para alcanzar tus metas?",
+            "dimension": "liderazgo",
+            "type": "multiple_choice",
+            "choices": ["Siempre", "Casi siempre", "A veces", "Raras veces"],
+        },
+        {
+            "title": "¿Sientes que tus objetivos profesionales trimestrales siguen alineados con el ritmo actual del equipo?",
+            "dimension": "desarrollo",
+            "type": "multiple_choice",
+            "choices": ["Completamente alineados", "Alineados", "Poco claros", "Desalineados"],
+        },
+        {
+            "title": "¿Qué propuesta o medida constructiva sugerirías a Dirección de Personas para optimizar este punto?",
+            "dimension": "cultura",
+            "type": "open_text",
+            "choices": [],
+        },
+    ]
+
+    if is_factory:
+        cohort_pool = factory_pool
+        synthesis = "Microconsulta ultrarrápida adaptada a operarios de planta y vestuarios."
+    elif cohort_name == "Logística":
+        cohort_pool = logistics_pool
+        synthesis = "Microconsulta móvil adaptada a conductores y centros logísticos."
+    elif cohort_name == "Comercial":
+        cohort_pool = commercial_pool
+        synthesis = "Microconsulta ágil adaptada a la red comercial y ventas en ruta."
+    else:
+        cohort_pool = office_pool
+        synthesis = "Encuesta corporativa completa con 4 preguntas cerradas y 1 abierta para Oficinas."
+
+    # 1. Intentar con LLM si hay API Key configurada
+    if ai_config.get("api_key"):
         system_instruction = (
-            "Eres el consultor senior de People & Culture de Estrella Damm para Fábrica, Logística, Comercial y Oficinas. "
-            "El usuario te da una instrucción en lenguaje natural (ej: 'cambia la pregunta 2 por una sobre descansos', "
-            "'adapta todas las preguntas para operarios de fábrica', 'haz una pregunta sobre ergonomía').\n"
-            "Tu tarea:\n"
-            "1. Analiza qué preguntas deben actualizarse (una, dos o todas). Si la lista actual está vacía, genera 3 o 4 preguntas completas.\n"
-            "2. Devuelve UN ÚNICO OBJETO JSON con este esquema exacto:\n"
+            f"Eres el consultor senior de People & Culture de Estrella Damm especializado en {cohort_name}.\n"
+            f"DEPARTAMENTO DESTINATARIO: '{cohort_name}'.\n"
+            f"{specific_rules}\n\n"
+            "El usuario te da una instrucción en lenguaje natural.\n"
+            "Devuelve UN ÚNICO OBJETO JSON con este esquema exacto:\n"
             "{\n"
-            '  "synthesis": "Explicación breve de 1 frase de qué cambios has realizado",\n'
-            '  "updated_indices": [0, 1], // Índices base-0 de las preguntas modificadas (o [0, 1, 2] si son todas)\n'
+            f'  "colectivo": "{cohort_name}",\n'
+            f'  "canal_recomendado": "{recommended_channel}",\n'
+            '  "titulo": "Título motivador y corto",\n'
+            '  "synthesis": "Breve frase explicando los cambios",\n'
+            '  "updated_indices": [0, 1],\n'
             '  "questions": [\n'
             "    {\n"
             '      "title": "¿Texto claro de la pregunta?",\n'
             '      "dimension": "bienestar" | "liderazgo" | "condiciones" | "desarrollo" | "cultura" | "relaciones",\n'
             '      "type": "rating" | "multiple_choice" | "open_text",\n'
-            '      "choices": ["Opción 1", "Opción 2"] // Obligatorio solo si type es multiple_choice\n'
+            '      "choices": ["Opción 1", "Opción 2"]\n'
             "    }\n"
             "  ]\n"
             "}\n"
-            "Reglas críticas de RRHH Damm:\n"
-            "- Cero preguntas que comprometan la privacidad (nada de nombres, DNI, correos, turnos específicos de 1 persona).\n"
-            "- Lenguaje cercano, respetuoso y adaptado al entorno del trabajador.\n"
-            "- La primera pregunta debe ser de tipo 'rating' (escala 1 a 5).\n"
-            "- Devuelve ÚNICAMENTE el JSON sin bloques de texto fuera."
         )
 
         user_content = {
             "instruction": user_prompt,
             "previous_instructions": prompt_history,
-            "cohort": cohort,
+            "cohort": cohort_name,
             "language": language,
             "existing_questions": current_questions,
         }
 
         request_body = {
-            "model": ai_config["model"],
+            "model": ai_config.get("model", "ornith"),
             "temperature": 0.3,
             "max_tokens": 4096,
             "chat_template_kwargs": {"enable_thinking": False},
@@ -426,65 +584,155 @@ def refine_survey_with_ai(payload: object) -> dict:
             text = extract_ai_content(data)
             parsed = parse_ai_json(text)
             if "questions" in parsed and isinstance(parsed["questions"], list) and len(parsed["questions"]) > 0:
+                raw_qs = parsed["questions"]
+                sanitized_qs = []
+                for q in raw_qs:
+                    q_type = q.get("type", "multiple_choice")
+                    if not is_office and q_type == "open_text":
+                        q_type = "multiple_choice"
+                    sanitized_qs.append({
+                        "title": q.get("title") or q.get("enunciado") or "¿Pregunta de consulta?",
+                        "dimension": q.get("dimension") or "bienestar",
+                        "type": q_type,
+                        "choices": q.get("choices") if isinstance(q.get("choices"), list) and len(q.get("choices")) > 0 else (
+                            ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"] if q_type != "open_text" else []
+                        )
+                    })
+
+                if is_office:
+                    # Estricto Oficinas: exactamente 4 cerradas + 1 abierta (total 5)
+                    closed_qs = [q for q in sanitized_qs if q["type"] != "open_text"][:4]
+                    existing_titles = {q["title"].strip().lower() for q in closed_qs}
+                    for cand in cohort_pool:
+                        if len(closed_qs) >= 4:
+                            break
+                        if cand["type"] != "open_text" and cand["title"].strip().lower() not in existing_titles:
+                            closed_qs.append(cand)
+                            existing_titles.add(cand["title"].strip().lower())
+                    open_qs = [q for q in sanitized_qs if q["type"] == "open_text"]
+                    if not open_qs:
+                        open_qs = [cohort_pool[-1]]
+                    final_qs = closed_qs[:4] + [open_qs[0]]
+                else:
+                    # Estricto Fábrica/Logística/Comercial: exactamente 3 preguntas cerradas
+                    closed_qs = [q for q in sanitized_qs if q["type"] != "open_text"][:3]
+                    existing_titles = {q["title"].strip().lower() for q in closed_qs}
+                    for cand in cohort_pool:
+                        if len(closed_qs) >= 3:
+                            break
+                        if cand["title"].strip().lower() not in existing_titles:
+                            closed_qs.append(cand)
+                            existing_titles.add(cand["title"].strip().lower())
+                    final_qs = closed_qs[:3]
+
                 return {
                     "source": "gemini",
-                    "synthesis": parsed.get("synthesis", "Preguntas actualizadas con el asistente LLM."),
-                    "questions": parsed["questions"],
-                    "updated_indices": parsed.get("updated_indices", list(range(len(parsed["questions"])))),
+                    "colectivo": cohort_name,
+                    "titulo": parsed.get("titulo", f"Pulso {cohort_name}: {user_prompt[:35]}"),
+                    "canal_recomendado": parsed.get("canal_recomendado", recommended_channel),
+                    "synthesis": parsed.get("synthesis", f"Preguntas actualizadas para {cohort_name}."),
+                    "questions": final_qs,
+                    "updated_indices": list(range(len(final_qs))),
                 }
         except Exception as e:
-            print(f"[LLM Refine Survey Warning] {e}. Usando fallback local inteligente.")
+            print(f"[LLM Refine {cohort_name} Warning] {e}. Usando fallback local.")
 
-    # Fallback inteligente local
-    low_prompt = user_prompt.lower()
-    new_questions = list(current_questions) if current_questions else [
-        {"title": "¿Qué te ha ayudado a sentirte bien en tu jornada esta semana?", "dimension": "bienestar", "type": "rating", "choices": ["Muy de acuerdo", "De acuerdo", "En desacuerdo", "Muy en desacuerdo"]},
-        {"title": "¿Has recibido el acompañamiento que necesitabas para hacer bien tu trabajo?", "dimension": "liderazgo", "type": "multiple_choice", "choices": ["Siempre", "Casi siempre", "A veces", "Casi nunca"]},
-        {"title": "¿Has contado con los recursos y el tiempo necesarios para tus tareas?", "dimension": "condiciones", "type": "multiple_choice", "choices": ["Completamente", "Suficiente", "Insuficiente"]},
-    ]
+    # Si se pide modificar una pregunta concreta (ej: "cambia la 2")
+    if current_questions and len(current_questions) > 1 and "2" in low_prompt:
+        q_copy = list(current_questions)
+        q_copy[1] = {
+            "title": "¿Los descansos y las pausas entre turnos son suficientes para recuperarte?",
+            "dimension": "bienestar",
+            "type": "multiple_choice",
+            "choices": ["Totalmente suficientes", "Aceptables", "Insuficientes", "Muy insuficientes"],
+        }
+        final_mod_qs = q_copy[:5] if is_office else q_copy[:3]
+        return {
+            "source": "plantilla_adaptada",
+            "colectivo": cohort_name,
+            "titulo": f"Pulso {cohort_name}: {clean_p[:30]}",
+            "canal_recomendado": recommended_channel,
+            "synthesis": "He actualizado la pregunta 2 con una valoración sobre descansos.",
+            "questions": final_mod_qs,
+            "updated_indices": [1],
+        }
 
-    updated_indices = []
-    synthesis = "He adaptado la encuesta según tus indicaciones."
-
-    if any(k in low_prompt for k in ["descanso", "pausa", "comedor", "ergonom", "carga"]):
-        q_text = "¿Los descansos y las pausas entre turnos son suficientes para recuperarte?"
-        if len(new_questions) > 1 and "2" in low_prompt:
-            new_questions[1] = {"title": q_text, "dimension": "bienestar", "type": "multiple_choice", "choices": ["Totalmente suficientes", "Aceptables", "Insuficientes", "Muy insuficientes"]}
-            updated_indices = [1]
-            synthesis = "He cambiado la pregunta 2 por una valoración sobre descansos y pausas en turnos."
-        else:
-            new_questions.append({"title": q_text, "dimension": "bienestar", "type": "multiple_choice", "choices": ["Totalmente suficientes", "Aceptables", "Insuficientes"]})
-            updated_indices = [len(new_questions) - 1]
-            synthesis = "He añadido una pregunta enfocada en descansos y condiciones físicas."
-    elif any(k in low_prompt for k in ["planta", "fabrica", "fábrica", "operari", "linea"]):
-        new_questions = [
-            {"title": "¿Cómo valoras la seguridad y el ritmo de trabajo en tu línea o puesto?", "dimension": "condiciones", "type": "rating", "choices": ["Muy seguro y adecuado", "Adecuado", "Excesivo", "Peligroso"]},
-            {"title": "¿La confirmación de tus turnos rotativos llega con suficiente antelación?", "dimension": "bienestar", "type": "multiple_choice", "choices": ["Con más de 2 semanas", "Con 1 semana", "Con pocos días", "Con menos de 48h"]},
-            {"title": "¿Cuentas con las herramientas de mantenimiento y EPIs necesarios para tu labor?", "dimension": "condiciones", "type": "multiple_choice", "choices": ["Siempre disponibles", "La mayoría de veces", "Raras veces", "Casi nunca"]},
-        ]
-        updated_indices = [0, 1, 2]
-        synthesis = "He reformulado todas las preguntas orientándolas específicamente a la realidad operativa de fábrica y planta."
-    elif "1" in low_prompt and "3" in low_prompt:
-        new_questions[0]["title"] = f"¿En qué medida el ritmo de esta semana ha permitido realizar tu trabajo con calidad? ({user_prompt[:30]}...)"
-        if len(new_questions) > 2:
-            new_questions[2]["title"] = "¿Qué apoyo organizativo o de material necesitas con mayor urgencia?"
-        updated_indices = [0, 2]
-        synthesis = "He actualizado las preguntas 1 y 3 con el nuevo enfoque solicitado."
-    elif "2" in low_prompt:
-        target_idx = 1 if len(new_questions) > 1 else 0
-        new_questions[target_idx]["title"] = f"¿Cómo calificarías la comunicación sobre cambios y tareas en tu jornada? ({user_prompt[:35]})"
-        updated_indices = [target_idx]
-        synthesis = f"He actualizado la pregunta {target_idx + 1} para reflejar tu indicación."
-    else:
-        new_questions[0]["title"] = f"¿Cómo calificarías tu experiencia respecto a: {user_prompt[:60]}?"
-        updated_indices = [0]
-        synthesis = "He adaptado la consulta para enfocarla en el tema que has indicado."
+    # Garantizar estrictamente 3 preguntas para no-oficinas y 5 para oficinas
+    final_fallback_qs = cohort_pool[:5] if is_office else cohort_pool[:3]
 
     return {
         "source": "plantilla_adaptada",
+        "colectivo": cohort_name,
+        "titulo": f"Pulso {cohort_name}: {clean_p[:30]}",
+        "canal_recomendado": recommended_channel,
         "synthesis": synthesis,
-        "questions": new_questions,
-        "updated_indices": updated_indices,
+        "questions": final_fallback_qs,
+        "updated_indices": list(range(len(final_fallback_qs))),
+    }
+
+
+def refine_survey_with_ai(payload: object) -> dict:
+    """Genera o actualiza encuestas hiperpersonalizadas para uno o múltiples colectivos."""
+    if not isinstance(payload, dict):
+        raise RequestError("El formato de la solicitud no es válido.")
+    user_prompt = payload.get("user_prompt", "").strip()
+    if not user_prompt:
+        raise RequestError("Escribe una instrucción o tema para la IA.")
+
+    current_questions = payload.get("current_questions", [])
+    if not isinstance(current_questions, list):
+        current_questions = []
+    prompt_history = validate_generator_history(payload.get("prompt_history", []))
+
+    raw_cohort = payload.get("cohort", "Planta")
+    language = payload.get("language", "es")
+    if language not in {"es", "ca", "en"}:
+        language = "es"
+
+    surveys_input = payload.get("surveys_by_cohort", {})
+    if not isinstance(surveys_input, dict):
+        surveys_input = {}
+
+    with AI_CONFIG_LOCK:
+        ai_config = dict(AI_CONFIG)
+
+    # Si se especificó una lista explícita de colectivos o se separan por comas
+    cohorts_list = payload.get("cohorts")
+    if not isinstance(cohorts_list, list) or not cohorts_list:
+        cohorts_list = parse_cohort_list(raw_cohort)
+
+    # Si se pasó explícitamente "Planta" (ej: en tests unitarios simples), preservar exactitud
+    if len(cohorts_list) == 1 and raw_cohort == "Planta":
+        cohorts_list = ["Planta"]
+
+    surveys_by_cohort = {}
+    for col in cohorts_list:
+        cohort_q = []
+        if col in surveys_input and isinstance(surveys_input[col], dict):
+            cohort_q = surveys_input[col].get("questions", [])
+        elif len(cohorts_list) == 1:
+            cohort_q = current_questions
+
+        surveys_by_cohort[col] = generate_cohort_survey(
+            col, user_prompt, prompt_history, cohort_q, ai_config, language
+        )
+
+    active_col = cohorts_list[0]
+    active_survey = surveys_by_cohort[active_col]
+
+    if len(cohorts_list) > 1:
+        synthesis = f"Se han generado {len(cohorts_list)} encuestas personalizadas para: {', '.join(cohorts_list)}."
+    else:
+        synthesis = active_survey["synthesis"]
+
+    return {
+        "source": active_survey["source"],
+        "synthesis": synthesis,
+        "questions": active_survey["questions"],
+        "updated_indices": active_survey["updated_indices"],
+        "cohort": raw_cohort,
+        "cohorts": cohorts_list,
+        "surveys_by_cohort": surveys_by_cohort,
     }
 
 

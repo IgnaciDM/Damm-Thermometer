@@ -418,6 +418,8 @@ def main() -> None:
     migrate_legacy_database()
     with connect() as db:
         seed_demo_data(db)
+    ThreadingHTTPServer.allow_reuse_address = True
+    ThreadingHTTPServer.daemon_threads = True
     server = ThreadingHTTPServer((HOST, PORT), PulsoHandler)
     print(f"\n=======================================================", flush=True)
     print(f" ★ Pulso Estrella Damm está listo y operativo:", flush=True)

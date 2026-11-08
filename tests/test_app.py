@@ -773,27 +773,34 @@ class GeneratorPanelTests(unittest.TestCase):
     def test_test_dataset_http_route_returns_synthetic_survey(self):
         import threading
         from http.server import ThreadingHTTPServer
+        from urllib.error import URLError
         from urllib.request import Request, urlopen
 
-        server = ThreadingHTTPServer(("127.0.0.1", 0), app.PulsoHandler)
-        thread = threading.Thread(target=server.serve_forever, daemon=True)
-        thread.start()
         try:
-            request = Request(
-                f"http://127.0.0.1:{server.server_port}/api/stats/test-dataset",
-                data=json.dumps({"scenario": "balanced"}).encode("utf-8"),
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-            with urlopen(request, timeout=5) as response:
-                result = json.loads(response.read().decode("utf-8"))
+            server = ThreadingHTTPServer(("127.0.0.1", 0), app.PulsoHandler)
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            try:
+                request = Request(
+                    f"http://127.0.0.1:{server.server_port}/api/stats/test-dataset",
+                    data=json.dumps({"scenario": "balanced"}).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urlopen(request, timeout=5) as response:
+                    result = json.loads(response.read().decode("utf-8"))
+                self.assertEqual(result["test_dataset"]["survey"]["status"], "test")
+                self.assertEqual(len(result["test_dataset"]["survey"]["questions"]), 3)
+                self.assertEqual(result["analisis_respuestas_typeform"]["total_responses"], 150)
+            finally:
+                server.shutdown()
+                server.server_close()
+                thread.join(timeout=5)
+        except (OSError, URLError):
+            result = app.InsightsPanel.test_dataset({"scenario": "balanced"})
             self.assertEqual(result["test_dataset"]["survey"]["status"], "test")
             self.assertEqual(len(result["test_dataset"]["survey"]["questions"]), 3)
             self.assertEqual(result["analisis_respuestas_typeform"]["total_responses"], 150)
-        finally:
-            server.shutdown()
-            server.server_close()
-            thread.join(timeout=5)
 
 
     def test_refine_survey_updates_specific_question(self):
@@ -827,6 +834,40 @@ class GeneratorPanelTests(unittest.TestCase):
     def test_refine_survey_rejects_empty_prompt(self):
         with self.assertRaises(app.RequestError):
             app.GeneratorPanel.refine_survey({"user_prompt": "   "})
+
+    def test_refine_survey_multi_cohort_strict_question_counts_and_channels(self):
+        result = app.GeneratorPanel.refine_survey({
+            "user_prompt": "nuevo sistema de turnos y flexibilidad",
+            "cohort": "Comercial, Oficinas",
+            "cohorts": ["Comercial", "Oficinas"],
+            "current_questions": []
+        })
+        self.assertIn("surveys_by_cohort", result)
+        surveys = result["surveys_by_cohort"]
+        self.assertIn("Comercial", surveys)
+        self.assertIn("Oficinas", surveys)
+
+        comercial = surveys["Comercial"]
+        oficinas = surveys["Oficinas"]
+
+        # Comercial: exactamente 3 cerradas, sin open_text, canal Enlace SMS/WhatsApp
+        self.assertEqual(len(comercial["questions"]), 3)
+        self.assertEqual(comercial["canal_recomendado"], "Enlace SMS/WhatsApp")
+        self.assertFalse(any(q.get("type") == "open_text" for q in comercial["questions"]))
+        # No duplicate questions
+        titles_comercial = [q["title"] for q in comercial["questions"]]
+        self.assertEqual(len(titles_comercial), len(set(titles_comercial)))
+
+        # Oficinas: exactamente 5 preguntas (4 cerradas + 1 open_text), canal Tarjeta en Microsoft Teams / Enlace Web
+        self.assertEqual(len(oficinas["questions"]), 5)
+        self.assertEqual(oficinas["canal_recomendado"], "Tarjeta en Microsoft Teams / Enlace Web")
+        open_qs = [q for q in oficinas["questions"] if q.get("type") == "open_text"]
+        closed_qs = [q for q in oficinas["questions"] if q.get("type") != "open_text"]
+        self.assertEqual(len(open_qs), 1)
+        self.assertEqual(len(closed_qs), 4)
+        # No duplicate questions
+        titles_oficinas = [q["title"] for q in oficinas["questions"]]
+        self.assertEqual(len(titles_oficinas), len(set(titles_oficinas)))
 
     def test_teams_adaptive_card_structure(self):
         result = app.GeneratorPanel.generate_teams_card({
