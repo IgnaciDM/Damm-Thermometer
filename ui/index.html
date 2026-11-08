@@ -19,6 +19,8 @@
     }
     ::-webkit-scrollbar { display: none; }
     .hero-nav-transition { transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
+    #app-sidebar.hero-nav-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
+    #main-header.hero-nav-transition { transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease; }
     #app-sidebar.hero-hidden { transform: translateX(-100%) !important; opacity: 0 !important; pointer-events: none !important; }
     #main-header.hero-hidden { transform: translateY(-100%) !important; opacity: 0 !important; pointer-events: none !important; }
     .sidebar-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
