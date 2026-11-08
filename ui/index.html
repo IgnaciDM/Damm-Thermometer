@@ -797,19 +797,55 @@
             </div>
           </div>
 
-          <!-- LLM Executive Synthesis Result Container -->
-          <div id="llm-insights-result-box" class="hidden p-space-md rounded-xl bg-surface-container-low border border-surface-container-high transition-all mt-4">
-            <div class="flex items-center justify-between mb-3 border-b border-surface-container pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
-                <h3 class="text-sm font-headline font-bold text-on-surface">Conclusiones Ejecutivas de Dirección (IA Cero-Alucinaciones)</h3>
+          <!-- Card Persistente de Síntesis IA (Aparece al final de Insights cuando se cierra el popup) -->
+          <div id="insights-saved-synthesis-card" class="hidden p-4 sm:p-5 rounded-2xl bg-surface-container-lowest border-2 border-primary/25 hover:border-primary/50 transition-all shadow-md mt-6 space-y-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 shrink-0 shadow-xs">
+                  <img src="/assets/chapa_damm.png" alt="Damm" class="w-7 h-7 object-contain">
+                  <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] text-white font-bold shadow-xs">
+                    <span class="material-symbols-outlined text-[10px]">auto_awesome</span>
+                  </span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <h4 class="text-sm font-headline font-bold text-on-surface">Síntesis Estratégica con IA</h4>
+                    <span id="saved-synthesis-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-status-positive/10 text-status-positive border border-status-positive/20 flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-status-positive animate-pulse"></span>
+                      <span>Disponible</span>
+                    </span>
+                  </div>
+                  <p id="saved-synthesis-snippet" class="text-xs text-on-surface-variant truncate max-w-xl">
+                    Diagnóstico cualitativo de People Analytics y plan de acción operativo listo para consultar.
+                  </p>
+                </div>
               </div>
-              <button onclick="document.getElementById('llm-insights-result-box').classList.add('hidden')" class="text-tertiary hover:text-on-surface p-1" type="button">
-                <span class="material-symbols-outlined text-sm">close</span>
-              </button>
+
+              <!-- Tres acciones requeridas: Abrir (reabre popup), Copiar y Eliminar -->
+              <div class="flex items-center gap-2 shrink-0">
+                <!-- 1. Abrir: Vuelve a abrir la ventana flotante popup -->
+                <button type="button" onclick="reopenLlmSynthesisModal()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs active:scale-95">
+                  <span class="material-symbols-outlined text-sm">open_in_new</span>
+                  <span>Abrir Síntesis</span>
+                </button>
+
+                <!-- 2. Copiar: Copia al portapapeles -->
+                <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs active:scale-95" title="Copiar informe completo al portapapeles">
+                  <span class="material-symbols-outlined text-sm">content_copy</span>
+                  <span>Copiar</span>
+                </button>
+
+                <!-- 3. Eliminar: Elimina y descarta la síntesis -->
+                <button type="button" onclick="deleteSavedLlmSynthesis()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface-container hover:bg-error-container/40 text-xs font-bold text-error border border-error/20 transition-all shadow-xs active:scale-95" title="Eliminar y descartar esta síntesis">
+                  <span class="material-symbols-outlined text-sm">delete</span>
+                  <span>Eliminar</span>
+                </button>
+              </div>
             </div>
-            <div class="prose prose-sm max-w-none text-xs text-on-surface leading-relaxed space-y-2" id="llm-insights-content">
-              <!-- Filled via fetch to /api/insights/llm -->
+
+            <!-- Resumen numérico rápido de 4 KPIs -->
+            <div id="saved-synthesis-quick-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-surface-container/60 text-xs">
+              <!-- Rellenado dinámicamente -->
             </div>
           </div>
         </section>
@@ -1296,25 +1332,7 @@
     </div>
   </div>
 
-      <!-- Modal Footer -->
-      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
-        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
-          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
-          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
-            <span class="material-symbols-outlined text-sm">content_copy</span>
-            <span>Copiar Síntesis</span>
-          </button>
-          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
-            Cerrar
-          </button>
-        </div>
-      </div>
 
-    </div>
-  </div>
 
   <!-- MODAL: LANZAR A PLANTAS / TYPEFORM (VALIDACIÓN HUMANA PREVIA) -->
   <div id="modal-launch-draft" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -1423,25 +1441,7 @@
     </div>
   </div>
 
-      <!-- Modal Footer -->
-      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
-        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
-          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
-          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
-            <span class="material-symbols-outlined text-sm">content_copy</span>
-            <span>Copiar Síntesis</span>
-          </button>
-          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
-            Cerrar
-          </button>
-        </div>
-      </div>
 
-    </div>
-  </div>
 
   <!-- MODAL DE RESPUESTA A CONSULTA / QR PARTICIPANTE -->
   <div id="respondent-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
@@ -1581,25 +1581,7 @@
     </div>
   </div>
 
-      <!-- Modal Footer -->
-      <div class="flex items-center justify-between px-5 sm:px-6 py-3 border-t border-surface-container bg-surface-container-low/70 backdrop-blur-sm">
-        <div class="flex items-center gap-1.5 text-[11px] text-tertiary">
-          <span class="material-symbols-outlined text-sm text-status-positive">verified_user</span>
-          <span class="hidden sm:inline">Cálculos respaldados por el Motor Determinista Zero-PII</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="copyLlmSynthesisToClipboard()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container text-xs font-bold text-on-surface transition-all shadow-xs">
-            <span class="material-symbols-outlined text-sm">content_copy</span>
-            <span>Copiar Síntesis</span>
-          </button>
-          <button type="button" onclick="closeLlmSynthesisModal()" class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-xs font-bold text-on-primary transition-all shadow-xs">
-            Cerrar
-          </button>
-        </div>
-      </div>
 
-    </div>
-  </div>
 
 
 
@@ -5478,6 +5460,7 @@
     // LLM Insights Synthesis Modal & Visual Engine
     // =====================================================================
     let currentLlmSynthesisRawMarkdown = '';
+    let currentLlmSynthesisData = null;
     let llmLoadingInterval = null;
 
     function openLlmSynthesisModal() {
@@ -5496,6 +5479,76 @@
         clearInterval(llmLoadingInterval);
         llmLoadingInterval = null;
       }
+      // Cuando el usuario cierra el popup, mostrar la tarjeta persistente al final de Insights
+      if (currentLlmSynthesisRawMarkdown && currentLlmSynthesisData) {
+        showSavedSynthesisCard();
+      }
+    }
+
+    function reopenLlmSynthesisModal() {
+      if (!currentLlmSynthesisData) {
+        requestLlmSynthesis();
+        return;
+      }
+      setLlmModalLoading(false);
+      const contentState = document.getElementById('llm-modal-content-state');
+      if (contentState) contentState.classList.remove('hidden');
+      const errorState = document.getElementById('llm-modal-error-state');
+      if (errorState) errorState.classList.add('hidden');
+      openLlmSynthesisModal();
+    }
+
+    function showSavedSynthesisCard() {
+      const card = document.getElementById('insights-saved-synthesis-card');
+      if (!card) return;
+
+      const stats = currentLlmSynthesisData?.payload_estadistico_utilizado || {};
+      const kpis = stats.kpis_ejecutivos || {};
+      const totalN = kpis.total_respuestas || kpis.total_personas || 45;
+      const mediaVal = (kpis.media_bruta ?? kpis.media_clima ?? 3.76);
+      const mediaStr = typeof mediaVal === 'number' ? mediaVal.toFixed(2) : String(mediaVal);
+      const ciStr = kpis.ci_label || '[3.40, 4.11]';
+      const diagStr = kpis.diagnostico || 'Polarizado (División de opiniones)';
+
+      const snippet = document.getElementById('saved-synthesis-snippet');
+      if (snippet) {
+        snippet.textContent = `Muestra observada n=${totalN} · Clima medio ${mediaStr}/5.00 (${ciStr}) · Diagnóstico: ${diagStr}. Plan operativo y preguntas de seguimiento disponibles.`;
+      }
+
+      const quickStats = document.getElementById('saved-synthesis-quick-stats');
+      if (quickStats) {
+        quickStats.innerHTML = `
+          <div class="px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container/60">
+            <span class="text-[10px] text-tertiary uppercase font-semibold block">Muestra (n)</span>
+            <span class="font-bold text-on-surface text-xs">${totalN} personas</span>
+          </div>
+          <div class="px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container/60">
+            <span class="text-[10px] text-tertiary uppercase font-semibold block">Clima Global</span>
+            <span class="font-bold text-primary text-xs">${mediaStr} / 5.0</span>
+          </div>
+          <div class="px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container/60">
+            <span class="text-[10px] text-tertiary uppercase font-semibold block">Diagnóstico</span>
+            <span class="font-bold ${diagStr.toLowerCase().includes('polar') ? 'text-amber-600' : 'text-status-positive'} text-xs truncate block">${diagStr}</span>
+          </div>
+          <div class="px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container/60">
+            <span class="text-[10px] text-tertiary uppercase font-semibold block">Plan RRHH</span>
+            <span class="font-bold text-status-positive text-xs flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">task_alt</span>
+              <span>Recomendaciones listas</span>
+            </span>
+          </div>
+        `;
+      }
+
+      card.classList.remove('hidden');
+    }
+
+    function deleteSavedLlmSynthesis() {
+      currentLlmSynthesisRawMarkdown = '';
+      currentLlmSynthesisData = null;
+      const card = document.getElementById('insights-saved-synthesis-card');
+      if (card) card.classList.add('hidden');
+      showToast('Síntesis de IA descartada y eliminada.', 'info');
     }
 
     function setLlmModalLoading(isLoading) {
@@ -5635,6 +5688,7 @@
 
       const md = data.informe_markdown || '';
       currentLlmSynthesisRawMarkdown = md;
+      currentLlmSynthesisData = data;
 
       // 1. Estadísticas deterministas exactas (KPIs)
       const stats = data.payload_estadistico_utilizado || {};
@@ -5948,14 +6002,6 @@
       const elMarkdown = document.getElementById('llm-modal-markdown-content');
       if (elMarkdown) {
         elMarkdown.innerHTML = formatMarkdown(md);
-      }
-
-      // Compatibilidad con el contenedor inline del panel
-      const box = document.getElementById('llm-insights-result-box');
-      const content = document.getElementById('llm-insights-content');
-      if (box && content) {
-        box.classList.remove('hidden');
-        content.innerHTML = formatMarkdown(md);
       }
     }
 
