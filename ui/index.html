@@ -4264,7 +4264,8 @@
         const res = await fetch(`/api/surveys/${id}/approve`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
         if (res.ok) {
           showToast('Consulta aprobada por RRHH.', 'success');
-          loadAdminData();
+          surveyStatusFilter = null;
+          await loadAdminData();
         }
       } catch (err) { showToast('Error al aprobar.', 'error'); }
     }
