@@ -19,8 +19,9 @@ import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse, unquote
 from urllib.request import Request, urlopen
+import mimetypes
 
 # Asegurar rutas y resolución de paquete para ejecución directa: `python backend/app.py`
 _CURRENT_DIR = Path(__file__).resolve().parent
@@ -179,8 +180,9 @@ class PulsoHandler(BaseHTTPRequestHandler):
         return audio_data
 
     def send_file(self, filename: str, content_type: str) -> None:
-        file_path = UI_DIR / filename
-        if not file_path.exists():
+        ui_root = UI_DIR.resolve()
+        file_path = (ui_root / filename).resolve()
+        if ui_root not in file_path.parents or not file_path.is_file():
             self.send_json(404, {"error": "Archivo no encontrado."})
             return
         body = file_path.read_bytes()
@@ -270,37 +272,38 @@ class PulsoHandler(BaseHTTPRequestHandler):
             self.send_file("index.html", "text/html; charset=utf-8")
             return
 
-        # Servir dinámicamente cualquier archivo de la carpeta ui/assets/
+        # Cualquier archivo dentro de ui/assets/ (sin listas manuales)
         if path.startswith("/assets/"):
-            rel_path = path.lstrip("/")
-            asset_file = UI_DIR / rel_path
-            if asset_file.is_file():
-                ext = asset_file.suffix.lower()
+            rel_path = unquote(path.lstrip("/"))
+            ui_root = UI_DIR.resolve()
+            asset_file = (ui_root / rel_path).resolve()
+            if ui_root in asset_file.parents and asset_file.is_file():
                 mime_types = {
                     ".png": "image/png",
                     ".jpg": "image/jpeg",
                     ".jpeg": "image/jpeg",
+                    ".gif": "image/gif",
                     ".svg": "image/svg+xml",
                     ".webp": "image/webp",
+                    ".avif": "image/avif",
                     ".ico": "image/x-icon",
                 }
-                content_type = mime_types.get(ext, "application/octet-stream")
-                self.send_file(rel_path, content_type)
+                ext = asset_file.suffix.lower()
+                content_type = (
+                    mime_types.get(ext)
+                    or mimetypes.guess_type(asset_file.name)[0]
+                    or "application/octet-stream"
+                )
+                self.send_file(str(asset_file.relative_to(ui_root)), content_type)
                 return
+            self.send_json(404, {"error": f"Asset no encontrado: {path}"})
+            return
 
         # Archivos estáticos de interfaz
         files = {
             "/": ("index.html", "text/html; charset=utf-8"),
             "/index.html": ("index.html", "text/html; charset=utf-8"),
             "/styles.css": ("styles.css", "text/css; charset=utf-8"),
-            "/assets/damm-thermometer-cover.jpg": ("assets/damm-thermometer-cover.jpg", "image/jpeg"),
-            "/assets/codigo_qr.png": ("assets/codigo_qr.png", "image/png"),
-            "/assets/chapa_damm.png": ("assets/chapa_damm.png", "image/png"),
-            "/assets/palabra_damm.png": ("assets/palabra_damm.png", "image/png"),
-            "/assets/botella-estrella-damm.png": ("assets/botella-estrella-damm.png", "image/png"),
-            "/assets/estrella-damm-logo.png": ("assets/estrella-damm-logo.png", "image/png"),
-            "/assets/damm-logistica.png": ("assets/damm-logistica.png", "image/png"),
-            "/assets/estrella-lata.png": ("assets/estrella-lata.png", "image/png"),
             "/admin": ("index.html", "text/html; charset=utf-8"),
             "/admin/": ("index.html", "text/html; charset=utf-8"),
             "/generator": ("index.html", "text/html; charset=utf-8"),
@@ -316,7 +319,6 @@ class PulsoHandler(BaseHTTPRequestHandler):
             return
 
         self.send_json(404, {"error": "No se ha encontrado esta página."})
-
     def do_POST(self) -> None:
         path = urlparse(self.path).path
         try:

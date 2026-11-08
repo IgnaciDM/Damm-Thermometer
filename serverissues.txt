@@ -1,0 +1,9 @@
+(.venv) C:\Users\usdal\Downloads\HackDatathones\Damn>netstat -ano | findstr LISTENING | findstr :8000
+  TCP    127.0.0.1:8000         0.0.0.0:0              LISTENING       29828
+  TCP    127.0.0.1:8000         0.0.0.0:0              LISTENING       18572
+  TCP    127.0.0.1:8000         0.0.0.0:0              LISTENING       10096
+
+
+taskkill /PID PID /F
+
+eliminar todos
