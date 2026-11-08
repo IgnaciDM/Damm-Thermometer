@@ -28,6 +28,18 @@
     .status-bar-brand { border-left: 3px solid #c4161c; }
     .status-bar-gold { border-left: 3px solid #d4af37; }
     .admin-history-table { width: 100%; table-layout: fixed; }
+    .dashboard-hero-bottle {
+      position: absolute;
+      right: 1.25rem;
+      bottom: -4.75rem;
+      width: auto;
+      height: 15rem;
+      pointer-events: none;
+      user-select: none;
+    }
+    @media (max-width: 1100px) {
+      .dashboard-hero-bottle { display: none; }
+    }
     @media (max-width: 1100px) {
       .admin-history-table col:nth-child(1) { width: 50%; }
       .admin-history-table col:nth-child(2),
@@ -120,7 +132,7 @@
   <aside class="fixed left-0 top-0 h-full bg-surface-container-low z-50 flex flex-col shadow-[0_1px_8px_rgba(30,22,17,0.04)] sidebar-transition overflow-hidden w-64 border-r border-surface-container/60" id="app-sidebar">
     <div class="h-16 px-space-md flex items-center justify-between border-b border-surface-container/60">
       <div class="flex items-center gap-2 overflow-hidden" id="sidebar-brand-box">
-        <div class="w-3 h-3 rounded-full bg-primary flex-shrink-0"></div>
+        <img alt="Estrella Damm" class="w-7 h-7 rounded-md object-cover flex-shrink-0 shadow-xs" src="/assets/estrella-damm-logo.png">
         <span class="font-headline font-bold text-sm tracking-wider text-on-surface uppercase whitespace-nowrap sidebar-label">PORTAL DAMM</span>
       </div>
       <button aria-label="Colapsar o expandir menú" class="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex-shrink-0" onclick="toggleSidebar()" type="button">
@@ -183,15 +195,9 @@
       </div>
 
       <div class="flex items-center gap-space-md">
-        <!-- Responder Pulso Kiosk Button -->
-        <button onclick="openCheckinModal()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold transition-all border border-surface-container" type="button">
-          <span class="material-symbols-outlined text-sm text-primary">touch_app</span>
-          <span>Participar en un Pulso</span>
-        </button>
-
-        <button aria-label="Notificaciones" class="relative w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button">
+        <button id="approval-notification" aria-label="Ver encuestas pendientes de aprobación" class="relative hidden w-9 h-9 items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors" onclick="openPendingSurveys()" type="button">
           <span class="material-symbols-outlined text-xl">notifications</span>
-          <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface"></span>
+          <span id="approval-notification-count" class="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 rounded-full bg-primary text-on-primary text-[9px] leading-4 font-bold ring-2 ring-surface"></span>
         </button>
 
         <!-- User Profile -->
@@ -215,8 +221,9 @@
       <!-- ===================================================================== -->
       <div id="panel-dashboard" class="panel-view space-y-space-lg">
         <!-- Hero Header -->
-        <div class="flex flex-wrap items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-xs border border-surface-container">
-          <div>
+        <div class="relative flex flex-wrap items-center justify-between gap-space-md overflow-hidden bg-surface-container-lowest p-space-lg xl:pr-44 rounded-xl shadow-xs border border-surface-container">
+          <img alt="Botella Estrella Damm" class="dashboard-hero-bottle" src="/assets/botella-estrella-damm.png">
+          <div class="relative z-10">
             <div class="flex items-center gap-2 mb-1">
               <span class="text-xs font-bold uppercase tracking-wider text-primary">Estrella Damm • Clima Continuo</span>
               <span class="text-xs text-outline">/</span>
@@ -225,7 +232,7 @@
             <h1 class="text-2xl font-headline font-bold text-on-surface">Escucha activa en Fábricas, Logística, Comercial y Oficinas</h1>
             <p class="text-xs text-on-surface-variant mt-1">Medición ágil y continua del clima laboral con estricta separación matemática y privacidad garantizada.</p>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="relative z-10 flex items-center gap-2">
             <button onclick="showPanel('insights')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-xs font-semibold text-on-surface border border-surface-container transition-all">
               <span class="material-symbols-outlined text-sm text-primary">query_stats</span>
               <span>Ver Insights Estadísticos</span>
@@ -344,7 +351,10 @@
               <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Realidad por Áreas</span>
               <h2 class="text-lg font-headline font-bold text-on-surface">Entornos de Trabajo</h2>
             </div>
-            <span class="text-xs text-tertiary">Fábrica • Logística • Comercial • Oficina</span>
+            <div class="hidden md:flex items-center gap-3">
+              <span class="text-xs text-tertiary">Fábrica • Logística • Comercial • Oficina</span>
+              <img alt="Centro logístico Damm" class="w-20 h-11 rounded-lg object-cover shadow-xs" src="/assets/damm-logistica.png">
+            </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md" id="sites-cards-container">
@@ -362,7 +372,8 @@
       <div id="panel-insights" class="panel-view hidden space-y-space-lg">
         <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
           <div class="space-y-space-md border-b border-surface-container pb-4">
-            <div>
+            <div class="flex items-start justify-between gap-4">
+              <div>
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold uppercase tracking-wider text-primary">Motor Estadístico Python</span>
                 <span id="insights-quarter-badge" class="px-2 py-0.5 rounded-full bg-secondary-container/60 text-on-secondary-container text-[11px] font-bold">
@@ -377,6 +388,8 @@
               </div>
               <h2 class="text-xl font-headline font-bold text-on-surface mt-1">Detección de Sesgos, Polarización y Cobertura</h2>
               <p class="text-xs text-on-surface-variant">Análisis estadístico insesgado por encuesta según los objetivos del caso Estrella Damm.</p>
+              </div>
+              <img alt="Lata Estrella Damm" class="hidden xl:block w-36 h-24 rounded-xl object-cover shadow-xs" src="/assets/estrella-lata.png">
             </div>
             <div class="grid grid-cols-1 items-center gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
               <!-- Filtro Avanzado: Encuesta / Cuatrimestre / Año -->
@@ -937,9 +950,7 @@
               </div>
 
               <div class="flex items-start gap-3.5">
-                <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs shrink-0 shadow-xs">
-                  <span class="material-symbols-outlined text-base">auto_awesome</span>
-                </div>
+                <img alt="Estrella Damm" class="w-8 h-8 rounded-full object-cover shrink-0 shadow-xs" src="/assets/estrella-damm-logo.png">
                 <div class="flex-1 space-y-space-md">
                   <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-primary">Asistente LLM (UAB DCC Ornith)</span>
@@ -1073,13 +1084,16 @@
         </section>
 
         <!-- Surveys Table -->
-        <section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
+        <section id="admin-surveys-history" class="bg-surface-container-lowest rounded-xl p-space-lg shadow-xs border border-surface-container space-y-space-md">
           <div class="flex items-center justify-between border-b border-surface-container pb-3">
             <div>
               <span class="text-[11px] font-bold uppercase tracking-wider text-primary block">Campañas Registradas</span>
               <h2 class="text-lg font-headline font-bold text-on-surface">Historial de Microconsultas</h2>
             </div>
-            <span class="text-xs text-tertiary" id="admin-surveys-count-label">Cargando...</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-tertiary" id="admin-surveys-count-label">Cargando...</span>
+              <button id="admin-clear-pending-filter" onclick="clearPendingSurveyFilter()" class="hidden rounded-lg bg-surface-container px-2 py-1 text-[10px] font-bold text-on-surface-variant hover:bg-surface-container-high" type="button">Ver todas</button>
+            </div>
           </div>
 
           <div class="overflow-hidden rounded-lg border border-surface-container">
@@ -1842,6 +1856,7 @@
     let pendingGeneratorPrompt = '';
     let surveysByCohort = {};
     let activeCohortTab = null;
+    let surveyStatusFilter = null;
     let launchDraftSubmitting = false;
     let pendingDeleteSurveyId = null;
     let deleteSurveySubmitting = false;
@@ -4080,16 +4095,26 @@
         const tbody = document.getElementById('admin-surveys-table-body');
         const countLabel = document.getElementById('admin-surveys-count-label');
         const surveys = data.surveys || [];
+        updateApprovalNotification(surveys);
+        const displayedSurveys = surveyStatusFilter === 'draft'
+          ? surveys.filter(survey => survey.status === 'draft')
+          : surveys;
         window.adminSurveysMap = {};
         surveys.forEach(s => { window.adminSurveysMap[s.id] = s; });
-        if (countLabel) countLabel.textContent = `${surveys.length} consultas registradas`;
+        const clearFilterButton = document.getElementById('admin-clear-pending-filter');
+        if (countLabel) {
+          countLabel.textContent = surveyStatusFilter === 'draft'
+            ? `${displayedSurveys.length} pendiente${displayedSurveys.length === 1 ? '' : 's'} de aprobación`
+            : `${surveys.length} consultas registradas`;
+        }
+        if (clearFilterButton) clearFilterButton.classList.toggle('hidden', surveyStatusFilter !== 'draft');
 
         if (tbody) {
-          if (surveys.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-tertiary">No hay consultas registradas. Usa el Generador Asistido para crear una.</td></tr>';
+          if (displayedSurveys.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-tertiary">${surveyStatusFilter === 'draft' ? 'No hay encuestas pendientes de aprobación.' : 'No hay consultas registradas. Usa el Generador Asistido para crear una.'}</td></tr>`;
           } else {
             tbody.innerHTML = '';
-            surveys.forEach(s => {
+            displayedSurveys.forEach(s => {
               const tr = document.createElement('tr');
               const statusPill = s.status === 'published' ? '<span class="px-2 py-0.5 rounded-full bg-status-positive/10 text-status-positive font-bold text-[10px]">Publicada</span>' :
                                  s.status === 'approved' ? '<span class="px-2 py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-bold text-[10px]">Aprobada</span>' :
@@ -4162,6 +4187,40 @@
       } catch (e) {
         console.warn('Error loading admin data', e);
       }
+    }
+
+    function updateApprovalNotification(surveys) {
+      const notification = document.getElementById('approval-notification');
+      const count = document.getElementById('approval-notification-count');
+      if (!notification || !count) return;
+      const pendingCount = surveys.filter(survey => survey.status === 'draft').length;
+      notification.classList.toggle('hidden', pendingCount === 0);
+      notification.classList.toggle('flex', pendingCount > 0);
+      count.textContent = pendingCount > 9 ? '9+' : String(pendingCount);
+    }
+
+    async function refreshApprovalNotification() {
+      try {
+        const res = await fetch('/api/admin');
+        if (!res.ok) return;
+        const data = await res.json();
+        updateApprovalNotification(data.surveys || []);
+      } catch (error) {
+        console.warn('No se pudo actualizar la notificación de aprobaciones.', error);
+      }
+    }
+
+    function openPendingSurveys() {
+      surveyStatusFilter = 'draft';
+      showPanel('admin');
+      requestAnimationFrame(() => {
+        document.getElementById('admin-surveys-history')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    function clearPendingSurveyFilter() {
+      surveyStatusFilter = null;
+      loadAdminData();
     }
 
     function editSurveyInGenerator(id) {
@@ -4300,9 +4359,7 @@
         if (card) {
           card.innerHTML = `
             <div class="text-center py-12 px-4 space-y-3">
-              <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto shadow-xs">
-                <span class="material-symbols-outlined text-2xl">auto_awesome</span>
-              </div>
+              <img alt="Estrella Damm" class="w-12 h-12 rounded-full object-cover mx-auto shadow-xs" src="/assets/estrella-damm-logo.png">
               <h3 class="text-sm font-headline font-bold text-on-surface">Ninguna microconsulta activa</h3>
               <p class="text-xs text-tertiary max-w-xs mx-auto leading-relaxed">
                 Escribe en la barra de IA inferior lo que deseas consultar (o qué cambios aplicar) y Google Gemini creará o actualizará las preguntas en tiempo real.
@@ -6141,6 +6198,7 @@
       updateGeneratorCohortDropdownUI();
       renderCohortTabs();
       loadPanelSettings();
+      refreshApprovalNotification();
 
       const chatInput = document.getElementById('gen-ai-chat-input');
       if (chatInput) {
